@@ -13,6 +13,7 @@
 		B698DDA4285881FB0009077E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B698DDA2285881FB0009077E /* Main.storyboard */; };
 		B698DDA6285881FD0009077E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B698DDA5285881FD0009077E /* Assets.xcassets */; };
 		B698DDA9285881FD0009077E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B698DDA7285881FD0009077E /* LaunchScreen.storyboard */; };
+		B698DDB328588D280009077E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B698DDB228588D280009077E /* GoogleService-Info.plist */; };
 		C616981117A2021ACBB94FA1 /* Pods_PawKing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3366849FA1579D202FA53C8 /* Pods_PawKing.framework */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +28,7 @@
 		B698DDA5285881FD0009077E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B698DDA8285881FD0009077E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B698DDAA285881FD0009077E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B698DDB228588D280009077E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F3366849FA1579D202FA53C8 /* Pods_PawKing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PawKing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -48,7 +50,6 @@
 				3892957CF3DC689420745EBB /* Pods-PawKing.debug.xcconfig */,
 				5AF034E01BB911618BEB17BE /* Pods-PawKing.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -88,6 +89,7 @@
 				B698DDA5285881FD0009077E /* Assets.xcassets */,
 				B698DDA7285881FD0009077E /* LaunchScreen.storyboard */,
 				B698DDAA285881FD0009077E /* Info.plist */,
+				B698DDB228588D280009077E /* GoogleService-Info.plist */,
 			);
 			path = PawKing;
 			sourceTree = "<group>";
@@ -103,6 +105,7 @@
 				B698DD95285881FB0009077E /* Sources */,
 				B698DD96285881FB0009077E /* Frameworks */,
 				B698DD97285881FB0009077E /* Resources */,
+				40CC832ED6627C2E4E5E7ED9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -152,6 +155,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B698DDA9285881FD0009077E /* LaunchScreen.storyboard in Resources */,
+				B698DDB328588D280009077E /* GoogleService-Info.plist in Resources */,
 				B698DDA6285881FD0009077E /* Assets.xcassets in Resources */,
 				B698DDA4285881FB0009077E /* Main.storyboard in Resources */,
 			);
@@ -160,6 +164,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		40CC832ED6627C2E4E5E7ED9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PawKing/Pods-PawKing-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PawKing/Pods-PawKing-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PawKing/Pods-PawKing-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		A5C3222AA92B63E382C65836 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -253,6 +274,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -313,6 +335,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
