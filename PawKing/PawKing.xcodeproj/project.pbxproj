@@ -9,11 +9,18 @@
 /* Begin PBXBuildFile section */
 		B698DD9D285881FB0009077E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DD9C285881FB0009077E /* AppDelegate.swift */; };
 		B698DD9F285881FB0009077E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DD9E285881FB0009077E /* SceneDelegate.swift */; };
-		B698DDA1285881FB0009077E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDA0285881FB0009077E /* ViewController.swift */; };
+		B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDA0285881FB0009077E /* TabBarViewController.swift */; };
 		B698DDA4285881FB0009077E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B698DDA2285881FB0009077E /* Main.storyboard */; };
 		B698DDA6285881FD0009077E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B698DDA5285881FD0009077E /* Assets.xcassets */; };
 		B698DDA9285881FD0009077E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B698DDA7285881FD0009077E /* LaunchScreen.storyboard */; };
 		B698DDB328588D280009077E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B698DDB228588D280009077E /* GoogleService-Info.plist */; };
+		B698DDB52858B8540009077E /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDB42858B8540009077E /* MapViewController.swift */; };
+		B698DDB72858B8850009077E /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDB62858B8850009077E /* ExploreViewController.swift */; };
+		B698DDB92858B8A90009077E /* PublishViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDB82858B8A90009077E /* PublishViewController.swift */; };
+		B698DDBB2858B8BA0009077E /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDBA2858B8BA0009077E /* ChatViewController.swift */; };
+		B698DDBD2858B8CC0009077E /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDBC2858B8CC0009077E /* ProfileViewController.swift */; };
+		B698DDC02858B99F0009077E /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDBF2858B99F0009077E /* UIImage+Extension.swift */; };
+		B698DDC22858CE9D0009077E /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDC12858CE9D0009077E /* UIView+Extension.swift */; };
 		C616981117A2021ACBB94FA1 /* Pods_PawKing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3366849FA1579D202FA53C8 /* Pods_PawKing.framework */; };
 /* End PBXBuildFile section */
 
@@ -23,12 +30,19 @@
 		B698DD99285881FB0009077E /* PawKing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PawKing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B698DD9C285881FB0009077E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B698DD9E285881FB0009077E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		B698DDA0285881FB0009077E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		B698DDA0285881FB0009077E /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		B698DDA3285881FB0009077E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B698DDA5285881FD0009077E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B698DDA8285881FD0009077E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B698DDAA285881FD0009077E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B698DDB228588D280009077E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B698DDB42858B8540009077E /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		B698DDB62858B8850009077E /* ExploreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
+		B698DDB82858B8A90009077E /* PublishViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublishViewController.swift; sourceTree = "<group>"; };
+		B698DDBA2858B8BA0009077E /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		B698DDBC2858B8CC0009077E /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		B698DDBF2858B99F0009077E /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		B698DDC12858CE9D0009077E /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		F3366849FA1579D202FA53C8 /* Pods_PawKing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PawKing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -82,9 +96,15 @@
 		B698DD9B285881FB0009077E /* PawKing */ = {
 			isa = PBXGroup;
 			children = (
+				B698DDBE2858B98A0009077E /* Extension */,
 				B698DD9C285881FB0009077E /* AppDelegate.swift */,
 				B698DD9E285881FB0009077E /* SceneDelegate.swift */,
-				B698DDA0285881FB0009077E /* ViewController.swift */,
+				B698DDA0285881FB0009077E /* TabBarViewController.swift */,
+				B698DDB42858B8540009077E /* MapViewController.swift */,
+				B698DDB62858B8850009077E /* ExploreViewController.swift */,
+				B698DDB82858B8A90009077E /* PublishViewController.swift */,
+				B698DDBA2858B8BA0009077E /* ChatViewController.swift */,
+				B698DDBC2858B8CC0009077E /* ProfileViewController.swift */,
 				B698DDA2285881FB0009077E /* Main.storyboard */,
 				B698DDA5285881FD0009077E /* Assets.xcassets */,
 				B698DDA7285881FD0009077E /* LaunchScreen.storyboard */,
@@ -92,6 +112,15 @@
 				B698DDB228588D280009077E /* GoogleService-Info.plist */,
 			);
 			path = PawKing;
+			sourceTree = "<group>";
+		};
+		B698DDBE2858B98A0009077E /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				B698DDBF2858B99F0009077E /* UIImage+Extension.swift */,
+				B698DDC12858CE9D0009077E /* UIView+Extension.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -210,9 +239,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B698DDA1285881FB0009077E /* ViewController.swift in Sources */,
+				B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */,
 				B698DD9D285881FB0009077E /* AppDelegate.swift in Sources */,
+				B698DDB92858B8A90009077E /* PublishViewController.swift in Sources */,
+				B698DDC02858B99F0009077E /* UIImage+Extension.swift in Sources */,
+				B698DDBB2858B8BA0009077E /* ChatViewController.swift in Sources */,
+				B698DDB72858B8850009077E /* ExploreViewController.swift in Sources */,
 				B698DD9F285881FB0009077E /* SceneDelegate.swift in Sources */,
+				B698DDBD2858B8CC0009077E /* ProfileViewController.swift in Sources */,
+				B698DDC22858CE9D0009077E /* UIView+Extension.swift in Sources */,
+				B698DDB52858B8540009077E /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
