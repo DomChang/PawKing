@@ -30,8 +30,7 @@ class MapViewController: UIViewController {
         mapView.delegate = self
         mapView.showsUserLocation = true
         
-        userLocationButton.isSelected = true
-        focusUserLocation()
+        didSelectUserLocation()
         
         userLocationButton.addTarget(self, action: #selector(didSelectUserLocation), for: .touchUpInside)
     }
