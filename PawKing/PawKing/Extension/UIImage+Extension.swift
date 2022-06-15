@@ -11,6 +11,7 @@ enum ImageAsset: String {
 
     // Map tab - Tab
     
+    // swiftlint:disable identifier_name
     case Icons_24px_Map_Normal
     case Icons_24px_Map_Selected
     
@@ -27,7 +28,11 @@ enum ImageAsset: String {
     
     case Icons_36px_UserLocate_Normal
     case Icons_36px_UserLocate_Selected
+    
+    case Icons_36px_RecordTrack_Normal
+    case Icons_36px_RecordTrack_Selected
 }
+// swiftlint:enable identifier_name
 
 extension UIImage {
 

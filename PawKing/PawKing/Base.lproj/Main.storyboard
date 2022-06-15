@@ -9,7 +9,6 @@
         <!--Tab Bar View Controller-->
         <scene sceneID="fQr-SK-J23">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="07n-BX-Hhk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <tabBarController id="cFw-i1-jf5" customClass="TabBarViewController" customModule="PawKing" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ADo-sC-M2o">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
@@ -17,6 +16,7 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                 </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="07n-BX-Hhk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="259" y="187"/>
         </scene>
