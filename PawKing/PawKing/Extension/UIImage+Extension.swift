@@ -24,7 +24,9 @@ enum ImageAsset: String {
     
     case Icons_24px_Profile_Normal
     case Icons_24px_Profile_Selected
-
+    
+    case Icons_36px_UserLocate_Normal
+    case Icons_36px_UserLocate_Selected
 }
 
 extension UIImage {

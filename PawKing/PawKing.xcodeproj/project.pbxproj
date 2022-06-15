@@ -96,9 +96,9 @@
 		B698DD9B285881FB0009077E /* PawKing */ = {
 			isa = PBXGroup;
 			children = (
-				B698DDBE2858B98A0009077E /* Extension */,
 				B698DD9C285881FB0009077E /* AppDelegate.swift */,
 				B698DD9E285881FB0009077E /* SceneDelegate.swift */,
+				B698DDBE2858B98A0009077E /* Extension */,
 				B698DDA0285881FB0009077E /* TabBarViewController.swift */,
 				B698DDB42858B8540009077E /* MapViewController.swift */,
 				B698DDB62858B8850009077E /* ExploreViewController.swift */,
@@ -401,6 +401,7 @@
 				DEVELOPMENT_TEAM = RUXNPB6ZP3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PawKing/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "是否同意使用您的位置資訊";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -430,6 +431,7 @@
 				DEVELOPMENT_TEAM = RUXNPB6ZP3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PawKing/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "是否同意使用您的位置資訊";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

@@ -6,16 +6,18 @@
 //
 
 import UIKit
+import CoreLocation
 import FirebaseCore
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    let locationManager = CLLocationManager()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
 //        FirebaseApp.configure()
+        locationManager.requestWhenInUseAuthorization()
         
         return true
     }
