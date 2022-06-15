@@ -15,6 +15,7 @@ target 'PawKing' do
   pod 'SwiftLint'
   pod 'FirebaseAuth'
   pod 'FirebaseFirestore'
+  pod 'FirebaseStorage'
   pod 'FirebaseFirestoreSwift'
 
 post_install do |installer|
