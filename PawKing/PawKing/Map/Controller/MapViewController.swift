@@ -339,7 +339,6 @@ class MapViewController: UIViewController {
             
             guard friend.status == Status.tracking.rawValue else { return }
                 
-                
             let annotation = UserAnnotation(coordinate: friend.location.transferToCoordinate2D(),
                                             title: "",
                                             subtitle: friend.userName,
