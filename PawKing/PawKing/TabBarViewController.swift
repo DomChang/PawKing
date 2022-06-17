@@ -89,9 +89,17 @@ private enum Tab {
 class TabBarViewController: UITabBarController {
 
     private let tabs: [Tab] = [.map, .explore, .publish, .chat, .profile]
+    
+    let photoHelper = PKPhotoHelper()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        photoHelper.completionHandler = { image in
+                print("handle image")
+        }
+        
+        delegate = self
 
         viewControllers = tabs.map({ $0.controller() })
         
@@ -104,5 +112,21 @@ class TabBarViewController: UITabBarController {
         navBarAppearance.configureWithDefaultBackground()
         UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
         UINavigationBar.appearance().standardAppearance = navBarAppearance
+    }
+}
+
+extension TabBarViewController: UITabBarControllerDelegate {
+    
+    func tabBarController(_ tabBarController: UITabBarController,
+                          shouldSelect viewController: UIViewController) -> Bool {
+        
+        if let navigaton = viewController as? UINavigationController,
+           navigaton.viewControllers.contains(where: { return $0 is PublishViewController }) {
+            
+            photoHelper.presentActionSheet(from: self)
+            
+            return false
+        }
+        return true
     }
 }

@@ -33,6 +33,7 @@
 		B6D4F6A5285C5D410045DDB2 /* StrangerCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F6A4285C5D410045DDB2 /* StrangerCardView.swift */; };
 		B6D4F6A7285C5F9B0045DDB2 /* StrangerCardViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F6A6285C5F9B0045DDB2 /* StrangerCardViewCell.swift */; };
 		B6D4F6A9285C62F10045DDB2 /* Pet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F6A8285C62F10045DDB2 /* Pet.swift */; };
+		B6D4F6AB285CDB150045DDB2 /* PKPhotoHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F6AA285CDB150045DDB2 /* PKPhotoHelper.swift */; };
 		C616981117A2021ACBB94FA1 /* Pods_PawKing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3366849FA1579D202FA53C8 /* Pods_PawKing.framework */; };
 /* End PBXBuildFile section */
 
@@ -67,6 +68,7 @@
 		B6D4F6A4285C5D410045DDB2 /* StrangerCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrangerCardView.swift; sourceTree = "<group>"; };
 		B6D4F6A6285C5F9B0045DDB2 /* StrangerCardViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrangerCardViewCell.swift; sourceTree = "<group>"; };
 		B6D4F6A8285C62F10045DDB2 /* Pet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pet.swift; sourceTree = "<group>"; };
+		B6D4F6AA285CDB150045DDB2 /* PKPhotoHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PKPhotoHelper.swift; sourceTree = "<group>"; };
 		F3366849FA1579D202FA53C8 /* Pods_PawKing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PawKing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -126,6 +128,7 @@
 				B6ABE8E3285A0B8500B1A977 /* Model */,
 				B6D4F69F285C360E0045DDB2 /* Map */,
 				B698DDB62858B8850009077E /* ExploreViewController.swift */,
+				B6D4F6AA285CDB150045DDB2 /* PKPhotoHelper.swift */,
 				B698DDB82858B8A90009077E /* PublishViewController.swift */,
 				B698DDBA2858B8BA0009077E /* ChatViewController.swift */,
 				B698DDBC2858B8CC0009077E /* ProfileViewController.swift */,
@@ -348,6 +351,7 @@
 				B698DDC02858B99F0009077E /* UIImage+Extension.swift in Sources */,
 				B698DDBB2858B8BA0009077E /* ChatViewController.swift in Sources */,
 				B698DDB72858B8850009077E /* ExploreViewController.swift in Sources */,
+				B6D4F6AB285CDB150045DDB2 /* PKPhotoHelper.swift in Sources */,
 				B698DD9F285881FB0009077E /* SceneDelegate.swift in Sources */,
 				B698DDBD2858B8CC0009077E /* ProfileViewController.swift in Sources */,
 				B698DDC22858CE9D0009077E /* UIView+Extension.swift in Sources */,

@@ -6,12 +6,8 @@
 //
 
 import UIKit
+import AVFoundation
 
-class PublishViewController: UIViewController {
+final class PublishViewController: UIViewController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        view.backgroundColor = .white
-    }
 }
