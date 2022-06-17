@@ -11,13 +11,9 @@ import MapKit
 class UserAnnotation: NSObject, MKAnnotation {
 
     let coordinate: CLLocationCoordinate2D
-    
     let title: String?
-    
     let subtitle: String?
-    
     var userId: String
-    
     var petPhoto: String?
   
 

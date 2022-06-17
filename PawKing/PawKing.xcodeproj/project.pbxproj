@@ -27,8 +27,12 @@
 		B6ABE8E9285AC08200B1A977 /* UserLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8E8285AC08200B1A977 /* UserLocation.swift */; };
 		B6ABE8EB285AE41500B1A977 /* LocationRelated+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8EA285AE41500B1A977 /* LocationRelated+Extension.swift */; };
 		B6ABE8ED285AFC2B00B1A977 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8EC285AFC2B00B1A977 /* User.swift */; };
-		B6ABE8F2285B870800B1A977 /* UserAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8F1285B870800B1A977 /* UserAnnotationView.swift */; };
 		B6ABE8F4285B87AB00B1A977 /* UserAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8F3285B87AB00B1A977 /* UserAnnotation.swift */; };
+		B6D4F69E285C35F80045DDB2 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F69D285C35F80045DDB2 /* UserManager.swift */; };
+		B6D4F6A3285C526A0045DDB2 /* FirebaseCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F6A2285C526A0045DDB2 /* FirebaseCollection.swift */; };
+		B6D4F6A5285C5D410045DDB2 /* StrangerCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F6A4285C5D410045DDB2 /* StrangerCardView.swift */; };
+		B6D4F6A7285C5F9B0045DDB2 /* StrangerCardViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F6A6285C5F9B0045DDB2 /* StrangerCardViewCell.swift */; };
+		B6D4F6A9285C62F10045DDB2 /* Pet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F6A8285C62F10045DDB2 /* Pet.swift */; };
 		C616981117A2021ACBB94FA1 /* Pods_PawKing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3366849FA1579D202FA53C8 /* Pods_PawKing.framework */; };
 /* End PBXBuildFile section */
 
@@ -57,8 +61,12 @@
 		B6ABE8E8285AC08200B1A977 /* UserLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLocation.swift; sourceTree = "<group>"; };
 		B6ABE8EA285AE41500B1A977 /* LocationRelated+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LocationRelated+Extension.swift"; sourceTree = "<group>"; };
 		B6ABE8EC285AFC2B00B1A977 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		B6ABE8F1285B870800B1A977 /* UserAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnnotationView.swift; sourceTree = "<group>"; };
 		B6ABE8F3285B87AB00B1A977 /* UserAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnnotation.swift; sourceTree = "<group>"; };
+		B6D4F69D285C35F80045DDB2 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		B6D4F6A2285C526A0045DDB2 /* FirebaseCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseCollection.swift; sourceTree = "<group>"; };
+		B6D4F6A4285C5D410045DDB2 /* StrangerCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrangerCardView.swift; sourceTree = "<group>"; };
+		B6D4F6A6285C5F9B0045DDB2 /* StrangerCardViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrangerCardViewCell.swift; sourceTree = "<group>"; };
+		B6D4F6A8285C62F10045DDB2 /* Pet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pet.swift; sourceTree = "<group>"; };
 		F3366849FA1579D202FA53C8 /* Pods_PawKing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PawKing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -116,8 +124,7 @@
 				B698DD9E285881FB0009077E /* SceneDelegate.swift */,
 				B698DDBE2858B98A0009077E /* Extension */,
 				B6ABE8E3285A0B8500B1A977 /* Model */,
-				B6ABE8F0285B86DA00B1A977 /* View */,
-				B698DDB42858B8540009077E /* MapViewController.swift */,
+				B6D4F69F285C360E0045DDB2 /* Map */,
 				B698DDB62858B8850009077E /* ExploreViewController.swift */,
 				B698DDB82858B8A90009077E /* PublishViewController.swift */,
 				B698DDBA2858B8BA0009077E /* ChatViewController.swift */,
@@ -146,11 +153,12 @@
 		B6ABE8E3285A0B8500B1A977 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				B6D4F6A2285C526A0045DDB2 /* FirebaseCollection.swift */,
 				B6ABE8E6285A19C400B1A977 /* FirebaseError.swift */,
 				B6ABE8EC285AFC2B00B1A977 /* User.swift */,
 				B6ABE8E8285AC08200B1A977 /* UserLocation.swift */,
-				B6ABE8E1285A0B7400B1A977 /* MapManager.swift */,
-				B6ABE8F3285B87AB00B1A977 /* UserAnnotation.swift */,
+				B6D4F69D285C35F80045DDB2 /* UserManager.swift */,
+				B6D4F6A8285C62F10045DDB2 /* Pet.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -158,9 +166,37 @@
 		B6ABE8F0285B86DA00B1A977 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				B6ABE8F1285B870800B1A977 /* UserAnnotationView.swift */,
+				B6D4F6A4285C5D410045DDB2 /* StrangerCardView.swift */,
+				B6D4F6A6285C5F9B0045DDB2 /* StrangerCardViewCell.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		B6D4F69F285C360E0045DDB2 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				B6D4F6A0285C367C0045DDB2 /* Model */,
+				B6ABE8F0285B86DA00B1A977 /* View */,
+				B6D4F6A1285C36950045DDB2 /* Controller */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
+		B6D4F6A0285C367C0045DDB2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B6ABE8E1285A0B7400B1A977 /* MapManager.swift */,
+				B6ABE8F3285B87AB00B1A977 /* UserAnnotation.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		B6D4F6A1285C36950045DDB2 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				B698DDB42858B8540009077E /* MapViewController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -300,12 +336,13 @@
 			files = (
 				B6ABE8E7285A19C400B1A977 /* FirebaseError.swift in Sources */,
 				B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */,
+				B6D4F69E285C35F80045DDB2 /* UserManager.swift in Sources */,
 				B698DD9D285881FB0009077E /* AppDelegate.swift in Sources */,
 				B698DDB92858B8A90009077E /* PublishViewController.swift in Sources */,
 				B6ABE8ED285AFC2B00B1A977 /* User.swift in Sources */,
-				B6ABE8F2285B870800B1A977 /* UserAnnotationView.swift in Sources */,
 				B6ABE8E0285A06E300B1A977 /* UIColor+Extension.swift in Sources */,
 				B6ABE8E9285AC08200B1A977 /* UserLocation.swift in Sources */,
+				B6D4F6A5285C5D410045DDB2 /* StrangerCardView.swift in Sources */,
 				B6ABE8E2285A0B7400B1A977 /* MapManager.swift in Sources */,
 				B6ABE8F4285B87AB00B1A977 /* UserAnnotation.swift in Sources */,
 				B698DDC02858B99F0009077E /* UIImage+Extension.swift in Sources */,
@@ -315,7 +352,10 @@
 				B698DDBD2858B8CC0009077E /* ProfileViewController.swift in Sources */,
 				B698DDC22858CE9D0009077E /* UIView+Extension.swift in Sources */,
 				B698DDB52858B8540009077E /* MapViewController.swift in Sources */,
+				B6D4F6A3285C526A0045DDB2 /* FirebaseCollection.swift in Sources */,
+				B6D4F6A7285C5F9B0045DDB2 /* StrangerCardViewCell.swift in Sources */,
 				B6ABE8EB285AE41500B1A977 /* LocationRelated+Extension.swift in Sources */,
+				B6D4F6A9285C62F10045DDB2 /* Pet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

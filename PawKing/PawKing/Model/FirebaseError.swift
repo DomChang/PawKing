@@ -13,13 +13,19 @@ enum FirebaseError: Error {
     
     case fetchUserError
     
+    case fetchPetError
+    
     case uploadTrackError
     
     case updateLocationError
     
     case fetchFriendError
     
+    case fetchStangerError
+    
     case decodeUserError
+    
+    case decodePetError
     
     var errorMessage: String {
         
@@ -27,11 +33,15 @@ enum FirebaseError: Error {
             
         case .setupUserError:
             
-            return "建立個人資料失敗"
+            return "建立使用者資料失敗"
             
         case .fetchUserError:
             
-            return "獲取個人資料失敗"
+            return "讀取使用者資料失敗"
+            
+        case .fetchPetError:
+            
+            return "讀取寵物資料失敗"
             
         case.uploadTrackError:
             
@@ -42,10 +52,20 @@ enum FirebaseError: Error {
             return "更新位置狀態失敗"
             
         case .fetchFriendError:
+            
             return "無法讀取朋友位置"
             
+        case .fetchStangerError:
+            
+            return "無法讀取陌生人位置"
+            
         case .decodeUserError:
+            
             return "無法解析使用者資料"
+            
+        case .decodePetError:
+            
+            return "無法解析寵物資料"
         }
     }
 }

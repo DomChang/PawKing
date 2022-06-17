@@ -10,35 +10,13 @@ import FirebaseFirestoreSwift
 
 class MapManager {
     
+    static let shared = MapManager()
+    
     lazy var dataBase = Firestore.firestore()
-    
-    func setupUser(user: inout User, completion: @escaping (Result<Void, Error>) -> Void) {
-        
-        let document = dataBase.collection("Users").document()
-        user.id = document.documentID
-        
-        do {
-            try document.setData(from: user)
-            
-        } catch {
-            completion(.failure(FirebaseError.setupUserError))
-        }
-    }
-    
-    func updateUserInfo(user: User, completion: @escaping (Result<Void, Error>) -> Void) {
-        
-        let document = dataBase.collection("Users").document(user.id)
-        
-        do {
-            try document.setData(from: user)
-        } catch {
-            completion(.failure(FirebaseError.setupUserError))
-        }
-    }
     
     func uploadTrack(trackInfo: inout TrackInfo, completion: @escaping (Result<Void, Error>) -> Void) {
         
-        let document = dataBase.collection("tracks").document()
+        let document = dataBase.collection(FirebaseCollection.tracks.rawValue).document()
         trackInfo.id = document.documentID
         trackInfo.endTime = Timestamp(date: Date())
         
@@ -51,10 +29,9 @@ class MapManager {
         }
     }
     
-    func updateUserLocation(location: UserLocation,
-                               completion: @escaping (Result<Void, Error>) -> Void) {
+    func updateUserLocation(location: UserLocation, completion: @escaping (Result<Void, Error>) -> Void) {
         
-        let document = dataBase.collection("UserLocations").document(location.userId)
+        let document = dataBase.collection(FirebaseCollection.userLocations.rawValue).document(location.userId)
         
         do {
             try document.setData(from: location)
@@ -66,10 +43,9 @@ class MapManager {
         }
     }
     
-    func changeUserStatus(userId: String, status: Status,
-                             completion: @escaping (Result<Void, Error>) -> Void) {
+    func changeUserStatus(userId: String, status: Status, completion: @escaping (Result<Void, Error>) -> Void) {
         
-        let document = dataBase.collection("UserLocations").document(userId)
+        let document = dataBase.collection(FirebaseCollection.userLocations.rawValue).document(userId)
             
         document.updateData([
             "status": status.rawValue
@@ -78,38 +54,9 @@ class MapManager {
         }
     }
     
-    func fetchUserInfo(userId: String,
-                             completion: @escaping (Result<User, Error>) -> Void) {
-        
-        let document = dataBase.collection("Users").document(userId)
-            
-        document.getDocument { snapshot, _ in
-            
-            guard let snapshot = snapshot
-            
-            else {
-                    completion(.failure(FirebaseError.fetchUserError))
-                    
-                    return
-            }
-            
-            do {
-                
-                let user = try snapshot.data(as: User.self)
-                
-                completion(.success(user))
-                
-            } catch {
-                
-                completion(.failure(FirebaseError.decodeUserError))
-            }
-            
-        }
-    }
-    
     func listenFriendsLocation(friend: String, completion: @escaping (Result<UserLocation, Error>) -> Void) {
     
-        dataBase.collection("UserLocations").document(friend).addSnapshotListener { snapshot, error in
+        dataBase.collection(FirebaseCollection.userLocations.rawValue).document(friend).addSnapshotListener { snapshot, _ in
             
             guard let snapshot = snapshot else {
                 completion(.failure(FirebaseError.fetchFriendError))
@@ -130,6 +77,65 @@ class MapManager {
             } catch {
                 
                 completion(.failure(FirebaseError.decodeUserError))
+            }
+        }
+    }
+    
+    func fetchAllUserLocations(completion: @escaping (Result<[UserLocation], Error>) -> Void) {
+        
+        var users: [UserLocation] = []
+        
+        let document = dataBase.collection(FirebaseCollection.userLocations.rawValue)
+            
+        document.getDocuments { snapshots, _ in
+            
+            guard let snapshots = snapshots
+            
+            else {
+                    completion(.failure(FirebaseError.fetchUserError))
+                    
+                    return
+            }
+            
+            do {
+                
+                for document in snapshots.documents {
+                    
+                    let user = try document.data(as: UserLocation.self)
+                    
+                    users.append(user)
+                }
+                
+                completion(.success(users))
+                
+            } catch {
+                
+                completion(.failure(FirebaseError.decodeUserError))
+            }
+            
+        }
+    }
+    
+    func fetchStrangerLocations(friend: [String], completion: @escaping (Result<[UserLocation], Error>) -> Void) {
+        
+        var strangerLocations: [UserLocation] = []
+        
+        fetchAllUserLocations { result in
+            switch result {
+                
+            case .success(let userLocations):
+                
+                for userLocation in userLocations {
+                    
+                    if !friend.contains(userLocation.userId) {
+                        strangerLocations.append(userLocation)
+                    }
+                }
+                completion(.success(strangerLocations))
+                
+            case .failure(let error):
+                
+                print(error)
             }
         }
     }

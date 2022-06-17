@@ -24,9 +24,23 @@ class MapViewController: UIViewController {
     
     let deleteTrackButton = UIButton()
     
+    let strangerButton = UIButton()
+    
+    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    
+    var strangersPet: [Pet] = [] {
+
+        didSet {
+            
+            collectionView.reloadData()
+        }
+    }
+    
     var userStoredLocations: [CLLocation] = []
     
-    let mapManager = MapManager()
+    let mapManager = MapManager.shared
+    
+    let userManager = UserManager.shared
     
     var trackStartTime = Timestamp()
     
@@ -40,7 +54,7 @@ class MapViewController: UIViewController {
         }
     }
     
-    let userId = "LI2XA6ImsVOvWE0eHU4U"
+    let userId = "oSLzURakUCoCClw5IT4R"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,19 +71,31 @@ class MapViewController: UIViewController {
         
         didSelectUserLocation()
         
-//        let user = User(id: "Xv0pEmNaLobBb7KUcOfO",
-//                        name: "Dom",
-//                        petsId: ["123", "456", "789"],
-//                        userImage: "",
-//                        description: "",
-//                        friendPetsId: [],
-//                        friends: ["8ZfXYhs9A4YjcI0oVFhi",
-//                                  "JZJrToyHcfeOy4uNphcP",
-//                                  "LI2XA6ImsVOvWE0eHU4U"],
-//                        recieveFriendRequest: [],
-//                        sendRequestsId: [])
-//
-//        mapManager.updateUserInfo(user: user) { result in
+        var user = User(id: userId,
+                        name: "ray",
+                        petsId: ["123", "456", "789"],
+                        userImage: "",
+                        description: "",
+                        friendPetsId: [],
+                        friends: ["YKLdeY8JFgJ6OCK3Dg55",
+                                  "6LekOapG0PZ0rmTMXXfZ",
+                                  "tAC8KcfV261Gv3uUpUEj"],
+                        recieveFriendRequest: [],
+                        sendRequestsId: [])
+
+        userManager.updateUserInfo(user: user) { result in
+            switch result {
+
+            case .success:
+
+                print("success")
+
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+//        userManager.setupUser(user: &user) { result in
 //            switch result {
 //
 //            case .success:
@@ -80,6 +106,19 @@ class MapViewController: UIViewController {
 //                print(error)
 //            }
 //        }
+        
+//        var pet = Pet(id: "",
+//                      ownerId: "YKLdeY8JFgJ6OCK3Dg55",
+//                      name: "fuby",
+//                      gender: 0,
+//                      breed: "",
+//                      description: "",
+//                      birthday: Timestamp(),
+//                      petImage: <#T##String#>,
+//                      postsId: <#T##[String]#>,
+//                      tracksId: <#T##[String]#>,
+//                      personality: <#T##PetPersonality#>)
+//
     }
     
     deinit {
@@ -89,7 +128,9 @@ class MapViewController: UIViewController {
     
     func setup() {
         
-        mapManager.fetchUserInfo(userId: "Xv0pEmNaLobBb7KUcOfO") { [weak self] result in
+        strangerButtonDisable()
+        
+        userManager.fetchUserInfo(userId: userId) { [weak self] result in
             
             switch result {
                 
@@ -97,6 +138,7 @@ class MapViewController: UIViewController {
                 
                 self?.user = user
                 self?.listenFriendsLocation()
+                self?.strangerButtonEnable()
                 
             case .failure(let error):
                 
@@ -120,8 +162,21 @@ class MapViewController: UIViewController {
         
         deleteTrackButton.addTarget(self, action: #selector(didTapDeleteTrack), for: .touchUpInside)
         
+        strangerButton.addTarget(self, action: #selector(didTapStrangerButton), for: .touchUpInside)
+        
         saveTrackButton.isHidden = true
         deleteTrackButton.isHidden = true
+        
+        collectionView.register(
+            StrangerCardViewCell.self,
+            forCellWithReuseIdentifier: StrangerCardViewCell.identifier
+        )
+        
+        collectionView.dataSource = self
+        
+        collectionView.delegate = self
+        
+        collectionView.isHidden = true
     }
     
     func style() {
@@ -140,6 +195,16 @@ class MapViewController: UIViewController {
         deleteTrackButton.backgroundColor = .G1
         deleteTrackButton.layer.cornerRadius = 5
         
+        strangerButton.setTitle("陌生", for: .normal)
+//        strangerButton.backgroundColor = .G1
+        strangerButton.layer.cornerRadius = 5
+        
+        if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            flowLayout.scrollDirection = .horizontal
+        }
+        
+        collectionView.backgroundColor = .clear
+        collectionView.isPagingEnabled = true
     }
     
     func layout() {
@@ -149,6 +214,8 @@ class MapViewController: UIViewController {
         view.addSubview(trackButton)
         view.addSubview(saveTrackButton)
         view.addSubview(deleteTrackButton)
+        view.addSubview(strangerButton)
+        view.addSubview(collectionView)
         
         mapView.fillSuperview()
         
@@ -175,6 +242,17 @@ class MapViewController: UIViewController {
                            width: 60,
                            height: 36,
                            padding: UIEdgeInsets(top: 0, left: 35, bottom: 35, right: 0))
+        
+        strangerButton.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                              trailing: view.trailingAnchor,
+                              width: 60,
+                              height: 36,
+                              padding: UIEdgeInsets(top: 35, left: 0, bottom: 0, right: 35))
+        
+        collectionView.anchor(leading: view.leadingAnchor,
+                              bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                              trailing: view.trailingAnchor,
+                              height: 130)
     }
     
     @objc func didSelectUserLocation() {
@@ -229,7 +307,7 @@ class MapViewController: UIViewController {
         let coordinate = userStoredLocations.map { $0.coordinate }
         let track = coordinate.map { $0.transferToGeopoint() }
         
-        var trackInfo = TrackInfo(id: "",
+        var trackInfo = TrackInfo(id: userId,
                           petId: ["petId"],
                           screenShot: "",
                           startTime: trackStartTime,
@@ -283,6 +361,100 @@ class MapViewController: UIViewController {
                 
                 print(error)
             }
+        }
+    }
+    
+    @objc func didTapStrangerButton() {
+        
+        guard let user = user else {
+            return
+        }
+
+        let friends = user.friends
+        
+        strangerButton.isSelected = !strangerButton.isSelected
+        
+        collectionView.isHidden = !strangerButton.isSelected
+        
+        mapManager.fetchStrangerLocations(friend: friends) { [weak self] result in
+            
+            switch result {
+                
+            case .success(let strangerLocations):
+                
+                guard let nearStrangersId = self?.getNearStrangersId(strangerLocations: strangerLocations) else {
+                    print(FirebaseError.fetchStangerError.errorMessage)
+                    return
+                }
+                
+                self?.fetchPets(from: nearStrangersId) { pets in
+                    
+                    self?.strangersPet = pets
+                }
+                
+            case .failure(let error):
+                
+                print(error)
+            }
+        }
+    }
+
+    func getNearStrangersId(strangerLocations: [UserLocation]) -> [String] {
+
+        var nearbyStrangeLocations: [UserLocation] = []
+
+        guard let myLocation = mapView.userLocation.location else { return [] }
+
+        for strangerLocation in strangerLocations {
+
+            let latitude = strangerLocation.location.latitude
+
+            let longitude = strangerLocation.location.longitude
+            
+            let strangerCordLocation = CLLocation(latitude: latitude, longitude: longitude)
+
+            let distance = myLocation.distance(from: strangerCordLocation) / 1000
+            
+            if distance < 6 {
+                
+                nearbyStrangeLocations.append(strangerLocation)
+            }
+        }
+        
+        return nearbyStrangeLocations.map { $0.userId }
+    }
+    
+    func fetchPets(from usersId: [String], completion: @escaping ([Pet]) -> Void) {
+        
+        let group = DispatchGroup()
+        
+        var fetchedPets: [Pet] = []
+        
+        for userId in usersId {
+            
+            group.enter()
+            
+            self.userManager.fetchPetsbyUser(user: userId) { result in
+                
+                switch result {
+                    
+                case.success(let pets):
+                    
+                    fetchedPets.append(contentsOf: pets)
+                    
+                    group.leave()
+                    
+                case .failure(let error):
+                    
+                    print(error)
+                    
+                    group.leave()
+                }
+            }
+        }
+        group.notify(queue: .main) {
+            
+            completion(fetchedPets)
         }
     }
     
@@ -353,6 +525,18 @@ class MapViewController: UIViewController {
             mapView.addAnnotation(friendAnnotationInfo.value)
 
         }
+    }
+    
+    func strangerButtonEnable() {
+        
+        strangerButton.isEnabled = true
+        strangerButton.backgroundColor = .O1
+    }
+    
+    func strangerButtonDisable() {
+        
+        strangerButton.isEnabled = false
+        strangerButton.backgroundColor = .G1
     }
 }
 
@@ -431,7 +615,7 @@ extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
         
         let annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "UserAnnotation")
         
-        //MARK: Wait change to annotation.petPhoto
+        // MARK: Wait change to annotation.petPhoto
         let image = UIImage(named: "Icons_24px_Chat_Normal")
         
         annotationView.glyphImage = image
@@ -440,4 +624,56 @@ extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
         
         return annotationView
     }
+}
+
+extension MapViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        strangersPet.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: StrangerCardViewCell.identifier,
+            for: indexPath) as? StrangerCardViewCell else {
+            
+            fatalError("Can not dequeue StrangerCardViewCell")
+        }
+        
+        cell.configuerCell(with: strangersPet[indexPath.item])
+        
+        return cell
+        
+    }
+    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//
+//        return CGSize(width: view.frame.width * 0.5, height: 130)
+//    }
+    
+//    func collectionView(_ collectionView: UICollectionView, layout
+//    collectionViewLayout: UICollectionViewLayout,
+//    minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+//
+//        return 0
+//    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        let frameSize = collectionView.frame.size
+            return frameSize.width * 0.1
+        }
+
+        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+            let frameSize = collectionView.frame.size
+            return CGSize(width: frameSize.width * 0.6, height: frameSize.height)
+        }
+
+        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+            let frameSize = collectionView.frame.size
+            return UIEdgeInsets(top: 0, left: frameSize.width * 0.2, bottom: 0, right: frameSize.width * 0.2)
+        }
 }
