@@ -21,6 +21,14 @@
 		B698DDBD2858B8CC0009077E /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDBC2858B8CC0009077E /* ProfileViewController.swift */; };
 		B698DDC02858B99F0009077E /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDBF2858B99F0009077E /* UIImage+Extension.swift */; };
 		B698DDC22858CE9D0009077E /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDC12858CE9D0009077E /* UIView+Extension.swift */; };
+		B6ABE8E0285A06E300B1A977 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8DF285A06E300B1A977 /* UIColor+Extension.swift */; };
+		B6ABE8E2285A0B7400B1A977 /* MapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8E1285A0B7400B1A977 /* MapManager.swift */; };
+		B6ABE8E7285A19C400B1A977 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8E6285A19C400B1A977 /* FirebaseError.swift */; };
+		B6ABE8E9285AC08200B1A977 /* UserLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8E8285AC08200B1A977 /* UserLocation.swift */; };
+		B6ABE8EB285AE41500B1A977 /* LocationRelated+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8EA285AE41500B1A977 /* LocationRelated+Extension.swift */; };
+		B6ABE8ED285AFC2B00B1A977 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8EC285AFC2B00B1A977 /* User.swift */; };
+		B6ABE8F2285B870800B1A977 /* UserAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8F1285B870800B1A977 /* UserAnnotationView.swift */; };
+		B6ABE8F4285B87AB00B1A977 /* UserAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8F3285B87AB00B1A977 /* UserAnnotation.swift */; };
 		C616981117A2021ACBB94FA1 /* Pods_PawKing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3366849FA1579D202FA53C8 /* Pods_PawKing.framework */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +51,14 @@
 		B698DDBC2858B8CC0009077E /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		B698DDBF2858B99F0009077E /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		B698DDC12858CE9D0009077E /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		B6ABE8DF285A06E300B1A977 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		B6ABE8E1285A0B7400B1A977 /* MapManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapManager.swift; sourceTree = "<group>"; };
+		B6ABE8E6285A19C400B1A977 /* FirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseError.swift; sourceTree = "<group>"; };
+		B6ABE8E8285AC08200B1A977 /* UserLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLocation.swift; sourceTree = "<group>"; };
+		B6ABE8EA285AE41500B1A977 /* LocationRelated+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LocationRelated+Extension.swift"; sourceTree = "<group>"; };
+		B6ABE8EC285AFC2B00B1A977 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		B6ABE8F1285B870800B1A977 /* UserAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnnotationView.swift; sourceTree = "<group>"; };
+		B6ABE8F3285B87AB00B1A977 /* UserAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnnotation.swift; sourceTree = "<group>"; };
 		F3366849FA1579D202FA53C8 /* Pods_PawKing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PawKing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -99,12 +115,14 @@
 				B698DD9C285881FB0009077E /* AppDelegate.swift */,
 				B698DD9E285881FB0009077E /* SceneDelegate.swift */,
 				B698DDBE2858B98A0009077E /* Extension */,
-				B698DDA0285881FB0009077E /* TabBarViewController.swift */,
+				B6ABE8E3285A0B8500B1A977 /* Model */,
+				B6ABE8F0285B86DA00B1A977 /* View */,
 				B698DDB42858B8540009077E /* MapViewController.swift */,
 				B698DDB62858B8850009077E /* ExploreViewController.swift */,
 				B698DDB82858B8A90009077E /* PublishViewController.swift */,
 				B698DDBA2858B8BA0009077E /* ChatViewController.swift */,
 				B698DDBC2858B8CC0009077E /* ProfileViewController.swift */,
+				B698DDA0285881FB0009077E /* TabBarViewController.swift */,
 				B698DDA2285881FB0009077E /* Main.storyboard */,
 				B698DDA5285881FD0009077E /* Assets.xcassets */,
 				B698DDA7285881FD0009077E /* LaunchScreen.storyboard */,
@@ -119,8 +137,30 @@
 			children = (
 				B698DDBF2858B99F0009077E /* UIImage+Extension.swift */,
 				B698DDC12858CE9D0009077E /* UIView+Extension.swift */,
+				B6ABE8DF285A06E300B1A977 /* UIColor+Extension.swift */,
+				B6ABE8EA285AE41500B1A977 /* LocationRelated+Extension.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		B6ABE8E3285A0B8500B1A977 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B6ABE8E6285A19C400B1A977 /* FirebaseError.swift */,
+				B6ABE8EC285AFC2B00B1A977 /* User.swift */,
+				B6ABE8E8285AC08200B1A977 /* UserLocation.swift */,
+				B6ABE8E1285A0B7400B1A977 /* MapManager.swift */,
+				B6ABE8F3285B87AB00B1A977 /* UserAnnotation.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		B6ABE8F0285B86DA00B1A977 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B6ABE8F1285B870800B1A977 /* UserAnnotationView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -258,9 +298,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6ABE8E7285A19C400B1A977 /* FirebaseError.swift in Sources */,
 				B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */,
 				B698DD9D285881FB0009077E /* AppDelegate.swift in Sources */,
 				B698DDB92858B8A90009077E /* PublishViewController.swift in Sources */,
+				B6ABE8ED285AFC2B00B1A977 /* User.swift in Sources */,
+				B6ABE8F2285B870800B1A977 /* UserAnnotationView.swift in Sources */,
+				B6ABE8E0285A06E300B1A977 /* UIColor+Extension.swift in Sources */,
+				B6ABE8E9285AC08200B1A977 /* UserLocation.swift in Sources */,
+				B6ABE8E2285A0B7400B1A977 /* MapManager.swift in Sources */,
+				B6ABE8F4285B87AB00B1A977 /* UserAnnotation.swift in Sources */,
 				B698DDC02858B99F0009077E /* UIImage+Extension.swift in Sources */,
 				B698DDBB2858B8BA0009077E /* ChatViewController.swift in Sources */,
 				B698DDB72858B8850009077E /* ExploreViewController.swift in Sources */,
@@ -268,6 +315,7 @@
 				B698DDBD2858B8CC0009077E /* ProfileViewController.swift in Sources */,
 				B698DDC22858CE9D0009077E /* UIView+Extension.swift in Sources */,
 				B698DDB52858B8540009077E /* MapViewController.swift in Sources */,
+				B6ABE8EB285AE41500B1A977 /* LocationRelated+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
