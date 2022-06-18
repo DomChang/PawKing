@@ -18,32 +18,32 @@ class PKPhotoHelper: NSObject {
     func presentActionSheet(from viewController: UIViewController) {
         // 1
         let alertController = UIAlertController(title: nil,
-                                                message: "Where do you want to get your picture from?",
+                                                message: "如何獲取相片?",
                                                 preferredStyle: .actionSheet)
 
         // 2
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
-            let capturePhotoAction = UIAlertAction(title: "Take Photo",
+            let capturePhotoAction = UIAlertAction(title: "相機",
                                                    style: .default,
-                                                   handler: { [unowned self] action in
-                self.presentImagePickerController(with: .camera, from: viewController)
+                                                   handler: { [weak self] action in
+                self?.presentImagePickerController(with: .camera, from: viewController)
             })
 
             alertController.addAction(capturePhotoAction)
         }
 
         if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-            let uploadAction = UIAlertAction(title: "Upload from Library",
+            let uploadAction = UIAlertAction(title: "照片",
                                              style: .default,
-                                             handler: { [unowned self] action in
-                self.presentImagePickerController(with: .photoLibrary, from: viewController)
+                                             handler: { [weak self] action in
+                self?.presentImagePickerController(with: .photoLibrary, from: viewController)
             })
 
             alertController.addAction(uploadAction)
         }
 
         // 6
-        let cancelAction = UIAlertAction(title: "Cancel",
+        let cancelAction = UIAlertAction(title: "取消",
                                          style: .cancel,
                                          handler: nil)
         alertController.addAction(cancelAction)
@@ -67,14 +67,19 @@ class PKPhotoHelper: NSObject {
 
 extension PKPhotoHelper: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
-        if let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+        guard let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage  else {
             
-            completionHandler?(selectedImage)
+            picker.dismiss(animated: true)
+            
+            return
         }
 
-        picker.dismiss(animated: true)
+        picker.dismiss(animated: true) { [weak self] in
+            self?.completionHandler?(selectedImage)
+        }
     }
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

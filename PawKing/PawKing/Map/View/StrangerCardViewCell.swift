@@ -69,7 +69,7 @@ class StrangerCardViewCell: UICollectionViewCell {
         
         let url = URL(string: pet.petImage)
         
-        petImageView.image = UIImage(named: "Image_Placeholder")
+        petImageView.image = UIImage.asset(.Image_Placeholder)
         
         nameLabel.text = pet.name
         

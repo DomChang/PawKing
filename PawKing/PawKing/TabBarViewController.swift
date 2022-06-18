@@ -29,8 +29,8 @@ private enum Tab {
 
         case .explore: controller = UINavigationController(rootViewController: ExploreViewController())
             
-        case .publish: controller = UINavigationController(rootViewController: PublishViewController())
-            
+        case .publish: controller = UINavigationController(rootViewController: PublishViewController(image:
+                                                                                                        UIImage.asset(.Image_Placeholder)!))
         case .chat: controller = UINavigationController(rootViewController: ChatViewController())
 
         case .profile: controller = UINavigationController(rootViewController: ProfileViewController())
@@ -95,8 +95,11 @@ class TabBarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        photoHelper.completionHandler = { image in
-                print("handle image")
+        photoHelper.completionHandler = { [weak self] image in
+            
+            let navPublishVC = UINavigationController(rootViewController: PublishViewController(image: image))
+//
+            self?.present(navPublishVC, animated: true)
         }
         
         delegate = self
