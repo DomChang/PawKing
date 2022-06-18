@@ -98,7 +98,9 @@ class TabBarViewController: UITabBarController {
         photoHelper.completionHandler = { [weak self] image in
             
             let navPublishVC = UINavigationController(rootViewController: PublishViewController(image: image))
-//
+            
+            navPublishVC.modalPresentationStyle = .fullScreen
+
             self?.present(navPublishVC, animated: true)
         }
         

@@ -18,6 +18,7 @@ target 'PawKing' do
   pod 'FirebaseStorage'
   pod 'FirebaseFirestoreSwift'
   pod 'Kingfisher'
+  pod 'IQKeyboardManagerSwift'
 
 post_install do |installer|
  installer.pods_project.targets.each do |target|

@@ -41,6 +41,9 @@ final class PublishViewController: UIViewController {
         
         view.backgroundColor = .white
         photoImageView.contentMode = .scaleAspectFit
+        
+        captionTextView.layer.borderWidth = 1
+        captionTextView.layer.borderColor = UIColor.G1?.cgColor
     }
     
     func layout() {

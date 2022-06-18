@@ -126,6 +126,7 @@
 				B698DD9E285881FB0009077E /* SceneDelegate.swift */,
 				B698DDBE2858B98A0009077E /* Extension */,
 				B6ABE8E3285A0B8500B1A977 /* Model */,
+				B6D4F6AC285D7EB70045DDB2 /* Configure */,
 				B6D4F69F285C360E0045DDB2 /* Map */,
 				B698DDB62858B8850009077E /* ExploreViewController.swift */,
 				B6D4F6AA285CDB150045DDB2 /* PKPhotoHelper.swift */,
@@ -200,6 +201,13 @@
 				B698DDB42858B8540009077E /* MapViewController.swift */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		B6D4F6AC285D7EB70045DDB2 /* Configure */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Configure;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
