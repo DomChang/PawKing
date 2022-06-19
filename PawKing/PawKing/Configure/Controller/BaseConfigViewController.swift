@@ -11,6 +11,8 @@ class BaseConfigViewController: UIViewController {
     
     let tableView = UITableView()
     
+    let photoHelper = PKPhotoHelper()
+    
     let bottomLineView = UIView()
     
     let confirmButton = UIButton()
@@ -25,17 +27,25 @@ class BaseConfigViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.tabBarController?.tabBar.isHidden = true
+        
+        navigationController?.navigationBar.isHidden = false
+        
+        tabBarController?.tabBar.isHidden = true
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.tabBarController?.tabBar.isHidden = false
+        
+        navigationController?.navigationBar.isHidden = true
+        
+        tabBarController?.tabBar.isHidden = false
     }
     
     func setup() {
         
-        confirmButton.addTarget(self, action: #selector(didTapConfirm), for: .touchUpInside)
+        tableView.dataSource = self
+        tableView.delegate = self
+        
     }
     
     func style() {
@@ -51,7 +61,11 @@ class BaseConfigViewController: UIViewController {
         view.addSubview(bottomLineView)
         view.addSubview(confirmButton)
         
-        tableView.fillSuperview(padding: UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0))
+        tableView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                         leading: view.leadingAnchor,
+                         bottom: view.bottomAnchor,
+                         trailing: view.trailingAnchor,
+                         padding: UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0))
         
         bottomLineView.anchor(top: tableView.bottomAnchor,
                               centerX: view.centerXAnchor,
@@ -61,11 +75,35 @@ class BaseConfigViewController: UIViewController {
         confirmButton.anchor(top: bottomLineView.bottomAnchor,
                              leading: view.leadingAnchor,
                              trailing: view.trailingAnchor,
-                             height: 30,
+                             height: 50,
                              padding: UIEdgeInsets(top: 20, left: 32, bottom: 0, right: 32))
     }
     
-    @objc func didTapConfirm() {
+    func confirmButtonEnable() {
         
+        confirmButton.backgroundColor = .O1
+        confirmButton.isEnabled = true
+    }
+    
+    func confirmButtonDisable() {
+        
+        confirmButton.backgroundColor = .G1
+        confirmButton.isEnabled = false
+    }
+}
+
+extension BaseConfigViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        return UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        0
     }
 }

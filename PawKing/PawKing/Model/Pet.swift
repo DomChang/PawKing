@@ -8,11 +8,13 @@
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-enum PetGender: Int {
+enum PetGender: String , CaseIterable {
     
-    case female
+    case male = "男生"
     
-    case male
+    case female = "女生"
+    
+    case other = "其他"
 }
 
 struct Pet: Codable {
@@ -24,7 +26,7 @@ struct Pet: Codable {
     let breed: String
     let description: String
     let birthday: Timestamp
-    let petImage: String
+    var petImage: String
     let postsId: [String]
     let tracksId: [String]
     let personality: PetPersonality

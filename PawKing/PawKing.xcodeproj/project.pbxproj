@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B63484D3285D80C600DB7CE7 /* UserConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484D2285D80C600DB7CE7 /* UserConfigViewController.swift */; };
+		B63484D6285D80F100DB7CE7 /* BaseConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484D5285D80F100DB7CE7 /* BaseConfigViewController.swift */; };
+		B63484DB285D85E900DB7CE7 /* UserConfigCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484DA285D85E900DB7CE7 /* UserConfigCell.swift */; };
+		B63484DD285DA5B300DB7CE7 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484DC285DA5B300DB7CE7 /* KeychainManager.swift */; };
+		B63484DF285DC62D00DB7CE7 /* PetConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484DE285DC62D00DB7CE7 /* PetConfigViewController.swift */; };
+		B63484E1285DC70D00DB7CE7 /* PetConfigCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484E0285DC70D00DB7CE7 /* PetConfigCell.swift */; };
+		B63484E3285DC8D000DB7CE7 /* PetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484E2285DC8D000DB7CE7 /* PetManager.swift */; };
+		B63484E5285E1E5300DB7CE7 /* ChoosePetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484E4285E1E5300DB7CE7 /* ChoosePetViewController.swift */; };
+		B63484E7285E36F700DB7CE7 /* ChoosePetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484E6285E36F700DB7CE7 /* ChoosePetTableViewCell.swift */; };
 		B698DD9D285881FB0009077E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DD9C285881FB0009077E /* AppDelegate.swift */; };
 		B698DD9F285881FB0009077E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DD9E285881FB0009077E /* SceneDelegate.swift */; };
 		B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDA0285881FB0009077E /* TabBarViewController.swift */; };
@@ -40,6 +49,15 @@
 /* Begin PBXFileReference section */
 		3892957CF3DC689420745EBB /* Pods-PawKing.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PawKing.debug.xcconfig"; path = "Target Support Files/Pods-PawKing/Pods-PawKing.debug.xcconfig"; sourceTree = "<group>"; };
 		5AF034E01BB911618BEB17BE /* Pods-PawKing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PawKing.release.xcconfig"; path = "Target Support Files/Pods-PawKing/Pods-PawKing.release.xcconfig"; sourceTree = "<group>"; };
+		B63484D2285D80C600DB7CE7 /* UserConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConfigViewController.swift; sourceTree = "<group>"; };
+		B63484D5285D80F100DB7CE7 /* BaseConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseConfigViewController.swift; sourceTree = "<group>"; };
+		B63484DA285D85E900DB7CE7 /* UserConfigCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConfigCell.swift; sourceTree = "<group>"; };
+		B63484DC285DA5B300DB7CE7 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		B63484DE285DC62D00DB7CE7 /* PetConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetConfigViewController.swift; sourceTree = "<group>"; };
+		B63484E0285DC70D00DB7CE7 /* PetConfigCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetConfigCell.swift; sourceTree = "<group>"; };
+		B63484E2285DC8D000DB7CE7 /* PetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetManager.swift; sourceTree = "<group>"; };
+		B63484E4285E1E5300DB7CE7 /* ChoosePetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoosePetViewController.swift; sourceTree = "<group>"; };
+		B63484E6285E36F700DB7CE7 /* ChoosePetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoosePetTableViewCell.swift; sourceTree = "<group>"; };
 		B698DD99285881FB0009077E /* PawKing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PawKing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B698DD9C285881FB0009077E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B698DD9E285881FB0009077E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -101,6 +119,32 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		B63484D7285D858C00DB7CE7 /* Modal */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Modal;
+			sourceTree = "<group>";
+		};
+		B63484D8285D859900DB7CE7 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B63484DA285D85E900DB7CE7 /* UserConfigCell.swift */,
+				B63484E0285DC70D00DB7CE7 /* PetConfigCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		B63484D9285D85A000DB7CE7 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				B63484D2285D80C600DB7CE7 /* UserConfigViewController.swift */,
+				B63484DE285DC62D00DB7CE7 /* PetConfigViewController.swift */,
+				B63484D5285D80F100DB7CE7 /* BaseConfigViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
 		B698DD90285881FB0009077E = {
 			isa = PBXGroup;
 			children = (
@@ -157,12 +201,14 @@
 		B6ABE8E3285A0B8500B1A977 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				B63484DC285DA5B300DB7CE7 /* KeychainManager.swift */,
 				B6D4F6A2285C526A0045DDB2 /* FirebaseCollection.swift */,
 				B6ABE8E6285A19C400B1A977 /* FirebaseError.swift */,
 				B6ABE8EC285AFC2B00B1A977 /* User.swift */,
 				B6ABE8E8285AC08200B1A977 /* UserLocation.swift */,
 				B6D4F69D285C35F80045DDB2 /* UserManager.swift */,
 				B6D4F6A8285C62F10045DDB2 /* Pet.swift */,
+				B63484E2285DC8D000DB7CE7 /* PetManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -172,6 +218,7 @@
 			children = (
 				B6D4F6A4285C5D410045DDB2 /* StrangerCardView.swift */,
 				B6D4F6A6285C5F9B0045DDB2 /* StrangerCardViewCell.swift */,
+				B63484E6285E36F700DB7CE7 /* ChoosePetTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -199,6 +246,7 @@
 			isa = PBXGroup;
 			children = (
 				B698DDB42858B8540009077E /* MapViewController.swift */,
+				B63484E4285E1E5300DB7CE7 /* ChoosePetViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -206,6 +254,9 @@
 		B6D4F6AC285D7EB70045DDB2 /* Configure */ = {
 			isa = PBXGroup;
 			children = (
+				B63484D7285D858C00DB7CE7 /* Modal */,
+				B63484D8285D859900DB7CE7 /* View */,
+				B63484D9285D85A000DB7CE7 /* Controller */,
 			);
 			path = Configure;
 			sourceTree = "<group>";
@@ -345,16 +396,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B63484DB285D85E900DB7CE7 /* UserConfigCell.swift in Sources */,
 				B6ABE8E7285A19C400B1A977 /* FirebaseError.swift in Sources */,
+				B63484DF285DC62D00DB7CE7 /* PetConfigViewController.swift in Sources */,
 				B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */,
+				B63484E7285E36F700DB7CE7 /* ChoosePetTableViewCell.swift in Sources */,
 				B6D4F69E285C35F80045DDB2 /* UserManager.swift in Sources */,
+				B63484E3285DC8D000DB7CE7 /* PetManager.swift in Sources */,
 				B698DD9D285881FB0009077E /* AppDelegate.swift in Sources */,
+				B63484E1285DC70D00DB7CE7 /* PetConfigCell.swift in Sources */,
 				B698DDB92858B8A90009077E /* PublishViewController.swift in Sources */,
+				B63484D3285D80C600DB7CE7 /* UserConfigViewController.swift in Sources */,
 				B6ABE8ED285AFC2B00B1A977 /* User.swift in Sources */,
 				B6ABE8E0285A06E300B1A977 /* UIColor+Extension.swift in Sources */,
 				B6ABE8E9285AC08200B1A977 /* UserLocation.swift in Sources */,
+				B63484D6285D80F100DB7CE7 /* BaseConfigViewController.swift in Sources */,
 				B6D4F6A5285C5D410045DDB2 /* StrangerCardView.swift in Sources */,
 				B6ABE8E2285A0B7400B1A977 /* MapManager.swift in Sources */,
+				B63484E5285E1E5300DB7CE7 /* ChoosePetViewController.swift in Sources */,
+				B63484DD285DA5B300DB7CE7 /* KeychainManager.swift in Sources */,
 				B6ABE8F4285B87AB00B1A977 /* UserAnnotation.swift in Sources */,
 				B698DDC02858B99F0009077E /* UIImage+Extension.swift in Sources */,
 				B698DDBB2858B8BA0009077E /* ChatViewController.swift in Sources */,
