@@ -8,7 +8,7 @@
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-enum PetGender: String , CaseIterable {
+enum PetGender: String, CaseIterable {
     
     case male = "男生"
     

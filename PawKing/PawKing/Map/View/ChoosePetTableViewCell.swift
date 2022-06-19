@@ -44,7 +44,7 @@ class ChoosePetTableViewCell: UITableViewCell {
                             width: 50,
                             height: 50,
                             padding: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
-        
+
         petNameLabel.anchor(leading: petImageView.trailingAnchor,
                             trailing: contentView.trailingAnchor,
                             centerY: contentView.centerYAnchor,

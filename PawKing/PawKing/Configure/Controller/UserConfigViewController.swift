@@ -86,7 +86,7 @@ extension UserConfigViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: UserConfigCell.identifier) as? UserConfigCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: UserConfigCell.identifier, for: indexPath) as? UserConfigCell
         else {
             
             fatalError("Cannot dequeue UserConfigCell")

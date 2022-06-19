@@ -86,7 +86,7 @@ class MapViewController: UIViewController {
         }
     }
     
-    let userId = "LqzusNedS4Ol9Xd3kvo5"
+    let userId = "6jRPSQJEw7NWuyZl2BCs"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -742,14 +742,31 @@ extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
         
         guard let imageUrl = URL(string: userAnnotation.petPhoto) else { return annotationView}
         
-        KingfisherManager.shared.retrieveImage(with: imageUrl) { result in
+//        KingfisherManager.shared.retrieveImage(with: imageUrl) { result in
+//
+//            let image = try? result.get().image
+//
+//            if let image = image {
+//
+//                annotationView.glyphImage = image
+//            }
+//        }
+        
+        KingfisherManager.shared.retrieveImage(with: imageUrl, completionHandler: { result in
             
-            let image = try? result.get().image
-            if let image = image {
+            switch result {
                 
-                annotationView.glyphImage = image
+            case .success(let value):
+                
+                let resizeImage = value.image.resized(to: CGSize(width: 10, height: 10))
+                annotationView.contentMode = .scaleAspectFit
+                annotationView.glyphImage = resizeImage
+                
+            case .failure(let error):
+                
+                print("Error: \(error)")
             }
-        }
+        })
         
         annotationView.markerTintColor = .G1
         
@@ -775,7 +792,7 @@ extension MapViewController: UICollectionViewDataSource, UICollectionViewDelegat
         }
         
         if strangersPet.count == 0 {
-            cell.infoLabel.text = "附近沒有寵物"
+            cell.infoLabel.text = "附近沒有陌生寵物"
         } else {
             cell.configuerCell(with: strangersPet[indexPath.item])
         }

@@ -106,7 +106,7 @@ extension PetConfigViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: PetConfigCell.identifier) as? PetConfigCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PetConfigCell.identifier,  for: indexPath) as? PetConfigCell
         else {
             
             fatalError("Cannot dequeue UserConfigCell")
