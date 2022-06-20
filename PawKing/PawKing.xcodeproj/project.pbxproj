@@ -50,6 +50,7 @@
 		B6E86AA6285F0B85002B8C9A /* TrackHostoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86AA5285F0B85002B8C9A /* TrackHostoryCell.swift */; };
 		B6E86AA8285F1EB4002B8C9A /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86AA7285F1EB4002B8C9A /* Post.swift */; };
 		B6E86AAA285F7DAA002B8C9A /* PetItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86AA9285F7DAA002B8C9A /* PetItemCell.swift */; };
+		B6E86AAC2860309F002B8C9A /* EditUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86AAB2860309F002B8C9A /* EditUserViewController.swift */; };
 		C616981117A2021ACBB94FA1 /* Pods_PawKing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3366849FA1579D202FA53C8 /* Pods_PawKing.framework */; };
 /* End PBXBuildFile section */
 
@@ -101,6 +102,7 @@
 		B6E86AA5285F0B85002B8C9A /* TrackHostoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackHostoryCell.swift; sourceTree = "<group>"; };
 		B6E86AA7285F1EB4002B8C9A /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		B6E86AA9285F7DAA002B8C9A /* PetItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetItemCell.swift; sourceTree = "<group>"; };
+		B6E86AAB2860309F002B8C9A /* EditUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserViewController.swift; sourceTree = "<group>"; };
 		F3366849FA1579D202FA53C8 /* Pods_PawKing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PawKing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -193,6 +195,7 @@
 			isa = PBXGroup;
 			children = (
 				B698DDBC2858B8CC0009077E /* ProfileViewController.swift */,
+				B6E86AAB2860309F002B8C9A /* EditUserViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -226,7 +229,6 @@
 				B6D4F69F285C360E0045DDB2 /* Map */,
 				B63484E8285EEE0E00DB7CE7 /* Profile */,
 				B698DDB62858B8850009077E /* ExploreViewController.swift */,
-				B6D4F6AA285CDB150045DDB2 /* PKPhotoHelper.swift */,
 				B698DDB82858B8A90009077E /* PublishViewController.swift */,
 				B698DDBA2858B8BA0009077E /* ChatViewController.swift */,
 				B698DDA0285881FB0009077E /* TabBarViewController.swift */,
@@ -262,6 +264,7 @@
 				B6D4F6A8285C62F10045DDB2 /* Pet.swift */,
 				B63484E2285DC8D000DB7CE7 /* PetManager.swift */,
 				B6E86AA7285F1EB4002B8C9A /* Post.swift */,
+				B6D4F6AA285CDB150045DDB2 /* PKPhotoHelper.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -452,6 +455,7 @@
 				B63484DB285D85E900DB7CE7 /* UserConfigCell.swift in Sources */,
 				B6E86AA6285F0B85002B8C9A /* TrackHostoryCell.swift in Sources */,
 				B6ABE8E7285A19C400B1A977 /* FirebaseError.swift in Sources */,
+				B6E86AAC2860309F002B8C9A /* EditUserViewController.swift in Sources */,
 				B63484DF285DC62D00DB7CE7 /* PetConfigViewController.swift in Sources */,
 				B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */,
 				B63484E7285E36F700DB7CE7 /* ChoosePetTableViewCell.swift in Sources */,

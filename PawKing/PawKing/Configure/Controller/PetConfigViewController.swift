@@ -20,7 +20,7 @@ class PetConfigViewController: UIViewController {
     
     private let tableView = UITableView()
     
-    private let bottomLineView = UIView()
+//    private let bottomLineView = UIView()
     
     private var petName: String?
     
@@ -28,14 +28,17 @@ class PetConfigViewController: UIViewController {
     
     private var petDescription: String?
     
+    private var isInitailSet: Bool
+    
     var petImage: UIImage? {
         didSet {
             tableView.reloadData()
         }
     }
     
-    init(user: User) {
+    init(user: User, isInitailSet: Bool) {
         self.owner = user
+        self.isInitailSet = isInitailSet
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -55,7 +58,10 @@ class PetConfigViewController: UIViewController {
         
         navigationItem.title = "寵物資料"
         
-        navigationItem.hidesBackButton = true
+        if isInitailSet {
+            
+            navigationItem.hidesBackButton = true
+        }
         
         tableView.dataSource = self
         
@@ -73,28 +79,23 @@ class PetConfigViewController: UIViewController {
 
         view.backgroundColor = .white
         
-        bottomLineView.backgroundColor = .O1
+//        bottomLineView.backgroundColor = .O1
     }
     
     func layout() {
         
         view.addSubview(tableView)
-        view.addSubview(bottomLineView)
+//        view.addSubview(bottomLineView)
         
         tableView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                          leading: view.leadingAnchor,
-                         bottom: view.bottomAnchor,
-                         trailing: view.trailingAnchor,
-                         padding: UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0))
+                         bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                         trailing: view.trailingAnchor)
         
-        bottomLineView.anchor(top: tableView.bottomAnchor,
-                              centerX: view.centerXAnchor,
-                              width: view.frame.width,
-                              height: 1)
-    }
-    
-    @objc func didTapFinish() {
-        
+//        bottomLineView.anchor(top: tableView.bottomAnchor,
+//                              centerX: view.centerXAnchor,
+//                              width: view.frame.width,
+//                              height: 1)
     }
 }
 
@@ -106,7 +107,8 @@ extension PetConfigViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: PetConfigCell.identifier,  for: indexPath) as? PetConfigCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PetConfigCell.identifier,
+                                                       for: indexPath) as? PetConfigCell
         else {
             
             fatalError("Cannot dequeue UserConfigCell")
@@ -123,7 +125,7 @@ extension PetConfigViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        1000
+        750
     }
 }
 
@@ -132,7 +134,7 @@ extension PetConfigViewController: PetConfigCellDelegate {
     func didTapFinish(From cell: PetConfigCell) {
         
         guard let petName = cell.petNameTextfield.text,
-              let image = cell.photoButton.image(for: .normal)
+              let petImage = cell.photoButton.image(for: .normal)
         else {
             return
         }
@@ -153,88 +155,16 @@ extension PetConfigViewController: PetConfigCellDelegate {
                                                   isCatFriendly: true,
                                                   isDogFriendly: true))
         
-        petManager.setupPet(pet: &pet) { [weak self] result in
+        petManager.setupPet(userId: owner.id,
+                            pet: &pet,
+                            petName: petName,
+                            petImage: petImage) { [weak self] result in
             
             switch result {
                 
-            case .success(let petId):
+            case .success:
                 
-//                self?.userId = petId
-                
-                self?.petManager.uploadPetPhoto(petId: petId, image: image) { result in
-                    
-                    switch result {
-                        
-                    case .success(let imageUrl):
-                        
-                        let imageUrlString = String(describing: imageUrl)
-                        
-                        pet.petImage = imageUrlString
-                        
-                        self?.petManager.updatePetInfo(pet: pet) { result in
-                            
-                            switch result {
-                                
-                            case .success:
-                                
-                                print("===Create pet success")
-                                
-                            case .failure(let error):
-                                
-                                print(error)
-                            }
-                        }
-                        
-                        guard let userId = self?.owner.id else {
-                            
-                            print("User id not found")
-                            
-                            return
-                        }
-                        
-                        let userLocation = UserLocation(userId: userId,
-                                                        userName: "",
-                                                        userPhoto: "",
-                                                        currentPetId: petId,
-                                                        petName: petName,
-                                                        petPhoto: imageUrlString,
-                                                        location: GeoPoint(latitude: 0, longitude: 0),
-                                                        status: 0)
-                        
-                        self?.userManager.updateUserLocation(location: userLocation, completion: { result in
-                            switch result {
-                                
-                            case .success:
-                                
-                                print("===initial userLocation success")
-                                self?.navigationController?.popToRootViewController(animated: true)
-                                
-                            case .failure(let error):
-                                
-                                print(error)
-                            }
-                        })
-                        
-                        self?.userManager.updateUserPet(userId: userId, petId: petId) { result in
-                             
-                            switch result {
-                                
-                            case .success:
-                                
-                                print("===Create pet success")
-                                
-                            case .failure(let error):
-                                
-                                print(error)
-                            }
-                            
-                        }
-                        
-                    case .failure(let error):
-                        
-                        print(error)
-                    }
-                }
+                self?.navigationController?.popToRootViewController(animated: true)
                 
             case .failure(let error):
                 

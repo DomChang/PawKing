@@ -307,7 +307,7 @@ class MapViewController: UIViewController {
     
     func fetchUserPets() {
         
-        userManager.fetchPetsbyUser(user: userId) { [weak self] result in
+        userManager.fetchPetsbyUser(userId: userId) { [weak self] result in
             
             switch result {
                 
@@ -437,7 +437,7 @@ class MapViewController: UIViewController {
                 
             case .success:
                 
-                print("===renew statu success")
+                print("===renew status success")
                 
             case .failure(let error):
                 
@@ -539,7 +539,7 @@ class MapViewController: UIViewController {
             
             group.enter()
             
-            self.userManager.fetchPetsbyUser(user: userId) { result in
+            self.userManager.fetchPetsbyUser(userId: userId) { result in
                 
                 switch result {
                     
@@ -654,6 +654,22 @@ extension MapViewController: ChoosePetViewDelegate {
     func didChoosePet(with selectedPet: Pet) {
         
         self.userCurrentPet = selectedPet
+        
+        guard let user = user else { return }
+        
+        userManager.updateCurrentPet(userId: user.id, pet: selectedPet) { result in
+            
+            switch result {
+                
+            case .success:
+                
+                print("=== Change current Pet complete")
+                
+            case .failure(let error):
+                
+                print(error)
+            }
+        }
     }
 }
 

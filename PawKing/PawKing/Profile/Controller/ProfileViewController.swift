@@ -9,12 +9,14 @@ import UIKit
 
 class ProfileViewController: UIViewController {
     
+    let userId = "6jRPSQJEw7NWuyZl2BCs"
+    
     private let collectionView = UICollectionView(frame: .zero,
                                                   collectionViewLayout: configureLayout())
     
-    let userManager = UserManager.shared
+    private let userManager = UserManager.shared
     
-    let userId = "6jRPSQJEw7NWuyZl2BCs"
+    private let photoHelper = PKPhotoHelper()
     
     var isPhoto = true {
         didSet {
@@ -52,13 +54,22 @@ class ProfileViewController: UIViewController {
         
         collectionView.dataSource = self
 //        collectionView?.delegate = self
-        collectionView.register(ProfileInfoCell.self, forCellWithReuseIdentifier: ProfileInfoCell.identifier)
-        collectionView.register(PetItemCell.self, forCellWithReuseIdentifier: PetItemCell.identifier)
-        collectionView.register(ContentButtonCell.self, forCellWithReuseIdentifier: ContentButtonCell.identifier)
-        collectionView.register(PhotoItemCell.self, forCellWithReuseIdentifier: PhotoItemCell.identifier)
-        collectionView.register(TrackHostoryCell.self, forCellWithReuseIdentifier: TrackHostoryCell.identifier)
+        collectionView.register(ProfileInfoCell.self,
+                                forCellWithReuseIdentifier: ProfileInfoCell.identifier)
         
-        collectionView.clipsToBounds = false
+        collectionView.register(PetItemCell.self,
+                                forCellWithReuseIdentifier: PetItemCell.identifier)
+        
+        collectionView.register(ContentButtonCell.self,
+                                forCellWithReuseIdentifier: ContentButtonCell.identifier)
+        
+        collectionView.register(PhotoItemCell.self,
+                                forCellWithReuseIdentifier: PhotoItemCell.identifier)
+        
+        collectionView.register(TrackHostoryCell.self,
+                                forCellWithReuseIdentifier: TrackHostoryCell.identifier)
+        
+        navigationItem.title = "個人"
         
         userManager.fetchUserInfo(userId: userId) { [weak self] result in
             
@@ -68,7 +79,7 @@ class ProfileViewController: UIViewController {
                 
                 self?.user = user
                 
-                self?.userManager.fetchPetsbyUser(user: user.id) { result in
+                self?.userManager.listenPetChange(userId: user.id) { result in
                     
                     switch result {
                         
@@ -184,6 +195,32 @@ class ProfileViewController: UIViewController {
     }
 }
 
+extension ProfileViewController: ProfileInfoCellDelegate {
+    
+    func didTapUserImage() {
+        
+        photoHelper.presentActionSheet(from: self)
+    }
+    
+    func didTapEditProfile() {
+        
+        guard let user = user else { return }
+        
+        let editUserVC = EditUserViewController(userId: user.id, userName: user.name)
+        
+        navigationController?.pushViewController(editUserVC, animated: true)
+    }
+    
+    func didTapAddPet() {
+        
+        guard let user = user else { return }
+        
+        let petConfigVC = PetConfigViewController(user: user, isInitailSet: false)
+        
+        navigationController?.pushViewController(petConfigVC, animated: true)
+    }
+}
+
 extension ProfileViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -233,7 +270,42 @@ extension ProfileViewController: UICollectionViewDataSource {
             
             guard let user = user else { return infoCell }
             
+            photoHelper.completionHandler = { [weak self] image in
+                
+                infoCell.userImageView.image = image
+                
+                self?.userManager.uploadUserPhoto(userId: user.id,
+                                            image: image) { result in
+                    switch result {
+
+                    case .success:
+                        
+                        self?.navigationController?.popToRootViewController(animated: true)
+                        
+                        self?.userManager.fetchUserInfo(userId: user.id) { [weak self] result in
+                            
+                            switch result {
+                                
+                            case .success(let user):
+                                
+                                self?.user = user
+                                
+                            case .failure(let error):
+                                
+                                print(error)
+                            }
+                        }
+                        
+                    case .failure(let error):
+                        
+                        print(error)
+                    }
+                }
+            }
+            
             infoCell.configureCell(user: user)
+            
+            infoCell.delegate = self
             
             return infoCell
             

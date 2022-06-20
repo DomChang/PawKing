@@ -19,13 +19,17 @@ enum FirebaseError: Error {
     
     case fetchPetError
     
+    case fetchFriendError
+    
+    case fetchStangerError
+    
+    case uploadUserPhotoError
+    
     case uploadTrackError
     
     case updateLocationError
     
-    case fetchFriendError
-    
-    case fetchStangerError
+    case updateUserInfoError
     
     case decodeUserError
     
@@ -51,14 +55,6 @@ enum FirebaseError: Error {
             
             return "讀取寵物資料失敗"
             
-        case.uploadTrackError:
-            
-            return "上傳軌跡失敗"
-            
-        case .updateLocationError:
-            
-            return "更新位置狀態失敗"
-            
         case .fetchUserLocationError:
             
             return "讀取使用者已儲存位置失敗"
@@ -70,6 +66,22 @@ enum FirebaseError: Error {
         case .fetchStangerError:
             
             return "無法讀取陌生人位置"
+            
+        case .uploadUserPhotoError:
+            
+            return "上傳使用者照片失敗"
+            
+        case.uploadTrackError:
+            
+            return "上傳軌跡失敗"
+            
+        case .updateLocationError:
+            
+            return "更新位置狀態失敗"
+            
+        case .updateUserInfoError:
+            
+            return "更新使用者資料失敗"
             
         case .decodeUserError:
             

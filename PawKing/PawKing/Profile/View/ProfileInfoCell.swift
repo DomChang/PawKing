@@ -6,10 +6,21 @@
 //
 
 import UIKit
+ 
+protocol ProfileInfoCellDelegate {
+    
+    func didTapUserImage()
+    
+    func didTapEditProfile()
+    
+    func didTapAddPet()
+}
 
 class ProfileInfoCell: UICollectionViewCell {
     
     static let identifier = "\(ProfileInfoCell.self)"
+    
+    var delegate: ProfileInfoCellDelegate?
     
     let userImageView = UIImageView()
     
@@ -31,16 +42,26 @@ class ProfileInfoCell: UICollectionViewCell {
     
     let buttonStackView = UIStackView()
     
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        setup()
         style()
         layout()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setup() {
+        
+        editProfileButton.addTarget(self, action: #selector(didTapEditProfile), for: .touchUpInside)
+        addPetButton.addTarget(self, action: #selector(didTapAddPet), for: .touchUpInside)
+        
+        userImageView.addGestureRecognizer(UITapGestureRecognizer(target: self,
+                                                                  action: #selector(didTapUserImage)))
+        userImageView.isUserInteractionEnabled = true
     }
     
     private func style() {
@@ -139,5 +160,20 @@ class ProfileInfoCell: UICollectionViewCell {
         userNameLabel.text = user.name
         
         friendNumLabel.text = "\(user.friends.count)"
+    }
+    
+    @objc func didTapUserImage() {
+        
+        self.delegate?.didTapUserImage()
+    }
+    
+    @objc func didTapEditProfile() {
+        
+        self.delegate?.didTapEditProfile()
+    }
+    
+    @objc func didTapAddPet() {
+        
+        self.delegate?.didTapAddPet()
     }
 }
