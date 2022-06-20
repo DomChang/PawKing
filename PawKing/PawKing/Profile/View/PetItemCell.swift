@@ -41,7 +41,7 @@ class PetItemCell: UICollectionViewCell {
 
         imageView.clipsToBounds = true
         
-//        imageView.kf.setImage(with: photoURL)
+        imageView.kf.setImage(with: photoURL)
         
         imageView.anchor(top: contentView.topAnchor,
                          leading: contentView.leadingAnchor,

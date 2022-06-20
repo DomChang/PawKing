@@ -202,10 +202,9 @@ extension ProfileViewController: UICollectionViewDataSource {
             
         case ProfileSections.choosePet.rawValue:
             
-//            return userPets?.count ?? 0
-            return 10
+            return userPets?.count ?? 0
+//            return 10
 
-            
         case ProfileSections.chooseContent.rawValue:
             
             return user == nil ? 0 : 1
@@ -246,12 +245,12 @@ extension ProfileViewController: UICollectionViewDataSource {
                 fatalError("Cannot dequeue PhotoItemCell")
             }
             
-//            guard let userPets = userPets else { return petCell }
-//
-//            let imageUrl = URL(string: userPets[indexPath.item].petImage)
+            guard let userPets = userPets else { return petCell }
+
+            let imageUrl = URL(string: userPets[indexPath.item].petImage)
             
-//            petCell.photoURL = imageUrl
-            petCell.imageView.image = UIImage.asset(.Image_Placeholder)
+            petCell.photoURL = imageUrl
+//            petCell.imageView.image = UIImage.asset(.Image_Placeholder)
             
 //            petCell.layoutIfNeeded()
 //            petCell.imageView.makeRound()
@@ -286,8 +285,7 @@ extension ProfileViewController: UICollectionViewDataSource {
                 
             } else {
                 
-                guard let trackCell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackHostoryCell.identifier,
-                                                                        for: indexPath) as? TrackHostoryCell
+                guard let trackCell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackHostoryCell.identifier, for: indexPath) as? TrackHostoryCell
                 else {
                     fatalError("Cannot dequeue TrackHostoryCell")
                 }
