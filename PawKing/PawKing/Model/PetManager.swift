@@ -13,49 +13,140 @@ class PetManager {
     
     static let shared = PetManager()
     
+    private let userManager = UserManager.shared
+    
     lazy var dataBase = Firestore.firestore()
     
-    func setupPet(pet: inout Pet, completion: @escaping (Result<String, Error>) -> Void) {
+    func setupPet(userId: String,
+                  pet: inout Pet,
+                  petName: String,
+                  petImage: UIImage, completion: @escaping (Result<Void, Error>) -> Void) {
         
-        let document = dataBase.collection(FirebaseCollection.pets.rawValue).document()
+        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+                       .collection(FirebaseCollection.pets.rawValue).document()
+        
         pet.id = document.documentID
         
         do {
             try document.setData(from: pet)
             
-            completion(.success(pet.id))
+            let petId = document.documentID
             
+            uploadPetPhoto(userId: userId, petId: petId, image: petImage) { [weak self] result in
+                
+                switch result {
+                    
+                case .success(let petImageUrlString):
+                    
+                    self?.userManager.updateUserPet(userId: userId, petId: petId) { result in
+                        
+                        switch result {
+                            
+                        case .success:
+                            
+                            let userLocation = UserLocation(userId: userId,
+                                                            userName: "",
+                                                            userPhoto: "",
+                                                            currentPetId: document.documentID,
+                                                            petName: petName,
+                                                            petPhoto: petImageUrlString,
+                                                            location: GeoPoint(latitude: 0, longitude: 0),
+                                                            status: 0)
+                            
+                            self?.userManager.updateUserLocation(location: userLocation) { result in
+                                
+                                switch result {
+                                    
+                                case .success:
+                                    
+                                    completion(.success(()))
+                                    
+                                case .failure:
+                                    
+                                    completion(.failure(FirebaseError.setupPetError))
+                                }
+                            }
+                            
+                        case .failure:
+                            
+                            completion(.failure(FirebaseError.setupPetError))
+                        }
+                    }
+                    
+                case .failure:
+                    
+                    completion(.failure(FirebaseError.setupPetError))
+                }
+            }
         } catch {
             completion(.failure(FirebaseError.setupPetError))
         }
     }
     
-    func updatePetInfo(pet: Pet, completion: @escaping (Result<Void, Error>) -> Void) {
+    func updatePetInfo(userId: String,
+                       pet: Pet,
+                       completion: @escaping (Result<Void, Error>) -> Void) {
         
-        let document = dataBase.collection(FirebaseCollection.pets.rawValue).document(pet.id)
+        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+            .collection(FirebaseCollection.pets.rawValue).document(pet.id)
         
         do {
             try document.setData(from: pet)
             
             completion(.success(()))
+            
         } catch {
             completion(.failure(FirebaseError.setupUserError))
         }
     }
     
-    func uploadPetPhoto(petId: String, image: UIImage, completion: @escaping (Result<URL, Error>) -> Void) {
+    func uploadPetPhoto(userId: String,
+                        petId: String,
+                        image: UIImage,
+                        completion: @escaping (Result<String, Error>) -> Void) {
             
         let fileReference = Storage.storage().reference().child("petImages/\(petId).jpg")
     
-        if let data = image.jpegData(compressionQuality: 1) {
+        if let data = image.jpegData(compressionQuality: 0.3) {
             
-            fileReference.putData(data, metadata: nil) { result in
+            fileReference.putData(data, metadata: nil) { [weak self] result in
                 
                 switch result {
                     
                 case .success:
                     
-                     fileReference.downloadURL(completion: completion)
+                    fileReference.downloadURL { result in
+                        
+                        switch result {
+                            
+                        case .success(let url):
+                            
+                            let document = self?.dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+                                .collection(FirebaseCollection.pets.rawValue).document(petId)
+                            
+                            let petImageUrlString = String(describing: url)
+                            
+                            document?.updateData([
+                                
+                                "petImage": petImageUrlString
+                                
+                            ]) { error in
+                                
+                                if let error = error {
+                                    
+                                    completion(.failure(error))
+                                    
+                                } else {
+                                    
+                                    completion(.success(petImageUrlString))
+                                }
+                            }
+                            
+                        case .failure(let error):
+                            
+                            completion(.failure(error))
+                        }
+                    }
                     
                 case .failure(let error):
                     

@@ -86,7 +86,7 @@ class MapViewController: UIViewController {
         }
     }
     
-    let userId = "LqzusNedS4Ol9Xd3kvo5"
+    let userId = "6jRPSQJEw7NWuyZl2BCs"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -266,7 +266,7 @@ class MapViewController: UIViewController {
     
     func fetchUserInfo() {
         
-        userManager.fetchUserInfo(userId: userId) { [weak self] result in
+        userManager.listenUserInfo(userId: userId) { [weak self] result in
             
             switch result {
                 
@@ -307,7 +307,7 @@ class MapViewController: UIViewController {
     
     func fetchUserPets() {
         
-        userManager.fetchPetsbyUser(user: userId) { [weak self] result in
+        userManager.fetchPetsbyUser(userId: userId) { [weak self] result in
             
             switch result {
                 
@@ -437,7 +437,7 @@ class MapViewController: UIViewController {
                 
             case .success:
                 
-                print("===renew statu success")
+                print("===renew status success")
                 
             case .failure(let error):
                 
@@ -539,7 +539,7 @@ class MapViewController: UIViewController {
             
             group.enter()
             
-            self.userManager.fetchPetsbyUser(user: userId) { result in
+            self.userManager.fetchPetsbyUser(userId: userId) { result in
                 
                 switch result {
                     
@@ -654,6 +654,22 @@ extension MapViewController: ChoosePetViewDelegate {
     func didChoosePet(with selectedPet: Pet) {
         
         self.userCurrentPet = selectedPet
+        
+        guard let user = user else { return }
+        
+        userManager.updateCurrentPet(userId: user.id, pet: selectedPet) { result in
+            
+            switch result {
+                
+            case .success:
+                
+                print("=== Change current Pet complete")
+                
+            case .failure(let error):
+                
+                print(error)
+            }
+        }
     }
 }
 
@@ -742,14 +758,31 @@ extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
         
         guard let imageUrl = URL(string: userAnnotation.petPhoto) else { return annotationView}
         
-        KingfisherManager.shared.retrieveImage(with: imageUrl) { result in
+//        KingfisherManager.shared.retrieveImage(with: imageUrl) { result in
+//
+//            let image = try? result.get().image
+//
+//            if let image = image {
+//
+//                annotationView.glyphImage = image
+//            }
+//        }
+        
+        KingfisherManager.shared.retrieveImage(with: imageUrl, completionHandler: { result in
             
-            let image = try? result.get().image
-            if let image = image {
+            switch result {
                 
-                annotationView.glyphImage = image
+            case .success(let value):
+                
+                let resizeImage = value.image.resized(to: CGSize(width: 10, height: 10))
+                annotationView.contentMode = .scaleAspectFit
+                annotationView.glyphImage = resizeImage
+                
+            case .failure(let error):
+                
+                print("Error: \(error)")
             }
-        }
+        })
         
         annotationView.markerTintColor = .G1
         
@@ -775,7 +808,7 @@ extension MapViewController: UICollectionViewDataSource, UICollectionViewDelegat
         }
         
         if strangersPet.count == 0 {
-            cell.infoLabel.text = "附近沒有寵物"
+            cell.infoLabel.text = "附近沒有陌生寵物"
         } else {
             cell.configuerCell(with: strangersPet[indexPath.item])
         }

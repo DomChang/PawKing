@@ -69,7 +69,8 @@ extension ChoosePetViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ChoosePetTableViewCell.identifier)
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ChoosePetTableViewCell.identifier, for: indexPath)
                 as? ChoosePetTableViewCell
         else {
             fatalError("Cannot dequeue ChoosePetTableViewCell")

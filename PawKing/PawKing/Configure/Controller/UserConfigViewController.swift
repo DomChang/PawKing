@@ -28,7 +28,7 @@ class UserConfigViewController: UIViewController {
             tableView.reloadData()
         }
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -71,7 +71,7 @@ class UserConfigViewController: UIViewController {
     
     func showPetConfigVC(user: User) {
         
-        let petConfigVC = PetConfigViewController(user: user)
+        let petConfigVC = PetConfigViewController(user: user, isInitailSet: true)
         
         navigationController?.pushViewController(petConfigVC, animated: true)
         
@@ -86,7 +86,8 @@ extension UserConfigViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: UserConfigCell.identifier) as? UserConfigCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: UserConfigCell.identifier,
+                                                       for: indexPath) as? UserConfigCell
         else {
             
             fatalError("Cannot dequeue UserConfigCell")
@@ -120,6 +121,7 @@ extension UserConfigViewController: UserConfigCellDelegate {
         var user = User(id: "",
                         name: userName,
                         petsId: [],
+                        currentPetId: "",
                         userImage: "",
                         description: cell.descriptionTextView.text,
                         friendPetsId: [],
@@ -139,39 +141,21 @@ extension UserConfigViewController: UserConfigCellDelegate {
                     
                     switch result {
                         
-                    case .success(let imageUrl):
+                    case .success:
                         
-                        let imageUrlString = String(describing: imageUrl)
-                        
-                        user.userImage = imageUrlString
-                        
-                        self?.userManager.updateUserInfo(user: user) { result in
-                            
-                            switch result {
-                                
-                            case .success:
-                                
-                                self?.showPetConfigVC(user: user)
-                                
-                            case .failure(let error):
-                                
-                                print(error)
-                            }
-                        }
+                        self?.showPetConfigVC(user: user)
                         
                     case .failure(let error):
                         
                         print(error)
                     }
                 }
-                
             case .failure(let error):
                 
                 print(error)
             }
         }
     }
-    
     
     func didTapPhoto() {
         

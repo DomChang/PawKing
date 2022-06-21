@@ -13,6 +13,7 @@ struct User: Codable {
     var id: String
     let name: String
     let petsId: [String]
+    let currentPetId: String
     var userImage: String
     let description: String
     let friendPetsId: [String]

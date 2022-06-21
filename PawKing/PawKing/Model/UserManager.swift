@@ -51,12 +51,36 @@ class UserManager {
         }
     }
     
+    func updateUserInfo(userId: String,
+                        userName: String,
+                        userDescription: String,
+                        completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+        
+        document.updateData([
+            "name": userName,
+            "description": userDescription
+        ]) { error in
+            
+            if error != nil {
+                
+                completion(.failure(FirebaseError.updateUserInfoError))
+                
+            } else {
+                
+                completion(.success(()))
+            }
+        }
+    }
+    
     func updateUserPet(userId: String, petId: String, completion: @escaping (Result<Void, Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
         
         document.updateData([
-            "petsId": FieldValue.arrayUnion([petId])
+            "petsId": FieldValue.arrayUnion([petId]),
+            "currentPetId": petId
         ]) { error in
             
             if let error = error {
@@ -67,19 +91,57 @@ class UserManager {
                 
                 completion(.success(()))
             }
-            
         }
     }
     
-    func fetchUserInfo(userId: String, completion: @escaping (Result<User, Error>) -> Void) {
+    func updateCurrentPet(userId: String,
+                          pet: Pet,
+                          completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let locationDoc = dataBase.collection(FirebaseCollection.userLocations.rawValue).document(userId)
+        
+        locationDoc.updateData([
+            
+            "currentPetId": pet.id,
+            "petPhoto": pet.petImage
+        ]) { [weak self] error in
+            
+            if let error = error {
+                
+                completion(.failure(error))
+                
+            } else {
+                
+                let userDoc = self?.dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+                
+                userDoc?.updateData([
+                    
+                    "currentPetId": pet.id
+                ]) { error in
+                    
+                    if let error = error {
+                        
+                        completion(.failure(error))
+                        
+                    } else {
+                        
+                        completion(.success(()))
+                    }
+                }
+            }
+        }
+    }
+    
+    func listenUserInfo(userId: String, completion: @escaping (Result<User, Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
             
-        document.getDocument { snapshot, _ in
+        document.addSnapshotListener { snapshot, _ in
             
             guard let snapshot = snapshot
             
             else {
+                
                     completion(.failure(FirebaseError.fetchUserError))
                     
                     return
@@ -141,12 +203,12 @@ class UserManager {
         }
     }
     
-    // 查詢陌生人寵物使用
-    func fetchPetsbyUser(user: String, completion: @escaping (Result<[Pet], Error>) -> Void) {
+    func fetchPetsbyUser(userId: String, completion: @escaping (Result<[Pet], Error>) -> Void) {
         
         var pets: [Pet] = []
         
-        let document = dataBase.collection(FirebaseCollection.pets.rawValue).whereField("ownerId", isEqualTo: user)
+        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+                                .collection(FirebaseCollection.pets.rawValue)
             
         document.getDocuments { snapshots, _ in
             
@@ -177,23 +239,88 @@ class UserManager {
         }
     }
     
-    func uploadUserPhoto(userId: String, image: UIImage, completion: @escaping (Result<URL, Error>) -> Void) {
+    func listenPetChange(userId: String, completion: @escaping (Result<[Pet], Error>) -> Void) {
+        
+        var pets: [Pet] = []
+        
+        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+                                .collection(FirebaseCollection.pets.rawValue)
+            
+        document.addSnapshotListener { snapshots, _ in
+            
+            guard let snapshots = snapshots
+            
+            else {
+                    completion(.failure(FirebaseError.fetchUserError))
+                    
+                    return
+            }
+            
+            do {
+                
+                for document in snapshots.documents {
+                    
+                    let pet = try document.data(as: Pet.self)
+                    
+                    pets.append(pet)
+                }
+                
+                completion(.success(pets))
+                
+            } catch {
+                
+                completion(.failure(FirebaseError.decodeUserError))
+            }
+            
+        }
+    }
+    
+    func uploadUserPhoto(userId: String, image: UIImage, completion: @escaping (Result<Void, Error>) -> Void) {
             
         let fileReference = Storage.storage().reference().child("userImages/\(userId).jpg")
     
-        if let data = image.jpegData(compressionQuality: 1) {
+        if let data = image.jpegData(compressionQuality: 0.3) {
             
-            fileReference.putData(data, metadata: nil) { result in
+            fileReference.putData(data, metadata: nil) { [weak self] result in
                 
                 switch result {
                     
                 case .success:
                     
-                     fileReference.downloadURL(completion: completion)
+                    fileReference.downloadURL { result in
+                        
+                        switch result {
+                            
+                        case .success(let url):
+                            
+                            let document = self?.dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+                            
+                            let userImageUrlString = String(describing: url)
+                            
+                            document?.updateData([
+                                
+                                "userImage": userImageUrlString
+                                
+                            ]) { error in
+                                
+                                if error != nil {
+                                    
+                                    completion(.failure(FirebaseError.uploadUserPhotoError))
+                                    
+                                } else {
+                                    
+                                    completion(.success(()))
+                                }
+                            }
+                            
+                        case .failure:
+                            
+                            completion(.failure(FirebaseError.uploadUserPhotoError))
+                        }
+                    }
+                case .failure:
                     
-                case .failure(let error):
-                    
-                    completion(.failure(error))
+                    completion(.failure(FirebaseError.uploadUserPhotoError))
                 }
             }
         }
