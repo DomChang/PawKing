@@ -71,7 +71,7 @@ class ProfileViewController: UIViewController {
         
         navigationItem.title = "個人"
         
-        userManager.fetchUserInfo(userId: userId) { [weak self] result in
+        userManager.listenUserInfo(userId: userId) { [weak self] result in
             
             switch result {
                 
@@ -282,7 +282,7 @@ extension ProfileViewController: UICollectionViewDataSource {
                         
                         self?.navigationController?.popToRootViewController(animated: true)
                         
-                        self?.userManager.fetchUserInfo(userId: user.id) { [weak self] result in
+                        self?.userManager.listenUserInfo(userId: user.id) { [weak self] result in
                             
                             switch result {
                                 
