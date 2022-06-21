@@ -64,6 +64,41 @@ class PostManager {
         }
     }
     
+    func fetchPostsbyUser(userId: String, completion: @escaping (Result<[Post], Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+            .collection(FirebaseCollection.posts.rawValue).order(by: "createdTime", descending: true)
+            
+        document.getDocuments { snapshots, _ in
+            
+            var posts: [Post] = []
+            
+            guard let snapshots = snapshots
+            
+            else {
+                    completion(.failure(FirebaseError.fetchPostError))
+                    
+                    return
+            }
+            
+            do {
+                
+                for document in snapshots.documents {
+                    
+                    let post = try document.data(as: Post.self)
+                    
+                    posts.append(post)
+                }
+                
+                completion(.success(posts))
+                
+            } catch {
+                
+                completion(.failure(FirebaseError.decodePostError))
+            }
+        }
+    }
+    
     func updatePetPost(userId: String,
                        petId: String,
                        postId: String,
@@ -115,7 +150,7 @@ class PostManager {
                             
                             document?.updateData([
                                 
-                                "postImage": postImageUrlString
+                                "photo": postImageUrlString
                                 
                             ]) { error in
                                 

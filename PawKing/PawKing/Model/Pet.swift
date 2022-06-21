@@ -26,6 +26,7 @@ struct Pet: Codable {
     let breed: String
     let description: String
     let birthday: Timestamp
+    let createdTime: Timestamp
     var petImage: String
     let postsId: [String]
     let tracksId: [String]

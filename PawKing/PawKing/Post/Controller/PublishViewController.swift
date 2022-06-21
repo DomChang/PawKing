@@ -149,7 +149,7 @@ final class PublishViewController: UIViewController {
     
     func getUserPet() {
         
-        userManager.listenUserInfo(userId: userId) { [weak self] result in
+        userManager.fetchUserInfo(userId: userId) { [weak self] result in
             
             switch result {
                 

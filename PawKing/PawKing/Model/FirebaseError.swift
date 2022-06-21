@@ -21,6 +21,8 @@ enum FirebaseError: Error {
     
     case fetchPetError
     
+    case fetchPostError
+    
     case fetchFriendError
     
     case fetchStangerError
@@ -36,6 +38,8 @@ enum FirebaseError: Error {
     case decodeUserError
     
     case decodePetError
+    
+    case decodePostError
     
     var errorMessage: String {
         
@@ -60,6 +64,10 @@ enum FirebaseError: Error {
         case .fetchPetError:
             
             return "讀取寵物資料失敗"
+            
+        case .fetchPostError:
+            
+            return "讀取貼文失敗"
             
         case .fetchUserLocationError:
             
@@ -96,6 +104,10 @@ enum FirebaseError: Error {
         case .decodePetError:
             
             return "無法解析寵物資料"
+            
+        case .decodePostError:
+            
+            return "無法解析貼文資料"
         }
     }
 }

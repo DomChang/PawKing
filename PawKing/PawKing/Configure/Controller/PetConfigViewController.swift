@@ -148,6 +148,7 @@ extension PetConfigViewController: PetConfigCellDelegate {
                       breed: "",
                       description: "",
                       birthday: birthday,
+                      createdTime: Timestamp(date: Date()),
                       petImage: "",
                       postsId: [],
                       tracksId: [],

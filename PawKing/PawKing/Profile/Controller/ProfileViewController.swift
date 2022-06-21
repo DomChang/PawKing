@@ -16,6 +16,8 @@ class ProfileViewController: UIViewController {
     
     private let userManager = UserManager.shared
     
+    private let postManager = PostManager.shared
+    
     private let photoHelper = PKPhotoHelper()
     
     var isPhoto = true {
@@ -37,6 +39,12 @@ class ProfileViewController: UIViewController {
     }
     
     var posts: [Post]? {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
+    
+    var trackInfos: [TrackInfo]? {
         didSet {
             collectionView.reloadData()
         }
@@ -71,33 +79,7 @@ class ProfileViewController: UIViewController {
         
         navigationItem.title = "個人"
         
-        userManager.listenUserInfo(userId: userId) { [weak self] result in
-            
-            switch result {
-                
-            case .success(let user):
-                
-                self?.user = user
-                
-                self?.userManager.listenPetChange(userId: user.id) { result in
-                    
-                    switch result {
-                        
-                    case .success(let pets):
-                        
-                        self?.userPets = pets
-                        
-                    case .failure(let error):
-                        
-                        print(error)
-                    }
-                }
-                
-            case .failure(let error):
-                
-                print(error)
-            }
-        }
+        fetchUser()
     }
     
     private func style() {
@@ -180,7 +162,7 @@ class ProfileViewController: UIViewController {
                                                           heightDimension: .fractionalHeight(1))
                 let postItem = NSCollectionLayoutItem(layoutSize: postItemSize)
                 
-                postItem.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 5, bottom: 10, trailing: 5)
+                postItem.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 1, bottom: 10, trailing: 10)
                 
                 let postGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                            heightDimension: .fractionalWidth(1 / 3))
@@ -188,8 +170,65 @@ class ProfileViewController: UIViewController {
                 
                 let postSection = NSCollectionLayoutSection(group: postGroup)
                 
+                postSection.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+                
                 return postSection
 
+            }
+        }
+    }
+    
+    func fetchUser() {
+        
+        userManager.fetchUserInfo(userId: userId) { [weak self] result in
+            
+            switch result {
+                
+            case .success(let user):
+                
+                self?.user = user
+                
+                self?.fetchPet(by: user)
+                
+                self?.fetchPost(by: user)
+                
+            case .failure(let error):
+                
+                print(error)
+            }
+        }
+    }
+    
+    func fetchPet(by user: User) {
+        
+        userManager.fetchPetsbyUser(userId: user.id) { [weak self] result in
+            
+            switch result {
+                
+            case .success(let pets):
+                
+                self?.userPets = pets
+                
+            case .failure(let error):
+                
+                print(error)
+            }
+        }
+    }
+    
+    func fetchPost(by user: User) {
+        
+        postManager.fetchPostsbyUser(userId: user.id) { [weak self] result in
+            
+            switch result {
+                
+            case .success(let posts):
+                
+                self?.posts = posts
+                
+            case .failure(let error):
+                
+                print(error)
             }
         }
     }
@@ -221,6 +260,19 @@ extension ProfileViewController: ProfileInfoCellDelegate {
     }
 }
 
+extension ProfileViewController: ContentButtonCellDelegate {
+    
+    func didTapPhoto() {
+        
+        isPhoto = true
+    }
+    
+    func didTapTrack() {
+        
+        isPhoto = false
+    }
+}
+
 extension ProfileViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -248,7 +300,7 @@ extension ProfileViewController: UICollectionViewDataSource {
             
         case ProfileSections.postsPhoto.rawValue:
             
-            return posts?.count ?? 15
+            return posts?.count ?? 0
             
         default:
             return 0
@@ -280,21 +332,7 @@ extension ProfileViewController: UICollectionViewDataSource {
 
                     case .success:
                         
-                        self?.navigationController?.popToRootViewController(animated: true)
-                        
-                        self?.userManager.listenUserInfo(userId: user.id) { [weak self] result in
-                            
-                            switch result {
-                                
-                            case .success(let user):
-                                
-                                self?.user = user
-                                
-                            case .failure(let error):
-                                
-                                print(error)
-                            }
-                        }
+                        print("更新使用者照片成功")
                         
                     case .failure(let error):
                         
@@ -339,6 +377,8 @@ extension ProfileViewController: UICollectionViewDataSource {
                 fatalError("Cannot dequeue ContentButtonCell")
             }
             
+            chooseCell.delegate = self
+            
             return chooseCell
             
         case ProfileSections.postsPhoto.rawValue:
@@ -351,7 +391,13 @@ extension ProfileViewController: UICollectionViewDataSource {
                     fatalError("Cannot dequeue PhotoItemCell")
                 }
                 
-                photoCell.imageView.image = UIImage.asset(.Image_Placeholder)
+//                photoCell.imageView.image = UIImage.asset(.Image_Placeholder)
+                
+                guard let posts = posts else { return photoCell }
+                
+                let imageUrl = URL(string: posts[indexPath.item].photo)
+                
+                photoCell.imageView.kf.setImage(with: imageUrl)
                 
                 return photoCell
                 

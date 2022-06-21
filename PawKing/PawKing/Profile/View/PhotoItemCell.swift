@@ -37,9 +37,9 @@ class PhotoItemCell: UICollectionViewCell {
         
 //        self.layoutIfNeeded()
         
-//        imageView.makeRound()
-//
-//        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 20
+
+        imageView.clipsToBounds = true
         
 //        imageView.kf.setImage(with: photoURL)
         
