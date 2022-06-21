@@ -44,11 +44,25 @@ class ProfileViewController: UIViewController {
         }
     }
     
+    var displayPosts: [Post]? {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
+    
     var trackInfos: [TrackInfo]? {
         didSet {
             collectionView.reloadData()
         }
     }
+    
+    var displayTrackInfos: [TrackInfo]? {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
+    
+    var selectedPetIndex: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,7 +75,11 @@ class ProfileViewController: UIViewController {
     private func setup() {
         
         collectionView.dataSource = self
-//        collectionView?.delegate = self
+        collectionView.delegate = self
+        
+        collectionView.allowsSelection = true
+        collectionView.isUserInteractionEnabled = true
+        
         collectionView.register(ProfileInfoCell.self,
                                 forCellWithReuseIdentifier: ProfileInfoCell.identifier)
         
@@ -227,6 +245,7 @@ class ProfileViewController: UIViewController {
             case .success(let posts):
                 
                 self?.posts = posts
+                self?.displayPosts = posts
                 
             case .failure(let error):
                 
@@ -244,6 +263,7 @@ class ProfileViewController: UIViewController {
             case .success(let trackInfos):
                 
                 self?.trackInfos = trackInfos
+                self?.displayTrackInfos = trackInfos
                 
             case .failure(let error):
                 
@@ -319,9 +339,9 @@ extension ProfileViewController: UICollectionViewDataSource {
         case ProfileSections.postsPhoto.rawValue:
             
             if isPhoto {
-                return posts?.count ?? 0
+                return displayPosts?.count ?? 0
             } else {
-                return trackInfos?.count ?? 0
+                return displayTrackInfos?.count ?? 0
             }
             
         default:
@@ -394,7 +414,6 @@ extension ProfileViewController: UICollectionViewDataSource {
             else {
                 fatalError("Cannot dequeue ContentButtonCell")
             }
-            
             chooseCell.delegate = self
             
             return chooseCell
@@ -411,7 +430,7 @@ extension ProfileViewController: UICollectionViewDataSource {
                 
                 photoCell.imageView.image = UIImage.asset(.Image_Placeholder)
                 
-                guard let posts = posts else { return photoCell }
+                guard let posts = displayPosts else { return photoCell }
                 
                 let imageUrl = URL(string: posts[indexPath.item].photo)
                 
@@ -421,12 +440,13 @@ extension ProfileViewController: UICollectionViewDataSource {
                 
             } else {
                 
-                guard let trackCell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackHostoryCell.identifier, for: indexPath) as? TrackHostoryCell
+                guard let trackCell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackHostoryCell.identifier,
+                                                                         for: indexPath) as? TrackHostoryCell
                 else {
                     fatalError("Cannot dequeue TrackHostoryCell")
                 }
                 
-                guard let trackInfos = trackInfos,
+                guard let trackInfos = displayTrackInfos,
                         let userPets = userPets else { return trackCell }
                 
                 let trackInfo = trackInfos[indexPath.item]
@@ -451,6 +471,37 @@ extension ProfileViewController: UICollectionViewDataSource {
             }
         default:
             return UICollectionViewCell()
+        }
+    }
+}
+
+extension ProfileViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        if indexPath.section == ProfileSections.choosePet.rawValue {
+            
+            guard let posts = posts,
+                    let trackInfos = trackInfos,
+                    let userPets = userPets else {
+                return
+            }
+            
+            if selectedPetIndex != indexPath.item {
+                
+                displayPosts = posts.filter { $0.petId == userPets[indexPath.item].id }
+                
+                displayTrackInfos = trackInfos.filter { $0.petId == userPets[indexPath.item].id }
+                
+                selectedPetIndex = indexPath.item
+                
+            } else {
+
+                displayPosts = posts
+                displayTrackInfos = trackInfos
+                
+                selectedPetIndex = -1
+            }
         }
     }
 }

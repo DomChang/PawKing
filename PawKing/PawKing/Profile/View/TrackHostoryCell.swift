@@ -39,11 +39,10 @@ class TrackHostoryCell: UICollectionViewCell {
         contentView.addSubview(petImageView)
         contentView.addSubview(petNameLabel)
         
-        
         dateLabel.anchor(top: contentView.topAnchor,
                          leading: contentView.leadingAnchor,
                          trailing: contentView.trailingAnchor,
-                         height: 20,
+                         height: 16,
                          padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0))
         
         petImageView.anchor(top: dateLabel.bottomAnchor,
@@ -55,8 +54,8 @@ class TrackHostoryCell: UICollectionViewCell {
         petNameLabel.anchor(top: petImageView.bottomAnchor,
                             leading: contentView.leadingAnchor,
                             trailing: contentView.trailingAnchor,
-                            height: 20,
-                            padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0))
+                            height: 16,
+                            padding: UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0))
         
         contentView.layer.cornerRadius = contentView.frame.width / 4
         
@@ -65,7 +64,7 @@ class TrackHostoryCell: UICollectionViewCell {
         contentView.backgroundColor = .O1
         
         dateLabel.textColor = .black
-        dateLabel.font = UIFont.systemFont(ofSize: 16)
+        dateLabel.font = UIFont.systemFont(ofSize: 14)
         dateLabel.textAlignment = .center
         
         petImageView.kf.setImage(with: petPhotoURL)
@@ -74,7 +73,7 @@ class TrackHostoryCell: UICollectionViewCell {
         petImageView.clipsToBounds = true
         
         petNameLabel.textColor = .black
-        petNameLabel.font = UIFont.systemFont(ofSize: 16)
+        petNameLabel.font = UIFont.systemFont(ofSize: 14)
         petNameLabel.textAlignment = .center
     }
     
