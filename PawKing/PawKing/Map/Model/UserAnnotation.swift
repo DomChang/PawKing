@@ -16,7 +16,6 @@ class UserAnnotation: NSObject, MKAnnotation {
     var userId: String
     var petPhoto: String
   
-
     init(
         coordinate: CLLocationCoordinate2D,
         title: String,

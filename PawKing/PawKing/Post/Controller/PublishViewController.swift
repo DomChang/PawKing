@@ -157,7 +157,7 @@ final class PublishViewController: UIViewController {
                 
                 self?.user = user
                 
-                self?.userManager.fetchPetsbyUser(userId: user.id) { result in
+                self?.userManager.fetchPets(userId: user.id) { result in
                     
                     switch result {
                         

@@ -23,6 +23,8 @@ enum FirebaseError: Error {
     
     case fetchPostError
     
+    case fetchTrackError
+    
     case fetchFriendError
     
     case fetchStangerError
@@ -40,6 +42,8 @@ enum FirebaseError: Error {
     case decodePetError
     
     case decodePostError
+    
+    case decodeTrackError
     
     var errorMessage: String {
         
@@ -72,6 +76,10 @@ enum FirebaseError: Error {
         case .fetchUserLocationError:
             
             return "讀取使用者已儲存位置失敗"
+            
+        case .fetchTrackError:
+            
+            return "讀取軌跡失敗"
             
         case .fetchFriendError:
             
@@ -108,6 +116,10 @@ enum FirebaseError: Error {
         case .decodePostError:
             
             return "無法解析貼文資料"
+            
+        case .decodeTrackError:
+            
+            return "無法解析軌跡"
         }
     }
 }

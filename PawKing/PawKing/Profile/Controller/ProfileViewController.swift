@@ -192,6 +192,8 @@ class ProfileViewController: UIViewController {
                 
                 self?.fetchPost(by: user)
                 
+                self?.fetchTrack(by: user) 
+                
             case .failure(let error):
                 
                 print(error)
@@ -201,7 +203,7 @@ class ProfileViewController: UIViewController {
     
     func fetchPet(by user: User) {
         
-        userManager.fetchPetsbyUser(userId: user.id) { [weak self] result in
+        userManager.fetchPets(userId: user.id) { [weak self] result in
             
             switch result {
                 
@@ -218,13 +220,30 @@ class ProfileViewController: UIViewController {
     
     func fetchPost(by user: User) {
         
-        postManager.fetchPostsbyUser(userId: user.id) { [weak self] result in
+        postManager.fetchPosts(userId: user.id) { [weak self] result in
             
             switch result {
                 
             case .success(let posts):
                 
                 self?.posts = posts
+                
+            case .failure(let error):
+                
+                print(error)
+            }
+        }
+    }
+    
+    func fetchTrack(by user: User) {
+        
+        userManager.fetchTracks(userId: user.id) { [weak self] result in
+            
+            switch result {
+                
+            case .success(let trackInfos):
+                
+                self?.trackInfos = trackInfos
                 
             case .failure(let error):
                 
@@ -292,7 +311,6 @@ extension ProfileViewController: UICollectionViewDataSource {
         case ProfileSections.choosePet.rawValue:
             
             return userPets?.count ?? 0
-//            return 10
 
         case ProfileSections.chooseContent.rawValue:
             
@@ -300,7 +318,11 @@ extension ProfileViewController: UICollectionViewDataSource {
             
         case ProfileSections.postsPhoto.rawValue:
             
-            return posts?.count ?? 0
+            if isPhoto {
+                return posts?.count ?? 0
+            } else {
+                return trackInfos?.count ?? 0
+            }
             
         default:
             return 0
@@ -360,11 +382,7 @@ extension ProfileViewController: UICollectionViewDataSource {
             let imageUrl = URL(string: userPets[indexPath.item].petImage)
             
             petCell.photoURL = imageUrl
-//            petCell.imageView.image = UIImage.asset(.Image_Placeholder)
             
-//            petCell.layoutIfNeeded()
-//            petCell.imageView.makeRound()
-//            petCell.imageView.clipsToBounds = true
             petCell.configureCell()
             
             return petCell
@@ -391,7 +409,7 @@ extension ProfileViewController: UICollectionViewDataSource {
                     fatalError("Cannot dequeue PhotoItemCell")
                 }
                 
-//                photoCell.imageView.image = UIImage.asset(.Image_Placeholder)
+                photoCell.imageView.image = UIImage.asset(.Image_Placeholder)
                 
                 guard let posts = posts else { return photoCell }
                 
@@ -408,6 +426,27 @@ extension ProfileViewController: UICollectionViewDataSource {
                     fatalError("Cannot dequeue TrackHostoryCell")
                 }
                 
+                guard let trackInfos = trackInfos,
+                        let userPets = userPets else { return trackCell }
+                
+                let trackInfo = trackInfos[indexPath.item]
+                
+                for userPet in userPets where userPet.id == trackInfo.petId {
+                    
+                    let imageUrl = URL(string: userPet.petImage)
+                    
+                    trackCell.petImageView.kf.setImage(with: imageUrl)
+                    
+                    trackCell.petNameLabel.text = userPet.name
+                    
+                    let dateFormatter = DateFormatter()
+                    
+                    dateFormatter.dateFormat = "yyyy/MM/dd"
+                    
+                    let trackDate = dateFormatter.string(from: trackInfo.startTime.dateValue())
+                    
+                    trackCell.dateLabel.text = trackDate
+                }
                 return trackCell
             }
         default:

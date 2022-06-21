@@ -22,8 +22,7 @@ class PhotoItemCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        contentView.backgroundColor = .clear
+
         configureCell()
     }
 
@@ -35,17 +34,16 @@ class PhotoItemCell: UICollectionViewCell {
         
         contentView.addSubview(imageView)
         
-//        self.layoutIfNeeded()
-        
-        imageView.layer.cornerRadius = 20
-
-        imageView.clipsToBounds = true
-        
-//        imageView.kf.setImage(with: photoURL)
-        
         imageView.anchor(top: contentView.topAnchor,
                          leading: contentView.leadingAnchor,
                          bottom: contentView.bottomAnchor,
                          trailing: contentView.trailingAnchor)
+        
+        contentView.layoutIfNeeded()
+        
+        imageView.layer.cornerRadius = imageView.frame.width / 4
+
+        imageView.clipsToBounds = true
+        
     }
 }
