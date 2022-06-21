@@ -11,7 +11,11 @@ enum FirebaseError: Error {
     
     case setupUserError
     
+    case setupPetError
+    
     case fetchUserError
+    
+    case fetchUserLocationError
     
     case fetchPetError
     
@@ -35,6 +39,10 @@ enum FirebaseError: Error {
             
             return "建立使用者資料失敗"
             
+        case .setupPetError:
+            
+            return "建立寵物資料失敗"
+            
         case .fetchUserError:
             
             return "讀取使用者資料失敗"
@@ -50,6 +58,10 @@ enum FirebaseError: Error {
         case .updateLocationError:
             
             return "更新位置狀態失敗"
+            
+        case .fetchUserLocationError:
+            
+            return "讀取使用者已儲存位置失敗"
             
         case .fetchFriendError:
             

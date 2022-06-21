@@ -11,11 +11,13 @@ import FirebaseStorage
 
 class UserManager {
     
+//    static var userId: String?
+    
     static let shared = UserManager()
     
     lazy var dataBase = Firestore.firestore()
     
-    func setupUser(user: inout User, completion: @escaping (Result<Void, Error>) -> Void) {
+    func setupUser(user: inout User, completion: @escaping (Result<String, Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.users.rawValue).document()
         user.id = document.documentID
@@ -23,18 +25,13 @@ class UserManager {
         do {
             try document.setData(from: user)
             
-        } catch {
-            completion(.failure(FirebaseError.setupUserError))
-        }
-    }
-    
-    func setupPet(pet: inout Pet, completion: @escaping (Result<Void, Error>) -> Void) {
-        
-        let document = dataBase.collection(FirebaseCollection.pets.rawValue).document()
-        pet.id = document.documentID
-        
-        do {
-            try document.setData(from: pet)
+            completion(.success(user.id))
+            
+            let id = Data(user.id.utf8)
+            
+            KeychainManager.shared.save(id,
+                                        service: KeychainService.userId.rawValue,
+                                        account: KeychainAccount.pawKing.rawValue)
             
         } catch {
             completion(.failure(FirebaseError.setupUserError))
@@ -47,8 +44,30 @@ class UserManager {
         
         do {
             try document.setData(from: user)
+            
+            completion(.success(()))
         } catch {
             completion(.failure(FirebaseError.setupUserError))
+        }
+    }
+    
+    func updateUserPet(userId: String, petId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+        
+        document.updateData([
+            "petsId": FieldValue.arrayUnion([petId])
+        ]) { error in
+            
+            if let error = error {
+                
+                completion(.failure(error))
+                
+            } else {
+                
+                completion(.success(()))
+            }
+            
         }
     }
     
@@ -80,11 +99,54 @@ class UserManager {
         }
     }
     
+    func fetchUserLocation(userId: String, completion: @escaping (Result<UserLocation, Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.userLocations.rawValue).document(userId)
+            
+        document.getDocument { snapshot, _ in
+            
+            guard let snapshot = snapshot
+            
+            else {
+                    completion(.failure(FirebaseError.fetchUserError))
+                    
+                    return
+            }
+            
+            do {
+                
+                let userLocation = try snapshot.data(as: UserLocation.self)
+                
+                completion(.success(userLocation))
+                
+            } catch {
+                
+                completion(.failure(FirebaseError.decodeUserError))
+            }
+            
+        }
+    }
+    
+    func updateUserLocation(location: UserLocation, completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.userLocations.rawValue).document(location.userId)
+        
+        do {
+            try document.setData(from: location)
+            
+            completion(.success(()))
+            
+        } catch {
+            completion(.failure(FirebaseError.uploadTrackError))
+        }
+    }
+    
+    // 查詢陌生人寵物使用
     func fetchPetsbyUser(user: String, completion: @escaping (Result<[Pet], Error>) -> Void) {
         
         var pets: [Pet] = []
         
-        let document = dataBase.collection(FirebaseCollection.pets.rawValue)
+        let document = dataBase.collection(FirebaseCollection.pets.rawValue).whereField("ownerId", isEqualTo: user)
             
         document.getDocuments { snapshots, _ in
             
@@ -115,25 +177,25 @@ class UserManager {
         }
     }
     
-    func uploadPhoto(image: UIImage, completion: @escaping (Result<URL, Error>) -> Void) {
+    func uploadUserPhoto(userId: String, image: UIImage, completion: @escaping (Result<URL, Error>) -> Void) {
             
-            let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
-        
-            if let data = image.jpegData(compressionQuality: 0.9) {
+        let fileReference = Storage.storage().reference().child("userImages/\(userId).jpg")
+    
+        if let data = image.jpegData(compressionQuality: 1) {
+            
+            fileReference.putData(data, metadata: nil) { result in
                 
-                fileReference.putData(data, metadata: nil) { result in
+                switch result {
                     
-                    switch result {
-                        
-                    case .success:
-                        
-                         fileReference.downloadURL(completion: completion)
-                        
-                    case .failure(let error):
-                        
-                        completion(.failure(error))
-                    }
+                case .success:
+                    
+                     fileReference.downloadURL(completion: completion)
+                    
+                case .failure(let error):
+                    
+                    completion(.failure(error))
                 }
             }
+        }
     }
 }

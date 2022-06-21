@@ -14,7 +14,7 @@ class UserAnnotation: NSObject, MKAnnotation {
     let title: String?
     let subtitle: String?
     var userId: String
-    var petPhoto: String?
+    var petPhoto: String
   
 
     init(

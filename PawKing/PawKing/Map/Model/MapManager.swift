@@ -29,20 +29,6 @@ class MapManager {
         }
     }
     
-    func updateUserLocation(location: UserLocation, completion: @escaping (Result<Void, Error>) -> Void) {
-        
-        let document = dataBase.collection(FirebaseCollection.userLocations.rawValue).document(location.userId)
-        
-        do {
-            try document.setData(from: location)
-            
-            completion(.success(()))
-            
-        } catch {
-            completion(.failure(FirebaseError.uploadTrackError))
-        }
-    }
-    
     func changeUserStatus(userId: String, status: Status, completion: @escaping (Result<Void, Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.userLocations.rawValue).document(userId)
@@ -59,6 +45,7 @@ class MapManager {
         dataBase.collection(FirebaseCollection.userLocations.rawValue).document(friend).addSnapshotListener { snapshot, _ in
             
             guard let snapshot = snapshot else {
+                
                 completion(.failure(FirebaseError.fetchFriendError))
                 return
             }
@@ -68,6 +55,7 @@ class MapManager {
                 let friend = try snapshot.data(as: UserLocation.self)
                 
                 if friend.status == Status.tracking.rawValue {
+                    
                     completion(.success(friend))
                     
                 } else {
