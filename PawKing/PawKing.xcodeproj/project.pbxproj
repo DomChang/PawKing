@@ -9,11 +9,31 @@
 /* Begin PBXBuildFile section */
 		B698DD9D285881FB0009077E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DD9C285881FB0009077E /* AppDelegate.swift */; };
 		B698DD9F285881FB0009077E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DD9E285881FB0009077E /* SceneDelegate.swift */; };
-		B698DDA1285881FB0009077E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDA0285881FB0009077E /* ViewController.swift */; };
+		B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDA0285881FB0009077E /* TabBarViewController.swift */; };
 		B698DDA4285881FB0009077E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B698DDA2285881FB0009077E /* Main.storyboard */; };
 		B698DDA6285881FD0009077E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B698DDA5285881FD0009077E /* Assets.xcassets */; };
 		B698DDA9285881FD0009077E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B698DDA7285881FD0009077E /* LaunchScreen.storyboard */; };
 		B698DDB328588D280009077E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B698DDB228588D280009077E /* GoogleService-Info.plist */; };
+		B698DDB52858B8540009077E /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDB42858B8540009077E /* MapViewController.swift */; };
+		B698DDB72858B8850009077E /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDB62858B8850009077E /* ExploreViewController.swift */; };
+		B698DDB92858B8A90009077E /* PublishViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDB82858B8A90009077E /* PublishViewController.swift */; };
+		B698DDBB2858B8BA0009077E /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDBA2858B8BA0009077E /* ChatViewController.swift */; };
+		B698DDBD2858B8CC0009077E /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDBC2858B8CC0009077E /* ProfileViewController.swift */; };
+		B698DDC02858B99F0009077E /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDBF2858B99F0009077E /* UIImage+Extension.swift */; };
+		B698DDC22858CE9D0009077E /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDC12858CE9D0009077E /* UIView+Extension.swift */; };
+		B6ABE8E0285A06E300B1A977 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8DF285A06E300B1A977 /* UIColor+Extension.swift */; };
+		B6ABE8E2285A0B7400B1A977 /* MapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8E1285A0B7400B1A977 /* MapManager.swift */; };
+		B6ABE8E7285A19C400B1A977 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8E6285A19C400B1A977 /* FirebaseError.swift */; };
+		B6ABE8E9285AC08200B1A977 /* UserLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8E8285AC08200B1A977 /* UserLocation.swift */; };
+		B6ABE8EB285AE41500B1A977 /* LocationRelated+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8EA285AE41500B1A977 /* LocationRelated+Extension.swift */; };
+		B6ABE8ED285AFC2B00B1A977 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8EC285AFC2B00B1A977 /* User.swift */; };
+		B6ABE8F4285B87AB00B1A977 /* UserAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8F3285B87AB00B1A977 /* UserAnnotation.swift */; };
+		B6D4F69E285C35F80045DDB2 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F69D285C35F80045DDB2 /* UserManager.swift */; };
+		B6D4F6A3285C526A0045DDB2 /* FirebaseCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F6A2285C526A0045DDB2 /* FirebaseCollection.swift */; };
+		B6D4F6A5285C5D410045DDB2 /* StrangerCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F6A4285C5D410045DDB2 /* StrangerCardView.swift */; };
+		B6D4F6A7285C5F9B0045DDB2 /* StrangerCardViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F6A6285C5F9B0045DDB2 /* StrangerCardViewCell.swift */; };
+		B6D4F6A9285C62F10045DDB2 /* Pet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F6A8285C62F10045DDB2 /* Pet.swift */; };
+		B6D4F6AB285CDB150045DDB2 /* PKPhotoHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F6AA285CDB150045DDB2 /* PKPhotoHelper.swift */; };
 		C616981117A2021ACBB94FA1 /* Pods_PawKing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3366849FA1579D202FA53C8 /* Pods_PawKing.framework */; };
 /* End PBXBuildFile section */
 
@@ -23,12 +43,32 @@
 		B698DD99285881FB0009077E /* PawKing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PawKing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B698DD9C285881FB0009077E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B698DD9E285881FB0009077E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		B698DDA0285881FB0009077E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		B698DDA0285881FB0009077E /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		B698DDA3285881FB0009077E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B698DDA5285881FD0009077E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B698DDA8285881FD0009077E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B698DDAA285881FD0009077E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B698DDB228588D280009077E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B698DDB42858B8540009077E /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		B698DDB62858B8850009077E /* ExploreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
+		B698DDB82858B8A90009077E /* PublishViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublishViewController.swift; sourceTree = "<group>"; };
+		B698DDBA2858B8BA0009077E /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		B698DDBC2858B8CC0009077E /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		B698DDBF2858B99F0009077E /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		B698DDC12858CE9D0009077E /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		B6ABE8DF285A06E300B1A977 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		B6ABE8E1285A0B7400B1A977 /* MapManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapManager.swift; sourceTree = "<group>"; };
+		B6ABE8E6285A19C400B1A977 /* FirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseError.swift; sourceTree = "<group>"; };
+		B6ABE8E8285AC08200B1A977 /* UserLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLocation.swift; sourceTree = "<group>"; };
+		B6ABE8EA285AE41500B1A977 /* LocationRelated+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LocationRelated+Extension.swift"; sourceTree = "<group>"; };
+		B6ABE8EC285AFC2B00B1A977 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		B6ABE8F3285B87AB00B1A977 /* UserAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnnotation.swift; sourceTree = "<group>"; };
+		B6D4F69D285C35F80045DDB2 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		B6D4F6A2285C526A0045DDB2 /* FirebaseCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseCollection.swift; sourceTree = "<group>"; };
+		B6D4F6A4285C5D410045DDB2 /* StrangerCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrangerCardView.swift; sourceTree = "<group>"; };
+		B6D4F6A6285C5F9B0045DDB2 /* StrangerCardViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrangerCardViewCell.swift; sourceTree = "<group>"; };
+		B6D4F6A8285C62F10045DDB2 /* Pet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pet.swift; sourceTree = "<group>"; };
+		B6D4F6AA285CDB150045DDB2 /* PKPhotoHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PKPhotoHelper.swift; sourceTree = "<group>"; };
 		F3366849FA1579D202FA53C8 /* Pods_PawKing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PawKing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -84,7 +124,16 @@
 			children = (
 				B698DD9C285881FB0009077E /* AppDelegate.swift */,
 				B698DD9E285881FB0009077E /* SceneDelegate.swift */,
-				B698DDA0285881FB0009077E /* ViewController.swift */,
+				B698DDBE2858B98A0009077E /* Extension */,
+				B6ABE8E3285A0B8500B1A977 /* Model */,
+				B6D4F6AC285D7EB70045DDB2 /* Configure */,
+				B6D4F69F285C360E0045DDB2 /* Map */,
+				B698DDB62858B8850009077E /* ExploreViewController.swift */,
+				B6D4F6AA285CDB150045DDB2 /* PKPhotoHelper.swift */,
+				B698DDB82858B8A90009077E /* PublishViewController.swift */,
+				B698DDBA2858B8BA0009077E /* ChatViewController.swift */,
+				B698DDBC2858B8CC0009077E /* ProfileViewController.swift */,
+				B698DDA0285881FB0009077E /* TabBarViewController.swift */,
 				B698DDA2285881FB0009077E /* Main.storyboard */,
 				B698DDA5285881FD0009077E /* Assets.xcassets */,
 				B698DDA7285881FD0009077E /* LaunchScreen.storyboard */,
@@ -92,6 +141,73 @@
 				B698DDB228588D280009077E /* GoogleService-Info.plist */,
 			);
 			path = PawKing;
+			sourceTree = "<group>";
+		};
+		B698DDBE2858B98A0009077E /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				B698DDBF2858B99F0009077E /* UIImage+Extension.swift */,
+				B698DDC12858CE9D0009077E /* UIView+Extension.swift */,
+				B6ABE8DF285A06E300B1A977 /* UIColor+Extension.swift */,
+				B6ABE8EA285AE41500B1A977 /* LocationRelated+Extension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		B6ABE8E3285A0B8500B1A977 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B6D4F6A2285C526A0045DDB2 /* FirebaseCollection.swift */,
+				B6ABE8E6285A19C400B1A977 /* FirebaseError.swift */,
+				B6ABE8EC285AFC2B00B1A977 /* User.swift */,
+				B6ABE8E8285AC08200B1A977 /* UserLocation.swift */,
+				B6D4F69D285C35F80045DDB2 /* UserManager.swift */,
+				B6D4F6A8285C62F10045DDB2 /* Pet.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		B6ABE8F0285B86DA00B1A977 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B6D4F6A4285C5D410045DDB2 /* StrangerCardView.swift */,
+				B6D4F6A6285C5F9B0045DDB2 /* StrangerCardViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		B6D4F69F285C360E0045DDB2 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				B6D4F6A0285C367C0045DDB2 /* Model */,
+				B6ABE8F0285B86DA00B1A977 /* View */,
+				B6D4F6A1285C36950045DDB2 /* Controller */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
+		B6D4F6A0285C367C0045DDB2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B6ABE8E1285A0B7400B1A977 /* MapManager.swift */,
+				B6ABE8F3285B87AB00B1A977 /* UserAnnotation.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		B6D4F6A1285C36950045DDB2 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				B698DDB42858B8540009077E /* MapViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		B6D4F6AC285D7EB70045DDB2 /* Configure */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Configure;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -106,6 +222,7 @@
 				B698DD96285881FB0009077E /* Frameworks */,
 				B698DD97285881FB0009077E /* Resources */,
 				40CC832ED6627C2E4E5E7ED9 /* [CP] Embed Pods Frameworks */,
+				B6ABE8DE285998C700B1A977 /* Run SwiftLint */,
 			);
 			buildRules = (
 			);
@@ -203,6 +320,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		B6ABE8DE285998C700B1A977 /* Run SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run SwiftLint";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"\n\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -210,9 +345,29 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B698DDA1285881FB0009077E /* ViewController.swift in Sources */,
+				B6ABE8E7285A19C400B1A977 /* FirebaseError.swift in Sources */,
+				B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */,
+				B6D4F69E285C35F80045DDB2 /* UserManager.swift in Sources */,
 				B698DD9D285881FB0009077E /* AppDelegate.swift in Sources */,
+				B698DDB92858B8A90009077E /* PublishViewController.swift in Sources */,
+				B6ABE8ED285AFC2B00B1A977 /* User.swift in Sources */,
+				B6ABE8E0285A06E300B1A977 /* UIColor+Extension.swift in Sources */,
+				B6ABE8E9285AC08200B1A977 /* UserLocation.swift in Sources */,
+				B6D4F6A5285C5D410045DDB2 /* StrangerCardView.swift in Sources */,
+				B6ABE8E2285A0B7400B1A977 /* MapManager.swift in Sources */,
+				B6ABE8F4285B87AB00B1A977 /* UserAnnotation.swift in Sources */,
+				B698DDC02858B99F0009077E /* UIImage+Extension.swift in Sources */,
+				B698DDBB2858B8BA0009077E /* ChatViewController.swift in Sources */,
+				B698DDB72858B8850009077E /* ExploreViewController.swift in Sources */,
+				B6D4F6AB285CDB150045DDB2 /* PKPhotoHelper.swift in Sources */,
 				B698DD9F285881FB0009077E /* SceneDelegate.swift in Sources */,
+				B698DDBD2858B8CC0009077E /* ProfileViewController.swift in Sources */,
+				B698DDC22858CE9D0009077E /* UIView+Extension.swift in Sources */,
+				B698DDB52858B8540009077E /* MapViewController.swift in Sources */,
+				B6D4F6A3285C526A0045DDB2 /* FirebaseCollection.swift in Sources */,
+				B6D4F6A7285C5F9B0045DDB2 /* StrangerCardViewCell.swift in Sources */,
+				B6ABE8EB285AE41500B1A977 /* LocationRelated+Extension.swift in Sources */,
+				B6D4F6A9285C62F10045DDB2 /* Pet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,7 +429,6 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -335,7 +489,6 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -365,6 +518,7 @@
 				DEVELOPMENT_TEAM = RUXNPB6ZP3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PawKing/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "是否同意使用您的位置資訊";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -394,6 +548,7 @@
 				DEVELOPMENT_TEAM = RUXNPB6ZP3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PawKing/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "是否同意使用您的位置資訊";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
