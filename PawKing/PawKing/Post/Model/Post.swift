@@ -8,7 +8,7 @@
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-struct Post {
+struct Post: Codable {
     
     var id: String
     let userId: String

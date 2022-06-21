@@ -51,6 +51,7 @@
 		B6E86AA8285F1EB4002B8C9A /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86AA7285F1EB4002B8C9A /* Post.swift */; };
 		B6E86AAA285F7DAA002B8C9A /* PetItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86AA9285F7DAA002B8C9A /* PetItemCell.swift */; };
 		B6E86AAC2860309F002B8C9A /* EditUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86AAB2860309F002B8C9A /* EditUserViewController.swift */; };
+		B6E86AB228609CB7002B8C9A /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86AB128609CB7002B8C9A /* PostManager.swift */; };
 		C616981117A2021ACBB94FA1 /* Pods_PawKing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3366849FA1579D202FA53C8 /* Pods_PawKing.framework */; };
 /* End PBXBuildFile section */
 
@@ -103,6 +104,7 @@
 		B6E86AA7285F1EB4002B8C9A /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		B6E86AA9285F7DAA002B8C9A /* PetItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetItemCell.swift; sourceTree = "<group>"; };
 		B6E86AAB2860309F002B8C9A /* EditUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserViewController.swift; sourceTree = "<group>"; };
+		B6E86AB128609CB7002B8C9A /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
 		F3366849FA1579D202FA53C8 /* Pods_PawKing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PawKing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -227,9 +229,9 @@
 				B6ABE8E3285A0B8500B1A977 /* Model */,
 				B6D4F6AC285D7EB70045DDB2 /* Configure */,
 				B6D4F69F285C360E0045DDB2 /* Map */,
+				B6E86AAD28609BD9002B8C9A /* Post */,
 				B63484E8285EEE0E00DB7CE7 /* Profile */,
 				B698DDB62858B8850009077E /* ExploreViewController.swift */,
-				B698DDB82858B8A90009077E /* PublishViewController.swift */,
 				B698DDBA2858B8BA0009077E /* ChatViewController.swift */,
 				B698DDA0285881FB0009077E /* TabBarViewController.swift */,
 				B698DDA2285881FB0009077E /* Main.storyboard */,
@@ -263,7 +265,6 @@
 				B6D4F69D285C35F80045DDB2 /* UserManager.swift */,
 				B6D4F6A8285C62F10045DDB2 /* Pet.swift */,
 				B63484E2285DC8D000DB7CE7 /* PetManager.swift */,
-				B6E86AA7285F1EB4002B8C9A /* Post.swift */,
 				B6D4F6AA285CDB150045DDB2 /* PKPhotoHelper.swift */,
 			);
 			path = Model;
@@ -315,6 +316,40 @@
 				B63484D9285D85A000DB7CE7 /* Controller */,
 			);
 			path = Configure;
+			sourceTree = "<group>";
+		};
+		B6E86AAD28609BD9002B8C9A /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				B6E86AAE28609C81002B8C9A /* Model */,
+				B6E86AAF28609C92002B8C9A /* View */,
+				B6E86AB028609C99002B8C9A /* Controller */,
+			);
+			path = Post;
+			sourceTree = "<group>";
+		};
+		B6E86AAE28609C81002B8C9A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B6E86AA7285F1EB4002B8C9A /* Post.swift */,
+				B6E86AB128609CB7002B8C9A /* PostManager.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		B6E86AAF28609C92002B8C9A /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		B6E86AB028609C99002B8C9A /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				B698DDB82858B8A90009077E /* PublishViewController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -492,6 +527,7 @@
 				B6E86AA8285F1EB4002B8C9A /* Post.swift in Sources */,
 				B6ABE8EB285AE41500B1A977 /* LocationRelated+Extension.swift in Sources */,
 				B6D4F6A9285C62F10045DDB2 /* Pet.swift in Sources */,
+				B6E86AB228609CB7002B8C9A /* PostManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

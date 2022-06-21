@@ -266,7 +266,7 @@ class MapViewController: UIViewController {
     
     func fetchUserInfo() {
         
-        userManager.fetchUserInfo(userId: userId) { [weak self] result in
+        userManager.listenUserInfo(userId: userId) { [weak self] result in
             
             switch result {
                 

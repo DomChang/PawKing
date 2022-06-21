@@ -13,6 +13,8 @@ enum FirebaseError: Error {
     
     case setupPetError
     
+    case setupPostError
+    
     case fetchUserError
     
     case fetchUserLocationError
@@ -46,6 +48,10 @@ enum FirebaseError: Error {
         case .setupPetError:
             
             return "建立寵物資料失敗"
+            
+        case .setupPostError:
+            
+            return "建立貼文失敗"
             
         case .fetchUserError:
             

@@ -63,7 +63,7 @@ class UserManager {
             "description": userDescription
         ]) { error in
             
-            if let error = error {
+            if error != nil {
                 
                 completion(.failure(FirebaseError.updateUserInfoError))
                 
@@ -79,7 +79,8 @@ class UserManager {
         let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
         
         document.updateData([
-            "petsId": FieldValue.arrayUnion([petId])
+            "petsId": FieldValue.arrayUnion([petId]),
+            "currentPetId": petId
         ]) { error in
             
             if let error = error {
@@ -97,13 +98,13 @@ class UserManager {
                           pet: Pet,
                           completion: @escaping (Result<Void, Error>) -> Void) {
         
-        let document = dataBase.collection(FirebaseCollection.userLocations.rawValue).document(userId)
+        let locationDoc = dataBase.collection(FirebaseCollection.userLocations.rawValue).document(userId)
         
-        document.updateData([
+        locationDoc.updateData([
             
             "currentPetId": pet.id,
             "petPhoto": pet.petImage
-        ]) { error in
+        ]) { [weak self] error in
             
             if let error = error {
                 
@@ -111,12 +112,27 @@ class UserManager {
                 
             } else {
                 
-                completion(.success(()))
+                let userDoc = self?.dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+                
+                userDoc?.updateData([
+                    
+                    "currentPetId": pet.id
+                ]) { error in
+                    
+                    if let error = error {
+                        
+                        completion(.failure(error))
+                        
+                    } else {
+                        
+                        completion(.success(()))
+                    }
+                }
             }
         }
     }
     
-    func fetchUserInfo(userId: String, completion: @escaping (Result<User, Error>) -> Void) {
+    func listenUserInfo(userId: String, completion: @escaping (Result<User, Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
             
@@ -125,6 +141,7 @@ class UserManager {
             guard let snapshot = snapshot
             
             else {
+                
                     completion(.failure(FirebaseError.fetchUserError))
                     
                     return

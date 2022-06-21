@@ -121,6 +121,7 @@ extension UserConfigViewController: UserConfigCellDelegate {
         var user = User(id: "",
                         name: userName,
                         petsId: [],
+                        currentPetId: "",
                         userImage: "",
                         description: cell.descriptionTextView.text,
                         friendPetsId: [],
