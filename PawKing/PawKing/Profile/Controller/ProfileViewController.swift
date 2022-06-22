@@ -502,6 +502,31 @@ extension ProfileViewController: UICollectionViewDelegate {
                 
                 selectedPetIndex = -1
             }
+        } else if indexPath.section == ProfileSections.postsPhoto.rawValue {
+            
+            if isPhoto {
+                
+            } else {
+                
+                guard let trackInfos = trackInfos,
+                        let userPets = userPets else {
+                    return
+                }
+                
+                let trackInfo = trackInfos[indexPath.item]
+                
+                
+                for userPet in userPets where userPet.id == trackInfo.petId {
+                    
+                    guard let imageUrl = URL(string: userPet.petImage) else { return }
+                    
+                    let trackHistoryVC = TrackHistoryViewController(petName: userPet.name,
+                                                                    petImageURL: imageUrl,
+                                                                    trackInfo: trackInfo)
+                    
+                    navigationController?.pushViewController(trackHistoryVC, animated: true)
+                }
+            }
         }
     }
 }

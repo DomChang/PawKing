@@ -258,10 +258,11 @@ class MapViewController: UIViewController {
     
         let location = mapView.userLocation
         
-        mapView.setRegion(MKCoordinateRegion(center: location.coordinate,
-                                             latitudinalMeters: 1000,
-                                             longitudinalMeters: 1000),
-                                             animated: true)
+        let region = MKCoordinateRegion(center: location.coordinate,
+                                        span: .init(latitudeDelta: 0.01,
+                                                    longitudeDelta: 0.01))
+        
+        mapView.setRegion(region, animated: false)
     }
     
     func fetchUserInfo() {
@@ -345,9 +346,9 @@ class MapViewController: UIViewController {
         
         userLocationButton.isSelected = true
         
-        mapView.userTrackingMode = .follow
-        
         focusUserLocation()
+        
+        mapView.userTrackingMode = .follow
     }
     
     @objc func didTapRecordTrack() {
