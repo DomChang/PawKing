@@ -23,8 +23,7 @@ class PostManager {
                    postImage: UIImage,
                    completion: @escaping (Result<Void, Error>) -> Void) {
         
-        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
-                       .collection(FirebaseCollection.posts.rawValue).document()
+        let document = dataBase.collection(FirebaseCollection.posts.rawValue).document()
         
         post.id = document.documentID
         
@@ -64,6 +63,107 @@ class PostManager {
         }
     }
     
+    func setupComment(comment: inout Comment,
+                   completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.posts.rawValue).document(comment.postId)
+            .collection(FirebaseCollection.comments.rawValue).document()
+        
+        comment.id = document.documentID
+        
+        do {
+            try document.setData(from: comment)
+            
+            let commentId = document.documentID
+            
+            updatePostComment(postId: comment.postId, commentId: commentId) { result in
+                
+                switch result {
+                    
+                case .success:
+                    
+                    completion(.success(()))
+                    
+                case .failure:
+                    
+                    completion(.failure(FirebaseError.setupCommentError))
+                }
+            }
+        } catch {
+            
+            completion(.failure(FirebaseError.setupCommentError))
+        }
+    }
+    
+    func fetchPosts(userId: String, completion: @escaping (Result<[Post], Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.posts.rawValue)
+            .whereField("userId", isEqualTo: userId).order(by: "createdTime", descending: true)
+            
+        document.getDocuments { snapshots, _ in
+            
+            var posts: [Post] = []
+            
+            guard let snapshots = snapshots
+            
+            else {
+                    completion(.failure(FirebaseError.fetchPostError))
+                    
+                    return
+            }
+            
+            do {
+                
+                for document in snapshots.documents {
+                    
+                    let post = try document.data(as: Post.self)
+                    
+                    posts.append(post)
+                }
+                
+                completion(.success(posts))
+                
+            } catch {
+                
+                completion(.failure(FirebaseError.decodePostError))
+            }
+        }
+    }
+    
+    func fetchComments(postId: String, completion: @escaping (Result<[Comment], Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.posts.rawValue).document(postId).collection(FirebaseCollection.comments.rawValue)
+            
+        document.getDocuments { snapshots, _ in
+            
+            var comments: [Comment] = []
+            
+            guard let snapshots = snapshots
+            
+            else {
+                    completion(.failure(FirebaseError.fetchCommentError))
+                    
+                    return
+            }
+            
+            do {
+                
+                for document in snapshots.documents {
+                    
+                    let comment = try document.data(as: Comment.self)
+                    
+                    comments.append(comment)
+                }
+                
+                completion(.success(comments))
+                
+            } catch {
+                
+                completion(.failure(FirebaseError.decodeCommentError))
+            }
+        }
+    }
+    
     func updatePetPost(userId: String,
                        petId: String,
                        postId: String,
@@ -74,6 +174,27 @@ class PostManager {
         
         document.updateData([
             "postsId": FieldValue.arrayUnion([postId])
+        ]) { error in
+            
+            if let error = error {
+                
+                completion(.failure(error))
+                
+            } else {
+                
+                completion(.success(()))
+            }
+        }
+    }
+    
+    func updatePostComment(postId: String,
+                           commentId: String,
+                       completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.posts.rawValue).document(postId)
+        
+        document.updateData([
+            "commentId": FieldValue.arrayUnion([commentId])
         ]) { error in
             
             if let error = error {
@@ -108,14 +229,13 @@ class PostManager {
                             
                         case .success(let url):
                             
-                            let document = self?.dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
-                                .collection(FirebaseCollection.posts.rawValue).document(postId)
+                            let document = self?.dataBase.collection(FirebaseCollection.posts.rawValue).document(postId)
                             
                             let postImageUrlString = String(describing: url)
                             
                             document?.updateData([
                                 
-                                "postImage": postImageUrlString
+                                "photo": postImageUrlString
                                 
                             ]) { error in
                                 

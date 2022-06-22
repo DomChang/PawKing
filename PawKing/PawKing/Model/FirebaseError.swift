@@ -15,11 +15,19 @@ enum FirebaseError: Error {
     
     case setupPostError
     
+    case setupCommentError
+    
     case fetchUserError
     
     case fetchUserLocationError
     
     case fetchPetError
+    
+    case fetchPostError
+    
+    case fetchCommentError
+    
+    case fetchTrackError
     
     case fetchFriendError
     
@@ -37,6 +45,12 @@ enum FirebaseError: Error {
     
     case decodePetError
     
+    case decodePostError
+    
+    case decodeCommentError
+    
+    case decodeTrackError
+    
     var errorMessage: String {
         
         switch self {
@@ -53,6 +67,10 @@ enum FirebaseError: Error {
             
             return "建立貼文失敗"
             
+        case .setupCommentError:
+            
+            return "建立評論失敗"
+            
         case .fetchUserError:
             
             return "讀取使用者資料失敗"
@@ -61,9 +79,21 @@ enum FirebaseError: Error {
             
             return "讀取寵物資料失敗"
             
+        case .fetchPostError:
+            
+            return "讀取貼文失敗"
+            
+        case .fetchCommentError:
+            
+            return "讀取留言失敗"
+            
         case .fetchUserLocationError:
             
             return "讀取使用者已儲存位置失敗"
+            
+        case .fetchTrackError:
+            
+            return "讀取軌跡失敗"
             
         case .fetchFriendError:
             
@@ -96,6 +126,18 @@ enum FirebaseError: Error {
         case .decodePetError:
             
             return "無法解析寵物資料"
+            
+        case .decodePostError:
+            
+            return "無法解析貼文資料"
+            
+        case .decodeTrackError:
+            
+            return "無法解析軌跡"
+            
+        case .decodeCommentError:
+            
+            return "無法解析留言"
         }
     }
 }

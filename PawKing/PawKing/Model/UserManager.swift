@@ -132,11 +132,11 @@ class UserManager {
         }
     }
     
-    func listenUserInfo(userId: String, completion: @escaping (Result<User, Error>) -> Void) {
+    func fetchUserInfo(userId: String, completion: @escaping (Result<User, Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
             
-        document.addSnapshotListener { snapshot, _ in
+        document.getDocument { snapshot, _ in
             
             guard let snapshot = snapshot
             
@@ -189,6 +189,41 @@ class UserManager {
         }
     }
     
+    func fetchTracks(userId: String, completion: @escaping (Result<[TrackInfo], Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+            .collection(FirebaseCollection.tracks.rawValue).order(by: "startTime", descending: true)
+            
+        document.getDocuments { snapshots, _ in
+            
+            var trackInfos: [TrackInfo] = []
+            
+            guard let snapshots = snapshots
+            
+            else {
+                    completion(.failure(FirebaseError.fetchTrackError))
+                    
+                    return
+            }
+            
+            do {
+                
+                for document in snapshots.documents {
+                    
+                    let trackInfo = try document.data(as: TrackInfo.self)
+                    
+                    trackInfos.append(trackInfo)
+                }
+                
+                completion(.success(trackInfos))
+                
+            } catch {
+                
+                completion(.failure(FirebaseError.decodeTrackError))
+            }
+        }
+    }
+    
     func updateUserLocation(location: UserLocation, completion: @escaping (Result<Void, Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.userLocations.rawValue).document(location.userId)
@@ -203,19 +238,19 @@ class UserManager {
         }
     }
     
-    func fetchPetsbyUser(userId: String, completion: @escaping (Result<[Pet], Error>) -> Void) {
-        
-        var pets: [Pet] = []
+    func fetchPets(userId: String, completion: @escaping (Result<[Pet], Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
-                                .collection(FirebaseCollection.pets.rawValue)
+            .collection(FirebaseCollection.pets.rawValue).order(by: "createdTime", descending: true)
             
         document.getDocuments { snapshots, _ in
+            
+            var pets: [Pet] = []
             
             guard let snapshots = snapshots
             
             else {
-                    completion(.failure(FirebaseError.fetchUserError))
+                    completion(.failure(FirebaseError.fetchPetError))
                     
                     return
             }
@@ -233,20 +268,19 @@ class UserManager {
                 
             } catch {
                 
-                completion(.failure(FirebaseError.decodeUserError))
+                completion(.failure(FirebaseError.decodePetError))
             }
-            
         }
     }
     
     func listenPetChange(userId: String, completion: @escaping (Result<[Pet], Error>) -> Void) {
         
-        var pets: [Pet] = []
-        
         let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
-                                .collection(FirebaseCollection.pets.rawValue)
+            .collection(FirebaseCollection.pets.rawValue).order(by: "createdTime", descending: true)
             
         document.addSnapshotListener { snapshots, _ in
+            
+            var pets: [Pet] = []
             
             guard let snapshots = snapshots
             
@@ -271,7 +305,6 @@ class UserManager {
                 
                 completion(.failure(FirebaseError.decodeUserError))
             }
-            
         }
     }
     

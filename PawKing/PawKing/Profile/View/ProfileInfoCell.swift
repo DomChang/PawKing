@@ -149,6 +149,10 @@ class ProfileInfoCell: UICollectionViewCell {
         
         buttonStackView.addArrangedSubview(editProfileButton)
         buttonStackView.addArrangedSubview(addPetButton)
+        
+        userImageView.layoutIfNeeded()
+        userImageView.layer.cornerRadius = 5
+        userImageView.clipsToBounds = true
     }
     
     func configureCell(user: User) {

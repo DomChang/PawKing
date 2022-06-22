@@ -149,7 +149,7 @@ final class PublishViewController: UIViewController {
     
     func getUserPet() {
         
-        userManager.listenUserInfo(userId: userId) { [weak self] result in
+        userManager.fetchUserInfo(userId: userId) { [weak self] result in
             
             switch result {
                 
@@ -157,7 +157,7 @@ final class PublishViewController: UIViewController {
                 
                 self?.user = user
                 
-                self?.userManager.fetchPetsbyUser(userId: user.id) { result in
+                self?.userManager.fetchPets(userId: user.id) { result in
                     
                     switch result {
                         
@@ -214,7 +214,8 @@ final class PublishViewController: UIViewController {
                         userId: user.id,
                         petId: user.currentPetId,
                         photo: "",
-                        likes: 0,
+                        caption: captionTextView.text,
+                        likesId: [],
                         commentsId: [],
                         createdTime: Timestamp(date: Date()))
         

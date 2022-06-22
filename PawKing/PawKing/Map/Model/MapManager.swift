@@ -14,9 +14,11 @@ class MapManager {
     
     lazy var dataBase = Firestore.firestore()
     
-    func uploadTrack(trackInfo: inout TrackInfo, completion: @escaping (Result<Void, Error>) -> Void) {
+    func uploadTrack(userId: String, trackInfo: inout TrackInfo, completion: @escaping (Result<Void, Error>) -> Void) {
         
-        let document = dataBase.collection(FirebaseCollection.tracks.rawValue).document()
+        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+                        .collection(FirebaseCollection.tracks.rawValue).document()
+        
         trackInfo.id = document.documentID
         trackInfo.endTime = Timestamp(date: Date())
         
@@ -42,7 +44,8 @@ class MapManager {
     
     func listenFriendsLocation(friend: String, completion: @escaping (Result<UserLocation, Error>) -> Void) {
     
-        dataBase.collection(FirebaseCollection.userLocations.rawValue).document(friend).addSnapshotListener { snapshot, _ in
+        dataBase.collection(FirebaseCollection.userLocations.rawValue).document(friend)
+                .addSnapshotListener { snapshot, _ in
             
             guard let snapshot = snapshot else {
                 

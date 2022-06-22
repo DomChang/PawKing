@@ -35,7 +35,12 @@ class PetItemCell: UICollectionViewCell {
         
         contentView.addSubview(imageView)
         
-        self.layoutIfNeeded()
+        imageView.anchor(top: contentView.topAnchor,
+                         leading: contentView.leadingAnchor,
+                         bottom: contentView.bottomAnchor,
+                         trailing: contentView.trailingAnchor)
+        
+        contentView.layoutIfNeeded()
         
         imageView.makeRound()
 
@@ -43,9 +48,5 @@ class PetItemCell: UICollectionViewCell {
         
         imageView.kf.setImage(with: photoURL)
         
-        imageView.anchor(top: contentView.topAnchor,
-                         leading: contentView.leadingAnchor,
-                         bottom: contentView.bottomAnchor,
-                         trailing: contentView.trailingAnchor)
     }
 }

@@ -266,7 +266,7 @@ class MapViewController: UIViewController {
     
     func fetchUserInfo() {
         
-        userManager.listenUserInfo(userId: userId) { [weak self] result in
+        userManager.fetchUserInfo(userId: userId) { [weak self] result in
             
             switch result {
                 
@@ -307,7 +307,7 @@ class MapViewController: UIViewController {
     
     func fetchUserPets() {
         
-        userManager.fetchPetsbyUser(userId: userId) { [weak self] result in
+        userManager.fetchPets(userId: userId) { [weak self] result in
             
             switch result {
                 
@@ -385,7 +385,10 @@ class MapViewController: UIViewController {
         let coordinate = userStoredLocations.map { $0.coordinate }
         let track = coordinate.map { $0.transferToGeopoint() }
         
-        guard let petId = userCurrentPet?.id else { return }
+        guard let petId = userCurrentPet?.id,
+              let userId = user?.id else {
+            return
+        }
         
         var trackInfo = TrackInfo(id: userId,
                           petId: petId,
@@ -395,7 +398,7 @@ class MapViewController: UIViewController {
                           track: track,
                           note: "")
         
-        mapManager.uploadTrack(trackInfo: &trackInfo) { [weak self] result in
+        mapManager.uploadTrack(userId: userId, trackInfo: &trackInfo) { [weak self] result in
             
             switch result {
                 
@@ -539,7 +542,7 @@ class MapViewController: UIViewController {
             
             group.enter()
             
-            self.userManager.fetchPetsbyUser(userId: userId) { result in
+            self.userManager.fetchPets(userId: userId) { result in
                 
                 switch result {
                     
