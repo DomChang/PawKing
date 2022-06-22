@@ -38,9 +38,13 @@
 		B6ABE8EB285AE41500B1A977 /* LocationRelated+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8EA285AE41500B1A977 /* LocationRelated+Extension.swift */; };
 		B6ABE8ED285AFC2B00B1A977 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8EC285AFC2B00B1A977 /* User.swift */; };
 		B6ABE8F4285B87AB00B1A977 /* UserAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8F3285B87AB00B1A977 /* UserAnnotation.swift */; };
+<<<<<<< HEAD
 		B6BF96182862A467003627C1 /* PhotoPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF96172862A467003627C1 /* PhotoPostViewController.swift */; };
 		B6BF961A2862A9CF003627C1 /* PhotoPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF96192862A9CF003627C1 /* PhotoPostCell.swift */; };
 		B6BF961C28630C4E003627C1 /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF961B28630C4E003627C1 /* CommentCell.swift */; };
+=======
+		B6BF96142861EABC003627C1 /* TrackHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF96132861EABC003627C1 /* TrackHistoryViewController.swift */; };
+>>>>>>> feature/track_history
 		B6D4F69E285C35F80045DDB2 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F69D285C35F80045DDB2 /* UserManager.swift */; };
 		B6D4F6A3285C526A0045DDB2 /* FirebaseCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F6A2285C526A0045DDB2 /* FirebaseCollection.swift */; };
 		B6D4F6A5285C5D410045DDB2 /* StrangerCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F6A4285C5D410045DDB2 /* StrangerCardView.swift */; };
@@ -94,9 +98,13 @@
 		B6ABE8EA285AE41500B1A977 /* LocationRelated+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LocationRelated+Extension.swift"; sourceTree = "<group>"; };
 		B6ABE8EC285AFC2B00B1A977 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		B6ABE8F3285B87AB00B1A977 /* UserAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnnotation.swift; sourceTree = "<group>"; };
+<<<<<<< HEAD
 		B6BF96172862A467003627C1 /* PhotoPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPostViewController.swift; sourceTree = "<group>"; };
 		B6BF96192862A9CF003627C1 /* PhotoPostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPostCell.swift; sourceTree = "<group>"; };
 		B6BF961B28630C4E003627C1 /* CommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
+=======
+		B6BF96132861EABC003627C1 /* TrackHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackHistoryViewController.swift; sourceTree = "<group>"; };
+>>>>>>> feature/track_history
 		B6D4F69D285C35F80045DDB2 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		B6D4F6A2285C526A0045DDB2 /* FirebaseCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseCollection.swift; sourceTree = "<group>"; };
 		B6D4F6A4285C5D410045DDB2 /* StrangerCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrangerCardView.swift; sourceTree = "<group>"; };
@@ -204,6 +212,7 @@
 			children = (
 				B698DDBC2858B8CC0009077E /* ProfileViewController.swift */,
 				B6E86AAB2860309F002B8C9A /* EditUserViewController.swift */,
+				B6BF96132861EABC003627C1 /* TrackHistoryViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -521,6 +530,7 @@
 				B6ABE8E2285A0B7400B1A977 /* MapManager.swift in Sources */,
 				B6E86AA2285F0AEE002B8C9A /* ProfileInfoCell.swift in Sources */,
 				B63484E5285E1E5300DB7CE7 /* ChoosePetViewController.swift in Sources */,
+				B6BF96142861EABC003627C1 /* TrackHistoryViewController.swift in Sources */,
 				B63484DD285DA5B300DB7CE7 /* KeychainManager.swift in Sources */,
 				B6ABE8F4285B87AB00B1A977 /* UserAnnotation.swift in Sources */,
 				B698DDC02858B99F0009077E /* UIImage+Extension.swift in Sources */,

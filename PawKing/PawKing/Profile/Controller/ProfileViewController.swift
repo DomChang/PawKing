@@ -506,14 +506,38 @@ extension ProfileViewController: UICollectionViewDelegate {
             }
         } else if indexPath.section == ProfileSections.postsPhoto.rawValue {
             
-            guard let post = posts?[indexPath.item],
-                    let user = user,
-                    let pet = userPets?.filter({ $0.id == post.petId }).first
-            else { return }
-            
-            let photoPostVC = PhotoPostViewController(user: user, pet: pet, post: post)
-            
-            navigationController?.pushViewController(photoPostVC, animated: true)
+            if isPhoto {
+                
+                guard let post = posts?[indexPath.item],
+                        let user = user,
+                        let pet = userPets?.filter({ $0.id == post.petId }).first
+                else { return }
+                
+                let photoPostVC = PhotoPostViewController(user: user, pet: pet, post: post)
+                
+                navigationController?.pushViewController(photoPostVC, animated: true)
+                
+            } else {
+                
+                guard let trackInfos = trackInfos,
+                        let userPets = userPets else {
+                    return
+                }
+                
+                let trackInfo = trackInfos[indexPath.item]
+                
+                
+                for userPet in userPets where userPet.id == trackInfo.petId {
+                    
+                    guard let imageUrl = URL(string: userPet.petImage) else { return }
+                    
+                    let trackHistoryVC = TrackHistoryViewController(petName: userPet.name,
+                                                                    petImageURL: imageUrl,
+                                                                    trackInfo: trackInfo)
+                    
+                    navigationController?.pushViewController(trackHistoryVC, animated: true)
+                }
+            }
         }
     }
 }
