@@ -16,4 +16,6 @@ enum FirebaseCollection: String {
     case pets
     
     case posts
+    
+    case comments
 }

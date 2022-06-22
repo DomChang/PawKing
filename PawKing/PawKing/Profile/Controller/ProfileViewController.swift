@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 class ProfileViewController: UIViewController {
     
@@ -166,7 +167,8 @@ class ProfileViewController: UIViewController {
                 
                 let chooseGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                              heightDimension: .absolute(50))
-                let chooseGroup = NSCollectionLayoutGroup.horizontal(layoutSize: chooseGroupSize, subitems: [chooseItem])
+                let chooseGroup = NSCollectionLayoutGroup.horizontal(layoutSize: chooseGroupSize,
+                                                                     subitems: [chooseItem])
                 
                 let chooseSection = NSCollectionLayoutSection(group: chooseGroup)
                 
@@ -440,8 +442,7 @@ extension ProfileViewController: UICollectionViewDataSource {
                 
             } else {
                 
-                guard let trackCell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackHostoryCell.identifier,
-                                                                         for: indexPath) as? TrackHostoryCell
+                guard let trackCell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackHostoryCell.identifier, for: indexPath) as? TrackHostoryCell
                 else {
                     fatalError("Cannot dequeue TrackHostoryCell")
                 }
@@ -498,10 +499,21 @@ extension ProfileViewController: UICollectionViewDelegate {
             } else {
 
                 displayPosts = posts
+                
                 displayTrackInfos = trackInfos
                 
                 selectedPetIndex = -1
             }
+        } else if indexPath.section == ProfileSections.postsPhoto.rawValue {
+            
+            guard let post = posts?[indexPath.item],
+                    let user = user,
+                    let pet = userPets?.filter({ $0.id == post.petId }).first
+            else { return }
+            
+            let photoPostVC = PhotoPostViewController(user: user, pet: pet, post: post)
+            
+            navigationController?.pushViewController(photoPostVC, animated: true)
         }
     }
 }

@@ -14,7 +14,25 @@ struct Post: Codable {
     let userId: String
     let petId: String
     let photo: String
-    let likes: Int
+    let caption: String
+    let likesId: [String]
     let commentsId: [String]
+    let createdTime: Timestamp
+}
+
+struct Comment: Codable {
+    
+    var id: String
+    let postId: String
+    let senderId: String
+    let text: String
+    let createdTime: Timestamp
+}
+
+struct Like: Codable {
+    
+    var id: String
+    let postId: String
+    let senderId: String
     let createdTime: Timestamp
 }

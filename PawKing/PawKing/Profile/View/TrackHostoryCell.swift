@@ -76,5 +76,4 @@ class TrackHostoryCell: UICollectionViewCell {
         petNameLabel.font = UIFont.systemFont(ofSize: 14)
         petNameLabel.textAlignment = .center
     }
-    
 }

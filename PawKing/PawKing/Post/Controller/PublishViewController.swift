@@ -214,7 +214,8 @@ final class PublishViewController: UIViewController {
                         userId: user.id,
                         petId: user.currentPetId,
                         photo: "",
-                        likes: 0,
+                        caption: captionTextView.text,
+                        likesId: [],
                         commentsId: [],
                         createdTime: Timestamp(date: Date()))
         

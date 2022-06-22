@@ -69,6 +69,25 @@ extension UIView {
         }
     }
     
+    func fillSafeLayout(padding: UIEdgeInsets = .zero) {
+        translatesAutoresizingMaskIntoConstraints = false
+        if let safeTopAnchor = superview?.safeAreaLayoutGuide.topAnchor {
+            topAnchor.constraint(equalTo: safeTopAnchor, constant: padding.top).isActive = true
+        }
+        
+        if let safeBottomAnchor = superview?.safeAreaLayoutGuide.bottomAnchor {
+            bottomAnchor.constraint(equalTo: safeBottomAnchor, constant: -padding.bottom).isActive = true
+        }
+        
+        if let superviewLeadingAnchor = superview?.leadingAnchor {
+            leadingAnchor.constraint(equalTo: superviewLeadingAnchor, constant: padding.left).isActive = true
+        }
+        
+        if let superviewTrailingAnchor = superview?.trailingAnchor {
+            trailingAnchor.constraint(equalTo: superviewTrailingAnchor, constant: -padding.right).isActive = true
+        }
+    }
+    
     func centerInSuperview(size: CGSize = .zero) {
         translatesAutoresizingMaskIntoConstraints = false
         if let superviewCenterXAnchor = superview?.centerXAnchor {

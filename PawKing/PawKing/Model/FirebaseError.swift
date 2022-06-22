@@ -15,6 +15,8 @@ enum FirebaseError: Error {
     
     case setupPostError
     
+    case setupCommentError
+    
     case fetchUserError
     
     case fetchUserLocationError
@@ -22,6 +24,8 @@ enum FirebaseError: Error {
     case fetchPetError
     
     case fetchPostError
+    
+    case fetchCommentError
     
     case fetchTrackError
     
@@ -43,6 +47,8 @@ enum FirebaseError: Error {
     
     case decodePostError
     
+    case decodeCommentError
+    
     case decodeTrackError
     
     var errorMessage: String {
@@ -61,6 +67,10 @@ enum FirebaseError: Error {
             
             return "建立貼文失敗"
             
+        case .setupCommentError:
+            
+            return "建立評論失敗"
+            
         case .fetchUserError:
             
             return "讀取使用者資料失敗"
@@ -72,6 +82,10 @@ enum FirebaseError: Error {
         case .fetchPostError:
             
             return "讀取貼文失敗"
+            
+        case .fetchCommentError:
+            
+            return "讀取留言失敗"
             
         case .fetchUserLocationError:
             
@@ -120,6 +134,10 @@ enum FirebaseError: Error {
         case .decodeTrackError:
             
             return "無法解析軌跡"
+            
+        case .decodeCommentError:
+            
+            return "無法解析留言"
         }
     }
 }
