@@ -58,7 +58,7 @@ class MapViewController: UIViewController {
     
     var trackStartTime = Timestamp()
     
-    private var user: User?
+    private let user: User
     
     var userPets: [Pet] = [] {
         didSet {
@@ -86,7 +86,15 @@ class MapViewController: UIViewController {
         }
     }
     
-    let userId = "6jRPSQJEw7NWuyZl2BCs"
+    init(user: User) {
+        
+        self.user = user
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -130,7 +138,7 @@ class MapViewController: UIViewController {
         
         strangerButtonDisable()
         
-        fetchUserInfo()
+//        fetchUserInfo()
         
         fetchUserPets()
         
@@ -265,28 +273,28 @@ class MapViewController: UIViewController {
         mapView.setRegion(region, animated: false)
     }
     
-    func fetchUserInfo() {
-        
-        userManager.fetchUserInfo(userId: userId) { [weak self] result in
-            
-            switch result {
-                
-            case .success(let user):
-                
-                self?.user = user
-                self?.listenFriendsLocation()
-                self?.strangerButtonEnable()
-                
-            case .failure(let error):
-                
-                print(error)
-            }
-        }
-    }
+//    func fetchUserInfo() {
+//
+//        userManager.fetchUserInfo(userId: userId) { [weak self] result in
+//
+//            switch result {
+//
+//            case .success(let user):
+//
+//                self?.user = user
+//                self?.listenFriendsLocation()
+//                self?.strangerButtonEnable()
+//
+//            case .failure(let error):
+//
+//                print(error)
+//            }
+//        }
+//    }
     
     func fetchStoredUserLocation() {
         
-        userManager.fetchUserLocation(userId: userId) { [weak self] result in
+        userManager.fetchUserLocation(userId: user.id) { [weak self] result in
             switch result {
                 
             case .success(let userLocation):
@@ -308,7 +316,7 @@ class MapViewController: UIViewController {
     
     func fetchUserPets() {
         
-        userManager.fetchPets(userId: userId) { [weak self] result in
+        userManager.fetchPets(userId: user.id) { [weak self] result in
             
             switch result {
                 
@@ -340,7 +348,6 @@ class MapViewController: UIViewController {
             choosePetButton.setImage(UIImage.asset(.Image_Placeholder), for: .normal)
         }
     }
-    
     
     @objc func didSelectUserLocation() {
         
@@ -386,12 +393,11 @@ class MapViewController: UIViewController {
         let coordinate = userStoredLocations.map { $0.coordinate }
         let track = coordinate.map { $0.transferToGeopoint() }
         
-        guard let petId = userCurrentPet?.id,
-              let userId = user?.id else {
+        guard let petId = userCurrentPet?.id else {
             return
         }
         
-        var trackInfo = TrackInfo(id: userId,
+        var trackInfo = TrackInfo(id: user.id,
                           petId: petId,
                           screenShot: "",
                           startTime: trackStartTime,
@@ -399,7 +405,7 @@ class MapViewController: UIViewController {
                           track: track,
                           note: "")
         
-        mapManager.uploadTrack(userId: userId, trackInfo: &trackInfo) { [weak self] result in
+        mapManager.uploadTrack(userId: user.id, trackInfo: &trackInfo) { [weak self] result in
             
             switch result {
                 
@@ -436,7 +442,7 @@ class MapViewController: UIViewController {
         saveTrackButton.isHidden = true
         deleteTrackButton.isHidden = true
         
-        mapManager.changeUserStatus(userId: userId, status: .unTrack) { result in
+        mapManager.changeUserStatus(userId: user.id, status: .unTrack) { result in
             switch result {
                 
             case .success:
@@ -469,9 +475,9 @@ class MapViewController: UIViewController {
     
     @objc func didTapStrangerButton() {
         
-        guard let user = user else {
-            return
-        }
+//        guard let user = user else {
+//            return
+//        }
 
         let friends = user.friends
         
@@ -494,7 +500,7 @@ class MapViewController: UIViewController {
                     return
                 }
                 
-                nearStrangersId.removeAll(where: { $0 == user.id })
+                nearStrangersId.removeAll(where: { $0 == self?.user.id })
                 
                 self?.fetchPets(from: nearStrangersId) { pets in
                     
@@ -569,9 +575,9 @@ class MapViewController: UIViewController {
     
     func listenFriendsLocation() {
         
-        guard let user = user else {
-            return
-        }
+//        guard let user = user else {
+//            return
+//        }
 
         let friends = user.friends
         
@@ -659,7 +665,7 @@ extension MapViewController: ChoosePetViewDelegate {
         
         self.userCurrentPet = selectedPet
         
-        guard let user = user else { return }
+//        guard let user = user else { return }
         
         userManager.updateCurrentPet(userId: user.id, pet: selectedPet) { result in
             
@@ -698,13 +704,13 @@ extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
         mapView.addOverlay(polyline, level: .aboveLabels)
         
         guard let location = locations.last?.coordinate,
-              let currentPet = userCurrentPet,
-              let user = user
+              let currentPet = userCurrentPet
+//              let user = user
         else {
             return
         }
         
-        let userLocation = UserLocation(userId: userId,
+        let userLocation = UserLocation(userId: user.id,
                                         userName: user.name,
                                         userPhoto: user.userImage,
                                         currentPetId: currentPet.id,

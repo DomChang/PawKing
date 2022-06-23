@@ -14,13 +14,19 @@ class PhotoPostViewController: UIViewController {
     
     private let userManager = UserManager.shared
     
+    private let petManager = PetManager.shared
+    
     private let tableView = UITableView()
     
     private let user: User
     
     private let post: Post
     
-    private let pet: Pet
+    private var pet: Pet? {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     
     private var commentSenders: [User] = []
     
@@ -34,11 +40,9 @@ class PhotoPostViewController: UIViewController {
     
     private var userInputTopAnchor: NSLayoutConstraint!
     
-    init(user: User, pet: Pet, post: Post) {
+    init(user: User, post: Post) {
         
         self.user = user
-        
-        self.pet = pet
         
         self.post = post
         
@@ -68,6 +72,8 @@ class PhotoPostViewController: UIViewController {
     }
     
     func setup() {
+        
+        getPet()
         
         getComments()
         
@@ -143,6 +149,23 @@ class PhotoPostViewController: UIViewController {
             equalTo: view.safeAreaLayoutGuide.bottomAnchor,
             constant: -52)
         userInputTopAnchor.isActive = true
+    }
+    
+    func getPet() {
+        
+        petManager.fetchPetInfo(userId: user.id, petId: post.petId) { [weak self] result in
+            
+            switch result {
+                
+            case .success(let pet):
+                
+                self?.pet = pet
+                
+            case .failure(let error):
+                
+                print(error)
+            }
+        }
     }
     
     func getComments() {
@@ -270,9 +293,12 @@ extension PhotoPostViewController: UITableViewDataSource, UITableViewDelegate {
         case 0:
             
             guard let contentCell = tableView.dequeueReusableCell(withIdentifier: PhotoPostCell.identifier,
-                                                           for: indexPath) as? PhotoPostCell else {
+                                                                  for: indexPath) as? PhotoPostCell else {
                 fatalError("Cannot dequeue PhotoPostCell")
             }
+            
+            guard let pet = pet else { return contentCell }
+            
             contentCell.configureCell(user: user, pet: pet, post: post)
             
             contentCell.selectionStyle = .none

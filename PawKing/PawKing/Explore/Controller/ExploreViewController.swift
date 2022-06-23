@@ -15,15 +15,32 @@ class ExploreViewController: UIViewController {
                                                   collectionViewLayout: configureLayout())
 
     private let postManager = PostManager.shared
-
-    var isfriend = false
     
-    var posts: [Post]? {
+    private let userManager = UserManager.shared
+    
+    private let user: User
+    
+    private var allPosts: [Post]?
+    
+    private var friendPosts: [Post]?
+    
+    private var displayPosts: [Post]? {
         didSet {
             collectionView.reloadData()
         }
     }
-
+    
+    init(user: User) {
+        
+        self.user = user
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -58,11 +75,7 @@ class ExploreViewController: UIViewController {
     
     func style() {
         
-//        allModeButton.setTitle("All", for: .normal)
-//        friendModeButton.setTitle("Friends", for: .normal)
-//
-//        allModeButton.setTitleColor(.O1, for: .normal)
-//        friendModeButton.setTitleColor(.O1, for: .normal)
+
     }
     
     func layout() {
@@ -80,14 +93,44 @@ class ExploreViewController: UIViewController {
                 
             case .success(let posts):
                 
-                self?.posts = posts
+                self?.allPosts = posts
+                
+                self?.displayPosts = posts
+                
+                self?.getFriendPosts()
                 
             case .failure(let error):
                 
                 print(error)
             }
         }
+    }
+    
+    func getFriendPosts() {
         
+        guard let posts = allPosts else { return }
+        
+        var friendPosts: [Post] = []
+        
+        for post in posts where user.friends.contains(post.userId) {
+            
+            friendPosts.append(post)
+        }
+        
+        self.friendPosts = friendPosts
+    }
+}
+
+extension ExploreViewController: ModeChangeHeaderDelegate {
+    
+    func didTapAll() {
+        
+        displayPosts = allPosts
+    }
+    
+    func didTapFriend() {
+        
+        displayPosts = friendPosts
     }
 }
 
@@ -97,9 +140,14 @@ extension ExploreViewController: UICollectionViewDataSource {
                         viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath) -> UICollectionReusableView {
         
-        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
+        guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
                                                                          withReuseIdentifier: ModeChangeHeaderReusableView.identifier,
-                                                                         for: indexPath)
+                                                                               for: indexPath) as? ModeChangeHeaderReusableView else {
+            fatalError("Cannot dequeue ModeChangeHeaderReusableView")
+        }
+        
+        headerView.delegate = self
+        
         return headerView
     }
     
@@ -201,7 +249,7 @@ extension ExploreViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        posts?.count ?? 0
+        displayPosts?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -214,7 +262,7 @@ extension ExploreViewController: UICollectionViewDataSource {
         
         cell.imageView.image = UIImage.asset(.Image_Placeholder)
         
-        guard let posts = posts else { return cell }
+        guard let posts = displayPosts else { return cell }
         
         let imageUrl = URL(string: posts[indexPath.item].photo)
         
@@ -226,5 +274,13 @@ extension ExploreViewController: UICollectionViewDataSource {
 
 extension ExploreViewController: UICollectionViewDelegate {
     
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        guard let post = displayPosts?[indexPath.item]
+        else { return }
+
+        let photoPostVC = PhotoPostViewController(user: user, post: post)
+
+        navigationController?.pushViewController(photoPostVC, animated: true)
+    }
 }

@@ -7,9 +7,18 @@
 
 import UIKit
 
+protocol ModeChangeHeaderDelegate {
+    
+    func didTapAll()
+    
+    func didTapFriend()
+}
+
 class ModeChangeHeaderReusableView: UICollectionReusableView {
     
     static let identifier = "ModeChangeHeaderReusableView"
+    
+    var delegate: ModeChangeHeaderDelegate?
     
     let allModeButton = UIButton()
     
@@ -73,6 +82,10 @@ class ModeChangeHeaderReusableView: UICollectionReusableView {
             
             self.bottomLine.center.x = self.frame.width * 1 / 4
         })
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.delegate?.didTapAll()
+        }
     }
     
     @objc func didTapFriend() {
@@ -82,5 +95,8 @@ class ModeChangeHeaderReusableView: UICollectionReusableView {
             self.bottomLine.center.x = self.frame.width * 3 / 4
         })
         
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.delegate?.didTapFriend()
+        }
     }
 }

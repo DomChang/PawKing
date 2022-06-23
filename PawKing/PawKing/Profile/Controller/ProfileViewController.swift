@@ -510,11 +510,11 @@ extension ProfileViewController: UICollectionViewDelegate {
             if isPhoto {
                 
                 guard let post = posts?[indexPath.item],
-                        let user = user,
-                        let pet = userPets?.filter({ $0.id == post.petId }).first
+                        let user = user
+//                        let pet = userPets?.filter({ $0.id == post.petId }).first
                 else { return }
                 
-                let photoPostVC = PhotoPostViewController(user: user, pet: pet, post: post)
+                let photoPostVC = PhotoPostViewController(user: user, post: post)
                 
                 navigationController?.pushViewController(photoPostVC, animated: true)
                 

@@ -41,7 +41,6 @@ class PhotoItemCell: UICollectionViewCell {
         
         contentView.layoutIfNeeded()
         
-        
         imageView.contentMode = .scaleAspectFill
         
         imageView.layer.cornerRadius = 10
