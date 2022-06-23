@@ -115,7 +115,6 @@ class TabBarViewController: UITabBarController {
         
         let navBarAppearance =  UINavigationBarAppearance()
         navBarAppearance.configureWithDefaultBackground()
-        UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
         UINavigationBar.appearance().standardAppearance = navBarAppearance
     }
 }

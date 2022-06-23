@@ -80,7 +80,7 @@ class ContentButtonCell: UICollectionViewCell {
             self.bottomLine.center.x = self.contentView.frame.width * 1 / 4
         })
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             self.delegate?.didTapPhoto()
         }
     }
@@ -92,7 +92,7 @@ class ContentButtonCell: UICollectionViewCell {
             self.bottomLine.center.x = self.contentView.frame.width * 3 / 4
         })
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             self.delegate?.didTapTrack()
         }
     }
