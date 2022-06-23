@@ -442,7 +442,8 @@ extension ProfileViewController: UICollectionViewDataSource {
                 
             } else {
                 
-                guard let trackCell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackHostoryCell.identifier, for: indexPath) as? TrackHostoryCell
+                guard let trackCell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackHostoryCell.identifier,
+                                                                         for: indexPath) as? TrackHostoryCell
                 else {
                     fatalError("Cannot dequeue TrackHostoryCell")
                 }
@@ -525,7 +526,6 @@ extension ProfileViewController: UICollectionViewDelegate {
                 }
                 
                 let trackInfo = trackInfos[indexPath.item]
-                
                 
                 for userPet in userPets where userPet.id == trackInfo.petId {
                     
