@@ -33,7 +33,7 @@ private enum Tab {
             UINavigationController(rootViewController:
                                     PublishViewController(image:UIImage.asset(.Image_Placeholder)!))
             
-        case .chat: controller = UINavigationController(rootViewController: ChatViewController())
+        case .chat: controller = UINavigationController(rootViewController: ChatRoomViewController(user: user))
 
         case .profile: controller = UINavigationController(rootViewController: ProfileViewController())
             

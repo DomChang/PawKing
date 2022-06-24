@@ -17,6 +17,8 @@ enum FirebaseError: Error {
     
     case setupCommentError
     
+    case sendMessageError
+    
     case fetchUserError
     
     case fetchUserLocationError
@@ -32,6 +34,8 @@ enum FirebaseError: Error {
     case fetchFriendError
     
     case fetchStangerError
+    
+    case fetchMessageError
     
     case uploadUserPhotoError
     
@@ -50,6 +54,8 @@ enum FirebaseError: Error {
     case decodeCommentError
     
     case decodeTrackError
+    
+    case decodeMessageError
     
     var errorMessage: String {
         
@@ -70,6 +76,10 @@ enum FirebaseError: Error {
         case .setupCommentError:
             
             return "建立評論失敗"
+            
+        case .sendMessageError:
+            
+            return "訊息傳送失敗"
             
         case .fetchUserError:
             
@@ -102,6 +112,10 @@ enum FirebaseError: Error {
         case .fetchStangerError:
             
             return "無法讀取陌生人位置"
+            
+        case .fetchMessageError:
+            
+            return "無法讀取訊息"
             
         case .uploadUserPhotoError:
             
@@ -138,6 +152,10 @@ enum FirebaseError: Error {
         case .decodeCommentError:
             
             return "無法解析留言"
+            
+        case .decodeMessageError:
+            
+            return "無法解析訊息"
         }
     }
 }

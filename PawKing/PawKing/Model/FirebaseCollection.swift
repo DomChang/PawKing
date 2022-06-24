@@ -18,4 +18,8 @@ enum FirebaseCollection: String {
     case posts
     
     case comments
+    
+    case chats
+    
+    case recentMessages
 }
