@@ -9,7 +9,9 @@ import UIKit
 
 class ExploreViewController: UIViewController {
     
-    let searchController = UISearchController(searchResultsController: nil)
+    var searchController: UISearchController?
+    
+    private let resultViewController = ResultViewController()
     
     private let collectionView = UICollectionView(frame: .zero,
                                                   collectionViewLayout: configureLayout())
@@ -49,7 +51,7 @@ class ExploreViewController: UIViewController {
         layout()
     }
     
-    func setup() {
+    private func setup() {
         
         getAllPosts()
         
@@ -63,6 +65,18 @@ class ExploreViewController: UIViewController {
         
         navigationItem.searchController = searchController
         
+//        searchController = UISearchController(searchResultsController: searchVC)
+//
+//        searchController?.searchResultsUpdater = searchVC as? UISearchResultsUpdating
+//
+//        searchController?.obscuresBackgroundDuringPresentation = false
+//
+//        searchController?.searchBar.placeholder = "Search User"
+//
+//        navigationItem.searchController = searchController
+//
+//        definesPresentationContext = true
+        
         collectionView.dataSource = self
         collectionView.delegate = self
         
@@ -71,21 +85,23 @@ class ExploreViewController: UIViewController {
                                 withReuseIdentifier: ModeChangeHeaderReusableView.identifier)
         
         collectionView.register(PhotoItemCell.self, forCellWithReuseIdentifier: PhotoItemCell.identifier)
+        
+        setSearchController()
     }
     
-    func style() {
+    private func style() {
         
 
     }
     
-    func layout() {
+    private func layout() {
         
         view.addSubview(collectionView)
         
         collectionView.fillSafeLayout()
     }
     
-    func getAllPosts() {
+    private func getAllPosts() {
         
         postManager.fetchAllPosts { [weak self] result in
             
@@ -106,7 +122,18 @@ class ExploreViewController: UIViewController {
         }
     }
     
-    func getFriendPosts() {
+    private func setSearchController() {
+        searchController = UISearchController(
+            searchResultsController: resultViewController
+        )
+        searchController?.searchResultsUpdater = resultViewController as? UISearchResultsUpdating
+        
+        navigationItem.searchController = searchController
+        
+        definesPresentationContext = true
+    }
+    
+    private func getFriendPosts() {
         
         guard let posts = allPosts else { return }
         
@@ -132,6 +159,12 @@ extension ExploreViewController: ModeChangeHeaderDelegate {
         
         displayPosts = friendPosts
     }
+}
+
+extension ExploreViewController: UISearchResultsUpdating {
+   func updateSearchResults(for searchController: UISearchController) {
+    // TO-DO: Implement here
+  }
 }
 
 extension ExploreViewController: UICollectionViewDataSource {
@@ -226,7 +259,10 @@ extension ExploreViewController: UICollectionViewDataSource {
                                                            heightDimension: .fractionalWidth(16/9))
 
         let nestedGroup = NSCollectionLayoutGroup.vertical(layoutSize: nestedGroupSize,
-                                                             subitems: [fullGroup, mainWithPairGroup, tripletGroup, mainWithRevGroup])
+                                                             subitems: [fullGroup,
+                                                                        mainWithPairGroup,
+                                                                        tripletGroup,
+                                                                        mainWithRevGroup])
 
         let section = NSCollectionLayoutSection(group: nestedGroup)
 
@@ -252,7 +288,8 @@ extension ExploreViewController: UICollectionViewDataSource {
         displayPosts?.count ?? 0
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoItemCell.identifier,
                                                                 for: indexPath) as? PhotoItemCell

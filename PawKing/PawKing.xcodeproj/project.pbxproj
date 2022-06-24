@@ -18,6 +18,8 @@
 		B63484E7285E36F700DB7CE7 /* ChoosePetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484E6285E36F700DB7CE7 /* ChoosePetTableViewCell.swift */; };
 		B63484ED285EEE8800DB7CE7 /* PhotoItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484EC285EEE8800DB7CE7 /* PhotoItemCell.swift */; };
 		B66A15B72864035100DF2663 /* ModeChangeHeaderReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15B62864035000DF2663 /* ModeChangeHeaderReusableView.swift */; };
+		B66A15B92864606700DF2663 /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15B82864606700DF2663 /* ResultViewController.swift */; };
+		B66A15BB28648B4900DF2663 /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15BA28648B4900DF2663 /* SearchResultCell.swift */; };
 		B698DD9D285881FB0009077E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DD9C285881FB0009077E /* AppDelegate.swift */; };
 		B698DD9F285881FB0009077E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DD9E285881FB0009077E /* SceneDelegate.swift */; };
 		B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDA0285881FB0009077E /* TabBarViewController.swift */; };
@@ -74,6 +76,8 @@
 		B63484E6285E36F700DB7CE7 /* ChoosePetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoosePetTableViewCell.swift; sourceTree = "<group>"; };
 		B63484EC285EEE8800DB7CE7 /* PhotoItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoItemCell.swift; sourceTree = "<group>"; };
 		B66A15B62864035000DF2663 /* ModeChangeHeaderReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeChangeHeaderReusableView.swift; sourceTree = "<group>"; };
+		B66A15B82864606700DF2663 /* ResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
+		B66A15BA28648B4900DF2663 /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
 		B698DD99285881FB0009077E /* PawKing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PawKing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B698DD9C285881FB0009077E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B698DD9E285881FB0009077E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -234,6 +238,7 @@
 			isa = PBXGroup;
 			children = (
 				B66A15B62864035000DF2663 /* ModeChangeHeaderReusableView.swift */,
+				B66A15BA28648B4900DF2663 /* SearchResultCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -242,6 +247,7 @@
 			isa = PBXGroup;
 			children = (
 				B698DDB62858B8850009077E /* ExploreViewController.swift */,
+				B66A15B82864606700DF2663 /* ResultViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -542,6 +548,7 @@
 				B63484DF285DC62D00DB7CE7 /* PetConfigViewController.swift in Sources */,
 				B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */,
 				B63484E7285E36F700DB7CE7 /* ChoosePetTableViewCell.swift in Sources */,
+				B66A15B92864606700DF2663 /* ResultViewController.swift in Sources */,
 				B6E86AA4285F0B6B002B8C9A /* ContentButtonCell.swift in Sources */,
 				B6D4F69E285C35F80045DDB2 /* UserManager.swift in Sources */,
 				B63484E3285DC8D000DB7CE7 /* PetManager.swift in Sources */,
@@ -555,6 +562,7 @@
 				B63484D6285D80F100DB7CE7 /* BaseConfigViewController.swift in Sources */,
 				B63484ED285EEE8800DB7CE7 /* PhotoItemCell.swift in Sources */,
 				B6D4F6A5285C5D410045DDB2 /* StrangerCardView.swift in Sources */,
+				B66A15BB28648B4900DF2663 /* SearchResultCell.swift in Sources */,
 				B6E86AA0285F016A002B8C9A /* Profile.swift in Sources */,
 				B6ABE8E2285A0B7400B1A977 /* MapManager.swift in Sources */,
 				B6E86AA2285F0AEE002B8C9A /* ProfileInfoCell.swift in Sources */,
@@ -655,7 +663,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -709,7 +717,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
