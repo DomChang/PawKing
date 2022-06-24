@@ -57,7 +57,7 @@ class TrackHostoryCell: UICollectionViewCell {
                             height: 16,
                             padding: UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0))
         
-        contentView.layer.cornerRadius = contentView.frame.width / 4
+        contentView.layer.cornerRadius = contentView.frame.width / 10
         
         contentView.layoutIfNeeded()
         

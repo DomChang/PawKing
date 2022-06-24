@@ -358,4 +358,38 @@ class UserManager {
             }
         }
     }
+    
+    func fetchAllUser(completion: @escaping (Result<[User], Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.users.rawValue)
+            
+        document.getDocuments { snapshots, _ in
+            
+            var users: [User] = []
+            
+            guard let snapshots = snapshots
+            
+            else {
+                    completion(.failure(FirebaseError.fetchUserError))
+                    
+                    return
+            }
+            
+            do {
+                
+                for document in snapshots.documents {
+                    
+                    let user = try document.data(as: User.self)
+                    
+                    users.append(user)
+                }
+                
+                completion(.success(users))
+                
+            } catch {
+                
+                completion(.failure(FirebaseError.decodeUserError))
+            }
+        }
+    }
 }

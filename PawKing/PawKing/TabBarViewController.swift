@@ -19,18 +19,20 @@ private enum Tab {
     
     case profile
 
-    func controller() -> UIViewController {
+    func controller(user: User) -> UIViewController {
 
         var controller: UIViewController
 
         switch self {
 
-        case .map: controller = UINavigationController(rootViewController: MapViewController())
+        case .map: controller = UINavigationController(rootViewController: MapViewController(user: user))
 
-        case .explore: controller = UINavigationController(rootViewController: ExploreViewController())
+        case .explore: controller = UINavigationController(rootViewController: ExploreViewController(user: user))
             
-        case .publish: controller = UINavigationController(rootViewController: PublishViewController(image:
-                                                                                                        UIImage.asset(.Image_Placeholder)!))
+        case .publish: controller =
+            UINavigationController(rootViewController:
+                                    PublishViewController(image:UIImage.asset(.Image_Placeholder)!))
+            
         case .chat: controller = UINavigationController(rootViewController: ChatViewController())
 
         case .profile: controller = UINavigationController(rootViewController: ProfileViewController())
@@ -87,13 +89,21 @@ private enum Tab {
 }
 
 class TabBarViewController: UITabBarController {
+    
+    private let userId = "6jRPSQJEw7NWuyZl2BCs"
 
     private let tabs: [Tab] = [.map, .explore, .publish, .chat, .profile]
     
-    let photoHelper = PKPhotoHelper()
+    private let userManager = UserManager.shared
+    
+    private let photoHelper = PKPhotoHelper()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.backgroundColor = .white
+        
+        tabBar.isHidden = true
         
         photoHelper.completionHandler = { [weak self] image in
             
@@ -105,9 +115,23 @@ class TabBarViewController: UITabBarController {
         }
         
         delegate = self
-
-        viewControllers = tabs.map({ $0.controller() })
         
+        userManager.fetchUserInfo(userId: userId) { [weak self] result in
+            
+            switch result {
+                
+            case .success(let user):
+                
+                self?.tabBar.isHidden = false
+                
+                self?.viewControllers = self?.tabs.map({ $0.controller(user: user) })
+                
+            case .failure(let error):
+                
+                print(error)
+            }
+        }
+
         let tabBarAppearance =  UITabBarAppearance()
         tabBarAppearance.configureWithDefaultBackground()
         tabBar.scrollEdgeAppearance = tabBarAppearance
@@ -115,7 +139,6 @@ class TabBarViewController: UITabBarController {
         
         let navBarAppearance =  UINavigationBarAppearance()
         navBarAppearance.configureWithDefaultBackground()
-        UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
         UINavigationBar.appearance().standardAppearance = navBarAppearance
     }
 }

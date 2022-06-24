@@ -83,6 +83,35 @@ class PetManager {
         }
     }
     
+    func fetchPetInfo(userId: String, petId: String, completion: @escaping (Result<Pet, Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+            .collection(FirebaseCollection.pets.rawValue).document(petId)
+            
+        document.getDocument { snapshot, _ in
+            
+            guard let snapshot = snapshot
+            
+            else {
+                
+                    completion(.failure(FirebaseError.fetchPetError))
+                    
+                    return
+            }
+            
+            do {
+                
+                let pet = try snapshot.data(as: Pet.self)
+                
+                completion(.success(pet))
+                
+            } catch {
+                
+                completion(.failure(FirebaseError.decodePetError))
+            }
+        }
+    }
+    
     func updatePetInfo(userId: String,
                        pet: Pet,
                        completion: @escaping (Result<Void, Error>) -> Void) {

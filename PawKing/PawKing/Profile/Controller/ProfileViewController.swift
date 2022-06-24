@@ -117,87 +117,6 @@ class ProfileViewController: UIViewController {
         
     }
     
-    private static func configureLayout() -> UICollectionViewCompositionalLayout {
-        
-        UICollectionViewCompositionalLayout { sectionIndex, _ in
-            
-            let section = ProfileSections.allCases[sectionIndex]
-            
-            switch section {
-                
-            case .userInfo:
-                
-                let infoItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                          heightDimension: .fractionalHeight(1))
-                let infoItem = NSCollectionLayoutItem(layoutSize: infoItemSize)
-                
-                let infoGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                           heightDimension: .absolute(150))
-                let infoGroup = NSCollectionLayoutGroup.vertical(layoutSize: infoGroupSize, subitems: [infoItem])
-                
-                let infoSection = NSCollectionLayoutSection(group: infoGroup)
-                
-                return infoSection
-                
-            case .choosePet:
-                
-                let petItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                         heightDimension: .fractionalHeight(1))
-                let petItem = NSCollectionLayoutItem(layoutSize: petItemSize)
-                
-                let petGroupSize = NSCollectionLayoutSize(widthDimension: .absolute(80),
-                                                          heightDimension: .absolute(80))
-                
-                let petGroup = NSCollectionLayoutGroup.horizontal(layoutSize: petGroupSize, subitems: [petItem])
-                
-                let petSection = NSCollectionLayoutSection(group: petGroup)
-                
-                petSection.orthogonalScrollingBehavior = .continuous
-                petSection.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 20, trailing: 20)
-                
-                petSection.interGroupSpacing = 10
-                
-                return petSection
-                
-            case .chooseContent:
-                
-                let chooseItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                            heightDimension: .fractionalHeight(1))
-                let chooseItem = NSCollectionLayoutItem(layoutSize: chooseItemSize)
-                
-                let chooseGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                             heightDimension: .absolute(50))
-                let chooseGroup = NSCollectionLayoutGroup.horizontal(layoutSize: chooseGroupSize,
-                                                                     subitems: [chooseItem])
-                
-                let chooseSection = NSCollectionLayoutSection(group: chooseGroup)
-                
-                chooseSection.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0)
-                
-                return chooseSection
-                
-            case .postsPhoto:
-                    
-                let postItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1 / 3),
-                                                          heightDimension: .fractionalHeight(1))
-                let postItem = NSCollectionLayoutItem(layoutSize: postItemSize)
-                
-                postItem.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 1, bottom: 10, trailing: 10)
-                
-                let postGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                           heightDimension: .fractionalWidth(1 / 3))
-                let postGroup = NSCollectionLayoutGroup.horizontal(layoutSize: postGroupSize, subitems: [postItem])
-                
-                let postSection = NSCollectionLayoutSection(group: postGroup)
-                
-                postSection.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
-                
-                return postSection
-
-            }
-        }
-    }
-    
     func fetchUser() {
         
         userManager.fetchUserInfo(userId: userId) { [weak self] result in
@@ -315,6 +234,87 @@ extension ProfileViewController: ContentButtonCellDelegate {
 }
 
 extension ProfileViewController: UICollectionViewDataSource {
+    
+    private static func configureLayout() -> UICollectionViewCompositionalLayout {
+        
+        UICollectionViewCompositionalLayout { sectionIndex, _ in
+            
+            let section = ProfileSections.allCases[sectionIndex]
+            
+            switch section {
+                
+            case .userInfo:
+                
+                let infoItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                          heightDimension: .fractionalHeight(1))
+                let infoItem = NSCollectionLayoutItem(layoutSize: infoItemSize)
+                
+                let infoGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                           heightDimension: .absolute(150))
+                let infoGroup = NSCollectionLayoutGroup.vertical(layoutSize: infoGroupSize, subitems: [infoItem])
+                
+                let infoSection = NSCollectionLayoutSection(group: infoGroup)
+                
+                return infoSection
+                
+            case .choosePet:
+                
+                let petItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                         heightDimension: .fractionalHeight(1))
+                let petItem = NSCollectionLayoutItem(layoutSize: petItemSize)
+                
+                let petGroupSize = NSCollectionLayoutSize(widthDimension: .absolute(80),
+                                                          heightDimension: .absolute(80))
+                
+                let petGroup = NSCollectionLayoutGroup.horizontal(layoutSize: petGroupSize, subitems: [petItem])
+                
+                let petSection = NSCollectionLayoutSection(group: petGroup)
+                
+                petSection.orthogonalScrollingBehavior = .continuous
+                petSection.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 20, trailing: 20)
+                
+                petSection.interGroupSpacing = 10
+                
+                return petSection
+                
+            case .chooseContent:
+                
+                let chooseItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                            heightDimension: .fractionalHeight(1))
+                let chooseItem = NSCollectionLayoutItem(layoutSize: chooseItemSize)
+                
+                let chooseGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                             heightDimension: .absolute(50))
+                let chooseGroup = NSCollectionLayoutGroup.horizontal(layoutSize: chooseGroupSize,
+                                                                     subitems: [chooseItem])
+                
+                let chooseSection = NSCollectionLayoutSection(group: chooseGroup)
+                
+                chooseSection.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0)
+                
+                return chooseSection
+                
+            case .postsPhoto:
+                    
+                let postItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1 / 3),
+                                                          heightDimension: .fractionalHeight(1))
+                let postItem = NSCollectionLayoutItem(layoutSize: postItemSize)
+                
+                postItem.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 1, bottom: 10, trailing: 10)
+                
+                let postGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                           heightDimension: .fractionalWidth(1 / 3))
+                let postGroup = NSCollectionLayoutGroup.horizontal(layoutSize: postGroupSize, subitems: [postItem])
+                
+                let postSection = NSCollectionLayoutSection(group: postGroup)
+                
+                postSection.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+                
+                return postSection
+
+            }
+        }
+    }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         
@@ -510,11 +510,11 @@ extension ProfileViewController: UICollectionViewDelegate {
             if isPhoto {
                 
                 guard let post = posts?[indexPath.item],
-                        let user = user,
-                        let pet = userPets?.filter({ $0.id == post.petId }).first
+                        let user = user
+//                        let pet = userPets?.filter({ $0.id == post.petId }).first
                 else { return }
                 
-                let photoPostVC = PhotoPostViewController(user: user, pet: pet, post: post)
+                let photoPostVC = PhotoPostViewController(user: user, post: post)
                 
                 navigationController?.pushViewController(photoPostVC, animated: true)
                 

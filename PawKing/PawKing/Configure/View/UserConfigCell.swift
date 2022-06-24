@@ -58,6 +58,7 @@ class UserConfigCell: UITableViewCell {
     func styleObject() {
         
         photoButton.setImage(UIImage.asset(.Image_Placeholder), for: .normal)
+        photoButton.imageView?.contentMode = .scaleAspectFill
         
         userNameTextfield.layer.borderColor = UIColor.G1?.cgColor
         userNameTextfield.layer.borderWidth = 1
