@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  TabBarViewController.swift
 //  PawKing
 //
 //  Created by ChunKai Chang on 2022/6/14.
@@ -31,11 +31,11 @@ private enum Tab {
             
         case .publish: controller =
             UINavigationController(rootViewController:
-                                    PublishViewController(image:UIImage.asset(.Image_Placeholder)!))
+                                    PublishViewController(image: UIImage.asset(.Image_Placeholder)!))
             
-        case .chat: controller = UINavigationController(rootViewController: ChatViewController())
+        case .chat: controller = UINavigationController(rootViewController: ChatRoomViewController(user: user))
 
-        case .profile: controller = UINavigationController(rootViewController: ProfileViewController())
+        case .profile: controller = UINavigationController(rootViewController: ProfileViewController(user: user))
             
         }
 

@@ -13,6 +13,8 @@ class ResultViewController: UISearchController {
     
     private let userManager = UserManager.shared
     
+    var user: User
+    
     var allUsers: [User]?
     
     var resultUsers: [User]? {
@@ -20,7 +22,18 @@ class ResultViewController: UISearchController {
             tableView.reloadData()
         }
     }
-
+    
+    init(user: User){
+        
+        self.user = user
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -37,6 +50,8 @@ class ResultViewController: UISearchController {
         
         tableView.dataSource = self
         tableView.delegate = self
+        
+        tableView.allowsSelection = true
         
         tableView.register(SearchResultCell.self, forCellReuseIdentifier: SearchResultCell.identifier)
     }
@@ -85,6 +100,20 @@ extension ResultViewController: UISearchResultsUpdating {
 }
 
 extension ResultViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        if let resultUsers = resultUsers {
+            
+            let userPhotoVC = UserPhotoWallViewController(user: user, otherUser: resultUsers[indexPath.row])
+            
+            let navUserPhotoVC = UINavigationController(rootViewController: userPhotoVC)
+            
+            navUserPhotoVC.modalPresentationStyle = .overFullScreen
+            
+            self.present(navUserPhotoVC, animated: true)
+        }
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         

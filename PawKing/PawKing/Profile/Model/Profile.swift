@@ -17,3 +17,12 @@ enum ProfileSections: Int, CaseIterable {
     
     case postsPhoto
 }
+
+enum UserPhotoWallSections: Int, CaseIterable {
+    
+    case userInfo
+
+    case choosePet
+
+    case postsPhoto
+}

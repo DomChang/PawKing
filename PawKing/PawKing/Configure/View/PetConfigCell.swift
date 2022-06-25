@@ -76,7 +76,6 @@ class PetConfigCell: UITableViewCell {
         photoButton.setImage(UIImage.asset(.Image_Placeholder), for: .normal)
         photoButton.imageView?.contentMode = .scaleAspectFill
         
-        
         nameTitleLabel.text = "Name"
         nameTitleLabel.font = UIFont.systemFont(ofSize: 16)
         nameTitleLabel.textColor = .black
