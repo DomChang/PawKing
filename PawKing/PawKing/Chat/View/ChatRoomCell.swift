@@ -31,9 +31,12 @@ class ChatRoomCell: UITableViewCell {
     
     func setup() {
         
+        selectionStyle = .none
     }
     
     func styleObject() {
+        
+        recieverImgeView.contentMode = .scaleAspectFill
         
         recieverNameLabel.textColor = .brown
         recieverNameLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
@@ -46,9 +49,11 @@ class ChatRoomCell: UITableViewCell {
     
     func layout() {
         
-        recieverImgeView.constrainWidth(constant: 30)
-        recieverImgeView.constrainHeight(constant: 30)
+        recieverImgeView.constrainWidth(constant: 50)
+        recieverImgeView.constrainHeight(constant: 50)
         recieverImgeView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        
+        recieverNameLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
         
         let vStack = UIStackView(arrangedSubviews: [recieverNameLabel, recentMessageLabel])
         

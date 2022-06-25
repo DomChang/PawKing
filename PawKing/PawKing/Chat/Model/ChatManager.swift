@@ -16,7 +16,7 @@ class ChatManager {
     private let userManager = UserManager.shared
     
     func sendMessage(message: Message,
-                       completion: @escaping (Result<Void, Error>) -> Void) {
+                     completion: @escaping (Result<Void, Error>) -> Void) {
             
         let batch = dataBase.batch()
         
@@ -64,7 +64,7 @@ class ChatManager {
             completion(.failure(FirebaseError.sendMessageError))
         }
         
-        batch.commit() { err in
+        batch.commit { err in
             if err != nil {
                 completion(.failure(FirebaseError.sendMessageError))
             } else {
@@ -112,7 +112,9 @@ class ChatManager {
                                 
                             case.success(let user):
                                 
-                                chatRooms.append(Conversation(user: user, message: chat))
+                                semaphore.signal()
+                                
+                                chatRooms.append(Conversation(otherUser: user, message: chat))
                                 
                             case .failure:
                                 
@@ -122,13 +124,91 @@ class ChatManager {
                             }
                         }
                     }
+                    semaphore.wait()
+                    
                     completion(.success(chatRooms))
+                    
+                    semaphore.signal()
 
                 } catch {
 
                     completion(.failure(FirebaseError.decodeMessageError))
                 }
                 
+            }
+        }
+    }
+    
+    func fetchMessageHistory(user: User, otherUser: User, completion: @escaping (Result<[Message], Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.chats.rawValue).document(user.id)
+            .collection(otherUser.id).order(by: "createdTime", descending: false)
+        
+        document.getDocuments { snapshots, _ in
+
+            var messages: [Message] = []
+            
+            guard let snapshots = snapshots
+
+            else {
+                    completion(.failure(FirebaseError.fetchMessageError))
+
+                    return
+            }
+                
+            do {
+
+                for document in snapshots.documents {
+
+                    let message = try document.data(as: Message.self)
+
+                    messages.append(message)
+                
+                }
+                
+                completion(.success(messages))
+
+            } catch {
+
+                completion(.failure(FirebaseError.decodeMessageError))
+            }
+        }
+    }
+    
+    func listenNewMessage(user: User, otherUser: User, completion: @escaping (Result<[Message], Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.chats.rawValue).document(user.id)
+            .collection(otherUser.id).order(by: "createdTime", descending: false)
+        
+        var messages: [Message] = []
+        
+        document.addSnapshotListener { snapshots, _ in
+            
+            guard let snapshots = snapshots
+            
+            else {
+                    completion(.failure(FirebaseError.fetchMessageError))
+                    
+                    return
+            }
+            
+            do {
+
+                for diff in snapshots.documentChanges {
+                    
+                    if diff.type == .added {
+                        
+                        let message = try diff.document.data(as: Message.self)
+                        
+                        messages.append(message)
+                    }
+                }
+                
+                completion(.success(messages))
+                
+            } catch {
+                
+                completion(.failure(FirebaseError.decodeMessageError))
             }
         }
     }

@@ -17,7 +17,9 @@ class ChatRoomViewController: UIViewController {
     
     private var chatRoooms: [Conversation]? {
         didSet {
-            tableView.reloadData()
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
     }
     
@@ -39,6 +41,8 @@ class ChatRoomViewController: UIViewController {
     }
     
     private func setup() {
+        
+        getChatRooms()
         
         view.backgroundColor = .white
         
@@ -80,6 +84,11 @@ extension ChatRoomViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        guard let otherUser = chatRoooms?[indexPath.row].otherUser else { return }
+        
+        let messageVC = MessageViewController(user: user, otherUser: otherUser)
+        
+        navigationController?.pushViewController(messageVC, animated: true)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -95,7 +104,7 @@ extension ChatRoomViewController: UITableViewDataSource, UITableViewDelegate {
         
         guard let chatRoom = chatRoooms?[indexPath.row] else { return cell}
         
-        cell.configureCell(user: chatRoom.user, recentMessage: chatRoom.message)
+        cell.configureCell(user: chatRoom.otherUser, recentMessage: chatRoom.message)
         
         return cell
     }

@@ -7,13 +7,13 @@
 
 import UIKit
  
-protocol ProfileInfoCellDelegate {
+@objc protocol ProfileInfoCellDelegate: AnyObject {
     
-    func didTapUserImage()
+    @objc optional func didTapUserImage()
     
-    func didTapEditProfile()
+    func didTapLeftButton()
     
-    func didTapAddPet()
+    func didTapRightButton()
 }
 
 class ProfileInfoCell: UICollectionViewCell {
@@ -36,9 +36,9 @@ class ProfileInfoCell: UICollectionViewCell {
     
     let friendNumTitleLabel = UILabel()
     
-    let editProfileButton = UIButton()
+    let leftButton = UIButton()
     
-    let addPetButton = UIButton()
+    let rightButton = UIButton()
     
     let buttonStackView = UIStackView()
     
@@ -56,8 +56,8 @@ class ProfileInfoCell: UICollectionViewCell {
     
     func setup() {
         
-        editProfileButton.addTarget(self, action: #selector(didTapEditProfile), for: .touchUpInside)
-        addPetButton.addTarget(self, action: #selector(didTapAddPet), for: .touchUpInside)
+        leftButton.addTarget(self, action: #selector(didTapLeftButton), for: .touchUpInside)
+        rightButton.addTarget(self, action: #selector(didTapRightButton), for: .touchUpInside)
         
         userImageView.addGestureRecognizer(UITapGestureRecognizer(target: self,
                                                                   action: #selector(didTapUserImage)))
@@ -65,7 +65,9 @@ class ProfileInfoCell: UICollectionViewCell {
     }
     
     private func style() {
-
+        
+        userImageView.contentMode = .scaleAspectFill
+        
         friendNumTitleLabel.text = "Friends"
         friendNumTitleLabel.textAlignment = .center
         friendNumTitleLabel.textColor = .black
@@ -82,11 +84,9 @@ class ProfileInfoCell: UICollectionViewCell {
         buttonStackView.distribution = .fillEqually
         buttonStackView.spacing = 20
         
-        editProfileButton.backgroundColor = .O1
-        editProfileButton.setTitle("Edit Profie", for: .normal)
+        leftButton.backgroundColor = .O1
         
-        addPetButton.backgroundColor = .O1
-        addPetButton.setTitle("Add Pet", for: .normal)
+        rightButton.backgroundColor = .O1
     }
     
     private func layout() {
@@ -147,8 +147,8 @@ class ProfileInfoCell: UICollectionViewCell {
                                height: 40,
                                padding: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 20))
         
-        buttonStackView.addArrangedSubview(editProfileButton)
-        buttonStackView.addArrangedSubview(addPetButton)
+        buttonStackView.addArrangedSubview(leftButton)
+        buttonStackView.addArrangedSubview(rightButton)
         
         userImageView.layoutIfNeeded()
         userImageView.layer.cornerRadius = 5
@@ -168,16 +168,16 @@ class ProfileInfoCell: UICollectionViewCell {
     
     @objc func didTapUserImage() {
         
-        self.delegate?.didTapUserImage()
+        self.delegate?.didTapUserImage?()
     }
     
-    @objc func didTapEditProfile() {
+    @objc func didTapLeftButton() {
         
-        self.delegate?.didTapEditProfile()
+        self.delegate?.didTapLeftButton()
     }
     
-    @objc func didTapAddPet() {
+    @objc func didTapRightButton() {
         
-        self.delegate?.didTapAddPet()
+        self.delegate?.didTapRightButton()
     }
 }

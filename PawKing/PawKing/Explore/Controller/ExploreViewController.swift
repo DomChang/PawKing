@@ -11,8 +11,6 @@ class ExploreViewController: UIViewController {
     
     var searchController: UISearchController?
     
-    private let resultViewController = ResultViewController()
-    
     private let collectionView = UICollectionView(frame: .zero,
                                                   collectionViewLayout: configureLayout())
 
@@ -65,18 +63,6 @@ class ExploreViewController: UIViewController {
         
         navigationItem.searchController = searchController
         
-//        searchController = UISearchController(searchResultsController: searchVC)
-//
-//        searchController?.searchResultsUpdater = searchVC as? UISearchResultsUpdating
-//
-//        searchController?.obscuresBackgroundDuringPresentation = false
-//
-//        searchController?.searchBar.placeholder = "Search User"
-//
-//        navigationItem.searchController = searchController
-//
-//        definesPresentationContext = true
-        
         collectionView.dataSource = self
         collectionView.delegate = self
         
@@ -91,7 +77,6 @@ class ExploreViewController: UIViewController {
     
     private func style() {
         
-
     }
     
     private func layout() {
@@ -123,10 +108,13 @@ class ExploreViewController: UIViewController {
     }
     
     private func setSearchController() {
+        
+        let resultViewController = ResultViewController(user: user)
+        
         searchController = UISearchController(
             searchResultsController: resultViewController
         )
-        searchController?.searchResultsUpdater = resultViewController as? UISearchResultsUpdating
+        searchController?.searchResultsUpdater = resultViewController
         
         navigationItem.searchController = searchController
         

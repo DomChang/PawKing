@@ -23,6 +23,11 @@
 		B66A15C228658DF500DF2663 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15C128658DF500DF2663 /* Message.swift */; };
 		B66A15C42865917300DF2663 /* ChatManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15C32865917300DF2663 /* ChatManager.swift */; };
 		B66A15C62865C7E500DF2663 /* ChatRoomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15C52865C7E500DF2663 /* ChatRoomCell.swift */; };
+		B66A15C82865E82D00DF2663 /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15C72865E82D00DF2663 /* MessageViewController.swift */; };
+		B66A15CA2865EC4300DF2663 /* UserMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15C92865EC4300DF2663 /* UserMessageCell.swift */; };
+		B66A15CC2865ECA300DF2663 /* OtherUserMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15CB2865ECA300DF2663 /* OtherUserMessageCell.swift */; };
+		B66A15CE2866AE5400DF2663 /* UserPhotoWallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15CD2866AE5400DF2663 /* UserPhotoWallViewController.swift */; };
+		B66A15D02867055F00DF2663 /* Montserrat-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B66A15CF2867055F00DF2663 /* Montserrat-VariableFont_wght.ttf */; };
 		B698DD9D285881FB0009077E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DD9C285881FB0009077E /* AppDelegate.swift */; };
 		B698DD9F285881FB0009077E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DD9E285881FB0009077E /* SceneDelegate.swift */; };
 		B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDA0285881FB0009077E /* TabBarViewController.swift */; };
@@ -84,6 +89,11 @@
 		B66A15C128658DF500DF2663 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		B66A15C32865917300DF2663 /* ChatManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatManager.swift; sourceTree = "<group>"; };
 		B66A15C52865C7E500DF2663 /* ChatRoomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomCell.swift; sourceTree = "<group>"; };
+		B66A15C72865E82D00DF2663 /* MessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
+		B66A15C92865EC4300DF2663 /* UserMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessageCell.swift; sourceTree = "<group>"; };
+		B66A15CB2865ECA300DF2663 /* OtherUserMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserMessageCell.swift; sourceTree = "<group>"; };
+		B66A15CD2866AE5400DF2663 /* UserPhotoWallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPhotoWallViewController.swift; sourceTree = "<group>"; };
+		B66A15CF2867055F00DF2663 /* Montserrat-VariableFont_wght.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-VariableFont_wght.ttf"; sourceTree = "<group>"; };
 		B698DD99285881FB0009077E /* PawKing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PawKing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B698DD9C285881FB0009077E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B698DD9E285881FB0009077E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -219,6 +229,7 @@
 				B698DDBC2858B8CC0009077E /* ProfileViewController.swift */,
 				B6E86AAB2860309F002B8C9A /* EditUserViewController.swift */,
 				B6BF96132861EABC003627C1 /* TrackHistoryViewController.swift */,
+				B66A15CD2866AE5400DF2663 /* UserPhotoWallViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -281,6 +292,8 @@
 			isa = PBXGroup;
 			children = (
 				B66A15C52865C7E500DF2663 /* ChatRoomCell.swift */,
+				B66A15C92865EC4300DF2663 /* UserMessageCell.swift */,
+				B66A15CB2865ECA300DF2663 /* OtherUserMessageCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -289,6 +302,7 @@
 			isa = PBXGroup;
 			children = (
 				B698DDBA2858B8BA0009077E /* ChatRoomViewController.swift */,
+				B66A15C72865E82D00DF2663 /* MessageViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -314,6 +328,7 @@
 		B698DD9B285881FB0009077E /* PawKing */ = {
 			isa = PBXGroup;
 			children = (
+				B66A15CF2867055F00DF2663 /* Montserrat-VariableFont_wght.ttf */,
 				B698DD9C285881FB0009077E /* AppDelegate.swift */,
 				B698DD9E285881FB0009077E /* SceneDelegate.swift */,
 				B698DDBE2858B98A0009077E /* Extension */,
@@ -511,6 +526,7 @@
 				B698DDB328588D280009077E /* GoogleService-Info.plist in Resources */,
 				B698DDA6285881FD0009077E /* Assets.xcassets in Resources */,
 				B698DDA4285881FB0009077E /* Main.storyboard in Resources */,
+				B66A15D02867055F00DF2663 /* Montserrat-VariableFont_wght.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -593,13 +609,16 @@
 				B66A15B92864606700DF2663 /* ResultViewController.swift in Sources */,
 				B6E86AA4285F0B6B002B8C9A /* ContentButtonCell.swift in Sources */,
 				B6D4F69E285C35F80045DDB2 /* UserManager.swift in Sources */,
+				B66A15CA2865EC4300DF2663 /* UserMessageCell.swift in Sources */,
 				B63484E3285DC8D000DB7CE7 /* PetManager.swift in Sources */,
 				B698DD9D285881FB0009077E /* AppDelegate.swift in Sources */,
+				B66A15C82865E82D00DF2663 /* MessageViewController.swift in Sources */,
 				B63484E1285DC70D00DB7CE7 /* PetConfigCell.swift in Sources */,
 				B698DDB92858B8A90009077E /* PublishViewController.swift in Sources */,
 				B63484D3285D80C600DB7CE7 /* UserConfigViewController.swift in Sources */,
 				B6ABE8ED285AFC2B00B1A977 /* User.swift in Sources */,
 				B6ABE8E0285A06E300B1A977 /* UIColor+Extension.swift in Sources */,
+				B66A15CE2866AE5400DF2663 /* UserPhotoWallViewController.swift in Sources */,
 				B6ABE8E9285AC08200B1A977 /* UserLocation.swift in Sources */,
 				B63484D6285D80F100DB7CE7 /* BaseConfigViewController.swift in Sources */,
 				B63484ED285EEE8800DB7CE7 /* PhotoItemCell.swift in Sources */,
@@ -630,6 +649,7 @@
 				B6E86AAA285F7DAA002B8C9A /* PetItemCell.swift in Sources */,
 				B6E86AA8285F1EB4002B8C9A /* Post.swift in Sources */,
 				B6ABE8EB285AE41500B1A977 /* LocationRelated+Extension.swift in Sources */,
+				B66A15CC2865ECA300DF2663 /* OtherUserMessageCell.swift in Sources */,
 				B6D4F6A9285C62F10045DDB2 /* Pet.swift in Sources */,
 				B6E86AB228609CB7002B8C9A /* PostManager.swift in Sources */,
 			);

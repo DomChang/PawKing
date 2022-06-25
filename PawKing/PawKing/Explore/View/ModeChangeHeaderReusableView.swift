@@ -50,6 +50,8 @@ class ModeChangeHeaderReusableView: UICollectionReusableView {
         
         allModeButton.setTitle("All", for: .normal)
         friendModeButton.setTitle("Friends", for: .normal)
+    
+        friendModeButton.titleLabel?.font = UIFont(name: "MontserratRoman-Regular", size: 20)
         
         allModeButton.setTitleColor(.O1, for: .normal)
         friendModeButton.setTitleColor(.O1, for: .normal)

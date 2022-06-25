@@ -6,11 +6,8 @@
 //
 
 import UIKit
-import SwiftUI
 
 class ProfileViewController: UIViewController {
-    
-    let userId = "6jRPSQJEw7NWuyZl2BCs"
     
     private let collectionView = UICollectionView(frame: .zero,
                                                   collectionViewLayout: configureLayout())
@@ -27,11 +24,7 @@ class ProfileViewController: UIViewController {
         }
     }
     
-    var user: User? {
-        didSet {
-            collectionView.reloadData()
-        }
-    }
+    var user: User
     
     var userPets: [Pet]? {
         didSet {
@@ -64,6 +57,17 @@ class ProfileViewController: UIViewController {
     }
     
     var selectedPetIndex: Int?
+    
+    init(user: User) {
+        
+        self.user = user
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -119,7 +123,7 @@ class ProfileViewController: UIViewController {
     
     func fetchUser() {
         
-        userManager.fetchUserInfo(userId: userId) { [weak self] result in
+        userManager.fetchUserInfo(userId: user.id) { [weak self] result in
             
             switch result {
                 
@@ -201,19 +205,15 @@ extension ProfileViewController: ProfileInfoCellDelegate {
         photoHelper.presentActionSheet(from: self)
     }
     
-    func didTapEditProfile() {
-        
-        guard let user = user else { return }
+    func didTapLeftButton() {
         
         let editUserVC = EditUserViewController(userId: user.id, userName: user.name)
         
         navigationController?.pushViewController(editUserVC, animated: true)
     }
     
-    func didTapAddPet() {
-        
-        guard let user = user else { return }
-        
+    func didTapRightButton() {
+
         let petConfigVC = PetConfigViewController(user: user, isInitailSet: false)
         
         navigationController?.pushViewController(petConfigVC, animated: true)
@@ -328,7 +328,7 @@ extension ProfileViewController: UICollectionViewDataSource {
             
         case ProfileSections.userInfo.rawValue:
             
-            return user == nil ? 0 : 1
+            return 1
             
         case ProfileSections.choosePet.rawValue:
             
@@ -336,7 +336,7 @@ extension ProfileViewController: UICollectionViewDataSource {
 
         case ProfileSections.chooseContent.rawValue:
             
-            return user == nil ? 0 : 1
+            return 1
             
         case ProfileSections.postsPhoto.rawValue:
             
@@ -364,13 +364,11 @@ extension ProfileViewController: UICollectionViewDataSource {
                 fatalError("Cannot dequeue ProfileInfoCell")
             }
             
-            guard let user = user else { return infoCell }
-            
             photoHelper.completionHandler = { [weak self] image in
                 
                 infoCell.userImageView.image = image
                 
-                self?.userManager.uploadUserPhoto(userId: user.id,
+                self?.userManager.uploadUserPhoto(userId: self?.user.id ?? "",
                                             image: image) { result in
                     switch result {
 
@@ -384,6 +382,10 @@ extension ProfileViewController: UICollectionViewDataSource {
                     }
                 }
             }
+            
+            infoCell.leftButton.setTitle("Edit Profile", for: .normal)
+            
+            infoCell.rightButton.setTitle("Add Pet", for: .normal)
             
             infoCell.configureCell(user: user)
             
@@ -509,9 +511,7 @@ extension ProfileViewController: UICollectionViewDelegate {
             
             if isPhoto {
                 
-                guard let post = posts?[indexPath.item],
-                        let user = user
-//                        let pet = userPets?.filter({ $0.id == post.petId }).first
+                guard let post = posts?[indexPath.item]
                 else { return }
                 
                 let photoPostVC = PhotoPostViewController(user: user, post: post)

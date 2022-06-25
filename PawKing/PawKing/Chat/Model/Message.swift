@@ -13,11 +13,11 @@ struct Message: Codable {
     let senderId: String
     let recieverId: String
     let content: String
-    let createdTime: String
+    let createdTime: Timestamp
 }
 
 struct Conversation: Codable {
     
-    let user: User
+    let otherUser: User
     let message: Message
 }

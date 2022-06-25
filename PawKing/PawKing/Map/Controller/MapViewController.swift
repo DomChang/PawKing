@@ -138,7 +138,9 @@ class MapViewController: UIViewController {
         
         strangerButtonDisable()
         
-//        fetchUserInfo()
+        listenFriendsLocation()
+        
+        strangerButtonEnable()
         
         fetchUserPets()
         
@@ -272,25 +274,6 @@ class MapViewController: UIViewController {
         
         mapView.setRegion(region, animated: false)
     }
-    
-//    func fetchUserInfo() {
-//
-//        userManager.fetchUserInfo(userId: userId) { [weak self] result in
-//
-//            switch result {
-//
-//            case .success(let user):
-//
-//                self?.user = user
-//                self?.listenFriendsLocation()
-//                self?.strangerButtonEnable()
-//
-//            case .failure(let error):
-//
-//                print(error)
-//            }
-//        }
-//    }
     
     func fetchStoredUserLocation() {
         
