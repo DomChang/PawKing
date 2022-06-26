@@ -61,7 +61,16 @@ class UserPhotoWallViewController: UIViewController {
         layout()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        
+        fetchPet(by: otherUser)
+        
+        fetchPost(by: otherUser)
+    }
+    
     private func setup() {
+        
+        navigationItem.title = "\(otherUser.name)"
         
         collectionView.dataSource = self
         
@@ -79,10 +88,6 @@ class UserPhotoWallViewController: UIViewController {
         
         collectionView.register(PhotoItemCell.self,
                                 forCellWithReuseIdentifier: PhotoItemCell.identifier)
-        
-        fetchPet(by: otherUser)
-        
-        fetchPost(by: otherUser)
     }
     
     private func style() {

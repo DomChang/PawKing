@@ -12,6 +12,8 @@ class PetItemCell: UICollectionViewCell {
     static let identifier = "\(PetItemCell.self)"
     
     let imageView = UIImageView()
+    
+    let backBorderView = UIView()
 
     var photoURL: URL? {
         
@@ -19,11 +21,31 @@ class PetItemCell: UICollectionViewCell {
             configureCell()
         }
     }
+    
+//    override var isSelected: Bool {
+//        
+//        didSet {
+//            
+//            if isSelected {
+//                
+//                imageView.layer.borderColor = UIColor.black.cgColor
+//                imageView.layer.borderWidth = 2
+//            } else {
+//                
+//                imageView.layer.borderWidth = 0
+//            }
+//        }
+//    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         contentView.backgroundColor = .clear
+        
+        backBorderView.backgroundColor = .O1
+        
+        backBorderView.isHidden = true
+        
         configureCell()
     }
 
@@ -33,20 +55,30 @@ class PetItemCell: UICollectionViewCell {
     
     func configureCell() {
         
+        contentView.addSubview(backBorderView)
         contentView.addSubview(imageView)
+        
+        imageView.contentMode = .scaleAspectFill
         
         imageView.anchor(top: contentView.topAnchor,
                          leading: contentView.leadingAnchor,
                          bottom: contentView.bottomAnchor,
-                         trailing: contentView.trailingAnchor)
+                         trailing: contentView.trailingAnchor,
+                         padding: UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2))
+        
+        backBorderView.anchor(top: contentView.topAnchor,
+                              leading: contentView.leadingAnchor,
+                              bottom: contentView.bottomAnchor,
+                              trailing: contentView.trailingAnchor)
         
         contentView.layoutIfNeeded()
         
         imageView.makeRound()
+        
+        backBorderView.makeRound()
 
         imageView.clipsToBounds = true
         
         imageView.kf.setImage(with: photoURL)
-        
     }
 }

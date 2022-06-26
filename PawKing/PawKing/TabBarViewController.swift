@@ -90,7 +90,7 @@ private enum Tab {
 
 class TabBarViewController: UITabBarController {
     
-    private let userId = "JOyrjoigCkTY5suf4WlP"
+    private let userId = "6jRPSQJEw7NWuyZl2BCs"
 
     private let tabs: [Tab] = [.map, .explore, .publish, .chat, .profile]
     

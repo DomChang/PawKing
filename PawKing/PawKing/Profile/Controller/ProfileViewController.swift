@@ -20,7 +20,7 @@ class ProfileViewController: UIViewController {
     
     var isPhoto = true {
         didSet {
-            collectionView.reloadData()
+            collectionView.reloadSections(IndexSet(integer: 3))
         }
     }
     
@@ -34,25 +34,25 @@ class ProfileViewController: UIViewController {
     
     var posts: [Post]? {
         didSet {
-            collectionView.reloadData()
+            collectionView.reloadSections(IndexSet(integer: 3))
         }
     }
     
     var displayPosts: [Post]? {
         didSet {
-            collectionView.reloadData()
+            collectionView.reloadSections(IndexSet(integer: 3))
         }
     }
     
     var trackInfos: [TrackInfo]? {
         didSet {
-            collectionView.reloadData()
+            collectionView.reloadSections(IndexSet(integer: 3))
         }
     }
     
     var displayTrackInfos: [TrackInfo]? {
         didSet {
-            collectionView.reloadData()
+            collectionView.reloadSections(IndexSet(integer: 3))
         }
     }
     
@@ -75,6 +75,19 @@ class ProfileViewController: UIViewController {
         setup()
         style()
         layout()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        fetchUser()
+        
+        collectionView.visibleCells.forEach { cell in
+            guard let petCell = cell as? PetItemCell else { return }
+            
+            petCell.imageView.layer.borderWidth = 0
+            
+            petCell.backBorderView.isHidden = true
+        }
     }
     
     private func setup() {
@@ -100,9 +113,7 @@ class ProfileViewController: UIViewController {
         collectionView.register(TrackHostoryCell.self,
                                 forCellWithReuseIdentifier: TrackHostoryCell.identifier)
         
-        navigationItem.title = "個人"
-        
-        fetchUser()
+        navigationItem.title = "\(user.name)"
     }
     
     private func style() {
@@ -487,8 +498,17 @@ extension ProfileViewController: UICollectionViewDelegate {
             
             guard let posts = posts,
                     let trackInfos = trackInfos,
-                    let userPets = userPets else {
+                    let userPets = userPets,
+                    let cell = collectionView.cellForItem(at: indexPath) as? PetItemCell else {
                 return
+            }
+            
+            collectionView.visibleCells.forEach { cell in
+                guard let petCell = cell as? PetItemCell else { return }
+                
+                petCell.imageView.layer.borderWidth = 0
+                
+                petCell.backBorderView.isHidden = true
             }
             
             if selectedPetIndex != indexPath.item {
@@ -499,7 +519,14 @@ extension ProfileViewController: UICollectionViewDelegate {
                 
                 selectedPetIndex = indexPath.item
                 
+                cell.imageView.layer.borderWidth = 2
+                cell.imageView.layer.borderColor = UIColor.white.cgColor
+                cell.backBorderView.isHidden = false
+                
             } else {
+                
+                cell.imageView.layer.borderWidth = 0
+                cell.backBorderView.isHidden = true
 
                 displayPosts = posts
                 
