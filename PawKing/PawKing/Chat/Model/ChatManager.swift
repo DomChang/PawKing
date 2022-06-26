@@ -200,7 +200,10 @@ class ChatManager {
                         
                         let message = try diff.document.data(as: Message.self)
                         
-                        messages.append(message)
+                        if message.senderId != user.id {
+                            
+                            messages.append(message)
+                        }
                     }
                 }
                 
