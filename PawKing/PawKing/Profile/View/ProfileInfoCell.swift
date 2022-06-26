@@ -84,9 +84,17 @@ class ProfileInfoCell: UICollectionViewCell {
         buttonStackView.distribution = .fillEqually
         buttonStackView.spacing = 20
         
-        leftButton.backgroundColor = .O1
+        leftButton.layer.borderWidth = 1
+        leftButton.layer.borderColor = UIColor.O1?.cgColor
+        leftButton.backgroundColor = .white
+        leftButton.setTitleColor(.O1, for: .normal)
+        leftButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
-        rightButton.backgroundColor = .O1
+        rightButton.layer.borderWidth = 1
+        rightButton.layer.borderColor = UIColor.O1?.cgColor
+        rightButton.backgroundColor = .white
+        rightButton.setTitleColor(.O1, for: .normal)
+        rightButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
     }
     
     private func layout() {
@@ -145,14 +153,17 @@ class ProfileInfoCell: UICollectionViewCell {
                                leading: contentView.leadingAnchor,
                                trailing: contentView.trailingAnchor,
                                height: 40,
-                               padding: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 20))
+                               padding: UIEdgeInsets(top: 20, left: 30, bottom: 0, right: 30))
         
         buttonStackView.addArrangedSubview(leftButton)
         buttonStackView.addArrangedSubview(rightButton)
         
-        userImageView.layoutIfNeeded()
+        contentView.layoutIfNeeded()
         userImageView.layer.cornerRadius = 5
         userImageView.clipsToBounds = true
+        
+        leftButton.layer.cornerRadius = 5
+        rightButton.layer.cornerRadius = 5
     }
     
     func configureCell(user: User) {

@@ -45,6 +45,7 @@
 		B698DDC02858B99F0009077E /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDBF2858B99F0009077E /* UIImage+Extension.swift */; };
 		B698DDC22858CE9D0009077E /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDC12858CE9D0009077E /* UIView+Extension.swift */; };
 		B6A91D692868372B0049253A /* NoStrangerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D682868372B0049253A /* NoStrangerCell.swift */; };
+		B6A91D6B2868909F0049253A /* PetItemBackReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D6A2868909F0049253A /* PetItemBackReusableView.swift */; };
 		B6ABE8E0285A06E300B1A977 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8DF285A06E300B1A977 /* UIColor+Extension.swift */; };
 		B6ABE8E2285A0B7400B1A977 /* MapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8E1285A0B7400B1A977 /* MapManager.swift */; };
 		B6ABE8E7285A19C400B1A977 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8E6285A19C400B1A977 /* FirebaseError.swift */; };
@@ -115,6 +116,7 @@
 		B698DDBF2858B99F0009077E /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		B698DDC12858CE9D0009077E /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		B6A91D682868372B0049253A /* NoStrangerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoStrangerCell.swift; sourceTree = "<group>"; };
+		B6A91D6A2868909F0049253A /* PetItemBackReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetItemBackReusableView.swift; sourceTree = "<group>"; };
 		B6ABE8DF285A06E300B1A977 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		B6ABE8E1285A0B7400B1A977 /* MapManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapManager.swift; sourceTree = "<group>"; };
 		B6ABE8E6285A19C400B1A977 /* FirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseError.swift; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 			children = (
 				B6E86AA1285F0AEE002B8C9A /* ProfileInfoCell.swift */,
 				B6E86AA9285F7DAA002B8C9A /* PetItemCell.swift */,
+				B6A91D6A2868909F0049253A /* PetItemBackReusableView.swift */,
 				B6E86AA3285F0B6B002B8C9A /* ContentButtonCell.swift */,
 				B63484EC285EEE8800DB7CE7 /* PhotoItemCell.swift */,
 				B6E86AA5285F0B85002B8C9A /* TrackHostoryCell.swift */,
@@ -640,6 +643,7 @@
 				B6ABE8F4285B87AB00B1A977 /* UserAnnotation.swift in Sources */,
 				B66A15B72864035100DF2663 /* ModeChangeHeaderReusableView.swift in Sources */,
 				B698DDC02858B99F0009077E /* UIImage+Extension.swift in Sources */,
+				B6A91D6B2868909F0049253A /* PetItemBackReusableView.swift in Sources */,
 				B698DDBB2858B8BA0009077E /* ChatRoomViewController.swift in Sources */,
 				B698DDB72858B8850009077E /* ExploreViewController.swift in Sources */,
 				B6D4F6AB285CDB150045DDB2 /* PKPhotoHelper.swift in Sources */,
