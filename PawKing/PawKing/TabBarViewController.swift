@@ -31,7 +31,7 @@ private enum Tab {
             
         case .publish: controller =
             UINavigationController(rootViewController:
-                                    PublishViewController(image: UIImage.asset(.Image_Placeholder)!))
+                                    PublishViewController(user: user, image: UIImage.asset(.Image_Placeholder)!))
             
         case .chat: controller = UINavigationController(rootViewController: ChatRoomViewController(user: user))
 
@@ -90,7 +90,7 @@ private enum Tab {
 
 class TabBarViewController: UITabBarController {
     
-    private let userId = "6jRPSQJEw7NWuyZl2BCs"
+    private let userId = "7jkh07vJvBjgd9F5qkrB"
 
     private let tabs: [Tab] = [.map, .explore, .publish, .chat, .profile]
     
@@ -107,15 +107,6 @@ class TabBarViewController: UITabBarController {
         
         tabBar.tintColor = .G1
         
-        photoHelper.completionHandler = { [weak self] image in
-            
-            let navPublishVC = UINavigationController(rootViewController: PublishViewController(image: image))
-            
-            navPublishVC.modalPresentationStyle = .fullScreen
-
-            self?.present(navPublishVC, animated: true)
-        }
-        
         delegate = self
         
         userManager.fetchUserInfo(userId: userId) { [weak self] result in
@@ -127,6 +118,16 @@ class TabBarViewController: UITabBarController {
                 self?.tabBar.isHidden = false
                 
                 self?.viewControllers = self?.tabs.map({ $0.controller(user: user) })
+                
+                self?.photoHelper.completionHandler = { image in
+                    
+                    let navPublishVC = UINavigationController(
+                        rootViewController: PublishViewController(user: user, image: image))
+                    
+                    navPublishVC.modalPresentationStyle = .fullScreen
+
+                    self?.present(navPublishVC, animated: true)
+                }
                 
             case .failure(let error):
                 

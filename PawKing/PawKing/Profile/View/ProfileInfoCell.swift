@@ -85,19 +85,20 @@ class ProfileInfoCell: UICollectionViewCell {
         postNumLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
         
         userNameLabel.textColor = .LightBlack
-        userNameLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        userNameLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        userNameLabel.numberOfLines = 0
         
         leftButton.layer.borderWidth = 1
         leftButton.layer.borderColor = UIColor.O1?.cgColor
         leftButton.backgroundColor = .white
         leftButton.setTitleColor(.O1, for: .normal)
-        leftButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        leftButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         
         rightButton.layer.borderWidth = 1
         rightButton.layer.borderColor = UIColor.O1?.cgColor
         rightButton.backgroundColor = .white
         rightButton.setTitleColor(.O1, for: .normal)
-        rightButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        rightButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .medium)
     }
     
     private func layout() {
@@ -142,9 +143,9 @@ class ProfileInfoCell: UICollectionViewCell {
         
         userNameLabel.anchor(leading: userImageView.trailingAnchor,
                              centerY: userImageView.centerYAnchor,
-                             width: 100,
+                             width: 120,
                              height: 20,
-                             padding: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
+                             padding: UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0))
         
         hStack.anchor(top: userImageView.topAnchor,
                       leading: userNameLabel.trailingAnchor,

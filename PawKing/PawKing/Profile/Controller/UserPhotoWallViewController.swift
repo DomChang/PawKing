@@ -86,6 +86,9 @@ class UserPhotoWallViewController: UIViewController {
         collectionView.register(PetItemCell.self,
                                 forCellWithReuseIdentifier: PetItemCell.identifier)
         
+        collectionView.collectionViewLayout.register(PetItemBackReusableView.self,
+                                                     forDecorationViewOfKind: "\(PetItemBackReusableView.self)")
+        
         collectionView.register(PhotoItemCell.self,
                                 forCellWithReuseIdentifier: PhotoItemCell.identifier)
     }
@@ -197,9 +200,13 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
                 let petSection = NSCollectionLayoutSection(group: petGroup)
                 
                 petSection.orthogonalScrollingBehavior = .continuous
-                petSection.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 20, trailing: 20)
+                petSection.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20)
                 
                 petSection.interGroupSpacing = 10
+                
+                let petItemBackView = NSCollectionLayoutDecorationItem.background(elementKind: "\(PetItemBackReusableView.self)")
+                
+                petSection.decorationItems = [petItemBackView]
                 
                 return petSection
                 

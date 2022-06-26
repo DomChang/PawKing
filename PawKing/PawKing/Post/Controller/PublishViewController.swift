@@ -10,15 +10,13 @@ import FirebaseFirestore
 
 final class PublishViewController: UIViewController {
     
-    private let userId = "6jRPSQJEw7NWuyZl2BCs"
-    
     private let userManager = UserManager.shared
     
     private let postManager = PostManager.shared
     
     private var userPets: [Pet]?
     
-    private var user: User?
+    private var user: User
     
     private var selectedPet: Pet?
     
@@ -53,8 +51,9 @@ final class PublishViewController: UIViewController {
         petImageView.makeRound()
     }
     
-    init(image: UIImage) {
+    init(user: User, image: UIImage) {
         
+        self.user = user
         self.photoImage = image
         super.init(nibName: nil, bundle: nil)
     }
@@ -149,7 +148,7 @@ final class PublishViewController: UIViewController {
     
     func getUserPet() {
         
-        userManager.fetchUserInfo(userId: userId) { [weak self] result in
+        userManager.fetchUserInfo(userId: user.id) { [weak self] result in
             
             switch result {
                 
@@ -183,8 +182,7 @@ final class PublishViewController: UIViewController {
     
     func getUserCurrentPet() {
         
-        guard let user = user,
-              let userPets = userPets else {
+        guard let userPets = userPets else {
             return
         }
         
@@ -204,8 +202,7 @@ final class PublishViewController: UIViewController {
         
         submitButtonDisable()
         
-        guard let user = user,
-              let selectedPet = selectedPet
+        guard let selectedPet = selectedPet
         else {
             return
         }

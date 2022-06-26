@@ -49,9 +49,11 @@ class ExploreViewController: UIViewController {
         layout()
     }
     
-    private func setup() {
-        
+    override func viewWillAppear(_ animated: Bool) {
         getAllPosts()
+    }
+    
+    private func setup() {
         
         view.backgroundColor = .white
         

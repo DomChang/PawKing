@@ -28,7 +28,7 @@ class ProfileViewController: UIViewController {
     
     var userPets: [Pet]? {
         didSet {
-            collectionView.reloadData()
+            collectionView.reloadSections(IndexSet(integer: 1))
         }
     }
     
