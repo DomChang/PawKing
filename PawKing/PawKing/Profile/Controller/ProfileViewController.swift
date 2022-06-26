@@ -20,7 +20,7 @@ class ProfileViewController: UIViewController {
     
     var isPhoto = true {
         didSet {
-            collectionView.reloadData()
+            collectionView.reloadSections(IndexSet(integer: 3))
         }
     }
     
@@ -28,31 +28,32 @@ class ProfileViewController: UIViewController {
     
     var userPets: [Pet]? {
         didSet {
-            collectionView.reloadData()
+            collectionView.reloadSections(IndexSet(integer: 1))
         }
     }
     
     var posts: [Post]? {
         didSet {
-            collectionView.reloadData()
+            collectionView.reloadSections(IndexSet(integer: 3))
+            collectionView.reloadItems(at: [IndexPath(item: 0, section: 0)])
         }
     }
     
     var displayPosts: [Post]? {
         didSet {
-            collectionView.reloadData()
+            collectionView.reloadSections(IndexSet(integer: 3))
         }
     }
     
     var trackInfos: [TrackInfo]? {
         didSet {
-            collectionView.reloadData()
+            collectionView.reloadSections(IndexSet(integer: 3))
         }
     }
     
     var displayTrackInfos: [TrackInfo]? {
         didSet {
-            collectionView.reloadData()
+            collectionView.reloadSections(IndexSet(integer: 3))
         }
     }
     
@@ -77,6 +78,19 @@ class ProfileViewController: UIViewController {
         layout()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        
+        fetchUser()
+        
+        collectionView.visibleCells.forEach { cell in
+            guard let petCell = cell as? PetItemCell else { return }
+            
+            petCell.imageView.layer.borderWidth = 0
+            
+            petCell.backBorderView.isHidden = true
+        }
+    }
+    
     private func setup() {
         
         collectionView.dataSource = self
@@ -97,12 +111,13 @@ class ProfileViewController: UIViewController {
         collectionView.register(PhotoItemCell.self,
                                 forCellWithReuseIdentifier: PhotoItemCell.identifier)
         
+        collectionView.collectionViewLayout.register(PetItemBackReusableView.self,
+                                                     forDecorationViewOfKind: "\(PetItemBackReusableView.self)")
+        
         collectionView.register(TrackHostoryCell.self,
                                 forCellWithReuseIdentifier: TrackHostoryCell.identifier)
         
-        navigationItem.title = "個人"
-        
-        fetchUser()
+        navigationItem.title = "\(user.name)"
     }
     
     private func style() {
@@ -271,9 +286,13 @@ extension ProfileViewController: UICollectionViewDataSource {
                 let petSection = NSCollectionLayoutSection(group: petGroup)
                 
                 petSection.orthogonalScrollingBehavior = .continuous
-                petSection.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 20, trailing: 20)
+                petSection.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20)
                 
                 petSection.interGroupSpacing = 10
+                
+                let petItemBackView = NSCollectionLayoutDecorationItem.background(elementKind: "\(PetItemBackReusableView.self)")
+                
+                petSection.decorationItems = [petItemBackView]
                 
                 return petSection
                 
@@ -387,7 +406,7 @@ extension ProfileViewController: UICollectionViewDataSource {
             
             infoCell.rightButton.setTitle("Add Pet", for: .normal)
             
-            infoCell.configureCell(user: user)
+            infoCell.configureCell(user: user, postCount: posts?.count ?? 0)
             
             infoCell.delegate = self
             
@@ -487,8 +506,17 @@ extension ProfileViewController: UICollectionViewDelegate {
             
             guard let posts = posts,
                     let trackInfos = trackInfos,
-                    let userPets = userPets else {
+                    let userPets = userPets,
+                    let cell = collectionView.cellForItem(at: indexPath) as? PetItemCell else {
                 return
+            }
+            
+            collectionView.visibleCells.forEach { cell in
+                guard let petCell = cell as? PetItemCell else { return }
+                
+                petCell.imageView.layer.borderWidth = 0
+                
+                petCell.backBorderView.isHidden = true
             }
             
             if selectedPetIndex != indexPath.item {
@@ -499,7 +527,14 @@ extension ProfileViewController: UICollectionViewDelegate {
                 
                 selectedPetIndex = indexPath.item
                 
+                cell.imageView.layer.borderWidth = 2
+                cell.imageView.layer.borderColor = UIColor.white.cgColor
+                cell.backBorderView.isHidden = false
+                
             } else {
+                
+                cell.imageView.layer.borderWidth = 0
+                cell.backBorderView.isHidden = true
 
                 displayPosts = posts
                 

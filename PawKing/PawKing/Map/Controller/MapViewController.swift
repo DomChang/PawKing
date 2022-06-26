@@ -111,6 +111,8 @@ class MapViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        fetchUserPets()
+        
         navigationController?.navigationBar.isHidden = true
     }
     

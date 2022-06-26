@@ -61,7 +61,16 @@ class UserPhotoWallViewController: UIViewController {
         layout()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        
+        fetchPet(by: otherUser)
+        
+        fetchPost(by: otherUser)
+    }
+    
     private func setup() {
+        
+        navigationItem.title = "\(otherUser.name)"
         
         collectionView.dataSource = self
         
@@ -77,12 +86,11 @@ class UserPhotoWallViewController: UIViewController {
         collectionView.register(PetItemCell.self,
                                 forCellWithReuseIdentifier: PetItemCell.identifier)
         
+        collectionView.collectionViewLayout.register(PetItemBackReusableView.self,
+                                                     forDecorationViewOfKind: "\(PetItemBackReusableView.self)")
+        
         collectionView.register(PhotoItemCell.self,
                                 forCellWithReuseIdentifier: PhotoItemCell.identifier)
-        
-        fetchPet(by: otherUser)
-        
-        fetchPost(by: otherUser)
     }
     
     private func style() {
@@ -192,9 +200,13 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
                 let petSection = NSCollectionLayoutSection(group: petGroup)
                 
                 petSection.orthogonalScrollingBehavior = .continuous
-                petSection.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 20, trailing: 20)
+                petSection.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20)
                 
                 petSection.interGroupSpacing = 10
+                
+                let petItemBackView = NSCollectionLayoutDecorationItem.background(elementKind: "\(PetItemBackReusableView.self)")
+                
+                petSection.decorationItems = [petItemBackView]
                 
                 return petSection
                 
@@ -264,7 +276,7 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
             
             infoCell.rightButton.setTitle("Send Message", for: .normal)
             
-            infoCell.configureCell(user: otherUser)
+            infoCell.configureCell(user: otherUser, postCount: posts?.count ?? 0)
             
             infoCell.delegate = self
             
