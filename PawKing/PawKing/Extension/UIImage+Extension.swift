@@ -32,6 +32,8 @@ enum ImageAsset: String {
     case Icons_36px_RecordTrack_Normal
     case Icons_36px_RecordTrack_Selected
     
+    case Icons_60px_Stranger
+    
     case Image_Placeholder
 }
 // swiftlint:enable identifier_name

@@ -90,7 +90,7 @@ private enum Tab {
 
 class TabBarViewController: UITabBarController {
     
-    private let userId = "6jRPSQJEw7NWuyZl2BCs"
+    private let userId = "JOyrjoigCkTY5suf4WlP"
 
     private let tabs: [Tab] = [.map, .explore, .publish, .chat, .profile]
     
@@ -140,8 +140,11 @@ class TabBarViewController: UITabBarController {
         tabBar.standardAppearance = tabBarAppearance
         
         let navBarAppearance =  UINavigationBarAppearance()
-        navBarAppearance.configureWithDefaultBackground()
+        navBarAppearance.backgroundColor = .white
+        navBarAppearance.shadowColor = .clear
         UINavigationBar.appearance().standardAppearance = navBarAppearance
+        UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
+        UINavigationBar.appearance().compactAppearance = navBarAppearance
     }
 }
 

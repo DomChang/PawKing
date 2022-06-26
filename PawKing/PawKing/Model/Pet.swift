@@ -10,11 +10,11 @@ import FirebaseFirestoreSwift
 
 enum PetGender: String, CaseIterable {
     
-    case male = "男生"
+    case male = "Boy"
     
-    case female = "女生"
+    case female = "Girl"
     
-    case other = "其他"
+    case other = "Other"
 }
 
 struct Pet: Codable {

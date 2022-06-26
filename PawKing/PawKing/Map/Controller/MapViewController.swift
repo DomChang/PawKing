@@ -136,11 +136,11 @@ class MapViewController: UIViewController {
         
         choosePetImageView.isHidden = true
         
-        strangerButtonDisable()
+//        strangerButtonDisable()
         
         listenFriendsLocation()
         
-        strangerButtonEnable()
+//        strangerButtonEnable()
         
         fetchUserPets()
         
@@ -156,7 +156,8 @@ class MapViewController: UIViewController {
         mapView.delegate = self
         
         choosePetImageView.addGestureRecognizer(
-            UITapGestureRecognizer(target: self,action: #selector(didTapChoosePet)))
+            UITapGestureRecognizer(target: self, action: #selector(didTapChoosePet)))
+        
         choosePetImageView.isUserInteractionEnabled = true
         
         userLocationButton.addTarget(self, action: #selector(didSelectUserLocation), for: .touchUpInside)
@@ -175,8 +176,11 @@ class MapViewController: UIViewController {
         
         collectionView.register(
             StrangerCardViewCell.self,
-            forCellWithReuseIdentifier: StrangerCardViewCell.identifier
-        )
+            forCellWithReuseIdentifier: StrangerCardViewCell.identifier)
+        
+        collectionView.register(
+            NoStrangerCell.self,
+            forCellWithReuseIdentifier: NoStrangerCell.identifier)
         
         collectionView.dataSource = self
         
@@ -203,15 +207,17 @@ class MapViewController: UIViewController {
         
         styleCurrentPetButton()
         
-        strangerButton.setTitle("陌生", for: .normal)
-        strangerButton.layer.cornerRadius = 5
+//        strangerButton.setTitle("陌生", for: .normal)
+//        strangerButton.layer.cornerRadius = 5
+        strangerButton.setImage(UIImage.asset(.Icons_60px_Stranger), for: .normal)
         
         if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             flowLayout.scrollDirection = .horizontal
         }
         
         collectionView.backgroundColor = .clear
-        collectionView.isPagingEnabled = true
+        collectionView.isPagingEnabled = false
+        collectionView.showsHorizontalScrollIndicator = false
     }
     
     func layout() {
@@ -254,13 +260,14 @@ class MapViewController: UIViewController {
         strangerButton.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                               trailing: view.trailingAnchor,
                               width: 60,
-                              height: 36,
-                              padding: UIEdgeInsets(top: 35, left: 0, bottom: 0, right: 35))
+                              height: 60,
+                              padding: UIEdgeInsets(top: 100, left: 0, bottom: 0, right: 35))
         
         collectionView.anchor(leading: view.leadingAnchor,
                               bottom: view.safeAreaLayoutGuide.bottomAnchor,
                               trailing: view.trailingAnchor,
-                              height: 130)
+                              height: 150,
+                              padding: UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0))
         
         choosePetImageView.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,
                                centerX: view.centerXAnchor,
@@ -465,10 +472,6 @@ class MapViewController: UIViewController {
     }
     
     @objc func didTapStrangerButton() {
-        
-//        guard let user = user else {
-//            return
-//        }
 
         let friends = user.friends
         
@@ -615,17 +618,17 @@ class MapViewController: UIViewController {
         }
     }
     
-    func strangerButtonEnable() {
-        
-        strangerButton.isEnabled = true
-        strangerButton.backgroundColor = .O1
-    }
-    
-    func strangerButtonDisable() {
-        
-        strangerButton.isEnabled = false
-        strangerButton.backgroundColor = .Gray
-    }
+//    func strangerButtonEnable() {
+//
+//        strangerButton.isEnabled = true
+//        strangerButton.backgroundColor = .O1
+//    }
+//
+//    func strangerButtonDisable() {
+//
+//        strangerButton.isEnabled = false
+//        strangerButton.backgroundColor = .Gray
+//    }
     
     func setupUserSettingButton() {
         
@@ -766,10 +769,7 @@ extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
         
         petNameLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         petNameLabel.numberOfLines = 3
-//        petNameLabel.backgroundColor = .white
         petNameLabel.textColor = .O1
-//        petNameLabel.layer.borderWidth = 0.5
-//        petNameLabel.layer.borderColor = UIColor.O1?.cgColor
         petNameLabel.layer.cornerRadius = 10
         
         petNameLabel.text = annotation.title ?? ""
@@ -810,6 +810,28 @@ extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
 
 extension MapViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        userManager.fetchUserInfo(userId: strangersPet[indexPath.item].ownerId) { [weak self] result in
+
+            switch result {
+
+            case .success(let otherUser):
+
+                guard let user = self?.user else { return }
+
+                let userPhotoWallVC = UserPhotoWallViewController(user: user, otherUser: otherUser)
+
+                self?.navigationController?.pushViewController(userPhotoWallVC, animated: true)
+
+            case .failure(let error):
+
+                print(error)
+
+            }
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         strangersPet.count == 0 ? 1 : strangersPet.count
@@ -818,21 +840,30 @@ extension MapViewController: UICollectionViewDataSource, UICollectionViewDelegat
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: StrangerCardViewCell.identifier,
-            for: indexPath) as? StrangerCardViewCell else {
-            
-            fatalError("Can not dequeue StrangerCardViewCell")
-        }
-        
         if strangersPet.count == 0 {
-            cell.infoLabel.text = "附近沒有陌生寵物"
+        
+            guard let noStrangerCell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: NoStrangerCell.identifier,
+                for: indexPath) as? NoStrangerCell else {
+                
+                fatalError("Can not dequeue NoStrangerCell")
+            }
+            
+            return noStrangerCell
+            
         } else {
-            cell.configuerCell(with: strangersPet[indexPath.item])
+            
+            guard let strangerCell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: StrangerCardViewCell.identifier,
+                for: indexPath) as? StrangerCardViewCell else {
+                
+                fatalError("Can not dequeue StrangerCardViewCell")
+            }
+            
+            strangerCell.configuerCell(with: strangersPet[indexPath.item])
+            
+            return strangerCell
         }
-        
-        return cell
-        
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -842,20 +873,21 @@ extension MapViewController: UICollectionViewDataSource, UICollectionViewDelegat
             return frameSize.width * 0.1
         }
 
-        func collectionView(_ collectionView: UICollectionView,
-                            layout collectionViewLayout: UICollectionViewLayout,
-                            sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-            let frameSize = collectionView.frame.size
-            return CGSize(width: frameSize.width * 0.6, height: frameSize.height)
-        }
+        let frameSize = collectionView.frame.size
+        return CGSize(width: frameSize.width * 0.6, height: frameSize.height)
+    }
 
-        func collectionView(_ collectionView: UICollectionView,
-                            layout collectionViewLayout: UICollectionViewLayout,
-                            insetForSectionAt section: Int) -> UIEdgeInsets {
-            let frameSize = collectionView.frame.size
-            return UIEdgeInsets(top: 0, left: frameSize.width * 0.2, bottom: 0, right: frameSize.width * 0.2)
-        }
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        
+        let frameSize = collectionView.frame.size
+        return UIEdgeInsets(top: 0, left: frameSize.width * 0.2, bottom: 0, right: frameSize.width * 0.2)
+    }
 }
 
 // swiftlint:enable file_length

@@ -34,6 +34,7 @@ class ChoosePetTableViewCell: UITableViewCell {
         
         petImageView.layer.borderColor = UIColor.white.cgColor
         petImageView.layer.borderWidth = 2
+        petImageView.contentMode = .scaleAspectFill
         
         petNameLabel.textColor = .LightBlack
         petNameLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)

@@ -7,6 +7,7 @@
 
 import UIKit
 import Kingfisher
+import SwiftUI
 
 class StrangerCardViewCell: UICollectionViewCell {
     
@@ -18,9 +19,7 @@ class StrangerCardViewCell: UICollectionViewCell {
     
     let genderLabel = UILabel()
     
-    let infoLabel = UILabel()
-    
-    let verticalStackView = UIStackView()
+    let ageLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -35,34 +34,53 @@ class StrangerCardViewCell: UICollectionViewCell {
     
     func style() {
         
+        contentView.layer.cornerRadius = 20
+        contentView.layer.masksToBounds = true
         contentView.backgroundColor = .O1
         
-        verticalStackView.distribution = .fill
-        verticalStackView.spacing = 0
-        verticalStackView.axis = .vertical
+        petImageView.contentMode = .scaleAspectFill
+        petImageView.layer.borderWidth = 2
+        petImageView.layer.borderColor = UIColor.white.cgColor
+        
+        nameLabel.textColor = .LightBlack
+        nameLabel.font = UIFont.systemFont(ofSize: 25, weight: .semibold)
+        
+        genderLabel.textColor = .YB1
+        genderLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        
+        ageLabel.textColor = .YB1
+        ageLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
     }
     
     func layout() {
         
         contentView.addSubview(petImageView)
-        contentView.addSubview(verticalStackView)
+
+        let vStack = UIStackView(arrangedSubviews: [nameLabel, genderLabel, ageLabel])
+        
+        contentView.addSubview(vStack)
+        
+        vStack.distribution = .fill
+        vStack.spacing = 8
+        vStack.axis = .vertical
         
         petImageView.anchor(leading: contentView.leadingAnchor,
-                            bottom: contentView.bottomAnchor,
                             centerY: contentView.centerYAnchor,
-                            width: 75,
-                            height: 75,
-                            padding: UIEdgeInsets(top: 0, left: 0, bottom: 20, right: 0))
+                            width: contentView.frame.height * 0.6,
+                            height: contentView.frame.height * 0.6,
+                            padding: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
         
-        verticalStackView.anchor(top: contentView.topAnchor,
-                                 leading: petImageView.trailingAnchor,
-                                 bottom: contentView.bottomAnchor,
-                                 trailing: contentView.trailingAnchor,
-                                 padding: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0))
+        vStack.anchor(top: contentView.topAnchor,
+                      leading: petImageView.trailingAnchor,
+                      bottom: contentView.bottomAnchor,
+                      trailing: contentView.trailingAnchor,
+                      padding: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
         
-        verticalStackView.addArrangedSubview(nameLabel)
-        verticalStackView.addArrangedSubview(genderLabel)
-        verticalStackView.addArrangedSubview(infoLabel)
+        contentView.layoutIfNeeded()
+        
+        petImageView.makeRound()
+        
+        petImageView.clipsToBounds = true
     }
     
     func configuerCell(with pet: Pet) {
@@ -73,21 +91,12 @@ class StrangerCardViewCell: UICollectionViewCell {
         
         nameLabel.text = pet.name
         
-        genderLabel.text = "\(pet.gender)"
+        genderLabel.text = "Gender: \(PetGender.allCases[pet.gender].rawValue)"
         
-        var catFriendly = ""
-        var childFriendly = ""
-        var dogFriendly = ""
+        let date = pet.birthday.dateValue()
+        let timeInterval = date.timeIntervalSinceNow
+        let age = abs(Int(timeInterval / 31556926.0))
         
-        if pet.personality.isCatFriendly {
-            catFriendly = "親貓"
-        }
-        if pet.personality.isChildFriendly {
-            childFriendly = "親小孩"
-        }
-        if pet.personality.isDogFriendly {
-            dogFriendly = "親狗"
-        }
-        infoLabel.text = "\(dogFriendly) \(catFriendly) \(childFriendly)"
+        ageLabel.text = "Age: \(age)"
     }
 }
