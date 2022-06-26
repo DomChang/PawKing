@@ -20,6 +20,8 @@ class PhotoPostViewController: UIViewController {
     
     private let user: User
     
+    private var postUser: User?
+    
     private let post: Post
     
     private var pet: Pet? {
@@ -28,7 +30,9 @@ class PhotoPostViewController: UIViewController {
         }
     }
     
-    private var commentSenders: [User] = []
+    private var userComments: [UserComment] = []
+    
+//    private var commentSenders: [User] = []
     
     private var comments: [Comment]?
     
@@ -45,7 +49,7 @@ class PhotoPostViewController: UIViewController {
         self.user = user
         
         self.post = post
-        
+
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -63,6 +67,8 @@ class PhotoPostViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         
+        getOtherUser()
+        
         tabBarController?.tabBar.isHidden = true
     }
     
@@ -73,9 +79,9 @@ class PhotoPostViewController: UIViewController {
     
     func setup() {
         
-        getPet()
-        
-        getComments()
+//        getPet()
+//
+//        getComments()
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -151,9 +157,30 @@ class PhotoPostViewController: UIViewController {
         userInputTopAnchor.isActive = true
     }
     
-    func getPet() {
+    func getOtherUser() {
         
-        petManager.fetchPetInfo(userId: user.id, petId: post.petId) { [weak self] result in
+        userManager.fetchUserInfo(userId: post.userId) { [weak self] result in
+            
+            switch result {
+                
+            case .success(let otherUser):
+                
+                self?.postUser = otherUser
+                
+                self?.getPet(otherUserId: otherUser.id)
+                
+                self?.getComments()
+                
+            case .failure(let error):
+                
+                print(error)
+            }
+        }
+    }
+    
+    func getPet(otherUserId: String) {
+        
+        petManager.fetchPetInfo(userId: otherUserId, petId: post.petId) { [weak self] result in
             
             switch result {
                 
@@ -180,7 +207,7 @@ class PhotoPostViewController: UIViewController {
                 
                 for comment in comments {
                     
-                    self?.getUserInfo(userId: comment.senderId)
+                    self?.getUserInfo(userId: comment.senderId, comment: comment)
                 }
                 
             case .failure(let error):
@@ -190,15 +217,17 @@ class PhotoPostViewController: UIViewController {
         }
     }
     
-    func getUserInfo(userId: String) {
+    func getUserInfo(userId: String, comment: Comment) {
         
         userManager.fetchUserInfo(userId: userId) { [weak self] result in
             
             switch result {
                 
-            case .success(let commentSenders):
+            case .success(let user):
                 
-                self?.commentSenders.append(commentSenders)
+                let userComment = UserComment(user: user, comment: comment)
+                
+                self?.userComments.append(userComment)
                 
                 self?.tableView.reloadData()
                 
@@ -220,7 +249,7 @@ class PhotoPostViewController: UIViewController {
         
         var comment = Comment(id: "",
                               postId: post.id,
-                              senderId: post.userId,
+                              senderId: user.id,
                               text: text,
                               createdTime: Timestamp(date: Date()))
         
@@ -235,7 +264,8 @@ class PhotoPostViewController: UIViewController {
                 
                 self?.comments?.append(comment)
                 
-                self?.commentSenders.append(user)
+                let userComment = UserComment(user: user, comment: comment)
+                self?.userComments.append(userComment)
                 
                 let indexPath = IndexPath(row: commentCount, section: 1)
                 
@@ -282,7 +312,7 @@ extension PhotoPostViewController: UITableViewDataSource, UITableViewDelegate {
             
         } else {
             
-            return commentSenders.count
+            return userComments.count
         }
     }
     
@@ -297,7 +327,8 @@ extension PhotoPostViewController: UITableViewDataSource, UITableViewDelegate {
                 fatalError("Cannot dequeue PhotoPostCell")
             }
             
-            guard let pet = pet else { return contentCell }
+            guard let pet = pet,
+                    let user = postUser else { return contentCell }
             
             contentCell.configureCell(user: user, pet: pet, post: post)
             
@@ -312,16 +343,15 @@ extension PhotoPostViewController: UITableViewDataSource, UITableViewDelegate {
                 fatalError("Cannot dequeue CommentCell")
             }
             
-            guard let comment = comments?[indexPath.row],
-                    !commentSenders.isEmpty else {
+            guard !userComments.isEmpty else {
                 return commentCell
             }
             
-            let commentSender = commentSenders[indexPath.row]
+            let userComment = userComments[indexPath.row]
             
-            commentCell.configureCell(userPhoto: commentSender.userImage,
-                                      userName: commentSender.name,
-                                      comment: comment)
+            commentCell.configureCell(userPhoto: userComment.user.userImage,
+                                      userName: userComment.user.name,
+                                      comment: userComment.comment)
             
             return commentCell
             

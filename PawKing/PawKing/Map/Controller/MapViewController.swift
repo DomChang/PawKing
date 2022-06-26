@@ -73,7 +73,7 @@ class MapViewController: UIViewController {
         didSet {
             
             trackButton.isHidden = false
-            choosePetImageView.isHidden = false
+            choosePetImageView.isHidden = trackButton.isSelected
             styleCurrentPetButton()
         }
     }

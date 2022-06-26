@@ -36,3 +36,9 @@ struct Like: Codable {
     let senderId: String
     let createdTime: Timestamp
 }
+
+struct UserComment {
+    
+    let user: User
+    let comment: Comment
+}
