@@ -180,9 +180,9 @@ class ChatManager {
         let document = dataBase.collection(FirebaseCollection.chats.rawValue).document(user.id)
             .collection(otherUser.id).order(by: "createdTime", descending: false)
         
-        var messages: [Message] = []
-        
         document.addSnapshotListener { snapshots, _ in
+            
+            var messages: [Message] = []
             
             guard let snapshots = snapshots
             

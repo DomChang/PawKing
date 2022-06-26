@@ -45,11 +45,15 @@ class MessageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        getMessageHistory()
         listenMessage()
         setup()
         style()
         layout()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        getMessageHistory()
     }
     
     func setup() {
@@ -149,7 +153,7 @@ class MessageViewController: UIViewController {
                 
             case .success(let messages):
                 
-                self?.messages = messages
+                self?.messages.append(contentsOf: messages)
                 
             case .failure(let error):
                 
