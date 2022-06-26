@@ -91,7 +91,7 @@ final class PublishViewController: UIViewController {
         captionTitleLabel.font = UIFont.systemFont(ofSize: 16)
         
         captionTextView.layer.borderWidth = 1
-        captionTextView.layer.borderColor = UIColor.G1?.cgColor
+        captionTextView.layer.borderColor = UIColor.Gray?.cgColor
         captionTextView.layer.cornerRadius = 20
         
         captionTextView.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
@@ -249,6 +249,6 @@ final class PublishViewController: UIViewController {
         
         submitButton.isEnabled = false
         
-        submitButton.backgroundColor = .G1
+        submitButton.backgroundColor = .Gray
     }
 }

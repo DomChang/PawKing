@@ -39,7 +39,7 @@ class ChoosePetViewController: UIViewController {
     
     func setup() {
         
-        navigationItem.title = "想與誰散步？"
+        navigationItem.title = "Who do you want to walk with?"
         
         tableView.register(ChoosePetTableViewCell.self,
                            forCellReuseIdentifier: ChoosePetTableViewCell.identifier)
@@ -50,7 +50,17 @@ class ChoosePetViewController: UIViewController {
     
     func style() {
         
-        tableView.backgroundColor = .white
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .G1
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        
+        navigationItem.standardAppearance = appearance
+        navigationItem.scrollEdgeAppearance = appearance
+        
+        tableView.backgroundColor = .YB1
+        
+        tableView.separatorStyle = .none
     }
     
     func layout() {
@@ -76,16 +86,9 @@ extension ChoosePetViewController: UITableViewDataSource, UITableViewDelegate {
             fatalError("Cannot dequeue ChoosePetTableViewCell")
         }
         
-        cell.selectionStyle = .none
-        
         cell.configureCell(pet: pets[indexPath.row])
         
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
-        80
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

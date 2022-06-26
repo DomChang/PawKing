@@ -10,18 +10,38 @@ import UIKit
 private enum PKColor: String {
 
     // swiftlint:disable identifier_name
-    case O1
     
     case G1
+    
+    case YB1
+    
+    case O1
+    
+    case O2
+    
+    case Y1
+    
+    case Gray
+    
+    case LightBlack
 }
 
 extension UIColor {
+    
+    static let G1 = PKColor(.G1)
+    
+    static let YB1 = PKColor(.YB1)
 
     static let O1 = PKColor(.O1)
     
-    static let G1 = PKColor(.G1)
-
+    static let O2 = PKColor(.O2)
     
+    static let Y1 = PKColor(.Y1)
+    
+    static let Gray = PKColor(.Gray)
+    
+    static let LightBlack = PKColor(.LightBlack)
+
     // swiftlint:enable identifier_name
     
     private static func PKColor(_ color: PKColor) -> UIColor? {

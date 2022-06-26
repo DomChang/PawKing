@@ -60,10 +60,10 @@ class UserConfigCell: UITableViewCell {
         photoButton.setImage(UIImage.asset(.Image_Placeholder), for: .normal)
         photoButton.imageView?.contentMode = .scaleAspectFill
         
-        userNameTextfield.layer.borderColor = UIColor.G1?.cgColor
+        userNameTextfield.layer.borderColor = UIColor.Gray?.cgColor
         userNameTextfield.layer.borderWidth = 1
         
-        descriptionTextView.layer.borderColor = UIColor.G1?.cgColor
+        descriptionTextView.layer.borderColor = UIColor.Gray?.cgColor
         descriptionTextView.layer.borderWidth = 1
         
         nextButton.setTitle("Next", for: .normal)

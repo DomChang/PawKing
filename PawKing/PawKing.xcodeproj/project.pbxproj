@@ -27,7 +27,9 @@
 		B66A15CA2865EC4300DF2663 /* UserMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15C92865EC4300DF2663 /* UserMessageCell.swift */; };
 		B66A15CC2865ECA300DF2663 /* OtherUserMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15CB2865ECA300DF2663 /* OtherUserMessageCell.swift */; };
 		B66A15CE2866AE5400DF2663 /* UserPhotoWallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15CD2866AE5400DF2663 /* UserPhotoWallViewController.swift */; };
-		B66A15D02867055F00DF2663 /* Montserrat-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B66A15CF2867055F00DF2663 /* Montserrat-VariableFont_wght.ttf */; };
+		B66A15D32867421900DF2663 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15D22867421800DF2663 /* UIImageView+Extension.swift */; };
+		B66A15D52867500C00DF2663 /* UserAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15D42867500C00DF2663 /* UserAnnotationView.swift */; };
+		B66A15D72868072E00DF2663 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15D62868072E00DF2663 /* CALayer+Extension.swift */; };
 		B698DD9D285881FB0009077E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DD9C285881FB0009077E /* AppDelegate.swift */; };
 		B698DD9F285881FB0009077E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DD9E285881FB0009077E /* SceneDelegate.swift */; };
 		B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDA0285881FB0009077E /* TabBarViewController.swift */; };
@@ -93,7 +95,9 @@
 		B66A15C92865EC4300DF2663 /* UserMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMessageCell.swift; sourceTree = "<group>"; };
 		B66A15CB2865ECA300DF2663 /* OtherUserMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserMessageCell.swift; sourceTree = "<group>"; };
 		B66A15CD2866AE5400DF2663 /* UserPhotoWallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPhotoWallViewController.swift; sourceTree = "<group>"; };
-		B66A15CF2867055F00DF2663 /* Montserrat-VariableFont_wght.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-VariableFont_wght.ttf"; sourceTree = "<group>"; };
+		B66A15D22867421800DF2663 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
+		B66A15D42867500C00DF2663 /* UserAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnnotationView.swift; sourceTree = "<group>"; };
+		B66A15D62868072E00DF2663 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
 		B698DD99285881FB0009077E /* PawKing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PawKing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B698DD9C285881FB0009077E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B698DD9E285881FB0009077E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -328,7 +332,6 @@
 		B698DD9B285881FB0009077E /* PawKing */ = {
 			isa = PBXGroup;
 			children = (
-				B66A15CF2867055F00DF2663 /* Montserrat-VariableFont_wght.ttf */,
 				B698DD9C285881FB0009077E /* AppDelegate.swift */,
 				B698DD9E285881FB0009077E /* SceneDelegate.swift */,
 				B698DDBE2858B98A0009077E /* Extension */,
@@ -356,6 +359,8 @@
 				B698DDC12858CE9D0009077E /* UIView+Extension.swift */,
 				B6ABE8DF285A06E300B1A977 /* UIColor+Extension.swift */,
 				B6ABE8EA285AE41500B1A977 /* LocationRelated+Extension.swift */,
+				B66A15D22867421800DF2663 /* UIImageView+Extension.swift */,
+				B66A15D62868072E00DF2663 /* CALayer+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -401,6 +406,7 @@
 			children = (
 				B6ABE8E1285A0B7400B1A977 /* MapManager.swift */,
 				B6ABE8F3285B87AB00B1A977 /* UserAnnotation.swift */,
+				B66A15D42867500C00DF2663 /* UserAnnotationView.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -526,7 +532,6 @@
 				B698DDB328588D280009077E /* GoogleService-Info.plist in Resources */,
 				B698DDA6285881FD0009077E /* Assets.xcassets in Resources */,
 				B698DDA4285881FB0009077E /* Main.storyboard in Resources */,
-				B66A15D02867055F00DF2663 /* Montserrat-VariableFont_wght.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -599,6 +604,7 @@
 			files = (
 				B63484DB285D85E900DB7CE7 /* UserConfigCell.swift in Sources */,
 				B66A15C62865C7E500DF2663 /* ChatRoomCell.swift in Sources */,
+				B66A15D32867421900DF2663 /* UIImageView+Extension.swift in Sources */,
 				B6E86AA6285F0B85002B8C9A /* TrackHostoryCell.swift in Sources */,
 				B6ABE8E7285A19C400B1A977 /* FirebaseError.swift in Sources */,
 				B6BF961C28630C4E003627C1 /* CommentCell.swift in Sources */,
@@ -645,8 +651,10 @@
 				B6BF96182862A467003627C1 /* PhotoPostViewController.swift in Sources */,
 				B698DDB52858B8540009077E /* MapViewController.swift in Sources */,
 				B6D4F6A3285C526A0045DDB2 /* FirebaseCollection.swift in Sources */,
+				B66A15D72868072E00DF2663 /* CALayer+Extension.swift in Sources */,
 				B6D4F6A7285C5F9B0045DDB2 /* StrangerCardViewCell.swift in Sources */,
 				B6E86AAA285F7DAA002B8C9A /* PetItemCell.swift in Sources */,
+				B66A15D52867500C00DF2663 /* UserAnnotationView.swift in Sources */,
 				B6E86AA8285F1EB4002B8C9A /* Post.swift in Sources */,
 				B6ABE8EB285AE41500B1A977 /* LocationRelated+Extension.swift in Sources */,
 				B66A15CC2865ECA300DF2663 /* OtherUserMessageCell.swift in Sources */,
@@ -810,6 +818,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -842,6 +851,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

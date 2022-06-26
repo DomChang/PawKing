@@ -18,6 +18,8 @@ class ChoosePetTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        selectionStyle = .none
+    
         styleObject()
         layout()
     }
@@ -28,28 +30,41 @@ class ChoosePetTableViewCell: UITableViewCell {
     
     private func styleObject () {
         
-        petImageView.layer.cornerRadius = 25
+        contentView.backgroundColor = .YB1
         
-        petNameLabel.textColor = .black
-        petNameLabel.font = UIFont.systemFont(ofSize: 18)
+        petImageView.layer.borderColor = UIColor.white.cgColor
+        petImageView.layer.borderWidth = 2
+        
+        petNameLabel.textColor = .LightBlack
+        petNameLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
     }
     
     private func layout() {
         
-        contentView.addSubview(petImageView)
-        contentView.addSubview(petNameLabel)
+        petImageView.constrainWidth(constant: 80)
+        petImageView.constrainHeight(constant: 80)
         
-        petImageView.anchor(leading: contentView.leadingAnchor,
-                            centerY: contentView.centerYAnchor,
-                            width: 50,
-                            height: 50,
-                            padding: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
-
-        petNameLabel.anchor(leading: petImageView.trailingAnchor,
-                            trailing: contentView.trailingAnchor,
-                            centerY: contentView.centerYAnchor,
-                            height: 20,
-                            padding: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
+        let hStack = UIStackView(arrangedSubviews: [petImageView, petNameLabel])
+        
+        hStack.axis = .horizontal
+        hStack.distribution = .fill
+        hStack.spacing = 25
+        
+        contentView.addSubview(hStack)
+        
+        hStack.anchor(top: contentView.topAnchor,
+                      leading: contentView.leadingAnchor,
+                      bottom: contentView.bottomAnchor,
+                      trailing: contentView.trailingAnchor,
+                      padding: UIEdgeInsets(top: 20, left: 50, bottom: 20, right: 20))
+        
+        petImageView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        
+        hStack.layoutIfNeeded()
+        
+        petImageView.makeRound()
+        
+        petImageView.clipsToBounds = true
     }
     
     func configureCell(pet: Pet) {

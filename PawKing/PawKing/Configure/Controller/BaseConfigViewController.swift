@@ -87,7 +87,7 @@ class BaseConfigViewController: UIViewController {
     
     func confirmButtonDisable() {
         
-        confirmButton.backgroundColor = .G1
+        confirmButton.backgroundColor = .Gray
         confirmButton.isEnabled = false
     }
 }

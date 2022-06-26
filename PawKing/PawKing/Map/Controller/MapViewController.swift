@@ -29,7 +29,7 @@ class MapViewController: UIViewController {
     
     let strangerButton = UIButton()
     
-    let choosePetButton = UIButton()
+    let choosePetImageView = UIImageView()
     
     let userSetupButton: UIButton = {
         
@@ -64,7 +64,7 @@ class MapViewController: UIViewController {
         didSet {
             if userPets.count == 0 {
                 
-                choosePetButton.isHidden = true
+                choosePetImageView.isHidden = true
             }
         }
     }
@@ -73,7 +73,7 @@ class MapViewController: UIViewController {
         didSet {
             
             trackButton.isHidden = false
-            choosePetButton.isHidden = false
+            choosePetImageView.isHidden = false
             styleCurrentPetButton()
         }
     }
@@ -134,7 +134,7 @@ class MapViewController: UIViewController {
         
         trackButton.isHidden = true
         
-        choosePetButton.isHidden = true
+        choosePetImageView.isHidden = true
         
         strangerButtonDisable()
         
@@ -145,14 +145,19 @@ class MapViewController: UIViewController {
         fetchUserPets()
         
         locationManager.requestWhenInUseAuthorization()
+        locationManager.distanceFilter = 10
         
         mapView.showsUserLocation = true
         mapView.mapType = .mutedStandard
         
+        mapView.register(MKAnnotationView.self, forAnnotationViewWithReuseIdentifier: "UserAnnotationView")
+        
         locationManager.delegate = self
         mapView.delegate = self
         
-        choosePetButton.addTarget(self, action: #selector(didTapChoosePet), for: .touchUpInside)
+        choosePetImageView.addGestureRecognizer(
+            UITapGestureRecognizer(target: self,action: #selector(didTapChoosePet)))
+        choosePetImageView.isUserInteractionEnabled = true
         
         userLocationButton.addTarget(self, action: #selector(didSelectUserLocation), for: .touchUpInside)
         
@@ -193,7 +198,7 @@ class MapViewController: UIViewController {
         saveTrackButton.layer.cornerRadius = 5
         
         deleteTrackButton.setTitle("放棄", for: .normal)
-        deleteTrackButton.backgroundColor = .G1
+        deleteTrackButton.backgroundColor = .Gray
         deleteTrackButton.layer.cornerRadius = 5
         
         styleCurrentPetButton()
@@ -218,7 +223,7 @@ class MapViewController: UIViewController {
         view.addSubview(deleteTrackButton)
         view.addSubview(strangerButton)
         view.addSubview(collectionView)
-        view.addSubview(choosePetButton)
+        view.addSubview(choosePetImageView)
         
         mapView.fillSuperview()
         
@@ -257,10 +262,10 @@ class MapViewController: UIViewController {
                               trailing: view.trailingAnchor,
                               height: 130)
         
-        choosePetButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,
+        choosePetImageView.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,
                                centerX: view.centerXAnchor,
-                               width: 50,
-                               height: 50,
+                               width: 100,
+                               height: 100,
                                padding: UIEdgeInsets(top: 0, left: 0, bottom: 35, right: 0))
     }
     
@@ -317,18 +322,21 @@ class MapViewController: UIViewController {
     
     func styleCurrentPetButton() {
         
-        choosePetButton.layer.masksToBounds = true
-        choosePetButton.layoutIfNeeded()
-        choosePetButton.makeRound()
+        choosePetImageView.contentMode = .scaleAspectFill
+        choosePetImageView.layer.borderWidth = 4
+        choosePetImageView.layer.borderColor = UIColor.white.cgColor
+        choosePetImageView.layer.masksToBounds = true
+        choosePetImageView.layoutIfNeeded()
+        choosePetImageView.makeRound()
         
-        if let _ = userCurrentPet {
+    if userCurrentPet != nil {
             
             let imageUrlSting = userCurrentPet!.petImage
             
-            choosePetButton.kf.setImage(with: URL(string: imageUrlSting), for: .normal)
+            choosePetImageView.kf.setImage(with: URL(string: imageUrlSting))
         } else {
             
-            choosePetButton.setImage(UIImage.asset(.Image_Placeholder), for: .normal)
+            choosePetImageView.image = UIImage.asset(.Image_Placeholder)
         }
     }
     
@@ -349,7 +357,7 @@ class MapViewController: UIViewController {
         
         userLocationButton.isHidden = !trackButton.isSelected
         
-        choosePetButton.isHidden = true
+        choosePetImageView.isHidden = true
         
         mapView.isUserInteractionEnabled = trackButton.isSelected
         
@@ -420,7 +428,7 @@ class MapViewController: UIViewController {
         
         userLocationButton.isHidden = false
         
-        choosePetButton.isHidden = false
+        choosePetImageView.isHidden = false
         
         saveTrackButton.isHidden = true
         deleteTrackButton.isHidden = true
@@ -469,7 +477,7 @@ class MapViewController: UIViewController {
         collectionView.isHidden = !strangerButton.isSelected
         
         trackButton.isHidden = strangerButton.isSelected
-        choosePetButton.isHidden = strangerButton.isSelected
+        choosePetImageView.isHidden = strangerButton.isSelected
         userLocationButton.isHidden = strangerButton.isSelected
         
         mapManager.fetchStrangerLocations(friend: friends) { [weak self] result in
@@ -557,10 +565,6 @@ class MapViewController: UIViewController {
     }
     
     func listenFriendsLocation() {
-        
-//        guard let user = user else {
-//            return
-//        }
 
         let friends = user.friends
         
@@ -591,7 +595,9 @@ class MapViewController: UIViewController {
         
         for friend in friendLocations.values {
             
-            guard friend.status == Status.tracking.rawValue else { return }
+            guard friend.status == Status.tracking.rawValue else {
+                return
+            }
                 
             let annotation = UserAnnotation(coordinate: friend.location.transferToCoordinate2D(),
                                             title: friend.petName,
@@ -618,7 +624,7 @@ class MapViewController: UIViewController {
     func strangerButtonDisable() {
         
         strangerButton.isEnabled = false
-        strangerButton.backgroundColor = .G1
+        strangerButton.backgroundColor = .Gray
     }
     
     func setupUserSettingButton() {
@@ -647,8 +653,6 @@ extension MapViewController: ChoosePetViewDelegate {
     func didChoosePet(with selectedPet: Pet) {
         
         self.userCurrentPet = selectedPet
-        
-//        guard let user = user else { return }
         
         userManager.updateCurrentPet(userId: user.id, pet: selectedPet) { result in
             
@@ -688,7 +692,6 @@ extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
         
         guard let location = locations.last?.coordinate,
               let currentPet = userCurrentPet
-//              let user = user
         else {
             return
         }
@@ -741,45 +744,67 @@ extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
             return nil
         }
         
-        // wait unComment
-        guard let userAnnotation = annotation as? UserAnnotation else { return MKMarkerAnnotationView() }
+        guard let annotation = annotation as? UserAnnotation else { return MKAnnotationView() }
         
-        let annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "UserAnnotation")
+        let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "UserAnnotationView",
+                                                                   for: annotation)
         
-        // MARK: Wait change to annotation.petPhoto
-//        let image = UIImage(named: "Icons_24px_Chat_Normal")
+        guard let imageUrl = URL(string: annotation.petPhoto) else { return annotationView}
         
-        guard let imageUrl = URL(string: userAnnotation.petPhoto) else { return annotationView}
+        let petView = UIImageView(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
         
-//        KingfisherManager.shared.retrieveImage(with: imageUrl) { result in
-//
-//            let image = try? result.get().image
-//
-//            if let image = image {
-//
-//                annotationView.glyphImage = image
-//            }
-//        }
+        let petNameLabel = UILabel(frame: CGRect(x: -10, y: 65, width: 80, height: 20))
         
-        KingfisherManager.shared.retrieveImage(with: imageUrl, completionHandler: { result in
-            
-            switch result {
-                
-            case .success(let value):
-                
-                let resizeImage = value.image.resized(to: CGSize(width: 10, height: 10))
-                annotationView.contentMode = .scaleAspectFit
-                annotationView.glyphImage = resizeImage
-                
-            case .failure(let error):
-                
-                print("Error: \(error)")
-            }
-        })
+        petView.kf.setImage(with: imageUrl)
+        petView.layer.cornerRadius = 30
+        petView.layer.borderWidth = 2
+        petView.layer.borderColor = UIColor.O1?.cgColor
         
-        annotationView.markerTintColor = .G1
+        petView.contentMode = .scaleAspectFill
+        petView.clipsToBounds = true
+        petView.isUserInteractionEnabled = true
+        
+        petNameLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        petNameLabel.numberOfLines = 3
+//        petNameLabel.backgroundColor = .white
+        petNameLabel.textColor = .O1
+//        petNameLabel.layer.borderWidth = 0.5
+//        petNameLabel.layer.borderColor = UIColor.O1?.cgColor
+        petNameLabel.layer.cornerRadius = 10
+        
+        petNameLabel.text = annotation.title ?? ""
+        petNameLabel.textAlignment = .center
+        
+        annotationView.frame = CGRect(x: 0, y: 0, width: 60, height: 70)
+        annotationView.subviews.forEach { $0.removeFromSuperview() }
+        annotationView.addSubview(petNameLabel)
+        annotationView.addSubview(petView)
         
         return annotationView
+    }
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+
+        guard let annotation = view.annotation as? UserAnnotation else { return }
+
+        userManager.fetchUserInfo(userId: annotation.userId) { [weak self] result in
+
+            switch result {
+
+            case .success(let otherUser):
+
+                guard let user = self?.user else { return }
+
+                let userPhotoWallVC = UserPhotoWallViewController(user: user, otherUser: otherUser)
+
+                self?.navigationController?.pushViewController(userPhotoWallVC, animated: true)
+
+            case .failure(let error):
+
+                print(error)
+
+            }
+        }
     }
 }
 
@@ -809,18 +834,6 @@ extension MapViewController: UICollectionViewDataSource, UICollectionViewDelegat
         return cell
         
     }
-    
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//
-//        return CGSize(width: view.frame.width * 0.5, height: 130)
-//    }
-    
-//    func collectionView(_ collectionView: UICollectionView, layout
-//    collectionViewLayout: UICollectionViewLayout,
-//    minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-//
-//        return 0
-//    }
     
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,

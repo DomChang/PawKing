@@ -64,7 +64,7 @@ class PostManager {
     }
     
     func setupComment(comment: inout Comment,
-                   completion: @escaping (Result<Void, Error>) -> Void) {
+                      completion: @escaping (Result<Void, Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.posts.rawValue).document(comment.postId)
             .collection(FirebaseCollection.comments.rawValue).document()
@@ -167,7 +167,8 @@ class PostManager {
     
     func fetchComments(postId: String, completion: @escaping (Result<[Comment], Error>) -> Void) {
         
-        let document = dataBase.collection(FirebaseCollection.posts.rawValue).document(postId).collection(FirebaseCollection.comments.rawValue)
+        let document = dataBase.collection(FirebaseCollection.posts.rawValue)
+            .document(postId).collection(FirebaseCollection.comments.rawValue)
             
         document.getDocuments { snapshots, _ in
             
@@ -224,7 +225,7 @@ class PostManager {
     
     func updatePostComment(postId: String,
                            commentId: String,
-                       completion: @escaping (Result<Void, Error>) -> Void) {
+                           completion: @escaping (Result<Void, Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.posts.rawValue).document(postId)
         
@@ -244,9 +245,9 @@ class PostManager {
     }
     
     func uploadPostPhoto(userId: String,
-                        postId: String,
-                        image: UIImage,
-                        completion: @escaping (Result<Void, Error>) -> Void) {
+                         postId: String,
+                         image: UIImage,
+                         completion: @escaping (Result<Void, Error>) -> Void) {
             
         let fileReference = Storage.storage().reference().child("postImages/\(NSUUID().uuidString).jpg")
     

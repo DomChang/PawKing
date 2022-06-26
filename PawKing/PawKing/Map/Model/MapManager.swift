@@ -57,14 +57,8 @@ class MapManager {
                 
                 let friend = try snapshot.data(as: UserLocation.self)
                 
-                if friend.status == Status.tracking.rawValue {
-                    
-                    completion(.success(friend))
-                    
-                } else {
-                    
-                    return
-                }
+                completion(.success(friend))
+                
             } catch {
                 
                 completion(.failure(FirebaseError.decodeUserError))

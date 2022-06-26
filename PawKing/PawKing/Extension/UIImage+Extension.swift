@@ -60,4 +60,20 @@ extension UIImage {
                 draw(in: CGRect(origin: middle, size: resizeSize))
             }
         }
+    
+     var rounded: UIImage? {
+        let rect = CGRect(origin: .zero, size: size)
+        UIGraphicsBeginImageContextWithOptions(size, false, 0)
+        defer { UIGraphicsEndImageContext() }
+        let bezierPath = UIBezierPath(roundedRect: rect, cornerRadius: 40)
+        bezierPath.addClip()
+        bezierPath.lineWidth = 10
+        draw(in: rect)
+        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+        context.setStrokeColor(UIColor.red.cgColor)
+        bezierPath.lineWidth = 10
+        bezierPath.stroke()
+        return UIGraphicsGetImageFromCurrentImageContext()
+     }
 }
+

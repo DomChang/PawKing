@@ -105,6 +105,8 @@ class TabBarViewController: UITabBarController {
         
         tabBar.isHidden = true
         
+        tabBar.tintColor = .G1
+        
         photoHelper.completionHandler = { [weak self] image in
             
             let navPublishVC = UINavigationController(rootViewController: PublishViewController(image: image))
