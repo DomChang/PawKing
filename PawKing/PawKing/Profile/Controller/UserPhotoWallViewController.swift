@@ -269,7 +269,7 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
             
             infoCell.rightButton.setTitle("Send Message", for: .normal)
             
-            infoCell.configureCell(user: otherUser)
+            infoCell.configureCell(user: otherUser, postCount: posts?.count ?? 0)
             
             infoCell.delegate = self
             

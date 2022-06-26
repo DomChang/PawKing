@@ -35,6 +35,7 @@ class ProfileViewController: UIViewController {
     var posts: [Post]? {
         didSet {
             collectionView.reloadSections(IndexSet(integer: 3))
+            collectionView.reloadItems(at: [IndexPath(item: 0, section: 0)])
         }
     }
     
@@ -405,7 +406,7 @@ extension ProfileViewController: UICollectionViewDataSource {
             
             infoCell.rightButton.setTitle("Add Pet", for: .normal)
             
-            infoCell.configureCell(user: user)
+            infoCell.configureCell(user: user, postCount: posts?.count ?? 0)
             
             infoCell.delegate = self
             
