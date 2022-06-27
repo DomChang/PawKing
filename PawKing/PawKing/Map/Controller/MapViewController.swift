@@ -600,17 +600,19 @@ class MapViewController: UIViewController {
         
         for friend in friendLocations.values {
             
-            guard friend.status == Status.tracking.rawValue else {
-                return
-            }
-                
-            let annotation = UserAnnotation(coordinate: friend.location.transferToCoordinate2D(),
-                                            title: friend.petName,
-                                            subtitle: friend.userName,
-                                            userId: friend.userId,
-                                            petPhoto: friend.petPhoto)
+            if friend.status == Status.tracking.rawValue {
             
-            friendAnnotationsInfo[friend.userId] = annotation
+                let annotation = UserAnnotation(coordinate: friend.location.transferToCoordinate2D(),
+                                                title: friend.petName,
+                                                subtitle: friend.userName,
+                                                userId: friend.userId,
+                                                petPhoto: friend.petPhoto)
+                
+                friendAnnotationsInfo[friend.userId] = annotation
+            } else {
+                
+                friendAnnotationsInfo.removeValue(forKey: friend.userId)
+            }
         }
         
         for friendAnnotationInfo in friendAnnotationsInfo {
