@@ -36,7 +36,7 @@ class StrangerCardViewCell: UICollectionViewCell {
         
         contentView.layer.cornerRadius = 20
         contentView.layer.masksToBounds = true
-        contentView.backgroundColor = .Orange1
+        contentView.backgroundColor = .Blue1
         
         petImageView.contentMode = .scaleAspectFill
         petImageView.layer.borderWidth = 2
@@ -45,10 +45,10 @@ class StrangerCardViewCell: UICollectionViewCell {
         nameLabel.textColor = .LightBlack
         nameLabel.font = UIFont.systemFont(ofSize: 25, weight: .semibold)
         
-        genderLabel.textColor = .YB1
+        genderLabel.textColor = .white
         genderLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         
-        ageLabel.textColor = .YB1
+        ageLabel.textColor = .white
         ageLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
     }
     

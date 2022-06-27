@@ -17,7 +17,6 @@
 		B63484E5285E1E5300DB7CE7 /* ChoosePetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484E4285E1E5300DB7CE7 /* ChoosePetViewController.swift */; };
 		B63484E7285E36F700DB7CE7 /* ChoosePetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484E6285E36F700DB7CE7 /* ChoosePetTableViewCell.swift */; };
 		B63484ED285EEE8800DB7CE7 /* PhotoItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484EC285EEE8800DB7CE7 /* PhotoItemCell.swift */; };
-		B66A15B72864035100DF2663 /* ModeChangeHeaderReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15B62864035000DF2663 /* ModeChangeHeaderReusableView.swift */; };
 		B66A15B92864606700DF2663 /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15B82864606700DF2663 /* ResultViewController.swift */; };
 		B66A15BB28648B4900DF2663 /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15BA28648B4900DF2663 /* SearchResultCell.swift */; };
 		B66A15C228658DF500DF2663 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15C128658DF500DF2663 /* Message.swift */; };
@@ -29,7 +28,6 @@
 		B66A15CE2866AE5400DF2663 /* UserPhotoWallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15CD2866AE5400DF2663 /* UserPhotoWallViewController.swift */; };
 		B66A15D32867421900DF2663 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15D22867421800DF2663 /* UIImageView+Extension.swift */; };
 		B66A15D52867500C00DF2663 /* UserAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15D42867500C00DF2663 /* UserAnnotationView.swift */; };
-		B66A15D72868072E00DF2663 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15D62868072E00DF2663 /* CALayer+Extension.swift */; };
 		B698DD9D285881FB0009077E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DD9C285881FB0009077E /* AppDelegate.swift */; };
 		B698DD9F285881FB0009077E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DD9E285881FB0009077E /* SceneDelegate.swift */; };
 		B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDA0285881FB0009077E /* TabBarViewController.swift */; };
@@ -87,7 +85,6 @@
 		B63484E4285E1E5300DB7CE7 /* ChoosePetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoosePetViewController.swift; sourceTree = "<group>"; };
 		B63484E6285E36F700DB7CE7 /* ChoosePetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoosePetTableViewCell.swift; sourceTree = "<group>"; };
 		B63484EC285EEE8800DB7CE7 /* PhotoItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoItemCell.swift; sourceTree = "<group>"; };
-		B66A15B62864035000DF2663 /* ModeChangeHeaderReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeChangeHeaderReusableView.swift; sourceTree = "<group>"; };
 		B66A15B82864606700DF2663 /* ResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
 		B66A15BA28648B4900DF2663 /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
 		B66A15C128658DF500DF2663 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -99,7 +96,6 @@
 		B66A15CD2866AE5400DF2663 /* UserPhotoWallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPhotoWallViewController.swift; sourceTree = "<group>"; };
 		B66A15D22867421800DF2663 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		B66A15D42867500C00DF2663 /* UserAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnnotationView.swift; sourceTree = "<group>"; };
-		B66A15D62868072E00DF2663 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
 		B698DD99285881FB0009077E /* PawKing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PawKing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B698DD9C285881FB0009077E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B698DD9E285881FB0009077E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -264,7 +260,6 @@
 		B66A15B42864031C00DF2663 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				B66A15B62864035000DF2663 /* ModeChangeHeaderReusableView.swift */,
 				B66A15BA28648B4900DF2663 /* SearchResultCell.swift */,
 			);
 			path = View;
@@ -366,7 +361,6 @@
 				B6ABE8DF285A06E300B1A977 /* UIColor+Extension.swift */,
 				B6ABE8EA285AE41500B1A977 /* LocationRelated+Extension.swift */,
 				B66A15D22867421800DF2663 /* UIImageView+Extension.swift */,
-				B66A15D62868072E00DF2663 /* CALayer+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -645,7 +639,6 @@
 				B6BF96142861EABC003627C1 /* TrackHistoryViewController.swift in Sources */,
 				B63484DD285DA5B300DB7CE7 /* KeychainManager.swift in Sources */,
 				B6ABE8F4285B87AB00B1A977 /* UserAnnotation.swift in Sources */,
-				B66A15B72864035100DF2663 /* ModeChangeHeaderReusableView.swift in Sources */,
 				B698DDC02858B99F0009077E /* UIImage+Extension.swift in Sources */,
 				B6A91D6B2868909F0049253A /* PetItemBackReusableView.swift in Sources */,
 				B698DDBB2858B8BA0009077E /* ChatRoomViewController.swift in Sources */,
@@ -659,7 +652,6 @@
 				B6BF96182862A467003627C1 /* PhotoPostViewController.swift in Sources */,
 				B698DDB52858B8540009077E /* MapViewController.swift in Sources */,
 				B6D4F6A3285C526A0045DDB2 /* FirebaseCollection.swift in Sources */,
-				B66A15D72868072E00DF2663 /* CALayer+Extension.swift in Sources */,
 				B6D4F6A7285C5F9B0045DDB2 /* StrangerCardViewCell.swift in Sources */,
 				B6E86AAA285F7DAA002B8C9A /* PetItemCell.swift in Sources */,
 				B66A15D52867500C00DF2663 /* UserAnnotationView.swift in Sources */,

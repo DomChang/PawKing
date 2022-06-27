@@ -72,8 +72,15 @@ class MapViewController: UIViewController {
     var userCurrentPet: Pet? {
         didSet {
             
-            trackButton.isHidden = false
-            choosePetImageView.isHidden = trackButton.isSelected
+            trackButton.isHidden = !collectionView.isHidden
+            
+            if !trackButton.isSelected && collectionView.isHidden {
+                
+                choosePetImageView.isHidden = false
+            } else {
+                
+                choosePetImageView.isHidden = true
+            }
             styleCurrentPetButton()
         }
     }
@@ -331,12 +338,13 @@ class MapViewController: UIViewController {
     
     func styleCurrentPetButton() {
         
+        choosePetImageView.makeRoundDoubleBorder(borderWidth: 2,
+                                                 outterColor: .Orange1,
+                                                 innerColor: .white)
+        
         choosePetImageView.contentMode = .scaleAspectFill
-        choosePetImageView.layer.borderWidth = 4
-        choosePetImageView.layer.borderColor = UIColor.white.cgColor
+        
         choosePetImageView.layer.masksToBounds = true
-        choosePetImageView.layoutIfNeeded()
-        choosePetImageView.makeRound()
         
     if userCurrentPet != nil {
             
@@ -882,7 +890,7 @@ extension MapViewController: UICollectionViewDataSource, UICollectionViewDelegat
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
         let frameSize = collectionView.frame.size
-        return CGSize(width: frameSize.width * 0.6, height: frameSize.height)
+        return CGSize(width: frameSize.width * 0.7, height: frameSize.height)
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -890,7 +898,7 @@ extension MapViewController: UICollectionViewDataSource, UICollectionViewDelegat
                         insetForSectionAt section: Int) -> UIEdgeInsets {
         
         let frameSize = collectionView.frame.size
-        return UIEdgeInsets(top: 0, left: frameSize.width * 0.2, bottom: 0, right: frameSize.width * 0.2)
+        return UIEdgeInsets(top: 0, left: frameSize.width * 0.15, bottom: 0, right: frameSize.width * 0.15)
     }
 }
 

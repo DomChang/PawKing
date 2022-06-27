@@ -58,7 +58,7 @@ class ChoosePetViewController: UIViewController {
         navigationItem.standardAppearance = appearance
         navigationItem.scrollEdgeAppearance = appearance
         
-        tableView.backgroundColor = .YB1
+        tableView.backgroundColor = .white
         
         tableView.separatorStyle = .none
     }
