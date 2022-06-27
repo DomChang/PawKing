@@ -102,17 +102,20 @@ class ProfileViewController: UIViewController {
         collectionView.register(ProfileInfoCell.self,
                                 forCellWithReuseIdentifier: ProfileInfoCell.identifier)
         
+        collectionView.collectionViewLayout.register(ProfileInfoReusableView.self,
+                                                     forDecorationViewOfKind: "\(ProfileInfoReusableView.self)")
+        
         collectionView.register(PetItemCell.self,
                                 forCellWithReuseIdentifier: PetItemCell.identifier)
+        
+        collectionView.collectionViewLayout.register(PetItemBackReusableView.self,
+                                                     forDecorationViewOfKind: "\(PetItemBackReusableView.self)")
         
         collectionView.register(ContentButtonCell.self,
                                 forCellWithReuseIdentifier: ContentButtonCell.identifier)
         
         collectionView.register(PhotoItemCell.self,
                                 forCellWithReuseIdentifier: PhotoItemCell.identifier)
-        
-        collectionView.collectionViewLayout.register(PetItemBackReusableView.self,
-                                                     forDecorationViewOfKind: "\(PetItemBackReusableView.self)")
         
         collectionView.register(TrackHostoryCell.self,
                                 forCellWithReuseIdentifier: TrackHostoryCell.identifier)
@@ -270,6 +273,11 @@ extension ProfileViewController: UICollectionViewDataSource {
                 
                 let infoSection = NSCollectionLayoutSection(group: infoGroup)
                 
+//                let infoBackView = NSCollectionLayoutDecorationItem.background(
+//                    elementKind: "\(ProfileInfoReusableView.self)")
+//
+//                infoSection.decorationItems = [infoBackView]
+                
                 return infoSection
                 
             case .choosePet:
@@ -290,9 +298,10 @@ extension ProfileViewController: UICollectionViewDataSource {
                 
                 petSection.interGroupSpacing = 10
                 
-                let petItemBackView = NSCollectionLayoutDecorationItem.background(elementKind: "\(PetItemBackReusableView.self)")
-                
-                petSection.decorationItems = [petItemBackView]
+//                let petItemBackView = NSCollectionLayoutDecorationItem.background(
+//                    elementKind: "\(PetItemBackReusableView.self)")
+//
+//                petSection.decorationItems = [petItemBackView]
                 
                 return petSection
                 
@@ -319,7 +328,7 @@ extension ProfileViewController: UICollectionViewDataSource {
                                                           heightDimension: .fractionalHeight(1))
                 let postItem = NSCollectionLayoutItem(layoutSize: postItemSize)
                 
-                postItem.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 1, bottom: 10, trailing: 10)
+                postItem.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 1, bottom: 2, trailing: 1)
                 
                 let postGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                            heightDimension: .fractionalWidth(1 / 3))
@@ -327,7 +336,7 @@ extension ProfileViewController: UICollectionViewDataSource {
                 
                 let postSection = NSCollectionLayoutSection(group: postGroup)
                 
-                postSection.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+                postSection.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 2, bottom: 0, trailing: 2)
                 
                 return postSection
 
@@ -476,19 +485,21 @@ extension ProfileViewController: UICollectionViewDataSource {
                 
                 for userPet in userPets where userPet.id == trackInfo.petId {
                     
-                    let imageUrl = URL(string: userPet.petImage)
+                    trackCell.configureCell(pet: userPet, trackInfo: trackInfo)
                     
-                    trackCell.petImageView.kf.setImage(with: imageUrl)
-                    
-                    trackCell.petNameLabel.text = userPet.name
-                    
-                    let dateFormatter = DateFormatter()
-                    
-                    dateFormatter.dateFormat = "yyyy/MM/dd"
-                    
-                    let trackDate = dateFormatter.string(from: trackInfo.startTime.dateValue())
-                    
-                    trackCell.dateLabel.text = trackDate
+//                    let imageUrl = URL(string: userPet.petImage)
+//
+//                    trackCell.petImageView.kf.setImage(with: imageUrl)
+//
+//                    trackCell.petNameLabel.text = userPet.name
+//
+//                    let dateFormatter = DateFormatter()
+//
+//                    dateFormatter.dateFormat = "yyyy/MM/dd"
+//
+//                    let trackDate = dateFormatter.string(from: trackInfo.startTime.dateValue())
+//
+//                    trackCell.dateLabel.text = trackDate
                 }
                 return trackCell
             }

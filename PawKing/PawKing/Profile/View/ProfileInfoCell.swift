@@ -68,37 +68,37 @@ class ProfileInfoCell: UICollectionViewCell {
         
         friendNumTitleLabel.text = "Friends"
         friendNumTitleLabel.textAlignment = .center
-        friendNumTitleLabel.textColor = .LightBlack
+        friendNumTitleLabel.textColor = .DarkBlue
         friendNumTitleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         
         friendNumLabel.textAlignment = .center
-        friendNumLabel.textColor = .LightBlack
+        friendNumLabel.textColor = .DarkBlue
         friendNumLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
         
         postNumTitleLabel.text = "Posts"
         postNumTitleLabel.textAlignment = .center
-        postNumTitleLabel.textColor = .LightBlack
+        postNumTitleLabel.textColor = .DarkBlue
         postNumTitleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         
         postNumLabel.textAlignment = .center
-        postNumLabel.textColor = .LightBlack
+        postNumLabel.textColor = .DarkBlue
         postNumLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
         
-        userNameLabel.textColor = .LightBlack
+        userNameLabel.textColor = .DarkBlue
         userNameLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         userNameLabel.numberOfLines = 0
         
         leftButton.layer.borderWidth = 1
-        leftButton.layer.borderColor = UIColor.O1?.cgColor
+        leftButton.layer.borderColor = UIColor.DarkBlue?.cgColor
         leftButton.backgroundColor = .white
-        leftButton.setTitleColor(.O1, for: .normal)
-        leftButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        leftButton.setTitleColor(.DarkBlue, for: .normal)
+        leftButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         
         rightButton.layer.borderWidth = 1
-        rightButton.layer.borderColor = UIColor.O1?.cgColor
+        rightButton.layer.borderColor = UIColor.DarkBlue?.cgColor
         rightButton.backgroundColor = .white
-        rightButton.setTitleColor(.O1, for: .normal)
-        rightButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        rightButton.setTitleColor(.DarkBlue, for: .normal)
+        rightButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
     }
     
     private func layout() {
@@ -185,7 +185,7 @@ class ProfileInfoCell: UICollectionViewCell {
         buttonStackView.anchor(top: userImageView.bottomAnchor,
                                leading: contentView.leadingAnchor,
                                trailing: contentView.trailingAnchor,
-                               height: 40,
+                               height: 30,
                                padding: UIEdgeInsets(top: 20, left: 30, bottom: 0, right: 30))
         
         contentView.layoutIfNeeded()

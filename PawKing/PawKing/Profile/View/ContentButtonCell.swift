@@ -50,16 +50,16 @@ class ContentButtonCell: UICollectionViewCell {
         stackView.spacing = 10
         
         photoContentButton.setTitle("Photo", for: .normal)
-        photoContentButton.setTitleColor(.Gray, for: .normal)
-        photoContentButton.setTitleColor(.O1, for: .selected)
+        photoContentButton.setTitleColor(.Gray1, for: .normal)
+        photoContentButton.setTitleColor(.Orange1, for: .selected)
         photoContentButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
         trackContentButton.setTitle("Track", for: .normal)
-        trackContentButton.setTitleColor(.Gray, for: .normal)
-        trackContentButton.setTitleColor(.O1, for: .selected)
+        trackContentButton.setTitleColor(.Gray1, for: .normal)
+        trackContentButton.setTitleColor(.Orange1, for: .selected)
         trackContentButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
-        bottomView.backgroundColor = .O2
+        bottomView.backgroundColor = .Orange2
     }
     
     private func layout() {
@@ -77,7 +77,7 @@ class ContentButtonCell: UICollectionViewCell {
                           width: 150,
                           height: 40)
         
-        bottomView.layer.cornerRadius = 20
+        bottomView.layer.cornerRadius = 5
     }
     
     @objc func didTapPhotoButton() {

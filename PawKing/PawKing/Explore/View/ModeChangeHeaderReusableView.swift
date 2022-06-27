@@ -53,10 +53,10 @@ class ModeChangeHeaderReusableView: UICollectionReusableView {
     
         friendModeButton.titleLabel?.font = UIFont(name: "MontserratRoman-Regular", size: 20)
         
-        allModeButton.setTitleColor(.O1, for: .normal)
-        friendModeButton.setTitleColor(.O1, for: .normal)
+        allModeButton.setTitleColor(.Orange1, for: .normal)
+        friendModeButton.setTitleColor(.Orange1, for: .normal)
         
-        bottomLine.backgroundColor = .O1
+        bottomLine.backgroundColor = .Orange1
     }
     
     private func layout() {

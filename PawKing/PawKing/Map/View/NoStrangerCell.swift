@@ -29,11 +29,11 @@ class NoStrangerCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 20
         contentView.layer.masksToBounds = true
         
-        contentView.backgroundColor = .O2
+        contentView.backgroundColor = .Orange2
         
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
-        label.textColor = .O1
+        label.textColor = .Orange1
         label.text = "No new friends nearby."
     }
     

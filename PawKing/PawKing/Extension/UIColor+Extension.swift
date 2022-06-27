@@ -11,34 +11,54 @@ private enum PKColor: String {
 
     // swiftlint:disable identifier_name
     
-    case G1
+    case Brown1
+    
+    case Blue1
+    
+    case Blue2
+    
+    case Blue3
+    
+    case DarkBlue
+    
+    case Green1
     
     case YB1
     
-    case O1
+    case Orange1
     
-    case O2
+    case Orange2
     
-    case Y1
+    case Yello1
     
-    case Gray
+    case Gray1
     
     case LightBlack
 }
 
 extension UIColor {
     
-    static let G1 = PKColor(.G1)
+    static let Brown1 = PKColor(.Brown1)
+    
+    static let Blue1 = PKColor(.Blue1)
+    
+    static let Blue2 = PKColor(.Blue2)
+    
+    static let Blue3 = PKColor(.Blue3)
+    
+    static let DarkBlue = PKColor(.DarkBlue)
+    
+    static let G1 = PKColor(.Green1)
     
     static let YB1 = PKColor(.YB1)
 
-    static let O1 = PKColor(.O1)
+    static let Orange1 = PKColor(.Orange1)
     
-    static let O2 = PKColor(.O2)
+    static let Orange2 = PKColor(.Orange2)
     
-    static let Y1 = PKColor(.Y1)
+    static let Yello1 = PKColor(.Yello1)
     
-    static let Gray = PKColor(.Gray)
+    static let Gray1 = PKColor(.Gray1)
     
     static let LightBlack = PKColor(.LightBlack)
 

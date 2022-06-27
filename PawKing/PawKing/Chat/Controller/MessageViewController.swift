@@ -88,7 +88,7 @@ class MessageViewController: UIViewController {
         
         sendButton.layer.cornerRadius = 3
         sendButton.setTitle("發送", for: .normal)
-        sendButton.backgroundColor = .O1
+        sendButton.backgroundColor = .Orange1
         
         inputBackView.layer.borderWidth = 0.8
         inputBackView.layer.borderColor = UIColor(red: 204/255, green: 204/255, blue: 204/255, alpha: 1).cgColor

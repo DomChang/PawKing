@@ -34,7 +34,7 @@ class MapViewController: UIViewController {
     let userSetupButton: UIButton = {
         
         let button = UIButton()
-        button.backgroundColor = .O1
+        button.backgroundColor = .Orange1
         button.setTitle("設定", for: .normal)
         button.layer.cornerRadius = 5
         return button
@@ -200,11 +200,11 @@ class MapViewController: UIViewController {
         trackButton.setImage(UIImage.asset(.Icons_36px_RecordTrack_Selected), for: .selected)
         
         saveTrackButton.setTitle("儲存", for: .normal)
-        saveTrackButton.backgroundColor = .O1
+        saveTrackButton.backgroundColor = .Orange1
         saveTrackButton.layer.cornerRadius = 5
         
         deleteTrackButton.setTitle("放棄", for: .normal)
-        deleteTrackButton.backgroundColor = .Gray
+        deleteTrackButton.backgroundColor = .Gray1
         deleteTrackButton.layer.cornerRadius = 5
         
         styleCurrentPetButton()
@@ -733,7 +733,7 @@ extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
             
             let polylineRenderer = MKPolylineRenderer(overlay: overlay)
             
-            polylineRenderer.strokeColor = .O1
+            polylineRenderer.strokeColor = .Orange1
             
             polylineRenderer.lineWidth = 4
                     
@@ -765,7 +765,7 @@ extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
         petView.kf.setImage(with: imageUrl)
         petView.layer.cornerRadius = 30
         petView.layer.borderWidth = 2
-        petView.layer.borderColor = UIColor.O1?.cgColor
+        petView.layer.borderColor = UIColor.Orange1?.cgColor
         
         petView.contentMode = .scaleAspectFill
         petView.clipsToBounds = true
@@ -773,7 +773,7 @@ extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
         
         petNameLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         petNameLabel.numberOfLines = 3
-        petNameLabel.textColor = .O1
+        petNameLabel.textColor = .Orange1
         petNameLabel.layer.cornerRadius = 10
         
         petNameLabel.text = annotation.title ?? ""

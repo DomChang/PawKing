@@ -46,6 +46,7 @@
 		B698DDC22858CE9D0009077E /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDC12858CE9D0009077E /* UIView+Extension.swift */; };
 		B6A91D692868372B0049253A /* NoStrangerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D682868372B0049253A /* NoStrangerCell.swift */; };
 		B6A91D6B2868909F0049253A /* PetItemBackReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D6A2868909F0049253A /* PetItemBackReusableView.swift */; };
+		B6A91D6D28697CCC0049253A /* ProfileInfoReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D6C28697CCC0049253A /* ProfileInfoReusableView.swift */; };
 		B6ABE8E0285A06E300B1A977 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8DF285A06E300B1A977 /* UIColor+Extension.swift */; };
 		B6ABE8E2285A0B7400B1A977 /* MapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8E1285A0B7400B1A977 /* MapManager.swift */; };
 		B6ABE8E7285A19C400B1A977 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8E6285A19C400B1A977 /* FirebaseError.swift */; };
@@ -117,6 +118,7 @@
 		B698DDC12858CE9D0009077E /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		B6A91D682868372B0049253A /* NoStrangerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoStrangerCell.swift; sourceTree = "<group>"; };
 		B6A91D6A2868909F0049253A /* PetItemBackReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetItemBackReusableView.swift; sourceTree = "<group>"; };
+		B6A91D6C28697CCC0049253A /* ProfileInfoReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoReusableView.swift; sourceTree = "<group>"; };
 		B6ABE8DF285A06E300B1A977 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		B6ABE8E1285A0B7400B1A977 /* MapManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapManager.swift; sourceTree = "<group>"; };
 		B6ABE8E6285A19C400B1A977 /* FirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseError.swift; sourceTree = "<group>"; };
@@ -221,6 +223,7 @@
 			isa = PBXGroup;
 			children = (
 				B6E86AA1285F0AEE002B8C9A /* ProfileInfoCell.swift */,
+				B6A91D6C28697CCC0049253A /* ProfileInfoReusableView.swift */,
 				B6E86AA9285F7DAA002B8C9A /* PetItemCell.swift */,
 				B6A91D6A2868909F0049253A /* PetItemBackReusableView.swift */,
 				B6E86AA3285F0B6B002B8C9A /* ContentButtonCell.swift */,
@@ -620,6 +623,7 @@
 				B6D4F69E285C35F80045DDB2 /* UserManager.swift in Sources */,
 				B66A15CA2865EC4300DF2663 /* UserMessageCell.swift in Sources */,
 				B63484E3285DC8D000DB7CE7 /* PetManager.swift in Sources */,
+				B6A91D6D28697CCC0049253A /* ProfileInfoReusableView.swift in Sources */,
 				B698DD9D285881FB0009077E /* AppDelegate.swift in Sources */,
 				B66A15C82865E82D00DF2663 /* MessageViewController.swift in Sources */,
 				B63484E1285DC70D00DB7CE7 /* PetConfigCell.swift in Sources */,

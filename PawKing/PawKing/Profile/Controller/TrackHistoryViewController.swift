@@ -138,7 +138,7 @@ extension TrackHistoryViewController: MKMapViewDelegate, CLLocationManagerDelega
 
             let polylineRenderer = MKPolylineRenderer(overlay: overlay)
 
-            polylineRenderer.strokeColor = .O1
+            polylineRenderer.strokeColor = .Orange1
 
             polylineRenderer.lineWidth = 4
 
