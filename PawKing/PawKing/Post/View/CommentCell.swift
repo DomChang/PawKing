@@ -33,49 +33,55 @@ class CommentCell: UITableViewCell {
     
     private func setup() {
         
+        selectionStyle = .none
     }
     
     private func styleObject() {
         
-        userNameLabel.textColor = .brown
-        userNameLabel.font = UIFont.systemFont(ofSize: 18)
+        userImageView.contentMode = .scaleAspectFill
         
-        commentLabel.textColor = .brown
-        commentLabel.font = UIFont.systemFont(ofSize: 18)
+        userNameLabel.textColor = .DarkBlue
+        userNameLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         
-        timeLabel.textColor = .brown
-        timeLabel.font = UIFont.systemFont(ofSize: 12)
-        timeLabel.textAlignment = .right
+        commentLabel.textColor = .LightBlack
+        commentLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        
+        timeLabel.textColor = .Gray1
+        timeLabel.font = UIFont.systemFont(ofSize: 12, weight: .light)
+        timeLabel.textAlignment = .left
     }
     
     private func layout() {
         
-        userImageView.constrainWidth(constant: 30)
-        userImageView.constrainHeight(constant: 30)
-        
         userNameLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         
-        let hStackView = UIStackView(arrangedSubviews: [userImageView, userNameLabel, commentLabel])
-        
+        let hStackView = UIStackView(arrangedSubviews: [userNameLabel, commentLabel])
+
         hStackView.axis = .horizontal
-        
         hStackView.distribution = .fill
-        
         hStackView.spacing = 8
         
         let vStackView = UIStackView(arrangedSubviews: [hStackView, timeLabel])
         
         vStackView.axis = .vertical
-        
         vStackView.distribution = .fill
+        vStackView.spacing = 8
+        
+        contentView.addSubview(userImageView)
         
         contentView.addSubview(vStackView)
         
-        vStackView.anchor(top: contentView.topAnchor,
-                         leading: contentView.leadingAnchor,
+        userImageView.anchor(top: contentView.topAnchor,
+                             leading: contentView.leadingAnchor,
+                             width: 30,
+                             height: 30,
+                             padding: UIEdgeInsets(top: 8, left: 20, bottom: 0, right: 0))
+        
+        vStackView.anchor(top: userImageView.topAnchor,
+                         leading: userImageView.trailingAnchor,
                          bottom: contentView.bottomAnchor,
                          trailing: contentView.trailingAnchor,
-                         padding: UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10))
+                         padding: UIEdgeInsets(top: 0, left: 8, bottom: 8, right: 10))
         
         userImageView.layoutIfNeeded()
         userImageView.makeRound()
@@ -92,12 +98,7 @@ class CommentCell: UITableViewCell {
         
         commentLabel.text = comment.text
         
-        let dateFormatter = DateFormatter()
-        
-        dateFormatter.dateFormat = "yyyy/MM/dd"
-        
-        let commentDate = dateFormatter.string(from: comment.createdTime.dateValue())
-        
-        timeLabel.text = commentDate
+        timeLabel.text = comment.createdTime.dateValue()
+            .displayTimeInSocialMediaStyle()
     }
 }

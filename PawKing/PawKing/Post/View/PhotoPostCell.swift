@@ -7,13 +7,22 @@
 
 import UIKit
 
+protocol PhotoItemCellDelegate {
+    
+    func didTapPetImage()
+}
+
 class PhotoPostCell: UITableViewCell {
     
     static let identifier = "\(PhotoItemCell.self)"
     
+    var delegate: PhotoItemCellDelegate?
+    
     let petImageView = UIImageView()
     
     let petNameLabel = UILabel()
+    
+    let ownerLabel = UILabel()
     
     let settingButton = UIButton()
     
@@ -22,8 +31,6 @@ class PhotoPostCell: UITableViewCell {
     let likeButton = UIButton()
     
     let likeNumLabel = UILabel()
-    
-    let commentButton = UIButton()
     
     let nameContentLabel = UILabel()
     
@@ -45,84 +52,120 @@ class PhotoPostCell: UITableViewCell {
     
     private func setup() {
         
+        petImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapPetImage)))
     }
     
     private func styleObject() {
         
+        petImageView.contentMode = .scaleAspectFill
+        
+        photoImageView.contentMode = .scaleAspectFill
+        
+        petNameLabel.textAlignment = .left
+        petNameLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        petNameLabel.textColor = .LightBlack
+        
+        ownerLabel.textAlignment = .left
+        ownerLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        ownerLabel.textColor = .DarkBlue
+        
+        settingButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
+        settingButton.tintColor = .DarkBlue
+        
+        likeButton.setImage(UIImage(systemName: "suit.heart",
+                                         withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+        likeButton.tintColor = .DarkBlue
+        
+        likeNumLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        likeNumLabel.textColor = .DarkBlue
+        
+        nameContentLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        nameContentLabel.textColor = .DarkBlue
+        
+        contentLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        contentLabel.textColor = .LightBlack
+        
+        timeLabel.font = UIFont.systemFont(ofSize: 12, weight: .light)
+        timeLabel.textColor = .Gray1
+        timeLabel.textAlignment = .left
     }
     
     private func layout() {
         
+        settingButton.constrainWidth(constant: 30)
+        settingButton.constrainHeight(constant: 30)
+        
+        let vOwnerStack = UIStackView(arrangedSubviews: [petNameLabel, ownerLabel])
+        vOwnerStack.axis = .vertical
+        vOwnerStack.distribution = .fillProportionally
+        vOwnerStack.spacing = 8
+        
+        let petInfoStack = UIStackView(arrangedSubviews: [vOwnerStack, settingButton])
+        petInfoStack.axis = .horizontal
+        petInfoStack.distribution = .fill
+        petInfoStack.spacing = 15
+        
+        petNameLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        
+        let infoStack = UIStackView(arrangedSubviews: [likeButton, likeNumLabel])
+        infoStack.axis = .horizontal
+        infoStack.distribution = .fill
+        infoStack.spacing = 8
+        
+        likeButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+
         let contentBodyStack = UIStackView(arrangedSubviews:
                                             [nameContentLabel, contentLabel])
-        
-        nameContentLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        contentBodyStack.axis = .horizontal
+        contentBodyStack.distribution = .fill
         contentBodyStack.spacing = 8
         
-        contentBodyStack.distribution = .fill
-        contentBodyStack.axis = .horizontal
+        nameContentLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         
-        let contentStack = UIStackView(arrangedSubviews:
-                                        [contentBodyStack, timeLabel])
-        
-        contentStack.distribution = .equalSpacing
-        contentStack.axis = .vertical
-        contentStack.spacing = 8
+        let vStack = UIStackView(arrangedSubviews: [contentBodyStack, timeLabel])
+        vStack.axis = .vertical
+        vStack.distribution = .fill
+        vStack.spacing = 8
         
         contentView.addSubview(petImageView)
-        contentView.addSubview(petNameLabel)
-        contentView.addSubview(settingButton)
+        contentView.addSubview(petInfoStack)
         contentView.addSubview(photoImageView)
-        contentView.addSubview(likeButton)
-        contentView.addSubview(likeNumLabel)
-        contentView.addSubview(commentButton)
-        contentView.addSubview(contentStack)
+        contentView.addSubview(infoStack)
+        contentView.addSubview(vStack)
         
         petImageView.anchor(top: contentView.topAnchor,
-                             leading: contentView.leadingAnchor,
-                             width: 30,
-                             height: 30,
-                             padding: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 0))
+                            leading: contentView.leadingAnchor,
+                            width: 40,
+                            height: 40,
+                            padding: UIEdgeInsets(top: 10, left: 20, bottom: 0, right: 0))
         
-        petNameLabel.anchor(leading: petImageView.trailingAnchor,
-                             centerY: petImageView.centerYAnchor,
-                             padding: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0))
+        petInfoStack.anchor(top: petImageView.topAnchor,
+                            leading: petImageView.trailingAnchor,
+                            bottom: photoImageView.topAnchor,
+                            trailing: contentView.trailingAnchor,
+                            height: 40,
+                            padding: UIEdgeInsets(top: 0, left: 16, bottom: 10, right: 20))
         
-        settingButton.anchor(leading: petNameLabel.trailingAnchor,
-                             trailing: contentView.trailingAnchor,
-                             centerY: petImageView.centerYAnchor,
-                             width: 30,
-                             height: 30,
-                             padding: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 20))
-        
-        photoImageView.anchor(top: petNameLabel.bottomAnchor,
-                              leading: contentView.leadingAnchor,
+        photoImageView.anchor(leading: contentView.leadingAnchor,
                               trailing: contentView.trailingAnchor,
-                              height: contentView.frame.width,
-                             padding: UIEdgeInsets(top: 30, left: 0, bottom: 0, right: 0))
-        
-        likeButton.anchor(top: photoImageView.bottomAnchor,
-                          leading: petImageView.leadingAnchor,
-                             width: 30,
-                             height: 30,
+                              height: UIScreen.main.bounds.width,
                              padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0))
         
-        likeNumLabel.anchor(leading: likeButton.trailingAnchor,
-                            centerY: likeButton.centerYAnchor,
-                             padding: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0))
+        infoStack.anchor(top: photoImageView.bottomAnchor,
+                         leading: contentView.leadingAnchor,
+                         trailing: contentView.trailingAnchor,
+                         height: 30,
+                         padding: UIEdgeInsets(top: 10, left: 16, bottom: 0, right: 10))
         
-        commentButton.anchor(leading: likeNumLabel.trailingAnchor,
-                             trailing: contentView.trailingAnchor,
-                             centerY: likeButton.centerYAnchor,
-                             width: 30,
-                             height: 30,
-                             padding: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 20))
-        
-        contentStack.anchor(top: likeButton.bottomAnchor,
+        vStack.anchor(top: likeButton.bottomAnchor,
                             leading: likeButton.leadingAnchor,
                             bottom: contentView.bottomAnchor,
-                            trailing: commentButton.trailingAnchor,
-                             padding: UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0))
+                            trailing: contentView.trailingAnchor,
+                             padding: UIEdgeInsets(top: 10, left: 0, bottom: 20, right: 20))
+        
+        contentView.layoutIfNeeded()
+        petImageView.makeRound()
+        petImageView.clipsToBounds = true
     }
     
     func configureCell(user: User, pet: Pet, post: Post) {
@@ -133,17 +176,30 @@ class PhotoPostCell: UITableViewCell {
         
         petNameLabel.text = pet.name
         
+        ownerLabel.text = "by \(user.name)"
+        
         let photoUrl = URL(string: post.photo)
         
         photoImageView.kf.setImage(with: photoUrl)
         
-        likeNumLabel.text = "\(post.likesId.count)"
+        let likeCount = post.likesId.count
+        
+        if likeCount == 0 {
+            
+            likeNumLabel.text = ""
+        } else if likeCount == 1 {
+            
+            likeNumLabel.text = "\(likeCount) like"
+        } else {
+            
+            likeNumLabel.text = "\(likeCount) likes"
+        }
         
         nameContentLabel.text = user.name
         
         contentLabel.text = post.caption
         
-        let commentCount = post.commentsId.count
+//        let commentCount = post.commentsId.count
         
 //        if commentCount > 0 {
 //            
@@ -154,12 +210,17 @@ class PhotoPostCell: UITableViewCell {
 //            viewCommentLabel.text = "write comment"
 //        }
         
-        let dateFormatter = DateFormatter()
+//        let dateFormatter = DateFormatter()
+//
+//        dateFormatter.dateFormat = "MMMM dd, yyyy"
+//
+//        let postDate = dateFormatter.string(from: post.createdTime.dateValue())
         
-        dateFormatter.dateFormat = "yyyy/MM/dd"
+        timeLabel.text = post.createdTime.dateValue().displayTimeInSocialMediaStyle()
+    }
+    
+    @objc func didTapPetImage() {
         
-        let postDate = dateFormatter.string(from: post.createdTime.dateValue())
-        
-        timeLabel.text = postDate
+        self.delegate?.didTapPetImage()
     }
 }

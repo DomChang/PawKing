@@ -94,15 +94,15 @@ class ExploreViewController: UIViewController {
         
         allModeButton.setTitle("All", for: .normal)
         allModeButton.setTitleColor(.Gray1, for: .normal)
-        allModeButton.setTitleColor(.Orange1, for: .selected)
+        allModeButton.setTitleColor(.white, for: .selected)
         allModeButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
         friendModeButton.setTitle("Friends", for: .normal)
         friendModeButton.setTitleColor(.Gray1, for: .normal)
-        friendModeButton.setTitleColor(.Orange1, for: .selected)
+        friendModeButton.setTitleColor(.white, for: .selected)
         friendModeButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
-        bottomView.backgroundColor = .Orange2
+        bottomView.backgroundColor = .Orange1
     }
     
     private func layout() {

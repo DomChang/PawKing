@@ -16,8 +16,7 @@ class TrackHostoryCell: UICollectionViewCell {
     
     let dateLabel = UILabel()
     
-    let distanLabel = UILabel()
-    
+    let distanceLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,9 +29,9 @@ class TrackHostoryCell: UICollectionViewCell {
     
     func configureCell(pet: Pet, trackInfo: TrackInfo) {
         
-        contentView.backgroundColor = .Blue1
+        contentView.backgroundColor = .Blue2
         
-        let vStack = UIStackView(arrangedSubviews: [dateLabel, distanLabel, petNameLabel])
+        let vStack = UIStackView(arrangedSubviews: [dateLabel, distanceLabel, petNameLabel])
         
         vStack.axis = .vertical
         vStack.distribution = .fillEqually
@@ -47,17 +46,20 @@ class TrackHostoryCell: UICollectionViewCell {
         
         contentView.layer.cornerRadius = 5
 
-        dateLabel.textColor = .white
+        dateLabel.textColor = .DarkBlue
         dateLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         dateLabel.textAlignment = .center
         
-        distanLabel.textColor = .white
-        distanLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
-        distanLabel.textAlignment = .center
+        distanceLabel.textColor = .DarkBlue
+        distanceLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        distanceLabel.textAlignment = .center
 
-        petNameLabel.textColor = .Orange2
-        petNameLabel.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
+        petNameLabel.textColor = .white
+        petNameLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         petNameLabel.textAlignment = .center
+        petNameLabel.backgroundColor = .Blue1
+        petNameLabel.layer.cornerRadius = 5
+        petNameLabel.layer.masksToBounds = true
         
         petNameLabel.text = pet.name
         
@@ -71,7 +73,7 @@ class TrackHostoryCell: UICollectionViewCell {
         
         let distance = computeDistance(from: trackInfo.track.map { $0.transferToCoordinate2D() })
         
-        distanLabel.text = "\(String(format: "%.2f", distance / 1000)) km"
+        distanceLabel.text = "\(String(format: "%.2f", distance / 1000)) km"
     }
     
     func computeDistance(from points: [CLLocationCoordinate2D]) -> Double {

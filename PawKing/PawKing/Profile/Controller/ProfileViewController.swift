@@ -486,20 +486,6 @@ extension ProfileViewController: UICollectionViewDataSource {
                 for userPet in userPets where userPet.id == trackInfo.petId {
                     
                     trackCell.configureCell(pet: userPet, trackInfo: trackInfo)
-                    
-//                    let imageUrl = URL(string: userPet.petImage)
-//
-//                    trackCell.petImageView.kf.setImage(with: imageUrl)
-//
-//                    trackCell.petNameLabel.text = userPet.name
-//
-//                    let dateFormatter = DateFormatter()
-//
-//                    dateFormatter.dateFormat = "yyyy/MM/dd"
-//
-//                    let trackDate = dateFormatter.string(from: trackInfo.startTime.dateValue())
-//
-//                    trackCell.dateLabel.text = trackDate
                 }
                 return trackCell
             }

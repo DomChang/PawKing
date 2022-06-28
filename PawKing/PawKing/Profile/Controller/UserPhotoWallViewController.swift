@@ -150,7 +150,6 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
     
     func didTapLeftButton() {
         
-      
     }
     
     func didTapRightButton() {

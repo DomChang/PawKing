@@ -51,15 +51,15 @@ class ContentButtonCell: UICollectionViewCell {
         
         photoContentButton.setTitle("Photo", for: .normal)
         photoContentButton.setTitleColor(.Gray1, for: .normal)
-        photoContentButton.setTitleColor(.Orange1, for: .selected)
+        photoContentButton.setTitleColor(.white, for: .selected)
         photoContentButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
         trackContentButton.setTitle("Track", for: .normal)
         trackContentButton.setTitleColor(.Gray1, for: .normal)
-        trackContentButton.setTitleColor(.Orange1, for: .selected)
+        trackContentButton.setTitleColor(.white, for: .selected)
         trackContentButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
-        bottomView.backgroundColor = .Orange2
+        bottomView.backgroundColor = .Orange1
     }
     
     private func layout() {
