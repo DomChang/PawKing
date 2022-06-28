@@ -98,6 +98,7 @@ class PhotoPostViewController: UIViewController {
     func style() {
         
         navigationController?.navigationBar.tintColor = .Orange1
+        navigationController?.navigationBar.topItem?.backButtonTitle = ""
         
         navigationItem.title = "Post"
         
@@ -105,9 +106,7 @@ class PhotoPostViewController: UIViewController {
         
         tableView.backgroundColor = .white
         tableView.separatorStyle = .none
-        
-        sendButtonDisable()
-        
+    
         inputSeperatorLine.backgroundColor = .lightGray
         
         let imageUrl = URL(string: user.userImage)
@@ -144,7 +143,7 @@ class PhotoPostViewController: UIViewController {
                              leading: inputBackView.leadingAnchor,
                              width: 40,
                              height: 40,
-                             padding: UIEdgeInsets(top: 10, left: 10, bottom: 0, right: 0))
+                             padding: UIEdgeInsets(top: 10, left: 16, bottom: 0, right: 0))
         
         userInputTextView.anchor(top: inputBackView.topAnchor,
                                  leading: userImageView.trailingAnchor,
@@ -152,8 +151,8 @@ class PhotoPostViewController: UIViewController {
                                   trailing: sendButton.leadingAnchor,
                                  padding: UIEdgeInsets(top: 8, left: 10, bottom: 10, right: 10))
         
-        sendButton.anchor(bottom: inputBackView.bottomAnchor,
-                          trailing: inputBackView.trailingAnchor,
+        sendButton.anchor(trailing: inputBackView.trailingAnchor,
+                          centerY: inputBackView.centerYAnchor,
                           width: 60,
                           height: 35,
                           padding: UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 20))

@@ -34,6 +34,8 @@ private enum PKColor: String {
     case Gray1
     
     case LightBlack
+    
+    case LightGray
 }
 
 extension UIColor {
@@ -61,6 +63,8 @@ extension UIColor {
     static let Gray1 = PKColor(.Gray1)
     
     static let LightBlack = PKColor(.LightBlack)
+    
+    static let LightGray = PKColor(.LightGray)
 
     // swiftlint:enable identifier_name
     

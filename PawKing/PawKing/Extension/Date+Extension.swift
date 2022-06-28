@@ -51,4 +51,31 @@ extension Date {
             return dateFormatter.string(from: self)
         }
     }
+    
+    func displayTimeInChatStyle() -> String {
+        
+        let secondsAgo = Int(Date().timeIntervalSince(self))
+        
+        let dateFormatter = DateFormatter()
+        
+        let minute = 60
+        let hour = 60 * minute
+        let day = 24 * hour
+        let week = 7 * day
+        let year = 48 * week
+        
+        if secondsAgo < day {
+            
+            dateFormatter.dateFormat = "HH:mm"
+            
+        } else if secondsAgo / day < year {
+            
+            dateFormatter.dateFormat = "MMM dd・HH:mm"
+            
+        } else {
+            
+            dateFormatter.dateFormat = "MMM dd, yyyy・HH:mm"
+        }
+        return dateFormatter.string(from: self)
+    }
 }

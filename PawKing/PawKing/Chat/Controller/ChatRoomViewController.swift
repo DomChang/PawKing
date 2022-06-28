@@ -18,7 +18,7 @@ class ChatRoomViewController: UIViewController {
     private var chatRoooms: [Conversation]? {
         didSet {
             DispatchQueue.main.async {
-                self.tableView.reloadData()
+                self.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
             }
         }
     }
@@ -40,9 +40,16 @@ class ChatRoomViewController: UIViewController {
         layout()
     }
     
-    private func setup() {
+    override func viewWillAppear(_ animated: Bool) {
         
         getChatRooms()
+    }
+    
+    private func setup() {
+        
+        navigationItem.title = "Chatroom"
+        
+        tableView.separatorStyle = .none
         
         view.backgroundColor = .white
         
@@ -97,7 +104,8 @@ extension ChatRoomViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ChatRoomCell.identifier, for: indexPath) as? ChatRoomCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ChatRoomCell.identifier,
+                                                       for: indexPath) as? ChatRoomCell
         else {
             fatalError("Cannot dequeue ChatRoomCell")
         }

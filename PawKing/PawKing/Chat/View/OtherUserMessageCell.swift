@@ -32,17 +32,25 @@ class OtherUserMessageCell: UITableViewCell {
     
     func styleObject() {
         
-        contentView.backgroundColor = UIColor(red: 204/255, green: 204/255, blue: 204/255, alpha: 1)
+        contentView.backgroundColor = .white
+        
+        otherUserImageView.contentMode = .scaleAspectFill
         
         otherUserTextView.isUserInteractionEnabled = false
-        otherUserTextView.font = UIFont.systemFont(ofSize: 15)
-        otherUserTextView.textColor = .black
-        otherUserTextView.backgroundColor = .white
+        otherUserTextView.font = UIFont.systemFont(ofSize: 18)
+        otherUserTextView.textColor = .LightBlack
+        otherUserTextView.backgroundColor = .LightGray
         otherUserTextView.isScrollEnabled = false
-        otherUserTextView.layer.cornerRadius = 5
+        otherUserTextView.layer.borderWidth = 0.2
+        otherUserTextView.layer.borderColor = UIColor.Blue1?.cgColor
+        otherUserTextView.layer.cornerRadius = 10
+        otherUserTextView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        
+        otherUserTextView.textContainerInset = UIEdgeInsets(top: 8, left: 5, bottom: 8, right: 5)
         
         timeLabel.font = UIFont.systemFont(ofSize: 10)
         timeLabel.textAlignment = .left
+        timeLabel.textColor = .Blue1
     }
     
     func layout() {
@@ -58,19 +66,22 @@ class OtherUserMessageCell: UITableViewCell {
         NSLayoutConstraint.activate([
             otherUserTextView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             otherUserTextView.leadingAnchor.constraint(equalTo: otherUserImageView.trailingAnchor, constant: 15),
-            otherUserTextView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -10),
+            otherUserTextView.bottomAnchor.constraint(lessThanOrEqualTo: timeLabel.topAnchor, constant: -3),
             otherUserTextView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -50),
             
-            timeLabel.bottomAnchor.constraint(equalTo: otherUserTextView.bottomAnchor),
-            timeLabel.heightAnchor.constraint(equalToConstant: 15),
-            timeLabel.leadingAnchor.constraint(equalTo: otherUserTextView.trailingAnchor, constant: 5),
-            timeLabel.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -10),
+            timeLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
+            timeLabel.leadingAnchor.constraint(equalTo: otherUserTextView.leadingAnchor),
+            timeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             
             otherUserImageView.centerYAnchor.constraint(equalTo: otherUserTextView.centerYAnchor),
             otherUserImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             otherUserImageView.heightAnchor.constraint(equalToConstant: 30),
             otherUserImageView.widthAnchor.constraint(equalToConstant: 30)
         ])
+        
+        contentView.layoutIfNeeded()
+        otherUserImageView.makeRound()
+        otherUserImageView.clipsToBounds = true
     }
     
     func configureCell(otherUser: User, message: Message) {
@@ -81,12 +92,6 @@ class OtherUserMessageCell: UITableViewCell {
         
         otherUserTextView.text = message.content
         
-        let dateFormatter = DateFormatter()
-        
-        dateFormatter.dateFormat = "hh:mm"
-        
-        let messageDate = dateFormatter.string(from: message.createdTime.dateValue())
-        
-        timeLabel.text = messageDate
+        timeLabel.text = message.createdTime.dateValue().displayTimeInChatStyle()
     }
 }

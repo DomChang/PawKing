@@ -18,11 +18,15 @@ class MessageViewController: UIViewController {
     
     private let tableView = UITableView()
     
-    private let userInputTextfield = UITextField()
+    private let userImageView = UIImageView()
+    
+    private let userInputTextView = InputTextView()
     
     private let sendButton = UIButton()
     
     private let inputBackView = UIView()
+    
+    private let inputSeperatorLine = UIView()
     
     var messages: [Message] = [] {
         didSet {
@@ -54,9 +58,21 @@ class MessageViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         
         getMessageHistory()
+        
+        tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        
+        tabBarController?.tabBar.isHidden = false
     }
     
     func setup() {
+        
+        navigationItem.title = "\(otherUser.name)"
+        
+        navigationController?.navigationBar.tintColor = .Orange1
+        navigationController?.navigationBar.topItem?.backButtonTitle = ""
         
         tableView.register(UserMessageCell.self, forCellReuseIdentifier: UserMessageCell.identifer)
         tableView.register(OtherUserMessageCell.self, forCellReuseIdentifier: OtherUserMessageCell.identifer)
@@ -66,66 +82,85 @@ class MessageViewController: UIViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 80
         
-        userInputTextfield.addTarget(self, action: #selector(textFieldDidChange(_:)),
-                                  for: .editingChanged)
+        userInputTextView.isScrollEnabled = false
+        userInputTextView.placeholder = "Aa"
+        userInputTextView.delegate = self
         
         sendButton.addTarget(self, action: #selector(didTapSendButton), for: .touchUpInside)
     }
     
     func style() {
         
-        view.backgroundColor = .gray
+        view.backgroundColor = .white
         
-        tableView.backgroundColor = UIColor(red: 204/255, green: 204/255, blue: 204/255, alpha: 1)
+        tableView.backgroundColor = .white
         tableView.separatorStyle = .none
         
-        sendButton.isEnabled = false
+        sendButtonDisable()
         
-        userInputTextfield.backgroundColor = .white
-        userInputTextfield.layer.cornerRadius = 3
-        userInputTextfield.layer.borderColor = UIColor(red: 204/255, green: 204/255, blue: 204/255, alpha: 1).cgColor
-        userInputTextfield.layer.borderWidth = 0.8
+        inputSeperatorLine.backgroundColor = .lightGray
         
-        sendButton.layer.cornerRadius = 3
-        sendButton.setTitle("發送", for: .normal)
-        sendButton.backgroundColor = .Orange1
+        let imageUrl = URL(string: user.userImage)
+        userImageView.kf.setImage(with: imageUrl)
+        userImageView.contentMode = .scaleAspectFill
         
-        inputBackView.layer.borderWidth = 0.8
-        inputBackView.layer.borderColor = UIColor(red: 204/255, green: 204/255, blue: 204/255, alpha: 1).cgColor
-        inputBackView.backgroundColor = UIColor(red: 250/255, green: 250/255, blue: 250/255, alpha: 1)
+        userInputTextView.backgroundColor = .white
+        userInputTextView.font = UIFont.systemFont(ofSize: 18)
+        
+        sendButton.setImage(UIImage(systemName: "paperplane.fill",
+                                    withConfiguration: UIImage.SymbolConfiguration(scale: .large)),
+                            for: .normal)
+        sendButton.setImage(UIImage(systemName: "paperplane",
+                                    withConfiguration: UIImage.SymbolConfiguration(scale: .large)),
+                            for: .disabled)
+        
+        inputBackView.backgroundColor = .white
     }
     
     func layout() {
         
         view.addSubview(tableView)
         view.addSubview(inputBackView)
-        view.addSubview(userInputTextfield)
-        view.addSubview(sendButton)
+        view.addSubview(inputSeperatorLine)
+        inputBackView.addSubview(userImageView)
+        inputBackView.addSubview(userInputTextView)
+        inputBackView.addSubview(sendButton)
         
         tableView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                          leading: view.leadingAnchor,
                          bottom: inputBackView.topAnchor,
                          trailing: view.trailingAnchor)
         
-        userInputTextfield.anchor(top: inputBackView.topAnchor,
-                                 leading: view.leadingAnchor,
+        userImageView.anchor(top: inputBackView.topAnchor,
+                             leading: inputBackView.leadingAnchor,
+                             width: 40,
+                             height: 40,
+                             padding: UIEdgeInsets(top: 10, left: 16, bottom: 0, right: 0))
+        
+        userInputTextView.anchor(top: inputBackView.topAnchor,
+                                 leading: userImageView.trailingAnchor,
                                  bottom: inputBackView.bottomAnchor,
-                                 trailing: view.trailingAnchor,
-                                 height: 36,
-                                 padding: UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 70))
+                                  trailing: sendButton.leadingAnchor,
+                                 padding: UIEdgeInsets(top: 8, left: 10, bottom: 10, right: 10))
+        
+        sendButton.anchor(trailing: inputBackView.trailingAnchor,
+                          centerY: inputBackView.centerYAnchor,
+                          width: 60,
+                          height: 35,
+                          padding: UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 20))
         
         inputBackView.anchor(leading: view.leadingAnchor,
                              bottom: view.safeAreaLayoutGuide.bottomAnchor,
-                             trailing: view.trailingAnchor,
-                             centerY: userInputTextfield.centerYAnchor,
-                             padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
+                             trailing: view.trailingAnchor)
         
-        sendButton.anchor(top: userInputTextfield.topAnchor,
-                          leading: userInputTextfield.trailingAnchor,
-                          bottom: userInputTextfield.bottomAnchor,
-                          trailing: view.trailingAnchor,
-                          centerY: userInputTextfield.centerYAnchor,
-                         padding: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 16))
+        inputSeperatorLine.anchor(leading: inputBackView.leadingAnchor,
+                                  bottom: inputBackView.topAnchor,
+                                  trailing: inputBackView.trailingAnchor,
+                                  height: 0.5)
+        
+        inputBackView.layoutIfNeeded()
+        userImageView.makeRound()
+        userImageView.clipsToBounds = true
     }
     
     func getMessageHistory() {
@@ -164,9 +199,9 @@ class MessageViewController: UIViewController {
     
     @objc func didTapSendButton() {
         
-        sendButton.isEnabled = false
+        sendButtonDisable()
         
-        guard let messageContent = userInputTextfield.text else { return }
+        guard let messageContent = userInputTextView.text else { return }
         
         let message = Message(otherUserId: otherUser.id,
                               senderId: user.id,
@@ -182,15 +217,16 @@ class MessageViewController: UIViewController {
                 
                 self?.messages.append(message)
                 
+                self?.userInputTextView.text = ""
+                
             case .failure(let error):
                 
                 print(error)
             }
         }
         
-        userInputTextfield.text = ""
-        
         DispatchQueue.main.async { [self] in
+            
             tableView.reloadData()
             
             scrollToBottom()
@@ -205,15 +241,16 @@ class MessageViewController: UIViewController {
 //        userInputTopAnchor.constant = -52
 //    }
 //
-    @objc func textFieldDidChange(_ textField: UITextField) {
+    func sendButtonEnable() {
         
-        guard textField == userInputTextfield else { return }
-
-        if textField.text != "" {
-            sendButton.isEnabled = true
-        } else {
-            sendButton.isEnabled = false
-        }
+        sendButton.isEnabled = true
+        sendButton.tintColor = .Orange1
+    }
+    
+    func sendButtonDisable() {
+        
+        sendButton.isEnabled = false
+        sendButton.tintColor = .Gray1
     }
     
     func scrollToBottom() {
@@ -268,3 +305,19 @@ extension MessageViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
 }
+
+extension MessageViewController: UITextViewDelegate {
+    
+    func textViewDidChange(_ textView: UITextView) {
+        guard textView == userInputTextView else { return }
+        
+        if textView.text.isEmpty {
+            
+            sendButtonDisable()
+        } else {
+            
+            sendButtonEnable()
+        }
+    }
+}
+
