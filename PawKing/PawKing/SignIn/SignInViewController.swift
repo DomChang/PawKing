@@ -10,9 +10,20 @@ import AuthenticationServices
 import CryptoKit
 import FirebaseAuth
 
+protocol SignInViewDelegate {
+    
+    func showNewUserConfigure()
+    
+    func signInExistUser()
+}
+
 class SignInViewController: UIViewController {
     
+    var delegate: SignInViewDelegate?
+    
     let appleButton = ASAuthorizationAppleIDButton(type: .continue, style: .black)
+    
+    let userManager = UserManager.shared
     
     fileprivate var currentNonce: String?
 
@@ -136,9 +147,51 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
           print(error.localizedDescription)
           return
         }
-        // User is signed in to Firebase with Apple.
-        // ...
-          self.dismiss(animated: true)
+        
+          guard let uid = authResult?.user.uid else { return }
+          
+          self.userManager.checkUserExist(uid: uid) { [weak self] isExist in
+
+              if isExist {
+                  
+                  self?.delegate?.signInExistUser()
+                  
+                  self?.dismiss(animated: true)
+
+              } else {
+                  
+                  guard let userName = appleIDCredential.fullName?.givenName else { return }
+                  
+                  let user = User(id: uid,
+                                  name: userName,
+                                  petsId: [],
+                                  currentPetId: "",
+                                  userImage: "",
+                                  description: "",
+                                  friendPetsId: [],
+                                  friends: [],
+                                  recieveFriendRequest: [],
+                                  sendRequestsId: [])
+                  
+                  self?.userManager.setupUser(user: user) { [weak self] result in
+                      
+                      switch result {
+                          
+                      case .success:
+                          
+                          self?.dismiss(animated: true)
+                          
+                          self?.delegate?.showNewUserConfigure()
+                          
+                          UserManager.shared.currentUser = user
+                          
+                      case .failure(let error):
+                          
+                          print(error)
+                      }
+                  }
+              }
+          }
       }
     }
   }
@@ -147,5 +200,4 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
     // Handle error.
     print("Sign in with Apple errored: \(error)")
   }
-
 }

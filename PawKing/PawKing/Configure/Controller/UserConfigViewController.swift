@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import FirebaseAuth
+import SwiftUI
 
 class UserConfigViewController: UIViewController {
     
@@ -15,7 +17,7 @@ class UserConfigViewController: UIViewController {
     
     private let photoHelper = PKPhotoHelper()
     
-    private var userId: String?
+    private var userId: String
     
     private var userName: String?
     
@@ -23,10 +25,27 @@ class UserConfigViewController: UIViewController {
     
     private var userDescription: String?
     
+    private var user: User? {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    
     var userImage: UIImage? {
         didSet {
             tableView.reloadData()
         }
+    }
+    
+    init(uid: String) {
+        
+        self.userId = uid
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
@@ -39,7 +58,7 @@ class UserConfigViewController: UIViewController {
     
     func setup() {
         
-        navigationItem.title = "使用者資料"
+        navigationItem.title = "User Configuration"
         
         tableView.dataSource = self
         
@@ -67,6 +86,25 @@ class UserConfigViewController: UIViewController {
                          bottom: view.bottomAnchor,
                          trailing: view.trailingAnchor,
                          padding: UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0))
+    }
+    
+    func getUser() {
+        
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        userManager.fetchUserInfo(userId: userId) { result in
+            
+            switch result {
+                
+            case .success(let user):
+                
+                self.user = user
+                
+            case .failure(let error):
+                
+                print(error)
+            }
+        }
     }
     
     func showPetConfigVC(user: User) {
@@ -98,6 +136,11 @@ extension UserConfigViewController: UITableViewDataSource, UITableViewDelegate {
             cell.photoButton.setImage(userImage, for: .normal)
         }
         
+        if let user = user {
+            
+            cell.userNameTextfield.text = user.name
+        }
+        
         cell.delegate = self
         
         return cell
@@ -113,23 +156,26 @@ extension UserConfigViewController: UserConfigCellDelegate {
     func didTapNext(from cell: UserConfigCell) {
         
         guard let userName = cell.userNameTextfield.text,
-              let image = cell.photoButton.image(for: .normal)
+              let image = cell.photoButton.image(for: .normal),
+              var user = user
         else {
             return
         }
-
-        var user = User(id: "",
-                        name: userName,
-                        petsId: [],
-                        currentPetId: "",
-                        userImage: "",
-                        description: cell.descriptionTextView.text,
-                        friendPetsId: [],
-                        friends: [],
-                        recieveFriendRequest: [],
-                        sendRequestsId: [])
         
-        userManager.setupUser(user: &user) { [weak self] result in
+        user.name = userName
+        user.description = cell.descriptionTextView.text
+//        let user = User(id: userId,
+//                        name: userName,
+//                        petsId: [],
+//                        currentPetId: "",
+//                        userImage: "",
+//                        description: ,
+//                        friendPetsId: [],
+//                        friends: [],
+//                        recieveFriendRequest: [],
+//                        sendRequestsId: [])
+        
+        userManager.setupUser(user: user) { [weak self] result in
             
             switch result {
                 
@@ -144,6 +190,10 @@ extension UserConfigViewController: UserConfigCellDelegate {
                     case .success:
                         
                         self?.showPetConfigVC(user: user)
+                        
+                        guard let tabBarVC = self?.tabBarController as? TabBarViewController else { return }
+                        
+                        tabBarVC.configureUserToTab(user: user)
                         
                     case .failure(let error):
                         

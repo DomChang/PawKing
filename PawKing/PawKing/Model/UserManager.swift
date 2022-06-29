@@ -11,9 +11,15 @@ import FirebaseStorage
 
 class UserManager {
     
-//    static var userId: String?
-    
     static let shared = UserManager()
+    
+    var currentUser: User? {
+        
+        didSet {
+            
+            NotificationCenter.default.post(name: .didSetCurrentUser, object: nil)
+        }
+    }
     
     lazy var dataBase = Firestore.firestore()
     
@@ -23,34 +29,31 @@ class UserManager {
             
         document.getDocument { snapshot, _ in
             
-            guard let _ = snapshot
+            guard snapshot?.data() != nil
             
             else {
-                
                     completion(false)
                     
                     return
             }
-            
             completion(true)
         }
     }
     
-    func setupUser(user: inout User, completion: @escaping (Result<String, Error>) -> Void) {
+    func setupUser(user: User, completion: @escaping (Result<String, Error>) -> Void) {
         
-        let document = dataBase.collection(FirebaseCollection.users.rawValue).document()
-        user.id = document.documentID
+        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(user.id)
         
         do {
             try document.setData(from: user)
             
             completion(.success(user.id))
             
-            let id = Data(user.id.utf8)
+//            let id = Data(user.id.utf8)
             
-            KeychainManager.shared.save(id,
-                                        service: KeychainService.userId.rawValue,
-                                        account: KeychainAccount.pawKing.rawValue)
+//            KeychainManager.shared.save(id,
+//                                        service: KeychainService.userId.rawValue,
+//                                        account: KeychainAccount.pawKing.rawValue)
             
         } catch {
             completion(.failure(FirebaseError.setupUserError))
@@ -63,6 +66,8 @@ class UserManager {
         
         do {
             try document.setData(from: user)
+            
+            self.currentUser = user
             
             completion(.success(()))
         } catch {

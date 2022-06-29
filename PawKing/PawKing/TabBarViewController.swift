@@ -91,7 +91,7 @@ private enum Tab {
 
 class TabBarViewController: UITabBarController {
     
-    private let userId = "7jkh07vJvBjgd9F5qkrB"
+//    private let userId = "7jkh07vJvBjgd9F5qkrB"
 
     private let tabs: [Tab] = [.map, .explore, .publish, .chat, .profile]
     
@@ -102,6 +102,11 @@ class TabBarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(didSetCurrentUser),
+                                               name: .didSetCurrentUser,
+                                               object: nil)
+        
         view.backgroundColor = .white
         
         tabBar.isHidden = true
@@ -110,32 +115,29 @@ class TabBarViewController: UITabBarController {
         
         delegate = self
         
-        userManager.fetchUserInfo(userId: userId) { [weak self] result in
+        tabBar.isHidden = false
+        
+        if var userId = Auth.auth().currentUser?.uid {
             
-            switch result {
-                
-            case .success(let user):
-                
-                self?.tabBar.isHidden = false
-                
-                self?.viewControllers = self?.tabs.map({ $0.controller(user: user) })
-                
-                self?.photoHelper.completionHandler = { image in
-                    
-                    let navPublishVC = UINavigationController(
-                        rootViewController: PublishViewController(user: user, image: image))
-                    
-                    navPublishVC.modalPresentationStyle = .fullScreen
-
-                    self?.present(navPublishVC, animated: true)
-                }
-                
-            case .failure(let error):
-                
-                print(error)
-            }
+//            userId = "6jRPSQJEw7NWuyZl2BCs"
+            getUser(userId: userId)
+            
+        } else {
+            
+            let user = User(id: "Guest",
+                            name: "Guest",
+                            petsId: [],
+                            currentPetId: "",
+                            userImage: "",
+                            description: "",
+                            friendPetsId: [],
+                            friends: [],
+                            recieveFriendRequest: [],
+                            sendRequestsId: [])
+            
+            configureUserToTab(user: user)
         }
-
+        
         let tabBarAppearance =  UITabBarAppearance()
         tabBarAppearance.configureWithDefaultBackground()
         tabBar.scrollEdgeAppearance = tabBarAppearance
@@ -151,35 +153,77 @@ class TabBarViewController: UITabBarController {
     
     override func viewDidAppear(_ animated: Bool) {
         
-        if Auth.auth().currentUser != nil {
-            
-            return
-        } else {
+        if Auth.auth().currentUser == nil {
             
             let signInVC = SignInViewController()
+            
+            signInVC.delegate = self
             
             present(signInVC, animated: true)
         }
     }
     
-//    func showConfigureUser(uid: String) {
-//
-//        userManager.checkUserExist(uid: uid) { [weak self] isExist in
-//
-//            if isExist {
-//
-//                return
-//
-//            } else {
-//
-//                let userConfigVC = UserConfigViewController()
-//
-//                self?.present(userConfigVC, animated: true)
-//
-//
-//            }
-//        }
-//    }
+    @objc func getUser(userId: String) {
+        
+        userManager.fetchUserInfo(userId: userId) { result in
+            
+            switch result {
+                
+            case .success(let user):
+                
+                UserManager.shared.currentUser = user
+                
+            case .failure(let error):
+                
+                print(error)
+            }
+        }
+    }
+    
+    @objc func didSetCurrentUser() {
+        
+        guard let user = userManager.currentUser else { return }
+        
+        configureUserToTab(user: user)
+    }
+    
+    func configureUserToTab(user: User) {
+        
+        tabBar.isHidden = false
+        
+        viewControllers = tabs.map({ $0.controller(user: user) })
+        
+        photoHelper.completionHandler = { [weak self] image in
+            
+            let navPublishVC = UINavigationController(
+                rootViewController: PublishViewController(user: user, image: image))
+            
+            navPublishVC.modalPresentationStyle = .fullScreen
+
+            self?.present(navPublishVC, animated: true)
+        }
+    }
+}
+
+extension TabBarViewController: SignInViewDelegate {
+    
+    func signInExistUser() {
+        
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        getUser(userId: uid)
+    }
+    
+    func showNewUserConfigure() {
+        
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let userConfigVC = UserConfigViewController(uid: uid)
+        
+        let navUserConfigVC = UINavigationController(rootViewController: userConfigVC)
+
+        present(navUserConfigVC, animated: true)
+    }
 }
 
 extension TabBarViewController: UITabBarControllerDelegate {

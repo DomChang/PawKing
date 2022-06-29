@@ -11,11 +11,11 @@ import Foundation
 struct User: Codable {
     
     var id: String
-    let name: String
+    var name: String
     let petsId: [String]
-    let currentPetId: String
+    var currentPetId: String
     var userImage: String
-    let description: String
+    var description: String
     let friendPetsId: [String]
     let friends: [String]
     let recieveFriendRequest: [String]

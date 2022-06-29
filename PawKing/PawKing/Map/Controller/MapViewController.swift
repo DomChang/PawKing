@@ -9,6 +9,7 @@ import UIKit
 import MapKit
 import CoreLocation
 import FirebaseFirestore
+import FirebaseAuth
 import Kingfisher
 
 // swiftlint:disable file_length
@@ -112,15 +113,18 @@ class MapViewController: UIViewController {
         style()
         layout()
         
-        setupUserSettingButton()
+//        setupUserSettingButton()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        fetchUserPets()
-        
         navigationController?.navigationBar.isHidden = true
+        
+        if Auth.auth().currentUser != nil {
+            
+            fetchUserPets()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -346,9 +350,9 @@ class MapViewController: UIViewController {
         
         choosePetImageView.layer.masksToBounds = true
         
-    if userCurrentPet != nil {
+    if let userCurrentPet = userCurrentPet {
             
-            let imageUrlSting = userCurrentPet!.petImage
+            let imageUrlSting = userCurrentPet.petImage
             
             choosePetImageView.kf.setImage(with: URL(string: imageUrlSting))
         } else {
@@ -471,13 +475,12 @@ class MapViewController: UIViewController {
         choosePetVC.delegate = self
         
         let navChoosePetVC = UINavigationController(rootViewController: choosePetVC)
-        
-        if #available(iOS 15.0, *) {
-            if let sheet = navChoosePetVC.sheetPresentationController {
-                sheet.detents = [.medium()]
-                sheet.preferredCornerRadius = 20
-            }
+
+        if let sheet = navChoosePetVC.sheetPresentationController {
+            sheet.detents = [.medium()]
+            sheet.preferredCornerRadius = 20
         }
+        
         present(navChoosePetVC, animated: true, completion: nil)
     }
     
@@ -489,8 +492,13 @@ class MapViewController: UIViewController {
         
         collectionView.isHidden = !strangerButton.isSelected
         
-        trackButton.isHidden = strangerButton.isSelected
-        choosePetImageView.isHidden = strangerButton.isSelected
+        if Auth.auth().currentUser != nil,
+            userCurrentPet != nil {
+            
+            trackButton.isHidden = strangerButton.isSelected
+            
+            choosePetImageView.isHidden = strangerButton.isSelected
+        }
         userLocationButton.isHidden = strangerButton.isSelected
         
         mapManager.fetchStrangerLocations(friend: friends) { [weak self] result in
@@ -642,25 +650,25 @@ class MapViewController: UIViewController {
 //        strangerButton.backgroundColor = .Gray
 //    }
     
-    func setupUserSettingButton() {
-        
-        userSetupButton.addTarget(self, action: #selector(showConfigure), for: .touchUpInside)
-        
-        view.addSubview(userSetupButton)
-        
-        userSetupButton.anchor(top: view.safeAreaLayoutGuide.topAnchor,
-                               leading: view.leadingAnchor,
-                               width: 60,
-                               height: 35,
-                               padding: UIEdgeInsets(top: 35, left: 35, bottom: 0, right: 0))
-    }
+//    func setupUserSettingButton() {
+//
+//        userSetupButton.addTarget(self, action: #selector(showConfigure), for: .touchUpInside)
+//
+//        view.addSubview(userSetupButton)
+//
+//        userSetupButton.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+//                               leading: view.leadingAnchor,
+//                               width: 60,
+//                               height: 35,
+//                               padding: UIEdgeInsets(top: 35, left: 35, bottom: 0, right: 0))
+//    }
     
-    @objc func showConfigure() {
-        
-        let userConfigVC = UserConfigViewController()
-        
-        navigationController?.pushViewController(userConfigVC, animated: true)
-    }
+//    @objc func showConfigure() {
+//
+//        let userConfigVC = UserConfigViewController()
+//
+//        navigationController?.pushViewController(userConfigVC, animated: true)
+//    }
 }
 
 extension MapViewController: ChoosePetViewDelegate {

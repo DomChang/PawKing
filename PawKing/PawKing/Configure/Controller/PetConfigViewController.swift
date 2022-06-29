@@ -165,7 +165,7 @@ extension PetConfigViewController: PetConfigCellDelegate {
                 
             case .success:
                 
-                self?.navigationController?.popToRootViewController(animated: true)
+                self?.dismiss(animated: true)
                 
             case .failure(let error):
                 
