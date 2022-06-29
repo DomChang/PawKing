@@ -16,6 +16,8 @@ class ChatRoomCell: UITableViewCell {
     private let recieverNameLabel = UILabel()
     
     private let recentMessageLabel = UILabel()
+    
+    private let messageTimeLabel = UILabel()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -38,13 +40,17 @@ class ChatRoomCell: UITableViewCell {
         
         recieverImgeView.contentMode = .scaleAspectFill
         
-        recieverNameLabel.textColor = .brown
+        recieverNameLabel.textColor = .DarkBlue
         recieverNameLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         recieverNameLabel.textAlignment = .left
         
-        recentMessageLabel.textColor = .black
+        recentMessageLabel.textColor = .Gray1
         recentMessageLabel.font = UIFont.systemFont(ofSize: 16)
         recentMessageLabel.textAlignment = .left
+        
+        messageTimeLabel.textColor = .Gray1
+        messageTimeLabel.font = UIFont.systemFont(ofSize: 14)
+        messageTimeLabel.textAlignment = .right
     }
     
     func layout() {
@@ -55,7 +61,15 @@ class ChatRoomCell: UITableViewCell {
         
         recieverNameLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
         
-        let vStack = UIStackView(arrangedSubviews: [recieverNameLabel, recentMessageLabel])
+        messageTimeLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        
+        let hMessageStack = UIStackView(arrangedSubviews: [recentMessageLabel, messageTimeLabel])
+        
+        hMessageStack.axis = .horizontal
+        hMessageStack.distribution = .fill
+        hMessageStack.spacing = 8
+        
+        let vStack = UIStackView(arrangedSubviews: [recieverNameLabel, hMessageStack])
         
         vStack.axis = .vertical
         vStack.distribution = .fillEqually
@@ -73,7 +87,7 @@ class ChatRoomCell: UITableViewCell {
                       leading: contentView.leadingAnchor,
                       bottom: contentView.bottomAnchor,
                       trailing: contentView.trailingAnchor,
-                      padding: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
+                      padding: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16))
         
         recieverImgeView.layoutIfNeeded()
         recieverImgeView.makeRound()
@@ -89,5 +103,7 @@ class ChatRoomCell: UITableViewCell {
         recieverNameLabel.text = user.name
         
         recentMessageLabel.text = recentMessage.content
+        
+        messageTimeLabel.text = recentMessage.createdTime.dateValue().displayTimeInSocialMediaStyle()
     }
 }

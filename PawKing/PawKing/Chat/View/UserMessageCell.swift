@@ -31,19 +31,23 @@ class UserMessageCell: UITableViewCell {
     
     private func styleObject() {
         
-        contentView.backgroundColor = UIColor(red: 204/255, green: 204/255, blue: 204/255, alpha: 1)
+        contentView.backgroundColor = .white
         
         userTextView.isUserInteractionEnabled = false
-        userTextView.font = UIFont.systemFont(ofSize: 15)
+        userTextView.font = UIFont.systemFont(ofSize: 18)
         userTextView.textColor = .white
-        userTextView.backgroundColor = UIColor(red: 63/255, green: 58/255, blue: 58/255, alpha: 1)
+        userTextView.backgroundColor = .DarkBlue
         userTextView.isScrollEnabled = false
-        userTextView.layer.borderWidth = 0.8
-        userTextView.layer.borderColor = UIColor(red: 204/255, green: 204/255, blue: 204/255, alpha: 1).cgColor
-        userTextView.layer.cornerRadius = 5
+        userTextView.layer.borderWidth = 0.2
+        userTextView.layer.borderColor = UIColor.LightBlack?.cgColor
+        userTextView.layer.cornerRadius = 10
+        userTextView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        
+        userTextView.textContainerInset = UIEdgeInsets(top: 8, left: 5, bottom: 8, right: 5)
         
         timeLabel.font = UIFont.systemFont(ofSize: 10)
         timeLabel.textAlignment = .right
+        timeLabel.textColor = .Blue1
     }
     
     private func layout() {
@@ -57,13 +61,12 @@ class UserMessageCell: UITableViewCell {
         NSLayoutConstraint.activate([
             userTextView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             userTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            userTextView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -10),
+            userTextView.bottomAnchor.constraint(lessThanOrEqualTo: timeLabel.topAnchor, constant: -3),
             userTextView.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor, constant: 50),
             
-            timeLabel.bottomAnchor.constraint(equalTo: userTextView.bottomAnchor),
-            timeLabel.heightAnchor.constraint(equalToConstant: 15),
-            timeLabel.trailingAnchor.constraint(equalTo: userTextView.leadingAnchor, constant: -5),
-            timeLabel.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor, constant: 10)
+            timeLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
+            timeLabel.trailingAnchor.constraint(equalTo: userTextView.trailingAnchor),
+            timeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
         ])
     }
     
@@ -71,12 +74,6 @@ class UserMessageCell: UITableViewCell {
         
         userTextView.text = message.content
         
-        let dateFormatter = DateFormatter()
-        
-        dateFormatter.dateFormat = "hh:mm"
-        
-        let messageDate = dateFormatter.string(from: message.createdTime.dateValue())
-        
-        timeLabel.text = messageDate
+        timeLabel.text = message.createdTime.dateValue().displayTimeInChatStyle()
     }
 }

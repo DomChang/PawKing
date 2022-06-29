@@ -17,7 +17,6 @@
 		B63484E5285E1E5300DB7CE7 /* ChoosePetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484E4285E1E5300DB7CE7 /* ChoosePetViewController.swift */; };
 		B63484E7285E36F700DB7CE7 /* ChoosePetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484E6285E36F700DB7CE7 /* ChoosePetTableViewCell.swift */; };
 		B63484ED285EEE8800DB7CE7 /* PhotoItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484EC285EEE8800DB7CE7 /* PhotoItemCell.swift */; };
-		B66A15B72864035100DF2663 /* ModeChangeHeaderReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15B62864035000DF2663 /* ModeChangeHeaderReusableView.swift */; };
 		B66A15B92864606700DF2663 /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15B82864606700DF2663 /* ResultViewController.swift */; };
 		B66A15BB28648B4900DF2663 /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15BA28648B4900DF2663 /* SearchResultCell.swift */; };
 		B66A15C228658DF500DF2663 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15C128658DF500DF2663 /* Message.swift */; };
@@ -29,7 +28,6 @@
 		B66A15CE2866AE5400DF2663 /* UserPhotoWallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15CD2866AE5400DF2663 /* UserPhotoWallViewController.swift */; };
 		B66A15D32867421900DF2663 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15D22867421800DF2663 /* UIImageView+Extension.swift */; };
 		B66A15D52867500C00DF2663 /* UserAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15D42867500C00DF2663 /* UserAnnotationView.swift */; };
-		B66A15D72868072E00DF2663 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15D62868072E00DF2663 /* CALayer+Extension.swift */; };
 		B698DD9D285881FB0009077E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DD9C285881FB0009077E /* AppDelegate.swift */; };
 		B698DD9F285881FB0009077E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DD9E285881FB0009077E /* SceneDelegate.swift */; };
 		B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDA0285881FB0009077E /* TabBarViewController.swift */; };
@@ -46,6 +44,9 @@
 		B698DDC22858CE9D0009077E /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDC12858CE9D0009077E /* UIView+Extension.swift */; };
 		B6A91D692868372B0049253A /* NoStrangerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D682868372B0049253A /* NoStrangerCell.swift */; };
 		B6A91D6B2868909F0049253A /* PetItemBackReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D6A2868909F0049253A /* PetItemBackReusableView.swift */; };
+		B6A91D6D28697CCC0049253A /* ProfileInfoReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D6C28697CCC0049253A /* ProfileInfoReusableView.swift */; };
+		B6A91D72286ACFDE0049253A /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D71286ACFDE0049253A /* Date+Extension.swift */; };
+		B6A91D74286AE9070049253A /* InputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D73286AE9070049253A /* InputTextView.swift */; };
 		B6ABE8E0285A06E300B1A977 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8DF285A06E300B1A977 /* UIColor+Extension.swift */; };
 		B6ABE8E2285A0B7400B1A977 /* MapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8E1285A0B7400B1A977 /* MapManager.swift */; };
 		B6ABE8E7285A19C400B1A977 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8E6285A19C400B1A977 /* FirebaseError.swift */; };
@@ -86,7 +87,6 @@
 		B63484E4285E1E5300DB7CE7 /* ChoosePetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoosePetViewController.swift; sourceTree = "<group>"; };
 		B63484E6285E36F700DB7CE7 /* ChoosePetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoosePetTableViewCell.swift; sourceTree = "<group>"; };
 		B63484EC285EEE8800DB7CE7 /* PhotoItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoItemCell.swift; sourceTree = "<group>"; };
-		B66A15B62864035000DF2663 /* ModeChangeHeaderReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeChangeHeaderReusableView.swift; sourceTree = "<group>"; };
 		B66A15B82864606700DF2663 /* ResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
 		B66A15BA28648B4900DF2663 /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
 		B66A15C128658DF500DF2663 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -98,7 +98,6 @@
 		B66A15CD2866AE5400DF2663 /* UserPhotoWallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPhotoWallViewController.swift; sourceTree = "<group>"; };
 		B66A15D22867421800DF2663 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		B66A15D42867500C00DF2663 /* UserAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnnotationView.swift; sourceTree = "<group>"; };
-		B66A15D62868072E00DF2663 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
 		B698DD99285881FB0009077E /* PawKing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PawKing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B698DD9C285881FB0009077E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B698DD9E285881FB0009077E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -117,6 +116,9 @@
 		B698DDC12858CE9D0009077E /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		B6A91D682868372B0049253A /* NoStrangerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoStrangerCell.swift; sourceTree = "<group>"; };
 		B6A91D6A2868909F0049253A /* PetItemBackReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetItemBackReusableView.swift; sourceTree = "<group>"; };
+		B6A91D6C28697CCC0049253A /* ProfileInfoReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoReusableView.swift; sourceTree = "<group>"; };
+		B6A91D71286ACFDE0049253A /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
+		B6A91D73286AE9070049253A /* InputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextView.swift; sourceTree = "<group>"; };
 		B6ABE8DF285A06E300B1A977 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		B6ABE8E1285A0B7400B1A977 /* MapManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapManager.swift; sourceTree = "<group>"; };
 		B6ABE8E6285A19C400B1A977 /* FirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseError.swift; sourceTree = "<group>"; };
@@ -221,6 +223,7 @@
 			isa = PBXGroup;
 			children = (
 				B6E86AA1285F0AEE002B8C9A /* ProfileInfoCell.swift */,
+				B6A91D6C28697CCC0049253A /* ProfileInfoReusableView.swift */,
 				B6E86AA9285F7DAA002B8C9A /* PetItemCell.swift */,
 				B6A91D6A2868909F0049253A /* PetItemBackReusableView.swift */,
 				B6E86AA3285F0B6B002B8C9A /* ContentButtonCell.swift */,
@@ -261,7 +264,6 @@
 		B66A15B42864031C00DF2663 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				B66A15B62864035000DF2663 /* ModeChangeHeaderReusableView.swift */,
 				B66A15BA28648B4900DF2663 /* SearchResultCell.swift */,
 			);
 			path = View;
@@ -337,6 +339,7 @@
 			children = (
 				B698DD9C285881FB0009077E /* AppDelegate.swift */,
 				B698DD9E285881FB0009077E /* SceneDelegate.swift */,
+				B6A91D6E286A9AB90049253A /* Resource */,
 				B698DDBE2858B98A0009077E /* Extension */,
 				B6ABE8E3285A0B8500B1A977 /* Model */,
 				B6D4F6AC285D7EB70045DDB2 /* Configure */,
@@ -363,9 +366,17 @@
 				B6ABE8DF285A06E300B1A977 /* UIColor+Extension.swift */,
 				B6ABE8EA285AE41500B1A977 /* LocationRelated+Extension.swift */,
 				B66A15D22867421800DF2663 /* UIImageView+Extension.swift */,
-				B66A15D62868072E00DF2663 /* CALayer+Extension.swift */,
+				B6A91D71286ACFDE0049253A /* Date+Extension.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		B6A91D6E286A9AB90049253A /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				B6A91D73286AE9070049253A /* InputTextView.swift */,
+			);
+			path = Resource;
 			sourceTree = "<group>";
 		};
 		B6ABE8E3285A0B8500B1A977 /* Model */ = {
@@ -611,6 +622,7 @@
 				B6E86AA6285F0B85002B8C9A /* TrackHostoryCell.swift in Sources */,
 				B6ABE8E7285A19C400B1A977 /* FirebaseError.swift in Sources */,
 				B6BF961C28630C4E003627C1 /* CommentCell.swift in Sources */,
+				B6A91D74286AE9070049253A /* InputTextView.swift in Sources */,
 				B6E86AAC2860309F002B8C9A /* EditUserViewController.swift in Sources */,
 				B63484DF285DC62D00DB7CE7 /* PetConfigViewController.swift in Sources */,
 				B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */,
@@ -620,6 +632,7 @@
 				B6D4F69E285C35F80045DDB2 /* UserManager.swift in Sources */,
 				B66A15CA2865EC4300DF2663 /* UserMessageCell.swift in Sources */,
 				B63484E3285DC8D000DB7CE7 /* PetManager.swift in Sources */,
+				B6A91D6D28697CCC0049253A /* ProfileInfoReusableView.swift in Sources */,
 				B698DD9D285881FB0009077E /* AppDelegate.swift in Sources */,
 				B66A15C82865E82D00DF2663 /* MessageViewController.swift in Sources */,
 				B63484E1285DC70D00DB7CE7 /* PetConfigCell.swift in Sources */,
@@ -641,13 +654,13 @@
 				B6BF96142861EABC003627C1 /* TrackHistoryViewController.swift in Sources */,
 				B63484DD285DA5B300DB7CE7 /* KeychainManager.swift in Sources */,
 				B6ABE8F4285B87AB00B1A977 /* UserAnnotation.swift in Sources */,
-				B66A15B72864035100DF2663 /* ModeChangeHeaderReusableView.swift in Sources */,
 				B698DDC02858B99F0009077E /* UIImage+Extension.swift in Sources */,
 				B6A91D6B2868909F0049253A /* PetItemBackReusableView.swift in Sources */,
 				B698DDBB2858B8BA0009077E /* ChatRoomViewController.swift in Sources */,
 				B698DDB72858B8850009077E /* ExploreViewController.swift in Sources */,
 				B6D4F6AB285CDB150045DDB2 /* PKPhotoHelper.swift in Sources */,
 				B698DD9F285881FB0009077E /* SceneDelegate.swift in Sources */,
+				B6A91D72286ACFDE0049253A /* Date+Extension.swift in Sources */,
 				B6BF961A2862A9CF003627C1 /* PhotoPostCell.swift in Sources */,
 				B698DDBD2858B8CC0009077E /* ProfileViewController.swift in Sources */,
 				B698DDC22858CE9D0009077E /* UIView+Extension.swift in Sources */,
@@ -655,7 +668,6 @@
 				B6BF96182862A467003627C1 /* PhotoPostViewController.swift in Sources */,
 				B698DDB52858B8540009077E /* MapViewController.swift in Sources */,
 				B6D4F6A3285C526A0045DDB2 /* FirebaseCollection.swift in Sources */,
-				B66A15D72868072E00DF2663 /* CALayer+Extension.swift in Sources */,
 				B6D4F6A7285C5F9B0045DDB2 /* StrangerCardViewCell.swift in Sources */,
 				B6E86AAA285F7DAA002B8C9A /* PetItemCell.swift in Sources */,
 				B66A15D52867500C00DF2663 /* UserAnnotationView.swift in Sources */,

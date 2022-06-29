@@ -22,19 +22,20 @@ class UserPhotoWallViewController: UIViewController {
     
     var otherUserPets: [Pet]? {
         didSet {
-            collectionView.reloadData()
+            collectionView.reloadSections(IndexSet(integer: 1))
         }
     }
     
     var posts: [Post]? {
         didSet {
-            collectionView.reloadData()
+            collectionView.reloadSections(IndexSet(integer: 2))
+            collectionView.reloadItems(at: [IndexPath(item: 0, section: 0)])
         }
     }
     
     var displayPosts: [Post]? {
         didSet {
-            collectionView.reloadData()
+            collectionView.reloadSections(IndexSet(integer: 2))
         }
     }
     
@@ -72,6 +73,9 @@ class UserPhotoWallViewController: UIViewController {
         
         navigationItem.title = "\(otherUser.name)"
         
+        navigationController?.navigationBar.tintColor = .Orange1
+        navigationController?.navigationBar.topItem?.backButtonTitle = ""
+        
         collectionView.dataSource = self
         
         collectionView.delegate = self
@@ -86,8 +90,8 @@ class UserPhotoWallViewController: UIViewController {
         collectionView.register(PetItemCell.self,
                                 forCellWithReuseIdentifier: PetItemCell.identifier)
         
-        collectionView.collectionViewLayout.register(PetItemBackReusableView.self,
-                                                     forDecorationViewOfKind: "\(PetItemBackReusableView.self)")
+//        collectionView.collectionViewLayout.register(PetItemBackReusableView.self,
+//                                                     forDecorationViewOfKind: "\(PetItemBackReusableView.self)")
         
         collectionView.register(PhotoItemCell.self,
                                 forCellWithReuseIdentifier: PhotoItemCell.identifier)
@@ -146,7 +150,6 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
     
     func didTapLeftButton() {
         
-      
     }
     
     func didTapRightButton() {
@@ -200,13 +203,13 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
                 let petSection = NSCollectionLayoutSection(group: petGroup)
                 
                 petSection.orthogonalScrollingBehavior = .continuous
-                petSection.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20)
+                petSection.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 20, trailing: 20)
                 
                 petSection.interGroupSpacing = 10
                 
-                let petItemBackView = NSCollectionLayoutDecorationItem.background(elementKind: "\(PetItemBackReusableView.self)")
-                
-                petSection.decorationItems = [petItemBackView]
+//                let petItemBackView = NSCollectionLayoutDecorationItem.background(elementKind: "\(PetItemBackReusableView.self)")
+//
+//                petSection.decorationItems = [petItemBackView]
                 
                 return petSection
                 
@@ -216,7 +219,7 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
                                                           heightDimension: .fractionalHeight(1))
                 let postItem = NSCollectionLayoutItem(layoutSize: postItemSize)
                 
-                postItem.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 1, bottom: 10, trailing: 10)
+                postItem.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 1, bottom: 2, trailing: 1)
                 
                 let postGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                            heightDimension: .fractionalWidth(1 / 3))
@@ -224,7 +227,7 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
                 
                 let postSection = NSCollectionLayoutSection(group: postGroup)
                 
-                postSection.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+                postSection.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 2, bottom: 0, trailing: 2)
                 
                 return postSection
 
@@ -331,8 +334,17 @@ extension UserPhotoWallViewController: UICollectionViewDelegate {
         if indexPath.section == UserPhotoWallSections.choosePet.rawValue {
             
             guard let posts = posts,
-                    let userPets = otherUserPets else {
+                    let userPets = otherUserPets,
+                    let cell = collectionView.cellForItem(at: indexPath) as? PetItemCell else {
                 return
+            }
+            
+            collectionView.visibleCells.forEach { cell in
+                guard let petCell = cell as? PetItemCell else { return }
+                
+                petCell.imageView.layer.borderWidth = 0
+                
+                petCell.backBorderView.isHidden = true
             }
             
             if selectedPetIndex != indexPath.item {
@@ -341,7 +353,14 @@ extension UserPhotoWallViewController: UICollectionViewDelegate {
                 
                 selectedPetIndex = indexPath.item
                 
+                cell.imageView.layer.borderWidth = 2
+                cell.imageView.layer.borderColor = UIColor.white.cgColor
+                cell.backBorderView.isHidden = false
+                
             } else {
+                
+                cell.imageView.layer.borderWidth = 0
+                cell.backBorderView.isHidden = true
 
                 displayPosts = posts
                 

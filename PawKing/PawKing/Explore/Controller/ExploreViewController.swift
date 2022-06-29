@@ -26,9 +26,15 @@ class ExploreViewController: UIViewController {
     
     private var displayPosts: [Post]? {
         didSet {
-            collectionView.reloadData()
+            collectionView.reloadSections(IndexSet(integer: 0))
         }
     }
+    
+    let allModeButton = UIButton()
+    
+    let friendModeButton = UIButton()
+    
+    let bottomView = UIView()
     
     init(user: User) {
         
@@ -53,39 +59,79 @@ class ExploreViewController: UIViewController {
         getAllPosts()
     }
     
+    override func viewDidLayoutSubviews() {
+        
+        if friendModeButton.isSelected {
+            
+            bottomView.center.x = friendModeButton.center.x
+            
+        } else {
+            
+            bottomView.center.x = allModeButton.center.x
+        }
+    }
+    
     private func setup() {
         
         view.backgroundColor = .white
         
         navigationItem.title = "Explore"
-        
-        navigationController?.navigationBar.prefersLargeTitles = true
-        
-        navigationItem.largeTitleDisplayMode = .automatic
-        
+
         navigationItem.searchController = searchController
         
         collectionView.dataSource = self
         collectionView.delegate = self
         
-        collectionView.register(ModeChangeHeaderReusableView.self,
-                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: ModeChangeHeaderReusableView.identifier)
-        
         collectionView.register(PhotoItemCell.self, forCellWithReuseIdentifier: PhotoItemCell.identifier)
         
         setSearchController()
+        
+        allModeButton.addTarget(self, action: #selector(didTapAll), for: .touchUpInside)
+        friendModeButton.addTarget(self, action: #selector(didTapFriend), for: .touchUpInside)
     }
     
     private func style() {
         
+        allModeButton.setTitle("All", for: .normal)
+        allModeButton.setTitleColor(.Gray1, for: .normal)
+        allModeButton.setTitleColor(.white, for: .selected)
+        allModeButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        
+        friendModeButton.setTitle("Friends", for: .normal)
+        friendModeButton.setTitleColor(.Gray1, for: .normal)
+        friendModeButton.setTitleColor(.white, for: .selected)
+        friendModeButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        
+        bottomView.backgroundColor = .Orange1
     }
     
     private func layout() {
         
         view.addSubview(collectionView)
         
-        collectionView.fillSafeLayout()
+        let hStackView = UIStackView(arrangedSubviews: [allModeButton, friendModeButton])
+        hStackView.distribution = .fillEqually
+        
+        view.addSubview(bottomView)
+        view.addSubview(hStackView)
+        
+        hStackView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                          leading: view.leadingAnchor,
+                          trailing: view.trailingAnchor,
+                          height: 50)
+        
+        bottomView.anchor(centerY: allModeButton.centerYAnchor,
+                          centerX: allModeButton.centerXAnchor,
+                          width: 150,
+                          height: 40)
+        
+        collectionView.anchor(top: hStackView.bottomAnchor,
+                              leading: view.leadingAnchor,
+                              bottom: view.bottomAnchor,
+                              trailing: view.trailingAnchor,
+                              padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0))
+        
+        bottomView.layer.cornerRadius = 5
     }
     
     private func getAllPosts() {
@@ -98,7 +144,14 @@ class ExploreViewController: UIViewController {
                 
                 self?.allPosts = posts
                 
-                self?.displayPosts = posts
+                if self?.friendModeButton.isSelected ?? true {
+
+                    self?.didTapFriend()
+
+                } else {
+                    
+                    self?.didTapAll()
+                }
                 
                 self?.getFriendPosts()
                 
@@ -136,47 +189,39 @@ class ExploreViewController: UIViewController {
         
         self.friendPosts = friendPosts
     }
-}
-
-extension ExploreViewController: ModeChangeHeaderDelegate {
     
-    func didTapAll() {
+    @objc func didTapAll() {
         
         displayPosts = allPosts
+        
+        allModeButton.isSelected = true
+        friendModeButton.isSelected = false
+        
+        UIView.animate(withDuration: 0.1, animations: {
+            
+            self.bottomView.center.x = self.allModeButton.center.x
+        })
     }
     
-    func didTapFriend() {
+    @objc func didTapFriend() {
         
         displayPosts = friendPosts
+        
+        allModeButton.isSelected = false
+        friendModeButton.isSelected = true
+        
+        UIView.animate(withDuration: 0.1, animations: {
+            
+            self.bottomView.center.x = self.friendModeButton.center.x
+        })
     }
-}
-
-extension ExploreViewController: UISearchResultsUpdating {
-   func updateSearchResults(for searchController: UISearchController) {
-    // TO-DO: Implement here
-  }
 }
 
 extension ExploreViewController: UICollectionViewDataSource {
     
-    func collectionView(_ collectionView: UICollectionView,
-                        viewForSupplementaryElementOfKind kind: String,
-                        at indexPath: IndexPath) -> UICollectionReusableView {
-        
-        guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
-                                                                         withReuseIdentifier: ModeChangeHeaderReusableView.identifier,
-                                                                               for: indexPath) as? ModeChangeHeaderReusableView else {
-            fatalError("Cannot dequeue ModeChangeHeaderReusableView")
-        }
-        
-        headerView.delegate = self
-        
-        return headerView
-    }
-    
     private static func configureLayout() -> UICollectionViewLayout {
         
-        let contentInset: CGFloat = 2
+        let contentInset: CGFloat = 1
         
         // Full
         let fullItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
@@ -255,18 +300,6 @@ extension ExploreViewController: UICollectionViewDataSource {
                                                                         mainWithRevGroup])
 
         let section = NSCollectionLayoutSection(group: nestedGroup)
-
-        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                                  heightDimension: .absolute(50.0))
-        
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerSize,
-            elementKind: UICollectionView.elementKindSectionHeader,
-            alignment: .top)
-        
-        header.pinToVisibleBounds = true
-        
-        section.boundarySupplementaryItems = [header]
         
         let layout = UICollectionViewCompositionalLayout(section: section)
         

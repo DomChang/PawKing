@@ -60,14 +60,14 @@ class UserConfigCell: UITableViewCell {
         photoButton.setImage(UIImage.asset(.Image_Placeholder), for: .normal)
         photoButton.imageView?.contentMode = .scaleAspectFill
         
-        userNameTextfield.layer.borderColor = UIColor.Gray?.cgColor
+        userNameTextfield.layer.borderColor = UIColor.Gray1?.cgColor
         userNameTextfield.layer.borderWidth = 1
         
-        descriptionTextView.layer.borderColor = UIColor.Gray?.cgColor
+        descriptionTextView.layer.borderColor = UIColor.Gray1?.cgColor
         descriptionTextView.layer.borderWidth = 1
         
         nextButton.setTitle("Next", for: .normal)
-        nextButton.backgroundColor = .O1
+        nextButton.backgroundColor = .Orange1
     }
     
     func layout() {

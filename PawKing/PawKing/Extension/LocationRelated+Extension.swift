@@ -17,6 +17,15 @@ extension CLLocationCoordinate2D {
         
         return geoPoint
     }
+    
+    func distanceTo(coordinate: CLLocationCoordinate2D) -> CLLocationDistance {
+        
+        let thisLocation = CLLocation(latitude: self.latitude, longitude: self.longitude)
+        
+        let otherLocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+
+        return thisLocation.distance(from: otherLocation)
+    }
 }
 
 extension GeoPoint {

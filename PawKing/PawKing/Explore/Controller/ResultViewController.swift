@@ -23,7 +23,7 @@ class ResultViewController: UISearchController {
         }
     }
     
-    init(user: User){
+    init(user: User) {
         
         self.user = user
         

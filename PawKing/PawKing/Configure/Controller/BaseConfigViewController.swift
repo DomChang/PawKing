@@ -50,9 +50,9 @@ class BaseConfigViewController: UIViewController {
     
     func style() {
         
-        bottomLineView.backgroundColor = .O1
+        bottomLineView.backgroundColor = .Orange1
     
-        confirmButton.backgroundColor = .O1
+        confirmButton.backgroundColor = .Orange1
     }
     
     func layout() {
@@ -81,13 +81,13 @@ class BaseConfigViewController: UIViewController {
     
     func confirmButtonEnable() {
         
-        confirmButton.backgroundColor = .O1
+        confirmButton.backgroundColor = .Orange1
         confirmButton.isEnabled = true
     }
     
     func confirmButtonDisable() {
         
-        confirmButton.backgroundColor = .Gray
+        confirmButton.backgroundColor = .Gray1
         confirmButton.isEnabled = false
     }
 }

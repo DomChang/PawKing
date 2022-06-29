@@ -32,17 +32,17 @@ class PhotoPostViewController: UIViewController {
     
     private var userComments: [UserComment] = []
     
-//    private var commentSenders: [User] = []
-    
     private var comments: [Comment]?
     
-    let userInputTextfield = UITextField()
+    private let userImageView = UIImageView()
     
-    let sentButton = UIButton()
+    let userInputTextView = InputTextView()
+    
+    let sendButton = UIButton()
     
     let inputBackView = UIView()
     
-    private var userInputTopAnchor: NSLayoutConstraint!
+    let inputSeperatorLine = UIView()
     
     init(user: User, post: Post) {
         
@@ -79,10 +79,6 @@ class PhotoPostViewController: UIViewController {
     
     func setup() {
         
-//        getPet()
-//
-//        getComments()
-        
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -92,41 +88,50 @@ class PhotoPostViewController: UIViewController {
         tableView.register(CommentCell.self,
                            forCellReuseIdentifier: CommentCell.identifier)
         
-        userInputTextfield.addTarget(self, action: #selector(textFieldDidChange(_:)),
-                                  for: .editingChanged)
+        userInputTextView.isScrollEnabled = false
+        userInputTextView.placeholder = "Enter Comment"
+        userInputTextView.delegate = self
         
-        sentButton.addTarget(self, action: #selector(didTapSendButton), for: .touchUpInside)
+        sendButton.addTarget(self, action: #selector(didTapSendButton), for: .touchUpInside)
     }
     
     func style() {
         
+        navigationController?.navigationBar.tintColor = .Orange1
+        navigationController?.navigationBar.topItem?.backButtonTitle = ""
+        
+        navigationItem.title = "Post"
+        
         view.backgroundColor = .white
         
         tableView.backgroundColor = .white
+        tableView.separatorStyle = .none
+    
+        inputSeperatorLine.backgroundColor = .lightGray
         
-        sentButton.isEnabled = false
+        let imageUrl = URL(string: user.userImage)
+        userImageView.kf.setImage(with: imageUrl)
+        userImageView.contentMode = .scaleAspectFill
         
-        userInputTextfield.backgroundColor = .white
-        userInputTextfield.layer.cornerRadius = 3
-        userInputTextfield.layer.borderColor = UIColor(red: 204/255, green: 204/255, blue: 204/255, alpha: 1).cgColor
-        userInputTextfield.layer.borderWidth = 0.8
-        userInputTextfield.font = UIFont.systemFont(ofSize: 18)
+        userInputTextView.backgroundColor = .white
+        userInputTextView.font = UIFont.systemFont(ofSize: 18)
         
-        sentButton.layer.cornerRadius = 3
-        sentButton.setTitle("發送", for: .normal)
-        sentButton.backgroundColor = .O1
+        sendButton.layer.cornerRadius = 3
+        sendButton.setTitle("Submit", for: .normal)
+        sendButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        sendButtonDisable()
         
-        inputBackView.layer.borderWidth = 0.8
-        inputBackView.layer.borderColor = UIColor(red: 204/255, green: 204/255, blue: 204/255, alpha: 1).cgColor
-        inputBackView.backgroundColor = UIColor(red: 250/255, green: 250/255, blue: 250/255, alpha: 1)
+        inputBackView.backgroundColor = .white
     }
     
     func layout() {
         
         view.addSubview(tableView)
         view.addSubview(inputBackView)
-        view.addSubview(userInputTextfield)
-        view.addSubview(sentButton)
+        view.addSubview(inputSeperatorLine)
+        inputBackView.addSubview(userImageView)
+        inputBackView.addSubview(userInputTextView)
+        inputBackView.addSubview(sendButton)
         
         tableView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                          leading: view.leadingAnchor,
@@ -134,27 +139,36 @@ class PhotoPostViewController: UIViewController {
                          trailing: view.trailingAnchor,
                          padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
         
-        userInputTextfield.anchor(leading: view.leadingAnchor,
-                                 bottom: view.safeAreaLayoutGuide.bottomAnchor,
-                                  trailing: sentButton.leadingAnchor,
-                                  height: 36,
-                                 padding: UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 10))
+        userImageView.anchor(top: inputBackView.topAnchor,
+                             leading: inputBackView.leadingAnchor,
+                             width: 40,
+                             height: 40,
+                             padding: UIEdgeInsets(top: 10, left: 16, bottom: 0, right: 0))
         
-        sentButton.anchor(trailing: view.trailingAnchor,
-                          centerY: userInputTextfield.centerYAnchor,
+        userInputTextView.anchor(top: inputBackView.topAnchor,
+                                 leading: userImageView.trailingAnchor,
+                                 bottom: inputBackView.bottomAnchor,
+                                  trailing: sendButton.leadingAnchor,
+                                 padding: UIEdgeInsets(top: 8, left: 10, bottom: 10, right: 10))
+        
+        sendButton.anchor(trailing: inputBackView.trailingAnchor,
+                          centerY: inputBackView.centerYAnchor,
                           width: 60,
                           height: 35,
-                          padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20))
+                          padding: UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 20))
         
         inputBackView.anchor(leading: view.leadingAnchor,
-                             trailing: view.trailingAnchor,
-                             centerY: userInputTextfield.centerYAnchor,
-                             height: 71)
+                             bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                             trailing: view.trailingAnchor)
         
-        userInputTopAnchor =  userInputTextfield.topAnchor.constraint(
-            equalTo: view.safeAreaLayoutGuide.bottomAnchor,
-            constant: -52)
-        userInputTopAnchor.isActive = true
+        inputSeperatorLine.anchor(leading: inputBackView.leadingAnchor,
+                                  bottom: inputBackView.topAnchor,
+                                  trailing: inputBackView.trailingAnchor,
+                                  height: 0.5)
+        
+        inputBackView.layoutIfNeeded()
+        userImageView.makeRound()
+        userImageView.clipsToBounds = true
     }
     
     func getOtherUser() {
@@ -240,10 +254,10 @@ class PhotoPostViewController: UIViewController {
     
     @objc func didTapSendButton() {
         
-        sentButton.isEnabled = false
+        sendButtonDisable()
         
-        guard let text = userInputTextfield.text,
-              userInputTextfield.text != "" else {
+        guard let text = userInputTextView.text,
+              userInputTextView.text != "" else {
             return
         }
         
@@ -273,27 +287,41 @@ class PhotoPostViewController: UIViewController {
                 
                 self?.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
                 
+                self?.userInputTextView.text = ""
+                
+                self?.userInputTextView.showPlaceholderLabel()
+                
             case .failure(let error):
                 
                 print(error)
             }
         }
         
-        userInputTextfield.text = ""
-        
         DispatchQueue.main.async { [self] in
             tableView.reloadData()
         }
     }
     
-    @objc func textFieldDidChange(_ textField: UITextField) {
-        guard textField == userInputTextfield else { return }
-
-        if textField.text != "" {
-            sentButton.isEnabled = true
-        } else {
-            sentButton.isEnabled = false
-        }
+//    @objc func textFieldDidChange(_ textField: UITextField) {
+//        guard textField == userInputTextfield else { return }
+//
+//        if textField.text != "" {
+//            sendButton.isEnabled = true
+//        } else {
+//            sendButton.isEnabled = false
+//        }
+//    }
+    
+    func sendButtonEnable() {
+        
+        sendButton.isEnabled = true
+        sendButton.backgroundColor = .Orange1
+    }
+    
+    func sendButtonDisable() {
+        
+        sendButton.isEnabled = false
+        sendButton.backgroundColor = .Gray1
     }
 }
 
@@ -357,6 +385,21 @@ extension PhotoPostViewController: UITableViewDataSource, UITableViewDelegate {
             
         default:
             return UITableViewCell()
+        }
+    }
+}
+
+extension PhotoPostViewController: UITextViewDelegate {
+    
+    func textViewDidChange(_ textView: UITextView) {
+        guard textView == userInputTextView else { return }
+        
+        if textView.text.isEmpty {
+            
+            sendButtonDisable()
+        } else {
+            
+            sendButtonEnable()
         }
     }
 }

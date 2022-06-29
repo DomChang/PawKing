@@ -90,7 +90,7 @@ class ChatManager {
                     return
             }
             
-            let semaphore = DispatchSemaphore(value: 1)
+            let semaphore = DispatchSemaphore(value: 0)
             
             let dispatchQueue = DispatchQueue.global()
             
@@ -99,8 +99,6 @@ class ChatManager {
                 do {
 
                     for document in snapshots.documents {
-                        
-                        semaphore.wait()
 
                         let chat = try document.data(as: Message.self)
                         
@@ -112,29 +110,23 @@ class ChatManager {
                                 
                             case.success(let user):
                                 
-                                semaphore.signal()
-                                
                                 chatRooms.append(Conversation(otherUser: user, message: chat))
+
+                                semaphore.signal()
                                 
                             case .failure:
                                 
-                                semaphore.signal()
-                             
                                 completion(.failure(FirebaseError.fetchUserError))
                             }
                         }
+                        semaphore.wait()
                     }
-                    semaphore.wait()
-                    
                     completion(.success(chatRooms))
                     
-                    semaphore.signal()
-
                 } catch {
 
                     completion(.failure(FirebaseError.decodeMessageError))
                 }
-                
             }
         }
     }

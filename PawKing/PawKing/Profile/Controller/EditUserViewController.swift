@@ -61,14 +61,14 @@ class EditUserViewController: UIViewController {
 
         view.backgroundColor = .systemBackground
         
-        userNameTextfield.layer.borderColor = UIColor.Gray?.cgColor
+        userNameTextfield.layer.borderColor = UIColor.Gray1?.cgColor
         userNameTextfield.layer.borderWidth = 1
         
-        descriptionTextView.layer.borderColor = UIColor.Gray?.cgColor
+        descriptionTextView.layer.borderColor = UIColor.Gray1?.cgColor
         descriptionTextView.layer.borderWidth = 1
         
         confirmButton.setTitle("Confirm", for: .normal)
-        confirmButton.backgroundColor = .O1
+        confirmButton.backgroundColor = .Orange1
     }
     
     func layout() {
@@ -123,13 +123,13 @@ class EditUserViewController: UIViewController {
     
     func confirmButtonEnable() {
         
-        confirmButton.backgroundColor = .O1
+        confirmButton.backgroundColor = .Orange1
         confirmButton.isEnabled = true
     }
     
     func confirmButtonDisable() {
         
-        confirmButton.backgroundColor = .Gray
+        confirmButton.backgroundColor = .Gray1
         confirmButton.isEnabled = false
     }
     

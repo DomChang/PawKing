@@ -30,7 +30,7 @@ class ChoosePetTableViewCell: UITableViewCell {
     
     private func styleObject () {
         
-        contentView.backgroundColor = .YB1
+        contentView.backgroundColor = .white
         
         petImageView.layer.borderColor = UIColor.white.cgColor
         petImageView.layer.borderWidth = 2

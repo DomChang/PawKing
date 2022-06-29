@@ -90,7 +90,7 @@ private enum Tab {
 
 class TabBarViewController: UITabBarController {
     
-    private let userId = "6jRPSQJEw7NWuyZl2BCs"
+    private let userId = "7jkh07vJvBjgd9F5qkrB"
 
     private let tabs: [Tab] = [.map, .explore, .publish, .chat, .profile]
     
@@ -105,7 +105,7 @@ class TabBarViewController: UITabBarController {
         
         tabBar.isHidden = true
         
-        tabBar.tintColor = .O1
+        tabBar.tintColor = .Orange1
         
         delegate = self
         

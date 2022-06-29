@@ -92,10 +92,10 @@ class PetConfigCell: UITableViewCell {
         descriptionTitleLabel.font = UIFont.systemFont(ofSize: 16)
         descriptionTitleLabel.textColor = .black
         
-        petNameTextfield.layer.borderColor = UIColor.Gray?.cgColor
+        petNameTextfield.layer.borderColor = UIColor.Gray1?.cgColor
         petNameTextfield.layer.borderWidth = 1
         
-        genderTextfield.layer.borderColor = UIColor.Gray?.cgColor
+        genderTextfield.layer.borderColor = UIColor.Gray1?.cgColor
         genderTextfield.layer.borderWidth = 1
         genderTextfield.inputView = genderPicker
         
@@ -105,15 +105,15 @@ class PetConfigCell: UITableViewCell {
         birthdayPicker.locale = .current
         birthdayPicker.datePickerMode = .date
         birthdayPicker.preferredDatePickerStyle = .compact
-        birthdayPicker.tintColor = .O1
-        birthdayPicker.layer.borderColor = UIColor.Gray?.cgColor
+        birthdayPicker.tintColor = .Orange1
+        birthdayPicker.layer.borderColor = UIColor.Gray1?.cgColor
         birthdayPicker.layer.borderWidth = 1
         
-        descriptionTextView.layer.borderColor = UIColor.Gray?.cgColor
+        descriptionTextView.layer.borderColor = UIColor.Gray1?.cgColor
         descriptionTextView.layer.borderWidth = 1
         
         finishButton.setTitle("Finish", for: .normal)
-        finishButton.backgroundColor = .O1
+        finishButton.backgroundColor = .Orange1
     }
     
     func layout() {

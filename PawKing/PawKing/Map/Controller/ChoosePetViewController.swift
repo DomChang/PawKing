@@ -52,13 +52,13 @@ class ChoosePetViewController: UIViewController {
         
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .G1
+        appearance.backgroundColor = .Orange1
         appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         
         navigationItem.standardAppearance = appearance
         navigationItem.scrollEdgeAppearance = appearance
         
-        tableView.backgroundColor = .YB1
+        tableView.backgroundColor = .white
         
         tableView.separatorStyle = .none
     }
