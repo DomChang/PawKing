@@ -17,6 +17,25 @@ class UserManager {
     
     lazy var dataBase = Firestore.firestore()
     
+    func checkUserExist(uid: String, completion: @escaping (Bool) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(uid)
+            
+        document.getDocument { snapshot, _ in
+            
+            guard let _ = snapshot
+            
+            else {
+                
+                    completion(false)
+                    
+                    return
+            }
+            
+            completion(true)
+        }
+    }
+    
     func setupUser(user: inout User, completion: @escaping (Result<String, Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.users.rawValue).document()

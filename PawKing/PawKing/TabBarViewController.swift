@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 private enum Tab {
 
@@ -147,6 +148,38 @@ class TabBarViewController: UITabBarController {
         UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
         UINavigationBar.appearance().compactAppearance = navBarAppearance
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        if Auth.auth().currentUser != nil {
+            
+            return
+        } else {
+            
+            let signInVC = SignInViewController()
+            
+            present(signInVC, animated: true)
+        }
+    }
+    
+//    func showConfigureUser(uid: String) {
+//
+//        userManager.checkUserExist(uid: uid) { [weak self] isExist in
+//
+//            if isExist {
+//
+//                return
+//
+//            } else {
+//
+//                let userConfigVC = UserConfigViewController()
+//
+//                self?.present(userConfigVC, animated: true)
+//
+//
+//            }
+//        }
+//    }
 }
 
 extension TabBarViewController: UITabBarControllerDelegate {

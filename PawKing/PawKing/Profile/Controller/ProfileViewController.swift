@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class ProfileViewController: UIViewController {
     
@@ -93,6 +94,10 @@ class ProfileViewController: UIViewController {
     
     private func setup() {
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "LogOut",
+                                                            style: .plain,
+                                                            target: self, action: #selector(logout))
+        
         collectionView.dataSource = self
         collectionView.delegate = self
         
@@ -137,6 +142,16 @@ class ProfileViewController: UIViewController {
                                bottom: view.safeAreaLayoutGuide.bottomAnchor,
                                trailing: view.trailingAnchor)
         
+    }
+    
+    @objc func logout() {
+        
+        let firebaseAuth = Auth.auth()
+        do {
+          try firebaseAuth.signOut()
+        } catch let signOutError as NSError {
+          print("Error signing out: %@", signOutError)
+        }
     }
     
     func fetchUser() {
