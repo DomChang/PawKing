@@ -165,12 +165,12 @@ class PostManager {
         }
     }
     
-    func fetchComments(postId: String, completion: @escaping (Result<[Comment], Error>) -> Void) {
+    func listenComments(postId: String, completion: @escaping (Result<[Comment], Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.posts.rawValue)
             .document(postId).collection(FirebaseCollection.comments.rawValue)
             
-        document.getDocuments { snapshots, _ in
+        document.addSnapshotListener { snapshots, _ in
             
             var comments: [Comment] = []
             
@@ -184,9 +184,9 @@ class PostManager {
             
             do {
                 
-                for document in snapshots.documents {
+                for diff in snapshots.documentChanges where diff.type == .added {
                     
-                    let comment = try document.data(as: Comment.self)
+                    let comment = try diff.document.data(as: Comment.self)
                     
                     comments.append(comment)
                 }
@@ -196,6 +196,31 @@ class PostManager {
             } catch {
                 
                 completion(.failure(FirebaseError.decodeCommentError))
+            }
+        }
+    }
+    
+    func listenPost(postId: String, completion: @escaping (Result<Post, Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.posts.rawValue).document(postId)
+            
+        document.addSnapshotListener { snapshot, _ in
+            
+            guard let snapshot = snapshot else {
+                
+                completion(.failure(FirebaseError.fetchPostError))
+                return
+            }
+            
+            do {
+                
+                let post = try snapshot.data(as: Post.self)
+                
+                completion(.success(post))
+                
+            } catch {
+                
+                completion(.failure(FirebaseError.decodePostError))
             }
         }
     }
@@ -230,7 +255,7 @@ class PostManager {
         let document = dataBase.collection(FirebaseCollection.posts.rawValue).document(postId)
         
         document.updateData([
-            "commentId": FieldValue.arrayUnion([commentId])
+            "commentsId": FieldValue.arrayUnion([commentId])
         ]) { error in
             
             if let error = error {
@@ -242,6 +267,24 @@ class PostManager {
                 completion(.success(()))
             }
         }
+    }
+    
+    func addPostLike(postId: String, userId: String) {
+        
+        let document = dataBase.collection(FirebaseCollection.posts.rawValue).document(postId)
+        
+        document.updateData([
+            "likesId": FieldValue.arrayUnion([userId])
+        ])
+    }
+    
+    func removePostLike(postId: String, userId: String) {
+        
+        let document = dataBase.collection(FirebaseCollection.posts.rawValue).document(postId)
+        
+        document.updateData([
+            "likesId": FieldValue.arrayRemove([userId])
+        ])
     }
     
     func uploadPostPhoto(userId: String,
