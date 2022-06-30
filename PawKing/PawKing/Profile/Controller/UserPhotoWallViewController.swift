@@ -41,6 +41,12 @@ class UserPhotoWallViewController: UIViewController {
     
     var selectedPetIndex: Int?
     
+    var isFriend = false {
+        didSet {
+            collectionView.reloadSections(IndexSet(integer: 0))
+        }
+    }
+    
     init(user: User, otherUser: User) {
         
         self.user = user
@@ -144,12 +150,32 @@ class UserPhotoWallViewController: UIViewController {
             }
         }
     }
+    
+    func setConnectButtonColor(sender: UIButton) {
+        
+        if sender.isSelected {
+            
+            sender.backgroundColor = .white
+            
+            sender.layer.borderWidth = 1
+            
+        } else {
+            sender.backgroundColor = .Orange1
+            
+            sender.layer.borderWidth = 0
+        }
+    }
 }
 
 extension UserPhotoWallViewController: ProfileInfoCellDelegate {
     
-    func didTapLeftButton() {
+    func didTapLeftButton(from cell: ProfileInfoCell) {
         
+        let friendRequestButton = cell.leftButton
+        
+        friendRequestButton.isSelected = !friendRequestButton.isSelected
+        
+        setConnectButtonColor(sender: friendRequestButton)
     }
     
     func didTapRightButton() {
@@ -276,6 +302,15 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
             }
             
             infoCell.leftButton.setTitle("Connect", for: .normal)
+            infoCell.leftButton.setTitleColor(.white, for: .normal)
+            
+            if isFriend {
+                infoCell.leftButton.setTitle("disconnect", for: .selected)
+            } else {
+                infoCell.leftButton.setTitle("Requested", for: .selected)
+            }
+            infoCell.leftButton.setTitleColor(.DarkBlue, for: .selected)
+            setConnectButtonColor(sender: infoCell.leftButton)
             
             infoCell.rightButton.setTitle("Send Message", for: .normal)
             

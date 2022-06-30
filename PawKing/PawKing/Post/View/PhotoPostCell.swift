@@ -236,16 +236,16 @@ class PhotoPostCell: UITableViewCell {
     
     func didLikePost() {
         
-        likeButton.isSelected = true
+        likeButton.tintColor = .Orange1
         
-        likeButton.tintColor = .red
+        likeButton.isSelected = true
     }
     
     func notLikePost() {
         
-        likeButton.isSelected = false
-        
         likeButton.tintColor = .DarkBlue
+        
+        likeButton.isSelected = false
     }
     
 //    @objc func didTapPetImage() {

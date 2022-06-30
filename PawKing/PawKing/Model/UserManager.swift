@@ -423,4 +423,117 @@ class UserManager {
             }
         }
     }
+    
+    func sendFriendRequest(senderId: String, recieverId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let batch = dataBase.batch()
+        
+        let senderDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(senderId)
+        
+        batch.updateData([
+            "sendRequestsId": FieldValue.arrayUnion([recieverId])
+        ], forDocument: senderDoc)
+        
+        let recieverDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(recieverId)
+        
+        batch.updateData([
+            "recieveFriendRequest": FieldValue.arrayUnion([senderId])
+        ], forDocument: recieverDoc)
+        
+        batch.commit() { err in
+            if let err = err {
+                print("Error writing batch \(err)")
+            } else {
+                
+                UserManager.shared.currentUser?.sendRequestsId.append(recieverId)
+                print("Batch write succeeded.")
+            }
+        }
+    }
+    
+    func removeFriendRequest(senderId: String, recieverId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let batch = dataBase.batch()
+        
+        let senderDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(senderId)
+        
+        batch.updateData([
+            "sendRequestsId": FieldValue.arrayRemove([recieverId])
+        ], forDocument: senderDoc)
+        
+        let recieverDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(recieverId)
+        
+        batch.updateData([
+            "recieveFriendRequest": FieldValue.arrayRemove([senderId])
+        ], forDocument: recieverDoc)
+        
+        batch.commit() { err in
+            if let err = err {
+                print("Error writing batch \(err)")
+            } else {
+                
+                UserManager.shared.currentUser?.sendRequestsId.removeAll(where: { $0 == recieverId })
+                print("Batch write succeeded.")
+            }
+        }
+    }
+    
+    func denyFriendRequest(senderId: String, userId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let recieverDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+        
+        recieverDoc.updateData([
+            "recieveFriendRequest": FieldValue.arrayRemove([senderId])
+        ]) { err in
+            if let err = err {
+                
+                completion(.failure(err))
+                
+            } else {
+                
+                UserManager.shared.currentUser?.recieveFriendRequest.removeAll(where: { $0 == senderId })
+                
+                completion(.success(()))
+            }
+        }
+    }
+    
+    func acceptFriendRequest(senderId: String, userId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let batch = dataBase.batch()
+        
+        let senderDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(senderId)
+        
+        let userDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+        
+        batch.updateData([
+            "friends": FieldValue.arrayUnion([userId])
+        ], forDocument: senderDoc)
+        
+        batch.updateData([
+            "friends": FieldValue.arrayUnion([senderId])
+        ], forDocument: userDoc)
+        
+        batch.updateData([
+            "sendRequestsId": FieldValue.arrayRemove([userId])
+        ], forDocument: senderDoc)
+        
+        batch.updateData([
+            "recieveFriendRequest": FieldValue.arrayRemove([senderId])
+        ], forDocument: userDoc)
+        
+        batch.commit() { err in
+            
+            if let err = err {
+                
+                completion(.failure(err))
+                
+            } else {
+                
+                UserManager.shared.currentUser?.recieveFriendRequest.removeAll(where: { $0 == senderId })
+                
+                completion(.success(()))
+            }
+        }
+    }
 }

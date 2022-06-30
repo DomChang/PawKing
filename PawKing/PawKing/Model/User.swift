@@ -17,6 +17,6 @@ struct User: Codable {
     var description: String
     let friendPetsId: [String]
     let friends: [String]
-    let recieveFriendRequest: [String]
-    let sendRequestsId: [String]
+    var recieveFriendRequest: [String]
+    var sendRequestsId: [String]
 }
