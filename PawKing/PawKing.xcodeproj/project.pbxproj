@@ -47,6 +47,8 @@
 		B6A91D6D28697CCC0049253A /* ProfileInfoReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D6C28697CCC0049253A /* ProfileInfoReusableView.swift */; };
 		B6A91D72286ACFDE0049253A /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D71286ACFDE0049253A /* Date+Extension.swift */; };
 		B6A91D74286AE9070049253A /* InputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D73286AE9070049253A /* InputTextView.swift */; };
+		B6A91D7A286BE5A60049253A /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D79286BE5A50049253A /* SignInViewController.swift */; };
+		B6A91D7D286C827B0049253A /* Notification+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D7C286C827B0049253A /* Notification+Extension.swift */; };
 		B6ABE8E0285A06E300B1A977 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8DF285A06E300B1A977 /* UIColor+Extension.swift */; };
 		B6ABE8E2285A0B7400B1A977 /* MapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8E1285A0B7400B1A977 /* MapManager.swift */; };
 		B6ABE8E7285A19C400B1A977 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ABE8E6285A19C400B1A977 /* FirebaseError.swift */; };
@@ -119,6 +121,9 @@
 		B6A91D6C28697CCC0049253A /* ProfileInfoReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoReusableView.swift; sourceTree = "<group>"; };
 		B6A91D71286ACFDE0049253A /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		B6A91D73286AE9070049253A /* InputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextView.swift; sourceTree = "<group>"; };
+		B6A91D79286BE5A50049253A /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
+		B6A91D7B286BF3A30049253A /* PawKing.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PawKing.entitlements; sourceTree = "<group>"; };
+		B6A91D7C286C827B0049253A /* Notification+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extension.swift"; sourceTree = "<group>"; };
 		B6ABE8DF285A06E300B1A977 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		B6ABE8E1285A0B7400B1A977 /* MapManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapManager.swift; sourceTree = "<group>"; };
 		B6ABE8E6285A19C400B1A977 /* FirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseError.swift; sourceTree = "<group>"; };
@@ -337,11 +342,13 @@
 		B698DD9B285881FB0009077E /* PawKing */ = {
 			isa = PBXGroup;
 			children = (
+				B6A91D7B286BF3A30049253A /* PawKing.entitlements */,
 				B698DD9C285881FB0009077E /* AppDelegate.swift */,
 				B698DD9E285881FB0009077E /* SceneDelegate.swift */,
 				B6A91D6E286A9AB90049253A /* Resource */,
 				B698DDBE2858B98A0009077E /* Extension */,
 				B6ABE8E3285A0B8500B1A977 /* Model */,
+				B6A91D78286BE5760049253A /* SignIn */,
 				B6D4F6AC285D7EB70045DDB2 /* Configure */,
 				B6D4F69F285C360E0045DDB2 /* Map */,
 				B66A15B22863FA0200DF2663 /* Explore */,
@@ -367,6 +374,7 @@
 				B6ABE8EA285AE41500B1A977 /* LocationRelated+Extension.swift */,
 				B66A15D22867421800DF2663 /* UIImageView+Extension.swift */,
 				B6A91D71286ACFDE0049253A /* Date+Extension.swift */,
+				B6A91D7C286C827B0049253A /* Notification+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -377,6 +385,14 @@
 				B6A91D73286AE9070049253A /* InputTextView.swift */,
 			);
 			path = Resource;
+			sourceTree = "<group>";
+		};
+		B6A91D78286BE5760049253A /* SignIn */ = {
+			isa = PBXGroup;
+			children = (
+				B6A91D79286BE5A50049253A /* SignInViewController.swift */,
+			);
+			path = SignIn;
 			sourceTree = "<group>";
 		};
 		B6ABE8E3285A0B8500B1A977 /* Model */ = {
@@ -646,7 +662,9 @@
 				B63484ED285EEE8800DB7CE7 /* PhotoItemCell.swift in Sources */,
 				B66A15BB28648B4900DF2663 /* SearchResultCell.swift in Sources */,
 				B6E86AA0285F016A002B8C9A /* Profile.swift in Sources */,
+				B6A91D7A286BE5A60049253A /* SignInViewController.swift in Sources */,
 				B6ABE8E2285A0B7400B1A977 /* MapManager.swift in Sources */,
+				B6A91D7D286C827B0049253A /* Notification+Extension.swift in Sources */,
 				B66A15C42865917300DF2663 /* ChatManager.swift in Sources */,
 				B6A91D692868372B0049253A /* NoStrangerCell.swift in Sources */,
 				B6E86AA2285F0AEE002B8C9A /* ProfileInfoCell.swift in Sources */,
@@ -821,6 +839,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = PawKing/PawKing.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = RUXNPB6ZP3;
@@ -854,6 +873,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = PawKing/PawKing.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = RUXNPB6ZP3;

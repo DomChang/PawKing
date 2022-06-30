@@ -30,6 +30,20 @@ class PhotoPostViewController: UIViewController {
         }
     }
     
+    private var likeCount: Int {
+        
+        didSet {
+            tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+        }
+    }
+    
+    private var isLike = false {
+        
+        didSet {
+            tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+        }
+    }
+    
     private var userComments: [UserComment] = []
     
     private var comments: [Comment]?
@@ -49,6 +63,8 @@ class PhotoPostViewController: UIViewController {
         self.user = user
         
         self.post = post
+        
+        self.likeCount = post.likesId.count
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -325,6 +341,25 @@ class PhotoPostViewController: UIViewController {
     }
 }
 
+extension PhotoPostViewController: PhotoItemCellDelegate {
+    
+    func didTapLike(for cell: PhotoPostCell, like: Bool) {
+        
+        if like {
+            
+            likeCount += 1
+            
+        } else {
+            
+            likeCount -= 1
+        }
+        
+        isLike = like
+        
+        tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+    }
+}
+
 extension PhotoPostViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -358,7 +393,9 @@ extension PhotoPostViewController: UITableViewDataSource, UITableViewDelegate {
             guard let pet = pet,
                     let user = postUser else { return contentCell }
             
-            contentCell.configureCell(user: user, pet: pet, post: post)
+            contentCell.delegate = self
+            
+            contentCell.configureCell(user: user, pet: pet, post: post, likeCount: likeCount, isLike: isLike)
             
             contentCell.selectionStyle = .none
             

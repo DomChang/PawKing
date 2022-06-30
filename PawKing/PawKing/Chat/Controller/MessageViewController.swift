@@ -320,4 +320,3 @@ extension MessageViewController: UITextViewDelegate {
         }
     }
 }
-
