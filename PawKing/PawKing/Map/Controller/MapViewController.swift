@@ -30,6 +30,8 @@ class MapViewController: UIViewController {
     
     let strangerButton = UIButton()
     
+    let notificationButton = UIButton()
+    
     let choosePetImageView = UIImageView()
     
     let userSetupButton: UIButton = {
@@ -183,6 +185,8 @@ class MapViewController: UIViewController {
         
         strangerButton.addTarget(self, action: #selector(didTapStrangerButton), for: .touchUpInside)
         
+        notificationButton.addTarget(self, action: #selector(didTapNotificationButton), for: .touchUpInside)
+        
         saveTrackButton.isHidden = true
         
         deleteTrackButton.isHidden = true
@@ -220,9 +224,9 @@ class MapViewController: UIViewController {
         
         styleCurrentPetButton()
         
-//        strangerButton.setTitle("陌生", for: .normal)
-//        strangerButton.layer.cornerRadius = 5
         strangerButton.setImage(UIImage.asset(.Icons_60px_Stranger), for: .normal)
+        
+        notificationButton.setImage(UIImage.asset(.Icons_45px_Bell), for: .normal)
         
         if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             flowLayout.scrollDirection = .horizontal
@@ -241,6 +245,7 @@ class MapViewController: UIViewController {
         view.addSubview(saveTrackButton)
         view.addSubview(deleteTrackButton)
         view.addSubview(strangerButton)
+        view.addSubview(notificationButton)
         view.addSubview(collectionView)
         view.addSubview(choosePetImageView)
         
@@ -271,10 +276,16 @@ class MapViewController: UIViewController {
                            padding: UIEdgeInsets(top: 0, left: 35, bottom: 35, right: 0))
         
         strangerButton.anchor(top: view.safeAreaLayoutGuide.topAnchor,
-                              trailing: view.trailingAnchor,
+                              leading: view.leadingAnchor,
                               width: 60,
                               height: 60,
-                              padding: UIEdgeInsets(top: 100, left: 0, bottom: 0, right: 35))
+                              padding: UIEdgeInsets(top: 60, left: 35, bottom: 0, right: 0))
+        
+        notificationButton.anchor(trailing: view.trailingAnchor,
+                              centerY: strangerButton.centerYAnchor,
+                              width: 45,
+                              height: 45,
+                              padding: UIEdgeInsets(top: 80, left: 0, bottom: 0, right: 35))
         
         collectionView.anchor(leading: view.leadingAnchor,
                               bottom: view.safeAreaLayoutGuide.bottomAnchor,
@@ -287,6 +298,15 @@ class MapViewController: UIViewController {
                                width: 100,
                                height: 100,
                                padding: UIEdgeInsets(top: 0, left: 0, bottom: 35, right: 0))
+        
+        strangerButton.setRadiusWithShadow()
+        
+        notificationButton.setRadiusWithShadow()
+        
+        userLocationButton.setRadiusWithShadow()
+        
+        trackButton.setRadiusWithShadow()
+
     }
     
     func focusUserLocation() {
@@ -551,6 +571,13 @@ class MapViewController: UIViewController {
         return nearbyStrangeLocations.map { $0.userId }
     }
     
+    @objc func didTapNotificationButton() {
+        
+        let friendRequestVC = FriendRequestViewController(user: user)
+        
+        navigationController?.pushViewController(friendRequestVC, animated: true)
+    }
+    
     func fetchPets(from usersId: [String], completion: @escaping ([Pet]) -> Void) {
         
         let group = DispatchGroup()
@@ -799,6 +826,8 @@ extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
 extension MapViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        guard strangersPet.count != 0 else { return }
         
         userManager.fetchUserInfo(userId: strangersPet[indexPath.item].ownerId) { [weak self] result in
 

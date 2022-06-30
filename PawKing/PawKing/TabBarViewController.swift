@@ -117,26 +117,26 @@ class TabBarViewController: UITabBarController {
         
         tabBar.isHidden = false
         
-        if var userId = Auth.auth().currentUser?.uid {
+//        if var userId = Auth.auth().currentUser?.uid {
             
-//            userId = "6jRPSQJEw7NWuyZl2BCs"
+            let userId = "dcMYWJ6vTJ9bFWu1VbDL"
             getUser(userId: userId)
             
-        } else {
-            
-            let user = User(id: "Guest",
-                            name: "Guest",
-                            petsId: [],
-                            currentPetId: "",
-                            userImage: "",
-                            description: "",
-                            friendPetsId: [],
-                            friends: [],
-                            recieveFriendRequest: [],
-                            sendRequestsId: [])
-            
-            configureUserToTab(user: user)
-        }
+//        } else {
+//
+//            let user = User(id: "Guest",
+//                            name: "Guest",
+//                            petsId: [],
+//                            currentPetId: "",
+//                            userImage: "",
+//                            description: "",
+//                            friendPetsId: [],
+//                            friends: [],
+//                            recieveFriendRequest: [],
+//                            sendRequestsId: [])
+//
+//            configureUserToTab(user: user)
+//        }
         
         let tabBarAppearance =  UITabBarAppearance()
         tabBarAppearance.configureWithDefaultBackground()

@@ -373,7 +373,7 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
             infoCell.leftButton.setTitleColor(.DarkBlue, for: .selected)
             
             if isFriend {
-                infoCell.leftButton.setTitle("disconnect", for: .selected)
+                infoCell.leftButton.setTitle("Disconnect", for: .selected)
             } else {
                 infoCell.leftButton.setTitle("Requested", for: .selected)
             }
