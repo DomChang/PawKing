@@ -41,7 +41,7 @@ class CommentCell: UITableViewCell {
         userImageView.contentMode = .scaleAspectFill
         
         userNameLabel.textColor = .DarkBlue
-        userNameLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        userNameLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         
         commentLabel.textColor = .LightBlack
         commentLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)

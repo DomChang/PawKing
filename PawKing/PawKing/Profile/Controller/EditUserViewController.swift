@@ -110,6 +110,9 @@ class EditUserViewController: UIViewController {
                 
             case .success:
                 
+                UserManager.shared.currentUser?.name = userName
+                UserManager.shared.currentUser?.description = userDescription
+                
                 print("更新使用者資料成功")
                 
                 self?.navigationController?.popViewController(animated: true)

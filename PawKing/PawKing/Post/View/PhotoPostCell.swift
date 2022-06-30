@@ -9,7 +9,9 @@ import UIKit
 
 protocol PhotoItemCellDelegate {
     
-    func didTapPetImage()
+//    func didTapPetImage()
+    
+    func didTapLike(for cell: PhotoPostCell, like: Bool)
 }
 
 class PhotoPostCell: UITableViewCell {
@@ -52,7 +54,15 @@ class PhotoPostCell: UITableViewCell {
     
     private func setup() {
         
-        petImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapPetImage)))
+//        petImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapPetImage)))
+        
+        photoImageView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapLikeButton))
+        tap.numberOfTapsRequired = 2
+        
+        photoImageView.addGestureRecognizer(tap)
+        
+        likeButton.addTarget(self, action: #selector(didTapLikeButton), for: .touchUpInside)
     }
     
     private func styleObject() {
@@ -73,13 +83,17 @@ class PhotoPostCell: UITableViewCell {
         settingButton.tintColor = .DarkBlue
         
         likeButton.setImage(UIImage(systemName: "suit.heart",
-                                         withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+                                    withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+        
+        likeButton.setImage(UIImage(systemName: "suit.heart.fill",
+                                    withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .selected)
+        
         likeButton.tintColor = .DarkBlue
         
-        likeNumLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        likeNumLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         likeNumLabel.textColor = .DarkBlue
         
-        nameContentLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        nameContentLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         nameContentLabel.textColor = .DarkBlue
         
         contentLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
@@ -168,7 +182,7 @@ class PhotoPostCell: UITableViewCell {
         petImageView.clipsToBounds = true
     }
     
-    func configureCell(user: User, pet: Pet, post: Post) {
+    func configureCell(user: User, pet: Pet, post: Post, likeCount: Int, isLike: Bool) {
         
         let petUrl = URL(string: pet.petImage)
         
@@ -182,11 +196,10 @@ class PhotoPostCell: UITableViewCell {
         
         photoImageView.kf.setImage(with: photoUrl)
         
-        let likeCount = post.likesId.count
-        
         if likeCount == 0 {
             
             likeNumLabel.text = ""
+            
         } else if likeCount == 1 {
             
             likeNumLabel.text = "\(likeCount) like"
@@ -195,32 +208,46 @@ class PhotoPostCell: UITableViewCell {
             likeNumLabel.text = "\(likeCount) likes"
         }
         
+        if isLike {
+            
+            didLikePost()
+        } else {
+            
+            notLikePost()
+        }
+        
         nameContentLabel.text = user.name
         
         contentLabel.text = post.caption
         
-//        let commentCount = post.commentsId.count
-        
-//        if commentCount > 0 {
-//            
-//            viewCommentLabel.text = "View all \(post.commentsId.count) comments"
-//            
-//        } else {
-//            
-//            viewCommentLabel.text = "write comment"
-//        }
-        
-//        let dateFormatter = DateFormatter()
-//
-//        dateFormatter.dateFormat = "MMMM dd, yyyy"
-//
-//        let postDate = dateFormatter.string(from: post.createdTime.dateValue())
-        
         timeLabel.text = post.createdTime.dateValue().displayTimeInSocialMediaStyle()
     }
     
-    @objc func didTapPetImage() {
+    @objc func didTapLikeButton() {
         
-        self.delegate?.didTapPetImage()
+        likeButton.isSelected = !likeButton.isSelected
+        
+        
+        
+        self.delegate?.didTapLike(for: self, like: likeButton.isSelected)
     }
+    
+    func didLikePost() {
+        
+        likeButton.isSelected = true
+        
+        likeButton.tintColor = .red
+    }
+    
+    func notLikePost() {
+        
+        likeButton.isSelected = false
+        
+        likeButton.tintColor = .DarkBlue
+    }
+    
+//    @objc func didTapPetImage() {
+//        
+//        self.delegate?.didTapPetImage()
+//    }
 }

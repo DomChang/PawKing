@@ -21,7 +21,7 @@ class SignInViewController: UIViewController {
     
     var delegate: SignInViewDelegate?
     
-    let appleButton = ASAuthorizationAppleIDButton(type: .continue, style: .black)
+    let appleButton = ASAuthorizationAppleIDButton(type: .signIn, style: .black)
     
     let userManager = UserManager.shared
     
@@ -32,8 +32,16 @@ class SignInViewController: UIViewController {
         
         view.backgroundColor = .white
         
+        layout()
+        
         setupAppleButton()
     }
+    
+    func layout() {
+        
+        
+    }
+    
     
     func setupAppleButton() {
         view.addSubview(appleButton)

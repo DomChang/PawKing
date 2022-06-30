@@ -58,6 +58,8 @@ class UserConfigViewController: UIViewController {
     
     func setup() {
         
+        getUser()
+        
         navigationItem.title = "User Configuration"
         
         tableView.dataSource = self
@@ -90,21 +92,9 @@ class UserConfigViewController: UIViewController {
     
     func getUser() {
         
-        guard let userId = Auth.auth().currentUser?.uid else { return }
+        guard let user = UserManager.shared.currentUser else { return }
         
-        userManager.fetchUserInfo(userId: userId) { result in
-            
-            switch result {
-                
-            case .success(let user):
-                
-                self.user = user
-                
-            case .failure(let error):
-                
-                print(error)
-            }
-        }
+        self.user = user
     }
     
     func showPetConfigVC(user: User) {
@@ -183,6 +173,7 @@ extension UserConfigViewController: UserConfigCellDelegate {
                 
                 self?.userId = userId
                 
+                // already update user data in uploadUserPhoto
                 self?.userManager.uploadUserPhoto(userId: userId, image: image) { result in
                     
                     switch result {
@@ -191,9 +182,9 @@ extension UserConfigViewController: UserConfigCellDelegate {
                         
                         self?.showPetConfigVC(user: user)
                         
-                        guard let tabBarVC = self?.tabBarController as? TabBarViewController else { return }
-                        
-                        tabBarVC.configureUserToTab(user: user)
+//                        guard let tabBarVC = self?.tabBarController as? TabBarViewController else { return }
+//
+//                        tabBarVC.configureUserToTab(user: user)
                         
                     case .failure(let error):
                         

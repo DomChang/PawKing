@@ -637,38 +637,6 @@ class MapViewController: UIViewController {
 
         }
     }
-    
-//    func strangerButtonEnable() {
-//
-//        strangerButton.isEnabled = true
-//        strangerButton.backgroundColor = .O1
-//    }
-//
-//    func strangerButtonDisable() {
-//
-//        strangerButton.isEnabled = false
-//        strangerButton.backgroundColor = .Gray
-//    }
-    
-//    func setupUserSettingButton() {
-//
-//        userSetupButton.addTarget(self, action: #selector(showConfigure), for: .touchUpInside)
-//
-//        view.addSubview(userSetupButton)
-//
-//        userSetupButton.anchor(top: view.safeAreaLayoutGuide.topAnchor,
-//                               leading: view.leadingAnchor,
-//                               width: 60,
-//                               height: 35,
-//                               padding: UIEdgeInsets(top: 35, left: 35, bottom: 0, right: 0))
-//    }
-    
-//    @objc func showConfigure() {
-//
-//        let userConfigVC = UserConfigViewController()
-//
-//        navigationController?.pushViewController(userConfigVC, animated: true)
-//    }
 }
 
 extension MapViewController: ChoosePetViewDelegate {

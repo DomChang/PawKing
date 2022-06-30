@@ -113,6 +113,9 @@ class UserManager {
                 
             } else {
                 
+                UserManager.shared.currentUser?.petsId.append(petId)
+                UserManager.shared.currentUser?.currentPetId = petId
+                
                 completion(.success(()))
             }
         }
@@ -148,6 +151,8 @@ class UserManager {
                         completion(.failure(error))
                         
                     } else {
+                        
+                        UserManager.shared.currentUser?.currentPetId = pet.id
                         
                         completion(.success(()))
                     }
@@ -365,6 +370,8 @@ class UserManager {
                                     completion(.failure(FirebaseError.uploadUserPhotoError))
                                     
                                 } else {
+                                    
+                                    UserManager.shared.currentUser?.userImage = userImageUrlString
                                     
                                     completion(.success(()))
                                 }

@@ -7,12 +7,11 @@
 
 import Foundation
 
-
 struct User: Codable {
     
     var id: String
     var name: String
-    let petsId: [String]
+    var petsId: [String]
     var currentPetId: String
     var userImage: String
     var description: String
