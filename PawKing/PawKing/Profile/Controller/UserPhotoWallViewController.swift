@@ -151,6 +151,28 @@ class UserPhotoWallViewController: UIViewController {
         }
     }
     
+    func setConnectState(sender: UIButton) {
+        
+        if user.friends.contains(otherUser.id) && otherUser.friends.contains(user.id) {
+            
+            isFriend = true
+            
+            sender.isSelected = true
+            
+        } else if user.sendRequestsId.contains(otherUser.id) {
+            
+            isFriend = false
+            
+            sender.isSelected = true
+            
+        } else {
+            
+            isFriend = false
+            
+            sender.isSelected = false
+        }
+    }
+    
     func setConnectButtonColor(sender: UIButton) {
         
         if sender.isSelected {
@@ -173,7 +195,52 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
         
         let friendRequestButton = cell.leftButton
         
-        friendRequestButton.isSelected = !friendRequestButton.isSelected
+        // state: requested or friend
+        if friendRequestButton.isSelected {
+            
+            if isFriend {
+                // show disConnect alert
+                
+                
+            } else {
+                // requested
+                
+                friendRequestButton.isSelected = !friendRequestButton.isSelected
+                
+                userManager.removeFriendRequest(senderId: user.id, recieverId: otherUser.id) { result in
+                    
+                    switch result {
+                        
+                    case .success:
+                        
+                        print("remove request success!")
+                        
+                    case .failure(let error):
+                        
+                        print(error)
+                    }
+                }
+            }
+            
+        } else {
+            // send request
+            
+            friendRequestButton.isSelected = !friendRequestButton.isSelected
+            
+            userManager.sendFriendRequest(senderId: user.id, recieverId: otherUser.id) { result in
+                
+                switch result {
+                    
+                case .success:
+                    
+                    print("send request success!")
+                    
+                case .failure(let error):
+                    
+                    print(error)
+                }
+            }
+        }
         
         setConnectButtonColor(sender: friendRequestButton)
     }
@@ -303,13 +370,16 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
             
             infoCell.leftButton.setTitle("Connect", for: .normal)
             infoCell.leftButton.setTitleColor(.white, for: .normal)
+            infoCell.leftButton.setTitleColor(.DarkBlue, for: .selected)
             
             if isFriend {
                 infoCell.leftButton.setTitle("disconnect", for: .selected)
             } else {
                 infoCell.leftButton.setTitle("Requested", for: .selected)
             }
-            infoCell.leftButton.setTitleColor(.DarkBlue, for: .selected)
+            
+            setConnectState(sender: infoCell.leftButton)
+            
             setConnectButtonColor(sender: infoCell.leftButton)
             
             infoCell.rightButton.setTitle("Send Message", for: .normal)
