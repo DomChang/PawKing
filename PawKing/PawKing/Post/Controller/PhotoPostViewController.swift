@@ -22,7 +22,14 @@ class PhotoPostViewController: UIViewController {
     
     private var postUser: User?
     
-    private let post: Post
+    private var post: Post {
+        
+        didSet {
+            checkIsLike()
+            
+            likeCount = post.likesId.count
+        }
+    }
     
     private var pet: Pet? {
         didSet {
@@ -83,7 +90,7 @@ class PhotoPostViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         
-        getOtherUser()
+        getPostUser()
         
         tabBarController?.tabBar.isHidden = true
     }
@@ -94,6 +101,8 @@ class PhotoPostViewController: UIViewController {
     }
     
     func setup() {
+        
+        listenPostUpdate()
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -187,7 +196,24 @@ class PhotoPostViewController: UIViewController {
         userImageView.clipsToBounds = true
     }
     
-    func getOtherUser() {
+    func listenPostUpdate() {
+        
+        postManager.listenPost(postId: post.id) { [weak self] result in
+            
+            switch result {
+                
+            case .success(let post):
+                
+                self?.post = post
+                
+            case .failure(let error):
+                
+                print(error)
+            }
+        }
+    }
+    
+    func getPostUser() {
         
         userManager.fetchUserInfo(userId: post.userId) { [weak self] result in
             
@@ -227,7 +253,7 @@ class PhotoPostViewController: UIViewController {
     
     func getComments() {
         
-        postManager.fetchComments(postId: post.id) { [weak self] result in
+        postManager.listenComments(postId: post.id) { [weak self] result in
             
             switch result {
                 
@@ -259,7 +285,9 @@ class PhotoPostViewController: UIViewController {
                 
                 self?.userComments.append(userComment)
                 
-                self?.tableView.reloadData()
+                self?.userComments.sort { $0.comment.createdTime.dateValue() < $1.comment.createdTime.dateValue() }
+                
+                self?.tableView.reloadSections(IndexSet(integer: 1), with: .fade)
                 
             case .failure(let error):
                 
@@ -289,19 +317,18 @@ class PhotoPostViewController: UIViewController {
                 
             case .success:
                 
-                guard let commentCount = self?.comments?.count,
-                        let user = self?.user else { return }
+                guard let user = self?.user else { return }
                 
                 self?.comments?.append(comment)
                 
                 let userComment = UserComment(user: user, comment: comment)
                 self?.userComments.append(userComment)
                 
-                let indexPath = IndexPath(row: commentCount, section: 1)
-                
-                self?.tableView.insertRows(at: [indexPath], with: .automatic)
-                
-                self?.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+//                let indexPath = IndexPath(row: commentCount, section: 1)
+//
+//                self?.tableView.insertRows(at: [indexPath], with: .automatic)
+//
+//                self?.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
                 
                 self?.userInputTextView.text = ""
                 
@@ -315,6 +342,19 @@ class PhotoPostViewController: UIViewController {
         
         DispatchQueue.main.async { [self] in
             tableView.reloadData()
+        }
+    }
+    
+    func checkIsLike() {
+        
+        let userId = user.id
+        
+        if post.likesId.contains(userId) {
+            
+            isLike = true
+        } else {
+            
+            isLike = false
         }
     }
     
@@ -349,9 +389,13 @@ extension PhotoPostViewController: PhotoItemCellDelegate {
             
             likeCount += 1
             
+            postManager.addPostLike(postId: post.id, userId: user.id)
+            
         } else {
             
             likeCount -= 1
+            
+            postManager.removePostLike(postId: post.id, userId: user.id)
         }
         
         isLike = like
@@ -395,7 +439,11 @@ extension PhotoPostViewController: UITableViewDataSource, UITableViewDelegate {
             
             contentCell.delegate = self
             
-            contentCell.configureCell(user: user, pet: pet, post: post, likeCount: likeCount, isLike: isLike)
+            contentCell.configureCell(user: user,
+                                      pet: pet,
+                                      post: post,
+                                      likeCount: likeCount,
+                                      isLike: isLike)
             
             contentCell.selectionStyle = .none
             

@@ -11,7 +11,7 @@ import UIKit
     
     @objc optional func didTapUserImage()
     
-    func didTapLeftButton()
+    func didTapLeftButton(from cell: ProfileInfoCell)
     
     func didTapRightButton()
 }
@@ -216,7 +216,7 @@ class ProfileInfoCell: UICollectionViewCell {
     
     @objc func didTapLeftButton() {
         
-        self.delegate?.didTapLeftButton()
+        self.delegate?.didTapLeftButton(from: self)
     }
     
     @objc func didTapRightButton() {

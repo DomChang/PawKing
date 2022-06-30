@@ -238,7 +238,7 @@ extension ProfileViewController: ProfileInfoCellDelegate {
         photoHelper.presentActionSheet(from: self)
     }
     
-    func didTapLeftButton() {
+    func didTapLeftButton(from cell: ProfileInfoCell) {
         
         let editUserVC = EditUserViewController(userId: user.id, userName: user.name)
         
@@ -287,7 +287,7 @@ extension ProfileViewController: UICollectionViewDataSource {
                 let infoGroup = NSCollectionLayoutGroup.vertical(layoutSize: infoGroupSize, subitems: [infoItem])
                 
                 let infoSection = NSCollectionLayoutSection(group: infoGroup)
-                
+                 
 //                let infoBackView = NSCollectionLayoutDecorationItem.background(
 //                    elementKind: "\(ProfileInfoReusableView.self)")
 //

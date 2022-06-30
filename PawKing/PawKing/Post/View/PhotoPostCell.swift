@@ -63,6 +63,8 @@ class PhotoPostCell: UITableViewCell {
         photoImageView.addGestureRecognizer(tap)
         
         likeButton.addTarget(self, action: #selector(didTapLikeButton), for: .touchUpInside)
+        
+        likeButton.isHidden = true
     }
     
     private func styleObject() {
@@ -221,29 +223,29 @@ class PhotoPostCell: UITableViewCell {
         contentLabel.text = post.caption
         
         timeLabel.text = post.createdTime.dateValue().displayTimeInSocialMediaStyle()
+        
+        likeButton.isHidden = false
     }
     
     @objc func didTapLikeButton() {
         
         likeButton.isSelected = !likeButton.isSelected
         
-        
-        
         self.delegate?.didTapLike(for: self, like: likeButton.isSelected)
     }
     
     func didLikePost() {
         
-        likeButton.isSelected = true
+        likeButton.tintColor = .Orange1
         
-        likeButton.tintColor = .red
+        likeButton.isSelected = true
     }
     
     func notLikePost() {
         
-        likeButton.isSelected = false
-        
         likeButton.tintColor = .DarkBlue
+        
+        likeButton.isSelected = false
     }
     
 //    @objc func didTapPetImage() {
