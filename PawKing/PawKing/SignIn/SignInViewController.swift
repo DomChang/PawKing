@@ -25,33 +25,199 @@ class SignInViewController: UIViewController {
     
     let userManager = UserManager.shared
     
+    let signInTitleLabel = UILabel()
+    
+    let emailTextField = InputTextField()
+    
+    let passwordTextField = InputTextField()
+    
+    let signInButton = UIButton()
+    
+    let registerHintLabel = UILabel()
+    
+    let registerButton = UIButton()
+    
+    let speratorLeftLine = UIView()
+    
+    let orLabel = UILabel()
+    
+    let speratorRightLine = UIView()
+    
     fileprivate var currentNonce: String?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .white
         
+        setup()
+        style()
         layout()
         
         setupAppleButton()
     }
     
-    func layout() {
+    func setup() {
         
+        signInButton.addTarget(self, action: #selector(didTapSignIn), for: .touchUpInside)
+        
+        registerButton.addTarget(self, action: #selector(didTapRegister), for: .touchUpInside)
+    }
+    
+    func style() {
+        
+        view.backgroundColor = .white
+        
+        signInTitleLabel.text = "Sign In"
+        signInTitleLabel.textColor = .DarkBlue
+        signInTitleLabel.font = UIFont.systemFont(ofSize: 24, weight: .medium)
+        
+        emailTextField.placeholder = "Email"
+        emailTextField.autocapitalizationType = .none
+        
+        passwordTextField.placeholder = "Password"
+        passwordTextField.autocapitalizationType = .none
+        passwordTextField.isSecureTextEntry = true
+        
+        signInButton.backgroundColor = .Orange1
+        signInButton.setTitle("Sign in", for: .normal)
+        signInButton.setTitleColor(.white, for: .normal)
+        signInButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        signInButton.layer.cornerRadius = 4
+        
+        registerHintLabel.text = "Don't haven an account?"
+        registerHintLabel.textColor = .darkGray
+        registerHintLabel.textAlignment = .right
+        registerHintLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        
+        registerButton.setTitle("Sign up", for: .normal)
+        registerButton.setTitleColor(.Orange1, for: .normal)
+        registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        
+        speratorLeftLine.backgroundColor = .Gray1
+        speratorRightLine.backgroundColor = .Gray1
+        
+        orLabel.text = "OR"
+        orLabel.textColor = .Gray1
+        orLabel.textAlignment = .center
+        orLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+    }
+    
+    func layout() {
+
+        let signVStack = UIStackView(arrangedSubviews: [emailTextField, passwordTextField, signInButton])
+        
+        let registerHStack = UIStackView(arrangedSubviews: [registerHintLabel, registerButton])
+        
+        view.addSubview(signInTitleLabel)
+        view.addSubview(signVStack)
+        view.addSubview(registerHStack)
+        view.addSubview(speratorLeftLine)
+        view.addSubview(speratorRightLine)
+        view.addSubview(orLabel)
+        
+        signVStack.axis = .vertical
+        signVStack.distribution = .fillEqually
+        signVStack.spacing = 20
+        
+        registerHStack.axis = .horizontal
+        registerHStack.distribution = .fill
+        registerHStack.spacing = 10
+        
+        
+        registerButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+//
+//        backView.anchor(leading: view.leadingAnchor,
+//                        bottom: view.bottomAnchor,
+//                        trailing: view.trailingAnchor,
+//                        height: 400,
+//                        padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
+        
+        signInTitleLabel.anchor(top: view.topAnchor,
+                                leading: view.leadingAnchor,
+                                trailing: view.trailingAnchor,
+                                padding: UIEdgeInsets(top: 300, left: 20, bottom: 0, right: 20))
+        
+        signVStack.anchor(top: signInTitleLabel.bottomAnchor,
+                          leading: view.leadingAnchor,
+                          trailing: view.trailingAnchor,
+                          height: 160,
+                          padding: UIEdgeInsets(top: 24, left: 20, bottom: 0, right: 20))
+        
+        registerHStack.anchor(top: signVStack.bottomAnchor,
+                              leading: signVStack.leadingAnchor,
+                              trailing: signVStack.trailingAnchor,
+                              padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
+        
+        speratorLeftLine.anchor(top: registerHStack.bottomAnchor,
+                                leading: registerHStack.leadingAnchor,
+                                trailing: orLabel.leadingAnchor,
+                                height: 0.5,
+                                padding: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 10))
+        
+        orLabel.anchor(centerY: speratorLeftLine.centerYAnchor,
+                       centerX: view.centerXAnchor)
+        
+        speratorRightLine.anchor(leading: orLabel.trailingAnchor,
+                                 trailing: registerHStack.trailingAnchor,
+                                 centerY: speratorLeftLine.centerYAnchor,
+                                 height: 0.5,
+                                padding: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 20))
         
     }
     
+    @objc func didTapSignIn() {
+        
+        guard let email = emailTextField.text,
+              let password = passwordTextField.text
+        else {
+            return
+        }
+        
+        Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
+            if let error = error {
+                
+                print(error.localizedDescription)
+                
+            } else {
+                
+                guard let uid = authResult?.user.uid else { return }
+                
+                self?.userManager.checkUserExist(uid: uid, completion: { isExit in
+                    
+                    if isExit {
+                        
+                        self?.delegate?.signInExistUser()
+
+                        self?.dismiss(animated: true)
+                        
+                    } else {
+                        
+                        print("Please Sign Up First!")
+                    }
+                })
+            }
+        }
+    }
+    
+    @objc func didTapRegister() {
+        
+        let registerVC = RegisterViewController()
+        
+        registerVC.delegate = self
+        
+        present(registerVC, animated: true)
+    }
     
     func setupAppleButton() {
         view.addSubview(appleButton)
         appleButton.layer.cornerRadius = 12
         appleButton.addTarget(self, action: #selector(startSignInWithAppleFlow), for: .touchUpInside)
         appleButton.translatesAutoresizingMaskIntoConstraints = false
-        appleButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        appleButton.heightAnchor.constraint(equalToConstant: 45).isActive = true
         appleButton.widthAnchor.constraint(equalToConstant: 235).isActive = true
         appleButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        appleButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -70).isActive = true
+        appleButton.topAnchor.constraint(equalTo: orLabel.bottomAnchor, constant: 20).isActive = true
     }
     
     @objc func startSignInWithAppleFlow() {
@@ -161,15 +327,15 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
           self.userManager.checkUserExist(uid: uid) { [weak self] isExist in
 
               if isExist {
-                  
+
                   self?.delegate?.signInExistUser()
-                  
+
                   self?.dismiss(animated: true)
 
               } else {
-                  
+
                   guard let userName = appleIDCredential.fullName?.givenName else { return }
-                  
+
                   let user = User(id: uid,
                                   name: userName,
                                   petsId: [],
@@ -180,21 +346,21 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
                                   friends: [],
                                   recieveFriendRequest: [],
                                   sendRequestsId: [])
-                  
+
                   self?.userManager.setupUser(user: user) { [weak self] result in
-                      
+
                       switch result {
-                          
+
                       case .success:
-                          
+
                           self?.dismiss(animated: true)
-                          
+
                           self?.delegate?.showNewUserConfigure()
-                          
+
                           UserManager.shared.currentUser = user
-                          
+
                       case .failure(let error):
-                          
+
                           print(error)
                       }
                   }
@@ -208,4 +374,86 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
     // Handle error.
     print("Sign in with Apple errored: \(error)")
   }
+    
+//    func checkUserExist(uid: String, userName: String?) {
+//
+//        self.userManager.checkUserExist(uid: uid) { [weak self] isExist in
+//
+//            if isExist {
+//
+//                self?.delegate?.signInExistUser()
+//
+//                self?.dismiss(animated: true)
+//
+//            } else {
+//
+//                let user = User(id: uid,
+//                                name: userName ?? "",
+//                                petsId: [],
+//                                currentPetId: "",
+//                                userImage: "",
+//                                description: "",
+//                                friendPetsId: [],
+//                                friends: [],
+//                                recieveFriendRequest: [],
+//                                sendRequestsId: [])
+//
+//                self?.userManager.setupUser(user: user) { [weak self] result in
+//
+//                    switch result {
+//
+//                    case .success:
+//
+//                        self?.dismiss(animated: true)
+//
+//                        self?.delegate?.showNewUserConfigure()
+//
+//                        UserManager.shared.currentUser = user
+//
+//                    case .failure(let error):
+//
+//                        print(error)
+//                    }
+//                }
+//            }
+//        }
+//    }
+}
+
+extension SignInViewController: RegisterViewDelegate {
+    
+    func didFinishRegister(uid: String) {
+        
+        self.dismiss(animated: true) { [weak self] in
+            
+            let user = User(id: uid,
+                            name: "",
+                            petsId: [],
+                            currentPetId: "",
+                            userImage: "",
+                            description: "",
+                            friendPetsId: [],
+                            friends: [],
+                            recieveFriendRequest: [],
+                            sendRequestsId: [])
+
+            self?.userManager.setupUser(user: user) {  result in
+
+                switch result {
+
+                case .success:
+
+                    self?.dismiss(animated: true)
+
+                    self?.delegate?.showNewUserConfigure()
+
+                    UserManager.shared.currentUser = user
+
+                case .failure(let error):
+
+                    print(error)
+                }
+            }
+        }
+    }
 }
