@@ -190,6 +190,35 @@ class UserManager {
         }
     }
     
+    func listenUserInfo(userId: String, completion: @escaping (Result<User, Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+            
+        document.addSnapshotListener { snapshot, _ in
+            
+            guard let snapshot = snapshot
+            
+            else {
+                
+                    completion(.failure(FirebaseError.fetchUserError))
+                    
+                    return
+            }
+            
+            do {
+                
+                let user = try snapshot.data(as: User.self)
+                
+                completion(.success(user))
+                
+            } catch {
+                
+                completion(.failure(FirebaseError.decodeUserError))
+            }
+            
+        }
+    }
+    
     func fetchUserLocation(userId: String, completion: @escaping (Result<UserLocation, Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.userLocations.rawValue).document(userId)
@@ -424,7 +453,53 @@ class UserManager {
         }
     }
     
-    func sendFriendRequest(senderId: String, recieverId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func fetchUsers(userIds: [String], completion: @escaping (Result<[User], Error>) -> Void) {
+        
+        var users: [User] = []
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        let dispatchQueue = DispatchQueue.global()
+        
+        dispatchQueue.async { [weak self] in
+            
+            for userId in userIds {
+                
+                let document = self?.dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+                
+                document?.getDocument { snapshot, _ in
+                    
+                    guard let snapshot = snapshot
+                    
+                    else {
+                        
+                            completion(.failure(FirebaseError.fetchUserError))
+                            
+                            return
+                    }
+                    
+                    do {
+                        
+                        let user = try snapshot.data(as: User.self)
+                        
+                        users.append(user)
+                        
+                        semaphore.signal()
+                        
+                    } catch {
+                        
+                        completion(.failure(FirebaseError.decodeUserError))
+                    }
+                }
+                semaphore.wait()
+            }
+            completion(.success(users))
+        }
+    }
+    
+    func sendFriendRequest(senderId: String,
+                           recieverId: String,
+                           completion: @escaping (Result<Void, Error>) -> Void) {
         
         let batch = dataBase.batch()
         
@@ -451,7 +526,9 @@ class UserManager {
         }
     }
     
-    func removeFriendRequest(senderId: String, recieverId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func removeFriendRequest(senderId: String,
+                             recieverId: String,
+                             completion: @escaping (Result<Void, Error>) -> Void) {
         
         let batch = dataBase.batch()
         
@@ -478,7 +555,9 @@ class UserManager {
         }
     }
     
-    func denyFriendRequest(senderId: String, userId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func denyFriendRequest(senderId: String,
+                           userId: String,
+                           completion: @escaping (Result<Void, Error>) -> Void) {
         
         let recieverDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
         
@@ -498,7 +577,9 @@ class UserManager {
         }
     }
     
-    func acceptFriendRequest(senderId: String, userId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func acceptFriendRequest(senderId: String,
+                             userId: String,
+                             completion: @escaping (Result<Void, Error>) -> Void) {
         
         let batch = dataBase.batch()
         

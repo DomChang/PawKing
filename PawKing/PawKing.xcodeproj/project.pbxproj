@@ -73,6 +73,8 @@
 		B6E86AAA285F7DAA002B8C9A /* PetItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86AA9285F7DAA002B8C9A /* PetItemCell.swift */; };
 		B6E86AAC2860309F002B8C9A /* EditUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86AAB2860309F002B8C9A /* EditUserViewController.swift */; };
 		B6E86AB228609CB7002B8C9A /* PostManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86AB128609CB7002B8C9A /* PostManager.swift */; };
+		B6E94318286DC83100B3157F /* FriendRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E94317286DC83100B3157F /* FriendRequestViewController.swift */; };
+		B6E9431A286DCA1700B3157F /* FriendRequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E94319286DCA1700B3157F /* FriendRequestCell.swift */; };
 		C616981117A2021ACBB94FA1 /* Pods_PawKing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3366849FA1579D202FA53C8 /* Pods_PawKing.framework */; };
 /* End PBXBuildFile section */
 
@@ -148,6 +150,8 @@
 		B6E86AA9285F7DAA002B8C9A /* PetItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetItemCell.swift; sourceTree = "<group>"; };
 		B6E86AAB2860309F002B8C9A /* EditUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserViewController.swift; sourceTree = "<group>"; };
 		B6E86AB128609CB7002B8C9A /* PostManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostManager.swift; sourceTree = "<group>"; };
+		B6E94317286DC83100B3157F /* FriendRequestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRequestViewController.swift; sourceTree = "<group>"; };
+		B6E94319286DCA1700B3157F /* FriendRequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRequestCell.swift; sourceTree = "<group>"; };
 		F3366849FA1579D202FA53C8 /* Pods_PawKing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PawKing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -417,6 +421,7 @@
 				B63484E6285E36F700DB7CE7 /* ChoosePetTableViewCell.swift */,
 				B6D4F6A6285C5F9B0045DDB2 /* StrangerCardViewCell.swift */,
 				B6A91D682868372B0049253A /* NoStrangerCell.swift */,
+				B6E94319286DCA1700B3157F /* FriendRequestCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -446,6 +451,7 @@
 			children = (
 				B698DDB42858B8540009077E /* MapViewController.swift */,
 				B63484E4285E1E5300DB7CE7 /* ChoosePetViewController.swift */,
+				B6E94317286DC83100B3157F /* FriendRequestViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -683,8 +689,10 @@
 				B698DDBD2858B8CC0009077E /* ProfileViewController.swift in Sources */,
 				B698DDC22858CE9D0009077E /* UIView+Extension.swift in Sources */,
 				B66A15C228658DF500DF2663 /* Message.swift in Sources */,
+				B6E9431A286DCA1700B3157F /* FriendRequestCell.swift in Sources */,
 				B6BF96182862A467003627C1 /* PhotoPostViewController.swift in Sources */,
 				B698DDB52858B8540009077E /* MapViewController.swift in Sources */,
+				B6E94318286DC83100B3157F /* FriendRequestViewController.swift in Sources */,
 				B6D4F6A3285C526A0045DDB2 /* FirebaseCollection.swift in Sources */,
 				B6D4F6A7285C5F9B0045DDB2 /* StrangerCardViewCell.swift in Sources */,
 				B6E86AAA285F7DAA002B8C9A /* PetItemCell.swift in Sources */,

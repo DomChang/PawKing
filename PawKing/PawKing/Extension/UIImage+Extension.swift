@@ -34,6 +34,8 @@ enum ImageAsset: String {
     
     case Icons_60px_Stranger
     
+    case Icons_45px_Bell
+    
     case Image_Placeholder
 }
 // swiftlint:enable identifier_name
@@ -78,4 +80,3 @@ extension UIImage {
         return UIGraphicsGetImageFromCurrentImageContext()
      }
 }
-
