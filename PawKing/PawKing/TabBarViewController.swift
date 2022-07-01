@@ -117,13 +117,13 @@ class TabBarViewController: UITabBarController {
         
         tabBar.isHidden = false
         
-        if var userId = Auth.auth().currentUser?.uid {
+        if let userId = Auth.auth().currentUser?.uid {
             
-//            userId = "6jRPSQJEw7NWuyZl2BCs"
+//            let userId = "6jRPSQJEw7NWuyZl2BCs"
             getUser(userId: userId)
             
         } else {
-            
+
             let user = User(id: "Guest",
                             name: "Guest",
                             petsId: [],
@@ -134,7 +134,7 @@ class TabBarViewController: UITabBarController {
                             friends: [],
                             recieveFriendRequest: [],
                             sendRequestsId: [])
-            
+
             configureUserToTab(user: user)
         }
         
@@ -230,6 +230,23 @@ extension TabBarViewController: UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController,
                           shouldSelect viewController: UIViewController) -> Bool {
+        
+        guard Auth.auth().currentUser?.uid != nil else {
+            
+            let index = viewControllers?.firstIndex(of: viewController)
+            
+            if index == 2 || index == 3 || index == 4 {
+                
+                let signInVC = SignInViewController()
+                
+                signInVC.delegate = self
+                
+                present(signInVC, animated: true)
+                
+                return false
+            }
+            return true
+        }
         
         if let navigaton = viewController as? UINavigationController,
            navigaton.viewControllers.contains(where: { return $0 is PublishViewController }) {

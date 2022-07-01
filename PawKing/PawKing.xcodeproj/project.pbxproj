@@ -17,6 +17,8 @@
 		B63484E5285E1E5300DB7CE7 /* ChoosePetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484E4285E1E5300DB7CE7 /* ChoosePetViewController.swift */; };
 		B63484E7285E36F700DB7CE7 /* ChoosePetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484E6285E36F700DB7CE7 /* ChoosePetTableViewCell.swift */; };
 		B63484ED285EEE8800DB7CE7 /* PhotoItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484EC285EEE8800DB7CE7 /* PhotoItemCell.swift */; };
+		B651EDCC286EA2F8003A5F2B /* InputTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B651EDCB286EA2F8003A5F2B /* InputTextField.swift */; };
+		B651EDCE286ED454003A5F2B /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B651EDCD286ED454003A5F2B /* RegisterViewController.swift */; };
 		B66A15B92864606700DF2663 /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15B82864606700DF2663 /* ResultViewController.swift */; };
 		B66A15BB28648B4900DF2663 /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15BA28648B4900DF2663 /* SearchResultCell.swift */; };
 		B66A15C228658DF500DF2663 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15C128658DF500DF2663 /* Message.swift */; };
@@ -89,6 +91,8 @@
 		B63484E4285E1E5300DB7CE7 /* ChoosePetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoosePetViewController.swift; sourceTree = "<group>"; };
 		B63484E6285E36F700DB7CE7 /* ChoosePetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoosePetTableViewCell.swift; sourceTree = "<group>"; };
 		B63484EC285EEE8800DB7CE7 /* PhotoItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoItemCell.swift; sourceTree = "<group>"; };
+		B651EDCB286EA2F8003A5F2B /* InputTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextField.swift; sourceTree = "<group>"; };
+		B651EDCD286ED454003A5F2B /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		B66A15B82864606700DF2663 /* ResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
 		B66A15BA28648B4900DF2663 /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
 		B66A15C128658DF500DF2663 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -211,7 +215,6 @@
 			children = (
 				B63484E9285EEE3000DB7CE7 /* Model */,
 				B63484EA285EEE3900DB7CE7 /* View */,
-				B63484EB285EEE4400DB7CE7 /* Controller */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -234,6 +237,7 @@
 				B6E86AA3285F0B6B002B8C9A /* ContentButtonCell.swift */,
 				B63484EC285EEE8800DB7CE7 /* PhotoItemCell.swift */,
 				B6E86AA5285F0B85002B8C9A /* TrackHostoryCell.swift */,
+				B63484EB285EEE4400DB7CE7 /* Controller */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -383,6 +387,7 @@
 			isa = PBXGroup;
 			children = (
 				B6A91D73286AE9070049253A /* InputTextView.swift */,
+				B651EDCB286EA2F8003A5F2B /* InputTextField.swift */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -391,6 +396,7 @@
 			isa = PBXGroup;
 			children = (
 				B6A91D79286BE5A50049253A /* SignInViewController.swift */,
+				B651EDCD286ED454003A5F2B /* RegisterViewController.swift */,
 			);
 			path = SignIn;
 			sourceTree = "<group>";
@@ -691,8 +697,10 @@
 				B66A15D52867500C00DF2663 /* UserAnnotationView.swift in Sources */,
 				B6E86AA8285F1EB4002B8C9A /* Post.swift in Sources */,
 				B6ABE8EB285AE41500B1A977 /* LocationRelated+Extension.swift in Sources */,
+				B651EDCE286ED454003A5F2B /* RegisterViewController.swift in Sources */,
 				B66A15CC2865ECA300DF2663 /* OtherUserMessageCell.swift in Sources */,
 				B6D4F6A9285C62F10045DDB2 /* Pet.swift in Sources */,
+				B651EDCC286EA2F8003A5F2B /* InputTextField.swift in Sources */,
 				B6E86AB228609CB7002B8C9A /* PostManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
