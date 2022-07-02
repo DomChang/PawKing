@@ -91,7 +91,7 @@ class StrangerCardViewCell: UICollectionViewCell {
         
         nameLabel.text = pet.name
         
-        genderLabel.text = "Gender: \(PetGender.allCases[pet.gender].rawValue)"
+        genderLabel.text = "Gender: \(pet.gender)"
         
         let date = pet.birthday.dateValue()
         let timeInterval = date.timeIntervalSinceNow

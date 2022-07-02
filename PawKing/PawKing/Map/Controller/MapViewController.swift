@@ -529,7 +529,7 @@ class MapViewController: UIViewController {
         }
         userLocationButton.isHidden = strangerButton.isSelected
         
-        mapManager.fetchStrangerLocations(friend: friends) { [weak self] result in
+        mapManager.fetchStrangerLocations(friend: friends, blockIds: user.blockUsersId) { [weak self] result in
             
             switch result {
                 

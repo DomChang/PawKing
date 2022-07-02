@@ -162,7 +162,7 @@ extension UserConfigViewController: UserConfigCellDelegate {
 //                        description: ,
 //                        friendPetsId: [],
 //                        friends: [],
-//                        recieveFriendRequest: [],
+//                        recieveRequestsId: [],
 //                        sendRequestsId: [])
         
         userManager.setupUser(user: user) { [weak self] result in

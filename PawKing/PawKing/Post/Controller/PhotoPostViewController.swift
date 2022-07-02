@@ -260,7 +260,7 @@ class PhotoPostViewController: UIViewController {
     
     func getComments() {
         
-        postManager.listenComments(postId: post.id) { [weak self] result in
+        postManager.listenComments(postId: post.id, blockIds: user.blockUsersId) { [weak self] result in
             
             switch result {
                 

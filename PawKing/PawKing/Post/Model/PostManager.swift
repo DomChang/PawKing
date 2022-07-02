@@ -95,7 +95,7 @@ class PostManager {
         }
     }
     
-    func fetchAllPosts(completion: @escaping (Result<[Post], Error>) -> Void) {
+    func fetchAllPosts(blockIds:[String], completion: @escaping (Result<[Post], Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.posts.rawValue)
                                 .order(by: "createdTime", descending: true)
@@ -118,7 +118,9 @@ class PostManager {
                     
                     let post = try document.data(as: Post.self)
                     
-                    posts.append(post)
+                    if !blockIds.contains(post.userId) {
+                        posts.append(post)
+                    }
                 }
                 
                 completion(.success(posts))
@@ -165,7 +167,7 @@ class PostManager {
         }
     }
     
-    func listenComments(postId: String, completion: @escaping (Result<[Comment], Error>) -> Void) {
+    func listenComments(postId: String, blockIds:[String], completion: @escaping (Result<[Comment], Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.posts.rawValue)
             .document(postId).collection(FirebaseCollection.comments.rawValue)
@@ -188,7 +190,10 @@ class PostManager {
                     
                     let comment = try diff.document.data(as: Comment.self)
                     
-                    comments.append(comment)
+                    if !blockIds.contains(comment.senderId) {
+                        
+                        comments.append(comment)
+                    }
                 }
                 
                 completion(.success(comments))

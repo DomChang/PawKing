@@ -45,9 +45,9 @@ class ChatRoomViewController: UIViewController {
         if let user = UserManager.shared.currentUser {
             
             self.user = user
+            
+            getChatRooms(without: user.blockUsersId)
         }
-        
-        getChatRooms()
     }
     
     private func setup() {
@@ -74,13 +74,13 @@ class ChatRoomViewController: UIViewController {
         tableView.fillSafeLayout()
     }
     
-    func getChatRooms() {
+    func getChatRooms(without blockIds: [String]) {
         
         guard let user = user else {
             return
         }
         
-        chatManager.fetchChatRooms(userId: user.id) { [weak self] result in
+        chatManager.fetchChatRooms(userId: user.id, blockIds: blockIds) { [weak self] result in
             
             switch result {
                 

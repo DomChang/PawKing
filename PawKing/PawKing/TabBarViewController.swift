@@ -28,7 +28,7 @@ private enum Tab {
 
         case .map: controller = UINavigationController(rootViewController: MapViewController(user: user))
 
-        case .explore: controller = UINavigationController(rootViewController: ExploreViewController(user: user))
+        case .explore: controller = UINavigationController(rootViewController: ExploreViewController())
             
         case .publish: controller =
             UINavigationController(rootViewController:
@@ -132,8 +132,9 @@ class TabBarViewController: UITabBarController {
                             description: "",
                             friendPetsId: [],
                             friends: [],
-                            recieveFriendRequest: [],
-                            sendRequestsId: [])
+                            recieveRequestsId: [],
+                            sendRequestsId: [],
+                            blockUsersId: [])
 
             configureUserToTab(user: user)
         }

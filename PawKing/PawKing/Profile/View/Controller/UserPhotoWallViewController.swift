@@ -47,6 +47,8 @@ class UserPhotoWallViewController: UIViewController {
         }
     }
     
+    let actionController = UIAlertController(title: "Actions", message: nil, preferredStyle: .actionSheet)
+    
     init(otherUser: User) {
 
         self.otherUser = otherUser
@@ -71,6 +73,8 @@ class UserPhotoWallViewController: UIViewController {
         if let user = UserManager.shared.currentUser {
             
             self.user = user
+            
+            setActionSheet(user: user)
         }
         
         fetchPet(by: otherUser)
@@ -81,6 +85,11 @@ class UserPhotoWallViewController: UIViewController {
     private func setup() {
         
         navigationItem.title = "\(otherUser.name)"
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"),
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(didTapAction))
         
         navigationController?.navigationBar.tintColor = .Orange1
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
@@ -194,6 +203,73 @@ class UserPhotoWallViewController: UIViewController {
             sender.layer.borderWidth = 0
         }
     }
+    
+    func setActionSheet(user: User) {
+        
+        if user.blockUsersId.contains(otherUser.id) {
+            
+            let unBlockAction = UIAlertAction(title: "Unblock User", style: .destructive) { [weak self] _ in
+                
+                guard let self = self else { return }
+                
+                self.userManager.removeBlockUser(userId: user.id, blockId: self.otherUser.id) { result in
+                    
+                    switch result {
+                        
+                    case.success:
+                        
+                        print("Unblock user success!")
+                        
+                    case .failure(let error):
+                        
+                        print(error)
+                    }
+                }
+            }
+            actionController.addAction(unBlockAction)
+            
+        } else {
+            
+            let blockAction = UIAlertAction(title: "Block User", style: .destructive) { [weak self] _ in
+                
+                guard let self = self else { return }
+                
+                self.userManager.addBlockUser(userId: user.id, blockId: self.otherUser.id) { result in
+                    
+                    switch result {
+                        
+                    case.success:
+                        
+                        print("Block user success!")
+                        
+                    case .failure(let error):
+                        
+                        print(error)
+                    }
+                }
+            }
+            actionController.addAction(blockAction)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        actionController.addAction(cancelAction)
+    }
+    
+    @objc func didTapAction() {
+        
+        present(actionController, animated: true) {
+            
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissAlertController))
+            
+            self.actionController.view.superview?.subviews[0].addGestureRecognizer(tapGesture)
+        }
+    }
+    
+    @objc private func dismissAlertController() {
+        
+        actionController.dismiss(animated: true)
+    }
 }
 
 extension UserPhotoWallViewController: ProfileInfoCellDelegate {
@@ -238,7 +314,7 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
             
             friendRequestButton.isSelected = !friendRequestButton.isSelected
             
-            userManager.sendFriendRequest(senderId: user.id, recieverId: otherUser.id) { result in
+            userManager.sendFriendRequest(senderId: user.id, recieverId: otherUser.id, recieverBlockIds: otherUser.blockUsersId) { result in
                 
                 switch result {
                     

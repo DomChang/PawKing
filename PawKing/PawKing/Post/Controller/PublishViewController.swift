@@ -66,13 +66,12 @@ final class PublishViewController: UIViewController {
         if let user = UserManager.shared.currentUser {
             
             self.user = user
+            
+            getUserPet()
         }
     }
 
-
     func setup() {
-        
-        getUserPet()
         
         submitButtonDisable()
         
