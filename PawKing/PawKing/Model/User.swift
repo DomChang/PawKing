@@ -16,7 +16,7 @@ struct User: Codable {
     var userImage: String
     var description: String
     let friendPetsId: [String]
-    let friends: [String]
+    var friends: [String]
     var recieveFriendRequest: [String]
     var sendRequestsId: [String]
 }

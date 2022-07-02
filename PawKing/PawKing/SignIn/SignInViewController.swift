@@ -50,11 +50,11 @@ class SignInViewController: UIViewController {
         
         view.backgroundColor = .white
         
+        setupAppleButton()
+        
         setup()
         style()
         layout()
-        
-        setupAppleButton()
     }
     
     func setup() {
@@ -133,27 +133,27 @@ class SignInViewController: UIViewController {
 //                        height: 400,
 //                        padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
         
-        signInTitleLabel.anchor(top: view.topAnchor,
-                                leading: view.leadingAnchor,
+        signInTitleLabel.anchor(leading: view.leadingAnchor,
+                                bottom: signVStack.topAnchor,
                                 trailing: view.trailingAnchor,
-                                padding: UIEdgeInsets(top: 300, left: 20, bottom: 0, right: 20))
+                                padding: UIEdgeInsets(top: 0, left: 20, bottom: 24, right: 20))
         
-        signVStack.anchor(top: signInTitleLabel.bottomAnchor,
-                          leading: view.leadingAnchor,
+        signVStack.anchor(leading: view.leadingAnchor,
+                          bottom: registerHStack.topAnchor,
                           trailing: view.trailingAnchor,
                           height: 160,
-                          padding: UIEdgeInsets(top: 24, left: 20, bottom: 0, right: 20))
+                          padding: UIEdgeInsets(top: 0, left: 20, bottom: 20, right: 20))
         
-        registerHStack.anchor(top: signVStack.bottomAnchor,
-                              leading: signVStack.leadingAnchor,
+        registerHStack.anchor(leading: signVStack.leadingAnchor,
+                              bottom: speratorLeftLine.topAnchor,
                               trailing: signVStack.trailingAnchor,
-                              padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
+                              padding: UIEdgeInsets(top: 0, left: 0, bottom: 20, right: 0))
         
-        speratorLeftLine.anchor(top: registerHStack.bottomAnchor,
-                                leading: registerHStack.leadingAnchor,
+        speratorLeftLine.anchor(leading: registerHStack.leadingAnchor,
+                                bottom: appleButton.topAnchor,
                                 trailing: orLabel.leadingAnchor,
                                 height: 0.5,
-                                padding: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 10))
+                                padding: UIEdgeInsets(top: 0, left: 20, bottom: 20, right: 10))
         
         orLabel.anchor(centerY: speratorLeftLine.centerYAnchor,
                        centerX: view.centerXAnchor)
@@ -213,11 +213,12 @@ class SignInViewController: UIViewController {
         view.addSubview(appleButton)
         appleButton.layer.cornerRadius = 12
         appleButton.addTarget(self, action: #selector(startSignInWithAppleFlow), for: .touchUpInside)
-        appleButton.translatesAutoresizingMaskIntoConstraints = false
-        appleButton.heightAnchor.constraint(equalToConstant: 45).isActive = true
-        appleButton.widthAnchor.constraint(equalToConstant: 235).isActive = true
-        appleButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        appleButton.topAnchor.constraint(equalTo: orLabel.bottomAnchor, constant: 20).isActive = true
+        
+        appleButton.anchor(bottom: view.bottomAnchor,
+                           centerX: view.centerXAnchor,
+                           width: 235,
+                           height: 45,
+                           padding: UIEdgeInsets(top: 0, left: 0, bottom: 80, right: 0))
     }
     
     @objc func startSignInWithAppleFlow() {

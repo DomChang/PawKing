@@ -164,7 +164,7 @@ class ExploreViewController: UIViewController {
     
     private func setSearchController() {
         
-        let resultViewController = ResultViewController(user: user)
+        let resultViewController = ResultViewController()
         
         searchController = UISearchController(
             searchResultsController: resultViewController

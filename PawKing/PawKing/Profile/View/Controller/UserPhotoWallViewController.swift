@@ -16,7 +16,7 @@ class UserPhotoWallViewController: UIViewController {
     
     private let postManager = PostManager.shared
     
-    var user: User
+    var user: User?
     
     var otherUser: User
     
@@ -47,10 +47,8 @@ class UserPhotoWallViewController: UIViewController {
         }
     }
     
-    init(user: User, otherUser: User) {
-        
-        self.user = user
-        
+    init(otherUser: User) {
+
         self.otherUser = otherUser
         
         super.init(nibName: nil, bundle: nil)
@@ -69,6 +67,11 @@ class UserPhotoWallViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        if let user = UserManager.shared.currentUser {
+            
+            self.user = user
+        }
         
         fetchPet(by: otherUser)
         
@@ -153,6 +156,10 @@ class UserPhotoWallViewController: UIViewController {
     
     func setConnectState(sender: UIButton) {
         
+        guard let user = user else {
+            return
+        }
+        
         if user.friends.contains(otherUser.id) && otherUser.friends.contains(user.id) {
             
             isFriend = true
@@ -192,6 +199,10 @@ class UserPhotoWallViewController: UIViewController {
 extension UserPhotoWallViewController: ProfileInfoCellDelegate {
     
     func didTapLeftButton(from cell: ProfileInfoCell) {
+        
+        guard let user = user else {
+            return
+        }
         
         let friendRequestButton = cell.leftButton
         
@@ -246,6 +257,10 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
     }
     
     func didTapRightButton() {
+        
+        guard let user = user else {
+            return
+        }
 
        let messageVC = MessageViewController(user: user,
                                              otherUser: otherUser)
@@ -473,7 +488,8 @@ extension UserPhotoWallViewController: UICollectionViewDelegate {
             }
         } else if indexPath.section == UserPhotoWallSections.postsPhoto.rawValue {
          
-            guard let post = posts?[indexPath.item] else { return }
+            guard  let user = user,
+                   let post = posts?[indexPath.item] else { return }
             
             let photoPostVC = PhotoPostViewController(user: user, post: post)
             

@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Notification.Name {
-    
-    static let didSetCurrentUser = Notification.Name("didSetCurrentUser")
-}
+//extension Notification.Name {
+//    
+//    static let didSetCurrentUser = Notification.Name("didSetCurrentUser")
+//}

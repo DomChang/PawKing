@@ -16,7 +16,7 @@ final class PublishViewController: UIViewController {
     
     private var userPets: [Pet]?
     
-    private var user: User
+    private var user: User?
     
     private var selectedPet: Pet?
     
@@ -38,6 +38,16 @@ final class PublishViewController: UIViewController {
     
     let closeButton = UIButton()
     
+    init(image: UIImage) {
+        
+        self.photoImage = image
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -51,16 +61,14 @@ final class PublishViewController: UIViewController {
         petImageView.makeRound()
     }
     
-    init(user: User, image: UIImage) {
+    override func viewWillAppear(_ animated: Bool) {
         
-        self.user = user
-        self.photoImage = image
-        super.init(nibName: nil, bundle: nil)
+        if let user = UserManager.shared.currentUser {
+            
+            self.user = user
+        }
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+
 
     func setup() {
         
@@ -148,6 +156,10 @@ final class PublishViewController: UIViewController {
     
     func getUserPet() {
         
+        guard let user = user else {
+            return
+        }
+        
         userManager.fetchUserInfo(userId: user.id) { [weak self] result in
             
             switch result {
@@ -164,7 +176,7 @@ final class PublishViewController: UIViewController {
                         
                         self?.userPets = pets
                         
-                        self?.getUserCurrentPet()
+                        self?.getUserCurrentPet(user: user)
                         
                         self?.submitButtonEnable()
                         
@@ -180,7 +192,7 @@ final class PublishViewController: UIViewController {
         }
     }
     
-    func getUserCurrentPet() {
+    func getUserCurrentPet(user: User) {
         
         guard let userPets = userPets else {
             return
@@ -202,7 +214,8 @@ final class PublishViewController: UIViewController {
         
         submitButtonDisable()
         
-        guard let selectedPet = selectedPet
+        guard let user = user,
+                let selectedPet = selectedPet
         else {
             return
         }

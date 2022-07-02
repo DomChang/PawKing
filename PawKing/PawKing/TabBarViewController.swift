@@ -32,9 +32,9 @@ private enum Tab {
             
         case .publish: controller =
             UINavigationController(rootViewController:
-                                    PublishViewController(user: user, image: UIImage.asset(.Image_Placeholder)!))
+                                    PublishViewController(image: UIImage.asset(.Image_Placeholder)!))
             
-        case .chat: controller = UINavigationController(rootViewController: ChatRoomViewController(user: user))
+        case .chat: controller = UINavigationController(rootViewController: ChatRoomViewController())
 
         case .profile: controller = UINavigationController(rootViewController: ProfileViewController(user: user))
             
@@ -102,10 +102,10 @@ class TabBarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(didSetCurrentUser),
-                                               name: .didSetCurrentUser,
-                                               object: nil)
+//        NotificationCenter.default.addObserver(self,
+//                                               selector: #selector(didSetCurrentUser),
+//                                               name: .didSetCurrentUser,
+//                                               object: nil)
         
         view.backgroundColor = .white
         
@@ -165,13 +165,15 @@ class TabBarViewController: UITabBarController {
     
     @objc func getUser(userId: String) {
         
-        userManager.fetchUserInfo(userId: userId) { result in
+        userManager.fetchUserInfo(userId: userId) { [weak self] result in
             
             switch result {
                 
             case .success(let user):
                 
                 UserManager.shared.currentUser = user
+                
+                self?.configureUserToTab(user: user)
                 
             case .failure(let error):
                 
@@ -180,12 +182,12 @@ class TabBarViewController: UITabBarController {
         }
     }
     
-    @objc func didSetCurrentUser() {
-        
-        guard let user = userManager.currentUser else { return }
-        
-        configureUserToTab(user: user)
-    }
+//    @objc func didSetCurrentUser() {
+//        
+//        guard let user = userManager.currentUser else { return }
+//        
+//        configureUserToTab(user: user)
+//    }
     
     func configureUserToTab(user: User) {
         
@@ -196,7 +198,7 @@ class TabBarViewController: UITabBarController {
         photoHelper.completionHandler = { [weak self] image in
             
             let navPublishVC = UINavigationController(
-                rootViewController: PublishViewController(user: user, image: image))
+                rootViewController: PublishViewController(image: image))
             
             navPublishVC.modalPresentationStyle = .fullScreen
 

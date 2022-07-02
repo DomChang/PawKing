@@ -51,7 +51,14 @@ class PhotoPostViewController: UIViewController {
         }
     }
     
-    private var userComments: [UserComment] = []
+    private var userComments: [UserComment] = [] {
+        didSet {
+            
+            userComments.sort { $0.comment.createdTime.dateValue() > $1.comment.createdTime.dateValue() }
+            
+            tableView.reloadSections(IndexSet(integer: 1), with: .fade)
+        }
+    }
     
     private var comments: [Comment]?
     
@@ -285,10 +292,6 @@ class PhotoPostViewController: UIViewController {
                 
                 self?.userComments.append(userComment)
                 
-                self?.userComments.sort { $0.comment.createdTime.dateValue() < $1.comment.createdTime.dateValue() }
-                
-                self?.tableView.reloadSections(IndexSet(integer: 1), with: .fade)
-                
             case .failure(let error):
                 
                 print(error)
@@ -317,12 +320,12 @@ class PhotoPostViewController: UIViewController {
                 
             case .success:
                 
-                guard let user = self?.user else { return }
+//                guard let user = self?.user else { return }
                 
-                self?.comments?.append(comment)
+//                self?.comments?.append(comment)
                 
-                let userComment = UserComment(user: user, comment: comment)
-                self?.userComments.append(userComment)
+//                let userComment = UserComment(user: user, comment: comment)
+//                self?.userComments.append(userComment)
                 
 //                let indexPath = IndexPath(row: commentCount, section: 1)
 //
@@ -399,8 +402,6 @@ extension PhotoPostViewController: PhotoItemCellDelegate {
         }
         
         isLike = like
-        
-        tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
     }
 }
 
