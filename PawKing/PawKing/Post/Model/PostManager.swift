@@ -118,7 +118,7 @@ class PostManager {
                     
                     let post = try document.data(as: Post.self)
                     
-                    if !blockIds.contains(where: { $0 == post.userId }) {
+                    if !blockIds.contains(post.userId) {
                         posts.append(post)
                     }
                 }
@@ -167,7 +167,7 @@ class PostManager {
         }
     }
     
-    func listenComments(postId: String, completion: @escaping (Result<[Comment], Error>) -> Void) {
+    func listenComments(postId: String, blockIds:[String], completion: @escaping (Result<[Comment], Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.posts.rawValue)
             .document(postId).collection(FirebaseCollection.comments.rawValue)
@@ -190,7 +190,10 @@ class PostManager {
                     
                     let comment = try diff.document.data(as: Comment.self)
                     
-                    comments.append(comment)
+                    if !blockIds.contains(comment.senderId) {
+                        
+                        comments.append(comment)
+                    }
                 }
                 
                 completion(.success(comments))

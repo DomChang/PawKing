@@ -501,7 +501,7 @@ class UserManager {
             "sendRequestsId": FieldValue.arrayUnion([recieverId])
         ], forDocument: senderDoc)
         
-        if !recieverBlockIds.contains(where: {$0 == senderId}) {
+        if !recieverBlockIds.contains(senderId) {
             
             let recieverDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(recieverId)
             

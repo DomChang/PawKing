@@ -104,7 +104,7 @@ class ChatManager {
                         
                         let otherUserId = chat.otherUserId
                         
-                        if !blockIds.contains(where: { $0 == otherUserId }) {
+                        if !blockIds.contains(otherUserId) {
                             
                             self?.userManager.fetchUserInfo(userId: otherUserId) { result in
                                 

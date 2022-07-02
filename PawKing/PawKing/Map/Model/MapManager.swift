@@ -103,7 +103,7 @@ class MapManager {
         }
     }
     
-    func fetchStrangerLocations(friend: [String], completion: @escaping (Result<[UserLocation], Error>) -> Void) {
+    func fetchStrangerLocations(friend: [String], blockIds: [String], completion: @escaping (Result<[UserLocation], Error>) -> Void) {
         
         var strangerLocations: [UserLocation] = []
         
@@ -114,7 +114,7 @@ class MapManager {
                 
                 for userLocation in userLocations {
                     
-                    if !friend.contains(userLocation.userId) {
+                    if !friend.contains(userLocation.userId) && !blockIds.contains(userLocation.userId) {
                         strangerLocations.append(userLocation)
                     }
                 }
