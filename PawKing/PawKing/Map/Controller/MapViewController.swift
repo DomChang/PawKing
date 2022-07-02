@@ -61,7 +61,7 @@ class MapViewController: UIViewController {
     
     var trackStartTime = Timestamp()
     
-    private let user: User
+    private var user: User
     
     var userPets: [Pet] = [] {
         didSet {
@@ -96,6 +96,8 @@ class MapViewController: UIViewController {
         }
     }
     
+    var listeners: [ListenerRegistration]?
+    
     init(user: User) {
         
         self.user = user
@@ -123,6 +125,12 @@ class MapViewController: UIViewController {
         
         navigationController?.navigationBar.isHidden = true
         
+        if let user = UserManager.shared.currentUser {
+            
+            self.user = user
+            listenFriendsLocation()
+        }
+        
         if Auth.auth().currentUser != nil {
             
             fetchUserPets()
@@ -138,6 +146,8 @@ class MapViewController: UIViewController {
         super.viewWillDisappear(animated)
         
         navigationController?.navigationBar.isHidden = false
+        
+        listeners?.forEach { $0.remove() }
     }
     
     deinit {
@@ -152,8 +162,6 @@ class MapViewController: UIViewController {
         choosePetImageView.isHidden = true
         
 //        strangerButtonDisable()
-        
-        listenFriendsLocation()
         
 //        strangerButtonEnable()
         
@@ -618,7 +626,7 @@ class MapViewController: UIViewController {
         
         for friend in friends {
             
-            mapManager.listenFriendsLocation(friend: friend) { [weak self] result in
+           let listener = mapManager.listenFriendsLocation(friend: friend) { [weak self] result in
                 
                 switch result {
                     
@@ -631,6 +639,7 @@ class MapViewController: UIViewController {
                     print(error)
                 }
             }
+            listeners?.append(listener)
         }
     }
     
@@ -808,9 +817,9 @@ extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
 
             case .success(let otherUser):
 
-                guard let user = self?.user else { return }
+//                guard let user = self?.user else { return }
 
-                let userPhotoWallVC = UserPhotoWallViewController(user: user, otherUser: otherUser)
+                let userPhotoWallVC = UserPhotoWallViewController(otherUser: otherUser)
 
                 self?.navigationController?.pushViewController(userPhotoWallVC, animated: true)
 
@@ -835,9 +844,9 @@ extension MapViewController: UICollectionViewDataSource, UICollectionViewDelegat
 
             case .success(let otherUser):
 
-                guard let user = self?.user else { return }
+//                guard let user = self?.user else { return }
 
-                let userPhotoWallVC = UserPhotoWallViewController(user: user, otherUser: otherUser)
+                let userPhotoWallVC = UserPhotoWallViewController(otherUser: otherUser)
 
                 self?.navigationController?.pushViewController(userPhotoWallVC, animated: true)
 
