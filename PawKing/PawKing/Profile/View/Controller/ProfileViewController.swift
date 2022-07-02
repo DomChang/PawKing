@@ -25,7 +25,7 @@ class ProfileViewController: UIViewController {
         }
     }
     
-    var user: User
+    var user: User?
     
     var userPets: [Pet]? {
         didSet {
@@ -124,8 +124,6 @@ class ProfileViewController: UIViewController {
         
         collectionView.register(TrackHostoryCell.self,
                                 forCellWithReuseIdentifier: TrackHostoryCell.identifier)
-        
-        navigationItem.title = "\(user.name)"
     }
     
     private func style() {
@@ -156,6 +154,8 @@ class ProfileViewController: UIViewController {
     
     func fetchUser() {
         
+        guard let user = UserManager.shared.currentUser else { return }
+        
         userManager.fetchUserInfo(userId: user.id) { [weak self] result in
             
             switch result {
@@ -163,6 +163,8 @@ class ProfileViewController: UIViewController {
             case .success(let user):
                 
                 self?.user = user
+                
+                self?.navigationItem.title = "\(user.name)"
                 
                 self?.fetchPet(by: user)
                 
@@ -240,12 +242,16 @@ extension ProfileViewController: ProfileInfoCellDelegate {
     
     func didTapLeftButton(from cell: ProfileInfoCell) {
         
+        guard let user = user else { return }
+        
         let editUserVC = EditUserViewController(userId: user.id, userName: user.name)
         
         navigationController?.pushViewController(editUserVC, animated: true)
     }
     
     func didTapRightButton() {
+        
+        guard let user = user else { return }
 
         let petConfigVC = PetConfigViewController(user: user, isInitailSet: false)
         
@@ -407,11 +413,13 @@ extension ProfileViewController: UICollectionViewDataSource {
                 fatalError("Cannot dequeue ProfileInfoCell")
             }
             
+            guard let user = user else { return infoCell }
+            
             photoHelper.completionHandler = { [weak self] image in
                 
                 infoCell.userImageView.image = image
                 
-                self?.userManager.uploadUserPhoto(userId: self?.user.id ?? "",
+                self?.userManager.uploadUserPhoto(userId: user.id,
                                             image: image) { result in
                     switch result {
 
@@ -558,7 +566,8 @@ extension ProfileViewController: UICollectionViewDelegate {
             
             if isPhoto {
                 
-                guard let post = posts?[indexPath.item]
+                guard let user = user,
+                      let post = posts?[indexPath.item]
                 else { return }
                 
                 let photoPostVC = PhotoPostViewController(user: user, post: post)

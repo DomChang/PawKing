@@ -42,9 +42,9 @@ class MapManager {
         }
     }
     
-    func listenFriendsLocation(friend: String, completion: @escaping (Result<UserLocation, Error>) -> Void) {
+    func listenFriendsLocation(friend: String, completion: @escaping (Result<UserLocation, Error>) -> Void) -> ListenerRegistration {
     
-        dataBase.collection(FirebaseCollection.userLocations.rawValue).document(friend)
+        let listener = dataBase.collection(FirebaseCollection.userLocations.rawValue).document(friend)
                 .addSnapshotListener { snapshot, _ in
             
             guard let snapshot = snapshot else {
@@ -64,6 +64,8 @@ class MapManager {
                 completion(.failure(FirebaseError.decodeUserError))
             }
         }
+        
+        return listener
     }
     
     func fetchAllUserLocations(completion: @escaping (Result<[UserLocation], Error>) -> Void) {

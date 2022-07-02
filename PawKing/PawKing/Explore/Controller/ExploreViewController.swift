@@ -164,10 +164,14 @@ class ExploreViewController: UIViewController {
     
     private func setSearchController() {
         
-        let resultViewController = ResultViewController(user: user)
+        let resultViewController = ResultViewController()
+        
+        resultViewController.resultVCDelegate = self
+        
+        let navResultVC = UINavigationController(rootViewController: resultViewController)
         
         searchController = UISearchController(
-            searchResultsController: resultViewController
+            searchResultsController: navResultVC
         )
         searchController?.searchResultsUpdater = resultViewController
         
@@ -214,6 +218,16 @@ class ExploreViewController: UIViewController {
             
             self.bottomView.center.x = self.friendModeButton.center.x
         })
+    }
+}
+
+extension ExploreViewController: ResultViewControllerDelegate {
+    
+    func didSelectResultUser(theOtherUser: User) {
+        
+        let userPhotoVC = UserPhotoWallViewController(otherUser: theOtherUser)
+                    
+        navigationController?.pushViewController(userPhotoVC, animated: true)
     }
 }
 

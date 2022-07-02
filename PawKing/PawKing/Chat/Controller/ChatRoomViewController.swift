@@ -9,7 +9,7 @@ import UIKit
 
 class ChatRoomViewController: UIViewController {
     
-    private let user: User
+    private var user: User?
     
     private let tableView = UITableView()
     
@@ -23,14 +23,14 @@ class ChatRoomViewController: UIViewController {
         }
     }
     
-    init(user: User) {
-        self.user = user
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+//    init(user: User) {
+//        self.user = user
+//        super.init(nibName: nil, bundle: nil)
+//    }
+//
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +41,11 @@ class ChatRoomViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        if let user = UserManager.shared.currentUser {
+            
+            self.user = user
+        }
         
         getChatRooms()
     }
@@ -71,6 +76,10 @@ class ChatRoomViewController: UIViewController {
     
     func getChatRooms() {
         
+        guard let user = user else {
+            return
+        }
+        
         chatManager.fetchChatRooms(userId: user.id) { [weak self] result in
             
             switch result {
@@ -91,7 +100,8 @@ extension ChatRoomViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        guard let otherUser = chatRoooms?[indexPath.row].otherUser else { return }
+        guard let user = user,
+              let otherUser = chatRoooms?[indexPath.row].otherUser else { return }
         
         let messageVC = MessageViewController(user: user, otherUser: otherUser)
         

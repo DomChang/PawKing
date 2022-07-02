@@ -7,13 +7,20 @@
 
 import UIKit
 
+protocol ResultViewControllerDelegate {
+    
+    func didSelectResultUser(theOtherUser: User)
+}
+
 class ResultViewController: UISearchController {
     
     private let tableView = UITableView()
     
-    private let userManager = UserManager.shared
+    var resultVCDelegate: ResultViewControllerDelegate?
     
-    var user: User
+    private let userManager = UserManager.shared
+//    
+//    var user: User
     
     var allUsers: [User]?
     
@@ -23,25 +30,43 @@ class ResultViewController: UISearchController {
         }
     }
     
-    init(user: User) {
-        
-        self.user = user
-        
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+//    init(user: User) {
+//        
+//        self.user = user
+//        
+//        super.init(nibName: nil, bundle: nil)
+//    }
+//    
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        definesPresentationContext = true
 
         view.backgroundColor = .white
         
         setup()
         style()
         layout()
+    }
+    
+//    override func viewWillLayoutSubviews() {
+//        super.viewWillLayoutSubviews()
+//        navigationController?.setNavigationBarHidden(true, animated: false)
+//    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationController?.navigationBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+
+        navigationController?.navigationBar.isHidden = false
     }
     
     private func setup() {
@@ -105,13 +130,17 @@ extension ResultViewController: UITableViewDataSource, UITableViewDelegate {
         
         if let resultUsers = resultUsers {
             
-            let userPhotoVC = UserPhotoWallViewController(user: user, otherUser: resultUsers[indexPath.row])
             
-            let navUserPhotoVC = UINavigationController(rootViewController: userPhotoVC)
+            self.resultVCDelegate?.didSelectResultUser(theOtherUser: resultUsers[indexPath.row])
+//            let userPhotoVC = UserPhotoWallViewController(otherUser: resultUsers[indexPath.row])
             
-            navUserPhotoVC.modalPresentationStyle = .overFullScreen
+//            let navUserPhotoVC = UINavigationController(rootViewController: userPhotoVC)
             
-            self.present(navUserPhotoVC, animated: true)
+//            navUserPhotoVC.modalPresentationStyle = .overFullScreen
+            
+//            self.present(navUserPhotoVC, animated: true)
+            
+//            navigationController?.pushViewController(userPhotoVC, animated: true)
         }
     }
     

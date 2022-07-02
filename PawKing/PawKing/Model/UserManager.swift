@@ -17,7 +17,7 @@ class UserManager {
         
         didSet {
             
-            NotificationCenter.default.post(name: .didSetCurrentUser, object: nil)
+//            NotificationCenter.default.post(name: .didSetCurrentUser, object: nil)
         }
     }
     
@@ -48,12 +48,6 @@ class UserManager {
             try document.setData(from: user)
             
             completion(.success(user.id))
-            
-//            let id = Data(user.id.utf8)
-            
-//            KeychainManager.shared.save(id,
-//                                        service: KeychainService.userId.rawValue,
-//                                        account: KeychainAccount.pawKing.rawValue)
             
         } catch {
             completion(.failure(FirebaseError.setupUserError))
@@ -94,6 +88,9 @@ class UserManager {
             } else {
                 
                 completion(.success(()))
+                
+                UserManager.shared.currentUser?.name = userName
+                UserManager.shared.currentUser?.description = userDescription
             }
         }
     }
@@ -517,7 +514,9 @@ class UserManager {
         
         batch.commit() { err in
             if let err = err {
+                
                 print("Error writing batch \(err)")
+                
             } else {
                 
                 UserManager.shared.currentUser?.sendRequestsId.append(recieverId)
@@ -545,11 +544,15 @@ class UserManager {
         ], forDocument: recieverDoc)
         
         batch.commit() { err in
+            
             if let err = err {
+                
                 print("Error writing batch \(err)")
+                
             } else {
                 
                 UserManager.shared.currentUser?.sendRequestsId.removeAll(where: { $0 == recieverId })
+                
                 print("Batch write succeeded.")
             }
         }
@@ -562,8 +565,11 @@ class UserManager {
         let recieverDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
         
         recieverDoc.updateData([
+            
             "recieveFriendRequest": FieldValue.arrayRemove([senderId])
+            
         ]) { err in
+            
             if let err = err {
                 
                 completion(.failure(err))
@@ -612,6 +618,7 @@ class UserManager {
             } else {
                 
                 UserManager.shared.currentUser?.recieveFriendRequest.removeAll(where: { $0 == senderId })
+                UserManager.shared.currentUser?.friends.append(senderId)
                 
                 completion(.success(()))
             }
