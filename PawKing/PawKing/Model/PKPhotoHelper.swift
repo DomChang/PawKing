@@ -18,14 +18,14 @@ class PKPhotoHelper: NSObject {
     func presentActionSheet(from viewController: UIViewController) {
         // 1
         let alertController = UIAlertController(title: nil,
-                                                message: "如何獲取相片?",
+                                                message: nil,
                                                 preferredStyle: .actionSheet)
 
         // 2
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
-            let capturePhotoAction = UIAlertAction(title: "相機",
+            let capturePhotoAction = UIAlertAction(title: "Camera",
                                                    style: .default,
-                                                   handler: { [weak self] action in
+                                                   handler: { [weak self] _ in
                 self?.presentImagePickerController(with: .camera, from: viewController)
             })
 
@@ -33,9 +33,9 @@ class PKPhotoHelper: NSObject {
         }
 
         if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-            let uploadAction = UIAlertAction(title: "照片",
+            let uploadAction = UIAlertAction(title: "Library",
                                              style: .default,
-                                             handler: { [weak self] action in
+                                             handler: { [weak self] _ in
                 self?.presentImagePickerController(with: .photoLibrary, from: viewController)
             })
 
@@ -43,7 +43,7 @@ class PKPhotoHelper: NSObject {
         }
 
         // 6
-        let cancelAction = UIAlertAction(title: "取消",
+        let cancelAction = UIAlertAction(title: "Cancel",
                                          style: .cancel,
                                          handler: nil)
         alertController.addAction(cancelAction)
@@ -58,6 +58,8 @@ class PKPhotoHelper: NSObject {
         let imagePickerController = UIImagePickerController()
         
         imagePickerController.sourceType = sourceType
+        
+        imagePickerController.allowsEditing = true
         
         imagePickerController.delegate = self
 

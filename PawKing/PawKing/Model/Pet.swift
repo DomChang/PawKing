@@ -22,7 +22,7 @@ struct Pet: Codable {
     var id: String
     let ownerId: String
     let name: String
-    let gender: Int
+    let gender: String
     let breed: String
     let description: String
     let birthday: Timestamp

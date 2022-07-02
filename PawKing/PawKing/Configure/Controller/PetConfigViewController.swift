@@ -134,6 +134,7 @@ extension PetConfigViewController: PetConfigCellDelegate {
     func didTapFinish(From cell: PetConfigCell) {
         
         guard let petName = cell.petNameTextfield.text,
+              let gender = cell.genderTextfield.text,
               let petImage = cell.photoButton.image(for: .normal)
         else {
             return
@@ -144,7 +145,7 @@ extension PetConfigViewController: PetConfigCellDelegate {
         var pet = Pet(id: "",
                       ownerId: owner.id,
                       name: petName,
-                      gender: 0,
+                      gender: gender,
                       breed: "",
                       description: "",
                       birthday: birthday,
@@ -165,7 +166,9 @@ extension PetConfigViewController: PetConfigCellDelegate {
                 
             case .success:
                 
-                self?.dismiss(animated: true)
+                self?.navigationController?.popToRootViewController(animated: true)
+                
+                self?.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
                 
             case .failure(let error):
                 

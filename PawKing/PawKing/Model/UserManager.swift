@@ -624,15 +624,15 @@ class UserManager {
         }
     }
     
-    func addBlockUser(userId: String, bockId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func addBlockUser(userId: String, blockId: String, completion: @escaping (Result<Void, Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
         
         document.updateData([
             
-            "blockUsersId": FieldValue.arrayUnion([bockId]),
-            "recieveRequestsId": FieldValue.arrayRemove([bockId]),
-            "friends": FieldValue.arrayRemove([bockId])
+            "blockUsersId": FieldValue.arrayUnion([blockId]),
+            "recieveRequestsId": FieldValue.arrayRemove([blockId]),
+            "friends": FieldValue.arrayRemove([blockId])
             
         ]) { error in
             
@@ -642,20 +642,20 @@ class UserManager {
                 
             } else {
                 
-                UserManager.shared.currentUser?.blockUsersId.append(bockId)
+                UserManager.shared.currentUser?.blockUsersId.append(blockId)
                 
                 completion(.success(()))
             }
         }
     }
         
-    func removeBlockUser(userId: String, bockId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func removeBlockUser(userId: String, blockId: String, completion: @escaping (Result<Void, Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
         
         document.updateData([
             
-            "blockUsersId": FieldValue.arrayRemove([bockId])
+            "blockUsersId": FieldValue.arrayRemove([blockId])
             
         ]) { error in
             
@@ -665,7 +665,7 @@ class UserManager {
                 
             } else {
                 
-                UserManager.shared.currentUser?.blockUsersId.removeAll(where: {$0 == bockId})
+                UserManager.shared.currentUser?.blockUsersId.removeAll(where: {$0 == blockId})
                 
                 completion(.success(()))
             }

@@ -73,6 +73,8 @@ class UserPhotoWallViewController: UIViewController {
         if let user = UserManager.shared.currentUser {
             
             self.user = user
+            
+            setActionSheet(user: user)
         }
         
         fetchPet(by: otherUser)
@@ -111,8 +113,6 @@ class UserPhotoWallViewController: UIViewController {
         
         collectionView.register(PhotoItemCell.self,
                                 forCellWithReuseIdentifier: PhotoItemCell.identifier)
-        
-        setActionSheet()
     }
     
     private func style() {
@@ -204,14 +204,52 @@ class UserPhotoWallViewController: UIViewController {
         }
     }
     
-    func setActionSheet() {
+    func setActionSheet(user: User) {
         
-        let blockAction = UIAlertAction(title: "Bock User", style: .destructive) {_ in 
+        if user.blockUsersId.contains(otherUser.id) {
             
+            let unBlockAction = UIAlertAction(title: "Unblock User", style: .destructive) { [weak self] _ in
+                
+                guard let self = self else { return }
+                
+                self.userManager.removeBlockUser(userId: user.id, blockId: self.otherUser.id) { result in
+                    
+                    switch result {
+                        
+                    case.success:
+                        
+                        print("Unblock user success!")
+                        
+                    case .failure(let error):
+                        
+                        print(error)
+                    }
+                }
+            }
+            actionController.addAction(unBlockAction)
             
+        } else {
+            
+            let blockAction = UIAlertAction(title: "Block User", style: .destructive) { [weak self] _ in
+                
+                guard let self = self else { return }
+                
+                self.userManager.addBlockUser(userId: user.id, blockId: self.otherUser.id) { result in
+                    
+                    switch result {
+                        
+                    case.success:
+                        
+                        print("Block user success!")
+                        
+                    case .failure(let error):
+                        
+                        print(error)
+                    }
+                }
+            }
+            actionController.addAction(blockAction)
         }
-        
-        actionController.addAction(blockAction)
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
