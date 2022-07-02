@@ -506,7 +506,7 @@ class UserManager {
             let recieverDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(recieverId)
             
             batch.updateData([
-                "recieveFriendRequest": FieldValue.arrayUnion([senderId])
+                "recieveRequestsId": FieldValue.arrayUnion([senderId])
             ], forDocument: recieverDoc)
         }
         
@@ -539,7 +539,7 @@ class UserManager {
         let recieverDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(recieverId)
         
         batch.updateData([
-            "recieveFriendRequest": FieldValue.arrayRemove([senderId])
+            "recieveRequestsId": FieldValue.arrayRemove([senderId])
         ], forDocument: recieverDoc)
         
         batch.commit() { err in
@@ -565,7 +565,7 @@ class UserManager {
         
         recieverDoc.updateData([
             
-            "recieveFriendRequest": FieldValue.arrayRemove([senderId])
+            "recieveRequestsId": FieldValue.arrayRemove([senderId])
             
         ]) { err in
             
@@ -605,7 +605,7 @@ class UserManager {
         ], forDocument: senderDoc)
         
         batch.updateData([
-            "recieveFriendRequest": FieldValue.arrayRemove([senderId])
+            "recieveRequestsId": FieldValue.arrayRemove([senderId])
         ], forDocument: userDoc)
         
         batch.commit() { err in
@@ -631,7 +631,7 @@ class UserManager {
         document.updateData([
             
             "blockUsersId": FieldValue.arrayUnion([bockId]),
-            "recieveFriendRequest": FieldValue.arrayRemove([bockId]),
+            "recieveRequestsId": FieldValue.arrayRemove([bockId]),
             "friends": FieldValue.arrayRemove([bockId])
             
         ]) { error in

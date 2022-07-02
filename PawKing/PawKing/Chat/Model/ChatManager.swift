@@ -73,7 +73,7 @@ class ChatManager {
         }
     }
     
-    func fetchChatRooms(userId: String, completion: @escaping (Result<[Conversation], Error>) -> Void) {
+    func fetchChatRooms(userId: String, blockIds: [String], completion: @escaping (Result<[Conversation], Error>) -> Void) {
 
         let document = dataBase.collection(FirebaseCollection.chats.rawValue).document(userId)
             .collection(FirebaseCollection.recentMessages.rawValue)
@@ -104,19 +104,22 @@ class ChatManager {
                         
                         let otherUserId = chat.otherUserId
                         
-                        self?.userManager.fetchUserInfo(userId: otherUserId) { result in
+                        if !blockIds.contains(where: { $0 == otherUserId }) {
                             
-                            switch result {
+                            self?.userManager.fetchUserInfo(userId: otherUserId) { result in
                                 
-                            case.success(let user):
-                                
-                                chatRooms.append(Conversation(otherUser: user, message: chat))
+                                switch result {
+                                    
+                                case.success(let user):
+                                    
+                                    chatRooms.append(Conversation(otherUser: user, message: chat))
 
-                                semaphore.signal()
-                                
-                            case .failure:
-                                
-                                completion(.failure(FirebaseError.fetchUserError))
+                                    semaphore.signal()
+                                    
+                                case .failure:
+                                    
+                                    completion(.failure(FirebaseError.fetchUserError))
+                                }
                             }
                         }
                         semaphore.wait()

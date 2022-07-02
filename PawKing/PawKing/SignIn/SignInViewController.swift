@@ -397,7 +397,7 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
 //                                description: "",
 //                                friendPetsId: [],
 //                                friends: [],
-//                                recieveFriendRequest: [],
+//                                recieveRequestsId: [],
 //                                sendRequestsId: [])
 //
 //                self?.userManager.setupUser(user: user) { [weak self] result in
