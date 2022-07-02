@@ -345,8 +345,9 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
                                   description: "",
                                   friendPetsId: [],
                                   friends: [],
-                                  recieveFriendRequest: [],
-                                  sendRequestsId: [])
+                                  recieveRequestsId: [],
+                                  sendRequestsId: [],
+                                  blockUsersId: [])
 
                   self?.userManager.setupUser(user: user) { [weak self] result in
 
@@ -435,8 +436,9 @@ extension SignInViewController: RegisterViewDelegate {
                             description: "",
                             friendPetsId: [],
                             friends: [],
-                            recieveFriendRequest: [],
-                            sendRequestsId: [])
+                            recieveRequestsId: [],
+                            sendRequestsId: [],
+                            blockUsersId: [])
 
             self?.userManager.setupUser(user: user) {  result in
 

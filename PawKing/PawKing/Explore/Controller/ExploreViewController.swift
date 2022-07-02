@@ -18,7 +18,7 @@ class ExploreViewController: UIViewController {
     
     private let userManager = UserManager.shared
     
-    private let user: User
+    private var user: User?
     
     private var allPosts: [Post]?
     
@@ -36,17 +36,6 @@ class ExploreViewController: UIViewController {
     
     let bottomView = UIView()
     
-    init(user: User) {
-        
-        self.user = user
-        
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -56,7 +45,13 @@ class ExploreViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        getAllPosts()
+        
+        if let user = UserManager.shared.currentUser {
+            
+            self.user = user
+            
+            getAllPosts(without: user.blockUsersId)
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -134,9 +129,9 @@ class ExploreViewController: UIViewController {
         bottomView.layer.cornerRadius = 5
     }
     
-    private func getAllPosts() {
+    private func getAllPosts(without blockIds: [String]) {
         
-        postManager.fetchAllPosts { [weak self] result in
+        postManager.fetchAllPosts(blockIds: blockIds) { [weak self] result in
             
             switch result {
                 
@@ -182,7 +177,8 @@ class ExploreViewController: UIViewController {
     
     private func getFriendPosts() {
         
-        guard let posts = allPosts else { return }
+        guard let user = user,
+              let posts = allPosts else { return }
         
         var friendPosts: [Post] = []
         
@@ -350,7 +346,8 @@ extension ExploreViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        guard let post = displayPosts?[indexPath.item]
+        guard let user = user,
+              let post = displayPosts?[indexPath.item]
         else { return }
 
         let photoPostVC = PhotoPostViewController(user: user, post: post)

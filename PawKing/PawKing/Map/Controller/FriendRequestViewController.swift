@@ -93,7 +93,7 @@ class FriendRequestViewController: UIViewController {
     
     func getSenderInfo() {
         
-        userManager.fetchUsers(userIds: user.recieveFriendRequest) { [weak self] result in
+        userManager.fetchUsers(userIds: user.recieveRequestsId) { [weak self] result in
             
             switch result {
                 

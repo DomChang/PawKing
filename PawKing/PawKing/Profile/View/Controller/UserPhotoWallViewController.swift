@@ -47,6 +47,8 @@ class UserPhotoWallViewController: UIViewController {
         }
     }
     
+    let actionController = UIAlertController(title: "Actions", message: nil, preferredStyle: .actionSheet)
+    
     init(otherUser: User) {
 
         self.otherUser = otherUser
@@ -82,6 +84,11 @@ class UserPhotoWallViewController: UIViewController {
         
         navigationItem.title = "\(otherUser.name)"
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"),
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(didTapAction))
+        
         navigationController?.navigationBar.tintColor = .Orange1
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
         
@@ -104,6 +111,8 @@ class UserPhotoWallViewController: UIViewController {
         
         collectionView.register(PhotoItemCell.self,
                                 forCellWithReuseIdentifier: PhotoItemCell.identifier)
+        
+        setActionSheet()
     }
     
     private func style() {
@@ -194,6 +203,35 @@ class UserPhotoWallViewController: UIViewController {
             sender.layer.borderWidth = 0
         }
     }
+    
+    func setActionSheet() {
+        
+        let blockAction = UIAlertAction(title: "Bock User", style: .destructive) {_ in 
+            
+            
+        }
+        
+        actionController.addAction(blockAction)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        actionController.addAction(cancelAction)
+    }
+    
+    @objc func didTapAction() {
+        
+        present(actionController, animated: true) {
+            
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissAlertController))
+            
+            self.actionController.view.superview?.subviews[0].addGestureRecognizer(tapGesture)
+        }
+    }
+    
+    @objc private func dismissAlertController() {
+        
+        actionController.dismiss(animated: true)
+    }
 }
 
 extension UserPhotoWallViewController: ProfileInfoCellDelegate {
@@ -238,7 +276,7 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
             
             friendRequestButton.isSelected = !friendRequestButton.isSelected
             
-            userManager.sendFriendRequest(senderId: user.id, recieverId: otherUser.id) { result in
+            userManager.sendFriendRequest(senderId: user.id, recieverId: otherUser.id, recieverBlockIds: otherUser.blockUsersId) { result in
                 
                 switch result {
                     

@@ -13,13 +13,7 @@ class UserManager {
     
     static let shared = UserManager()
     
-    var currentUser: User? {
-        
-        didSet {
-            
-//            NotificationCenter.default.post(name: .didSetCurrentUser, object: nil)
-        }
-    }
+    var currentUser: User?
     
     lazy var dataBase = Firestore.firestore()
     
@@ -496,6 +490,7 @@ class UserManager {
     
     func sendFriendRequest(senderId: String,
                            recieverId: String,
+                           recieverBlockIds: [String],
                            completion: @escaping (Result<Void, Error>) -> Void) {
         
         let batch = dataBase.batch()
@@ -506,13 +501,17 @@ class UserManager {
             "sendRequestsId": FieldValue.arrayUnion([recieverId])
         ], forDocument: senderDoc)
         
-        let recieverDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(recieverId)
+        if !recieverBlockIds.contains(where: {$0 == senderId}) {
+            
+            let recieverDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(recieverId)
+            
+            batch.updateData([
+                "recieveFriendRequest": FieldValue.arrayUnion([senderId])
+            ], forDocument: recieverDoc)
+        }
         
-        batch.updateData([
-            "recieveFriendRequest": FieldValue.arrayUnion([senderId])
-        ], forDocument: recieverDoc)
-        
-        batch.commit() { err in
+        batch.commit(completion: { err in
+            
             if let err = err {
                 
                 print("Error writing batch \(err)")
@@ -522,7 +521,7 @@ class UserManager {
                 UserManager.shared.currentUser?.sendRequestsId.append(recieverId)
                 print("Batch write succeeded.")
             }
-        }
+        })
     }
     
     func removeFriendRequest(senderId: String,
@@ -576,7 +575,7 @@ class UserManager {
                 
             } else {
                 
-                UserManager.shared.currentUser?.recieveFriendRequest.removeAll(where: { $0 == senderId })
+                UserManager.shared.currentUser?.recieveRequestsId.removeAll(where: { $0 == senderId })
                 
                 completion(.success(()))
             }
@@ -617,8 +616,56 @@ class UserManager {
                 
             } else {
                 
-                UserManager.shared.currentUser?.recieveFriendRequest.removeAll(where: { $0 == senderId })
+                UserManager.shared.currentUser?.recieveRequestsId.removeAll(where: { $0 == senderId })
                 UserManager.shared.currentUser?.friends.append(senderId)
+                
+                completion(.success(()))
+            }
+        }
+    }
+    
+    func addBlockUser(userId: String, bockId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+        
+        document.updateData([
+            
+            "blockUsersId": FieldValue.arrayUnion([bockId]),
+            "recieveFriendRequest": FieldValue.arrayRemove([bockId]),
+            "friends": FieldValue.arrayRemove([bockId])
+            
+        ]) { error in
+            
+            if let error = error {
+                
+                completion(.failure(error))
+                
+            } else {
+                
+                UserManager.shared.currentUser?.blockUsersId.append(bockId)
+                
+                completion(.success(()))
+            }
+        }
+    }
+        
+    func removeBlockUser(userId: String, bockId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+        
+        document.updateData([
+            
+            "blockUsersId": FieldValue.arrayRemove([bockId])
+            
+        ]) { error in
+            
+            if let error = error {
+                
+                completion(.failure(error))
+                
+            } else {
+                
+                UserManager.shared.currentUser?.blockUsersId.removeAll(where: {$0 == bockId})
                 
                 completion(.success(()))
             }

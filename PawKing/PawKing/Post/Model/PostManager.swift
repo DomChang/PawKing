@@ -95,7 +95,7 @@ class PostManager {
         }
     }
     
-    func fetchAllPosts(completion: @escaping (Result<[Post], Error>) -> Void) {
+    func fetchAllPosts(blockIds:[String], completion: @escaping (Result<[Post], Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.posts.rawValue)
                                 .order(by: "createdTime", descending: true)
@@ -118,7 +118,9 @@ class PostManager {
                     
                     let post = try document.data(as: Post.self)
                     
-                    posts.append(post)
+                    if !blockIds.contains(where: { $0 == post.userId }) {
+                        posts.append(post)
+                    }
                 }
                 
                 completion(.success(posts))
