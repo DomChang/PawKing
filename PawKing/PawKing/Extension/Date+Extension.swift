@@ -88,11 +88,16 @@ extension Date {
         dateFormatter.allowedUnits = [.hour, .minute, .second]
         
         dateFormatter.zeroFormattingBehavior = .pad
-//
-//        let seconds = secondsAgo % 60
-//        let minute = secondsAgo / 60
-//        let hour = secondsAgo / 3600
 
         return dateFormatter.string(from: delta) ?? ""
+    }
+    
+    func displayTimeInBirthdayStyle() -> String {
+        
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.dateFormat = "yyyy / MM / dd"
+        
+        return dateFormatter.string(from: self)
     }
 }

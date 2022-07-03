@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 protocol PetConfigCellDelegate {
     
@@ -22,29 +23,31 @@ class PetConfigCell: UITableViewCell {
     
     var delegate: PetConfigCellDelegate?
     
-    let photoButton = UIButton()
+    let petImageView = UIImageView()
     
     let nameTitleLabel = UILabel()
     
-    let petNameTextfield = UITextField()
+    let petNameTextfield = InputTextField()
     
     let genderTitleLabel = UILabel()
     
     private let genderPicker = UIPickerView()
     
-    let genderTextfield = UITextField()
+    let genderTextfield = InputTextField()
     
     let birthdayTitleLabel = UILabel()
     
     let birthdayPicker = UIDatePicker()
     
-//    let birthdayTextfield = UITextField()
+    let birthdayTextfield = InputTextField()
     
-    let descriptionTitleLabel = UILabel()
+//    let descriptionTitleLabel = UILabel()
     
-    let descriptionTextView = UITextView()
+//    let descriptionTextView = UITextView()
     
     private let finishButton = UIButton()
+    
+    var birthday: Timestamp?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -60,43 +63,40 @@ class PetConfigCell: UITableViewCell {
     
     func setup() {
         
-        photoButton.isUserInteractionEnabled = true
+        selectionStyle = .none
         
-        photoButton.addTarget(self, action: #selector(didTapPhotoButton),
-                                  for: .touchUpInside)
+        petImageView.isUserInteractionEnabled = true
         
-//        petNameTextfield.addTarget(self, action: #selector(textFieldDidChange(_:)),
-//                                  for: .editingChanged)
-//
+        petImageView.addGestureRecognizer(
+            UITapGestureRecognizer(target: self, action: #selector(didTapPetImage)))
+        
+        petImageView.isUserInteractionEnabled = true
+        
+//        photoButton.addTarget(self, action: #selector(didTapPhotoButton),
+//                                  for: .touchUpInside)
+        
+        birthdayPicker.addTarget(self, action: #selector(handleDatePicker(sender:)), for: .valueChanged)
+        
         finishButton.addTarget(self, action: #selector(didTapFinish), for: .touchUpInside)
     }
     
     func styleObject() {
         
-        photoButton.setImage(UIImage.asset(.Image_Placeholder), for: .normal)
-        photoButton.imageView?.contentMode = .scaleAspectFill
+        petImageView.image = UIImage.asset(.Image_Placeholder)
+        petImageView.contentMode = .scaleAspectFill
         
         nameTitleLabel.text = "Name"
-        nameTitleLabel.font = UIFont.systemFont(ofSize: 16)
-        nameTitleLabel.textColor = .black
+        nameTitleLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        nameTitleLabel.textColor = .DarkBlue
         
         genderTitleLabel.text = "Gender"
-        genderTitleLabel.font = UIFont.systemFont(ofSize: 16)
-        genderTitleLabel.textColor = .black
+        genderTitleLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        genderTitleLabel.textColor = .DarkBlue
         
         birthdayTitleLabel.text = "Birthday"
-        birthdayTitleLabel.font = UIFont.systemFont(ofSize: 16)
-        birthdayTitleLabel.textColor = .black
+        birthdayTitleLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        birthdayTitleLabel.textColor = .DarkBlue
         
-        descriptionTitleLabel.text = "Description"
-        descriptionTitleLabel.font = UIFont.systemFont(ofSize: 16)
-        descriptionTitleLabel.textColor = .black
-        
-        petNameTextfield.layer.borderColor = UIColor.Gray1?.cgColor
-        petNameTextfield.layer.borderWidth = 1
-        
-        genderTextfield.layer.borderColor = UIColor.Gray1?.cgColor
-        genderTextfield.layer.borderWidth = 1
         genderTextfield.inputView = genderPicker
         
         genderPicker.delegate = self
@@ -104,40 +104,38 @@ class PetConfigCell: UITableViewCell {
         
         birthdayPicker.locale = .current
         birthdayPicker.datePickerMode = .date
-        birthdayPicker.preferredDatePickerStyle = .compact
-        birthdayPicker.tintColor = .Orange1
-        birthdayPicker.layer.borderColor = UIColor.Gray1?.cgColor
-        birthdayPicker.layer.borderWidth = 1
-        
-        descriptionTextView.layer.borderColor = UIColor.Gray1?.cgColor
-        descriptionTextView.layer.borderWidth = 1
-        
-        finishButton.setTitle("Finish", for: .normal)
+        birthdayPicker.preferredDatePickerStyle = .inline
+
+        birthdayTextfield.inputView = birthdayPicker
+
+        finishButton.setTitle("Confirm", for: .normal)
+        finishButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         finishButton.backgroundColor = .Orange1
+        finishButton.layer.cornerRadius = 4
     }
     
     func layout() {
         
-        contentView.addSubview(photoButton)
+        contentView.addSubview(petImageView)
         contentView.addSubview(nameTitleLabel)
         contentView.addSubview(genderTitleLabel)
         contentView.addSubview(birthdayTitleLabel)
-        contentView.addSubview(descriptionTitleLabel)
+//        contentView.addSubview(descriptionTitleLabel)
         
         contentView.addSubview(petNameTextfield)
         contentView.addSubview(genderTextfield)
-        contentView.addSubview(birthdayPicker)
-        contentView.addSubview(descriptionTextView)
+        contentView.addSubview(birthdayTextfield)
+//        contentView.addSubview(descriptionTextView)
         
         contentView.addSubview(finishButton)
         
-        photoButton.anchor(top: contentView.topAnchor,
+        petImageView.anchor(top: contentView.topAnchor,
                            centerX: contentView.centerXAnchor,
                            width: 150,
                            height: 150,
                            padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
         
-        nameTitleLabel.anchor(top: photoButton.bottomAnchor,
+        nameTitleLabel.anchor(top: petImageView.bottomAnchor,
                               leading: contentView.leadingAnchor,
                               trailing: contentView.trailingAnchor,
                               height: 20,
@@ -146,7 +144,7 @@ class PetConfigCell: UITableViewCell {
         petNameTextfield.anchor(top: nameTitleLabel.bottomAnchor,
                                  leading: nameTitleLabel.leadingAnchor,
                                  trailing: contentView.trailingAnchor,
-                                 height: 30,
+                                 height: 40,
                                  padding: UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 20))
         
         genderTitleLabel.anchor(top: petNameTextfield.bottomAnchor,
@@ -158,7 +156,7 @@ class PetConfigCell: UITableViewCell {
         genderTextfield.anchor(top: genderTitleLabel.bottomAnchor,
                                leading: nameTitleLabel.leadingAnchor,
                                trailing: contentView.trailingAnchor,
-                               height: 30,
+                               height: 40,
                                padding: UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 20))
         
         birthdayTitleLabel.anchor(top: genderTextfield.bottomAnchor,
@@ -167,37 +165,46 @@ class PetConfigCell: UITableViewCell {
                                   height: 20,
                                 padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
         
-        birthdayPicker.anchor(top: birthdayTitleLabel.bottomAnchor,
+        birthdayTextfield.anchor(top: birthdayTitleLabel.bottomAnchor,
                               leading: nameTitleLabel.leadingAnchor,
                               trailing: contentView.trailingAnchor,
-                              height: 30,
+                              height: 40,
                               padding: UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 20))
         
-        descriptionTitleLabel.anchor(top: birthdayPicker.bottomAnchor,
-                                     leading: nameTitleLabel.leadingAnchor,
-                                     trailing: nameTitleLabel.trailingAnchor,
-                                     height: 20,
-                                   padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
+        finishButton.anchor(top: birthdayTextfield.bottomAnchor,
+                            leading: birthdayTextfield.leadingAnchor,
+                            trailing: birthdayTextfield.trailingAnchor,
+                            height: 40,
+                            padding: UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0))
         
-        descriptionTextView.anchor(top: descriptionTitleLabel.bottomAnchor,
-                                   leading: nameTitleLabel.leadingAnchor,
-                                   trailing: contentView.trailingAnchor,
-                                   height: 200,
-                                   padding: UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 20))
-        
-        finishButton.anchor(top: descriptionTextView.bottomAnchor,
-                            leading: contentView.leadingAnchor,
-                            trailing: contentView.trailingAnchor,
-                            height: 50,
-                            padding:UIEdgeInsets(top: 20, left: 30, bottom: 0, right: 30))
+        contentView.layoutIfNeeded()
+        petImageView.makeRound()
+        petImageView.clipsToBounds = true
     }
     
-    @objc func didTapPhotoButton() {
+    func configureCell(pet: Pet) {
+        
+        let imageUrl = URL(string: pet.petImage)
+        
+        petImageView.kf.setImage(with: imageUrl)
+        
+        petNameTextfield.text = pet.name
+        
+        genderTextfield.text = pet.gender
+        
+        birthdayTextfield.text = pet.birthday.dateValue().displayTimeInBirthdayStyle()
+        
+        birthday = pet.birthday
+    }
+    
+    @objc func didTapPetImage() {
         
         self.delegate?.didTapPhoto()
     }
     
     @objc func didTapFinish() {
+        
+        finishButtonDisable()
         
         self.delegate?.didTapFinish(From: self)
     }
@@ -208,10 +215,25 @@ class PetConfigCell: UITableViewCell {
 //
 //        self.delegate?.textFieldDidChange(From: textField)
 //    }
-}
-
-extension PetConfigCell: UITextViewDelegate {
     
+    @objc func handleDatePicker(sender: UIDatePicker) {
+
+        birthdayTextfield.text = sender.date.displayTimeInBirthdayStyle()
+        
+        birthday = Timestamp(date: sender.date)
+    }
+    
+    func finishButtonEnable() {
+        
+        finishButton.backgroundColor = .Orange1
+        finishButton.isEnabled = true
+    }
+    
+    func finishButtonDisable() {
+        
+        finishButton.backgroundColor = .Gray1
+        finishButton.isEnabled = false
+    }
 }
 
 extension PetConfigCell: UIPickerViewDataSource, UIPickerViewDelegate {
@@ -241,7 +263,9 @@ extension PetConfigCell: UIPickerViewDataSource, UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
         if pickerView == genderPicker {
+            
             genderTextfield.text = PetGender.allCases[row].rawValue
+            
         }
     }
 }

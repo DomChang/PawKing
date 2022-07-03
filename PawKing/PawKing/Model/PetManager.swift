@@ -8,6 +8,7 @@
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 import FirebaseStorage
+import UIKit
 
 class PetManager {
     
@@ -113,19 +114,44 @@ class PetManager {
     }
     
     func updatePetInfo(userId: String,
-                       pet: Pet,
+                       petId: String,
+                       image: UIImage,
+                       name: String,
+                       gender: String,
+                       birthday: Timestamp,
                        completion: @escaping (Result<Void, Error>) -> Void) {
         
-        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
-            .collection(FirebaseCollection.pets.rawValue).document(pet.id)
-        
-        do {
-            try document.setData(from: pet)
-            
-            completion(.success(()))
-            
-        } catch {
-            completion(.failure(FirebaseError.setupUserError))
+        uploadPetPhoto(userId: userId, petId: petId, image: image) { [weak self] result in
+            switch result {
+                
+            case .success(let url):
+                
+                guard let self = self else { return }
+                
+                let document = self.dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+                    .collection(FirebaseCollection.pets.rawValue).document(petId)
+                
+                document.updateData([
+                    "name": name,
+                    "gender": gender,
+                    "birthday": birthday,
+                    "petImage": url
+                ]) { error in
+                    
+                    if let error = error {
+                        
+                        completion(.failure(error))
+                        
+                    } else {
+                        
+                        completion(.success(()))
+                    }
+                }
+                
+            case .failure(let error):
+                
+                print(error)
+            }
         }
     }
     

@@ -102,10 +102,10 @@ class TabBarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        NotificationCenter.default.addObserver(self,
-//                                               selector: #selector(didSetCurrentUser),
-//                                               name: .didSetCurrentUser,
-//                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(showSignInView),
+                                               name: .showSignInView,
+                                               object: nil)
         
         view.backgroundColor = .white
         
@@ -137,6 +137,8 @@ class TabBarViewController: UITabBarController {
                             blockUsersId: [])
 
             configureUserToTab(user: user)
+            
+            UserManager.shared.currentUser = user
         }
 
         let tabBarAppearance =  UITabBarAppearance()
@@ -153,6 +155,11 @@ class TabBarViewController: UITabBarController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        
+        showSignInView()
+    }
+    
+    @objc func showSignInView() {
         
         if Auth.auth().currentUser == nil {
             

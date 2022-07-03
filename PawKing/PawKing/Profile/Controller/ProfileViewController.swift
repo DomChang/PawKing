@@ -147,6 +147,25 @@ class ProfileViewController: UIViewController {
         let firebaseAuth = Auth.auth()
         do {
           try firebaseAuth.signOut()
+            
+            UserManager.shared.currentUser =  User(id: "Guest",
+                                                     name: "Guest",
+                                                     petsId: [],
+                                                     currentPetId: "",
+                                                     userImage: "",
+                                                     description: "",
+                                                     friendPetsId: [],
+                                                     friends: [],
+                                                     recieveRequestsId: [],
+                                                     sendRequestsId: [],
+                                                     blockUsersId: [])
+            
+            Auth.auth().currentUser?.reload()
+            
+            DispatchQueue.main.async {
+               self.tabBarController?.selectedIndex = 0
+            }
+            
         } catch let signOutError as NSError {
           print("Error signing out: %@", signOutError)
         }
@@ -242,9 +261,10 @@ extension ProfileViewController: ProfileInfoCellDelegate {
     
     func didTapLeftButton(from cell: ProfileInfoCell) {
         
-        guard let user = user else { return }
+        guard let user = user,
+              let userPets = userPets else { return }
         
-        let editUserVC = EditUserViewController(userId: user.id, userName: user.name)
+        let editUserVC = EditProfileViewController(user: user)
         
         navigationController?.pushViewController(editUserVC, animated: true)
     }
@@ -253,7 +273,10 @@ extension ProfileViewController: ProfileInfoCellDelegate {
         
         guard let user = user else { return }
 
-        let petConfigVC = PetConfigViewController(user: user, isInitailSet: false)
+        let petConfigVC = PetConfigViewController(user: user,
+                                                  editPet: nil,
+                                                  isInitailSet:
+                                                    false, isEdit: false)
         
         navigationController?.pushViewController(petConfigVC, animated: true)
     }

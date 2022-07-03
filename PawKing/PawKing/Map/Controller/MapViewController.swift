@@ -134,6 +134,14 @@ class MapViewController: UIViewController {
         if Auth.auth().currentUser != nil {
             
             fetchUserPets()
+        } else {
+            userCurrentPet = nil
+            userPets = []
+            listeners = nil
+            friendAnnotationsInfo = [:]
+            friendLocations = [:]
+            trackButton.isHidden = true
+            choosePetImageView.isHidden = true
         }
     }
     
@@ -557,7 +565,9 @@ class MapViewController: UIViewController {
             
             trackButton.isHidden = strangerButton.isSelected
             
-            choosePetImageView.isHidden = strangerButton.isSelected
+            if !trackButton.isSelected {
+                choosePetImageView.isHidden = strangerButton.isSelected
+            }
         }
         userLocationButton.isHidden = strangerButton.isSelected
         
@@ -612,6 +622,12 @@ class MapViewController: UIViewController {
     }
     
     @objc func didTapNotificationButton() {
+        
+        guard Auth.auth().currentUser != nil else {
+            
+            NotificationCenter.default.post(name: .showSignInView, object: .none)
+            return
+        }
         
         let friendRequestVC = FriendRequestViewController(user: user)
         
@@ -867,6 +883,12 @@ extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
 extension MapViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        guard Auth.auth().currentUser != nil else {
+            
+            NotificationCenter.default.post(name: .showSignInView, object: .none)
+            return
+        }
         
         guard strangersPet.count != 0 else { return }
         

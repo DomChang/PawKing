@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 protocol ResultViewControllerDelegate {
     
@@ -128,8 +129,13 @@ extension ResultViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if let resultUsers = resultUsers {
+        guard Auth.auth().currentUser != nil else {
             
+            NotificationCenter.default.post(name: .showSignInView, object: .none)
+            return
+        }
+        
+        if let resultUsers = resultUsers {
             
             self.resultVCDelegate?.didSelectResultUser(theOtherUser: resultUsers[indexPath.row])
 //            let userPhotoVC = UserPhotoWallViewController(otherUser: resultUsers[indexPath.row])

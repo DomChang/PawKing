@@ -65,14 +65,12 @@ class UserManager {
     
     func updateUserInfo(userId: String,
                         userName: String,
-                        userDescription: String,
                         completion: @escaping (Result<Void, Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
         
         document.updateData([
-            "name": userName,
-            "description": userDescription
+            "name": userName
         ]) { error in
             
             if error != nil {
@@ -84,7 +82,6 @@ class UserManager {
                 completion(.success(()))
                 
                 UserManager.shared.currentUser?.name = userName
-                UserManager.shared.currentUser?.description = userDescription
             }
         }
     }

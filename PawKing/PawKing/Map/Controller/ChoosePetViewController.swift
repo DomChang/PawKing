@@ -18,7 +18,7 @@ class ChoosePetViewController: UIViewController {
     
     private var pets: [Pet]
     
-    private let tableView = UITableView()
+    private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     
     init(pets: [Pet]) {
         self.pets = pets
@@ -52,15 +52,16 @@ class ChoosePetViewController: UIViewController {
         
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .Orange1
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.backgroundColor = .white
+        appearance.shadowColor = .clear
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.Orange1 ?? .white]
         
         navigationItem.standardAppearance = appearance
         navigationItem.scrollEdgeAppearance = appearance
         
-        tableView.backgroundColor = .white
+        tableView.backgroundColor = .LightGray
         
-        tableView.separatorStyle = .none
+//        tableView.separatorStyle = .none
     }
     
     func layout() {

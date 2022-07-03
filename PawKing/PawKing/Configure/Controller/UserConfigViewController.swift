@@ -99,7 +99,10 @@ class UserConfigViewController: UIViewController {
     
     func showPetConfigVC(user: User) {
         
-        let petConfigVC = PetConfigViewController(user: user, isInitailSet: true)
+        let petConfigVC = PetConfigViewController(user: user,
+                                                  editPet: nil,
+                                                  isInitailSet: true,
+                                                  isEdit: false)
         
         navigationController?.pushViewController(petConfigVC, animated: true)
         

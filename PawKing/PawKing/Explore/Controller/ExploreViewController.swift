@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class ExploreViewController: UIViewController {
     
@@ -71,9 +72,9 @@ class ExploreViewController: UIViewController {
         view.backgroundColor = .white
         
         navigationItem.title = "Explore"
-
+            
         navigationItem.searchController = searchController
-        
+
         collectionView.dataSource = self
         collectionView.delegate = self
         
@@ -345,6 +346,12 @@ extension ExploreViewController: UICollectionViewDataSource {
 extension ExploreViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        guard Auth.auth().currentUser != nil else {
+            
+            NotificationCenter.default.post(name: .showSignInView, object: .none)
+            return
+        }
         
         guard let user = user,
               let post = displayPosts?[indexPath.item]

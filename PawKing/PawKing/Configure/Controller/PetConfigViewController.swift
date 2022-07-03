@@ -18,17 +18,17 @@ class PetConfigViewController: UIViewController {
     
     private var owner: User
     
-    private let tableView = UITableView()
+    private var editPet: Pet?
     
-//    private let bottomLineView = UIView()
+    private let tableView = UITableView()
     
     private var petName: String?
     
     private var petImageUrl: String?
     
-    private var petDescription: String?
-    
     private var isInitailSet: Bool
+    
+    private var isEdit: Bool
     
     var petImage: UIImage? {
         didSet {
@@ -36,9 +36,14 @@ class PetConfigViewController: UIViewController {
         }
     }
     
-    init(user: User, isInitailSet: Bool) {
+    init(user: User, editPet: Pet?, isInitailSet: Bool, isEdit: Bool) {
         self.owner = user
         self.isInitailSet = isInitailSet
+        self.isEdit = isEdit
+        
+        if let editPet = editPet {
+            self.editPet = editPet
+        }
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -56,7 +61,13 @@ class PetConfigViewController: UIViewController {
     
     func setup() {
         
-        navigationItem.title = "寵物資料"
+        if isEdit {
+            
+            navigationItem.title = "Pet Configuration"
+        } else {
+            
+            navigationItem.title = "Add Pet"
+        }
         
         if isInitailSet {
             
@@ -79,23 +90,14 @@ class PetConfigViewController: UIViewController {
 
         view.backgroundColor = .white
         
-//        bottomLineView.backgroundColor = .O1
+        tableView.separatorStyle = .none
     }
     
     func layout() {
         
         view.addSubview(tableView)
-//        view.addSubview(bottomLineView)
         
-        tableView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
-                         leading: view.leadingAnchor,
-                         bottom: view.safeAreaLayoutGuide.bottomAnchor,
-                         trailing: view.trailingAnchor)
-        
-//        bottomLineView.anchor(top: tableView.bottomAnchor,
-//                              centerX: view.centerXAnchor,
-//                              width: view.frame.width,
-//                              height: 1)
+        tableView.fillSafeLayout()
     }
 }
 
@@ -114,9 +116,15 @@ extension PetConfigViewController: UITableViewDataSource, UITableViewDelegate {
             fatalError("Cannot dequeue UserConfigCell")
         }
         
-        if let userImage = petImage {
+        if isEdit,
+            let editPet = editPet {
             
-            cell.photoButton.setImage(userImage, for: .normal)
+            cell.configureCell(pet: editPet)
+        }
+        
+        if let petImage = petImage {
+            
+            cell.petImageView.image = petImage
         }
         
         cell.delegate = self
@@ -135,44 +143,85 @@ extension PetConfigViewController: PetConfigCellDelegate {
         
         guard let petName = cell.petNameTextfield.text,
               let gender = cell.genderTextfield.text,
-              let petImage = cell.photoButton.image(for: .normal)
+              let petImage = cell.petImageView.image,
+              let birthday = cell.birthday
         else {
             return
         }
         
-        let birthday = Timestamp(date: cell.birthdayPicker.date)
-
-        var pet = Pet(id: "",
-                      ownerId: owner.id,
-                      name: petName,
-                      gender: gender,
-                      breed: "",
-                      description: "",
-                      birthday: birthday,
-                      createdTime: Timestamp(date: Date()),
-                      petImage: "",
-                      postsId: [],
-                      tracksId: [],
-                      personality: PetPersonality(isChildFriendly: true,
-                                                  isCatFriendly: true,
-                                                  isDogFriendly: true))
-        
-        petManager.setupPet(userId: owner.id,
-                            pet: &pet,
-                            petName: petName,
-                            petImage: petImage) { [weak self] result in
+        if isEdit {
             
-            switch result {
+            guard let editPet = editPet else { return }
+            
+            petManager.updatePetInfo(userId: owner.id,
+                                     petId: editPet.id,
+                                     image: petImage,
+                                     name: petName,
+                                     gender: gender,
+                                     birthday: birthday) { [weak self] result in
+                switch result {
+                    
+                case .success:
+                    
+                    cell.finishButtonEnable()
+                    
+                    self?.navigationController?.popViewController(animated: true)
+                    
+                case .failure(let error):
+                    
+                    cell.finishButtonEnable()
+                    
+                    print(error)
+                }
+            }
+            
+        } else {
+            
+//            guard let petName = cell.petNameTextfield.text,
+//                  let gender = cell.genderTextfield.text,
+//                  let petImage = cell.petImageView.image
+//            else {
+//                return
+//            }
+//
+//            let birthday = Timestamp(date: cell.birthdayPicker.date)
+
+            var pet = Pet(id: "",
+                          ownerId: owner.id,
+                          name: petName,
+                          gender: gender,
+                          breed: "",
+                          description: "",
+                          birthday: birthday,
+                          createdTime: Timestamp(date: Date()),
+                          petImage: "",
+                          postsId: [],
+                          tracksId: [],
+                          personality: PetPersonality(isChildFriendly: true,
+                                                      isCatFriendly: true,
+                                                      isDogFriendly: true))
+            
+            petManager.setupPet(userId: owner.id,
+                                pet: &pet,
+                                petName: petName,
+                                petImage: petImage) { [weak self] result in
                 
-            case .success:
-                
-                self?.navigationController?.popToRootViewController(animated: true)
-                
-                self?.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
-                
-            case .failure(let error):
-                
-                print(error)
+                switch result {
+                    
+                case .success:
+                    
+                    cell.finishButtonEnable()
+                    
+                    self?.navigationController?.popViewController(animated: true)
+                    
+                    self?.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
+                    
+                case .failure(let error):
+                    
+                    cell.finishButtonEnable()
+                    
+                    print(error)
+                }
             }
         }
     }
