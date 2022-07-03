@@ -585,11 +585,9 @@ extension ProfileViewController: UICollectionViewDelegate {
                 
                 for userPet in userPets where userPet.id == trackInfo.petId {
                     
-                    guard let imageUrl = URL(string: userPet.petImage) else { return }
+//                    guard let imageUrl = URL(string: userPet.petImage) else { return }
                     
-                    let trackHistoryVC = TrackHistoryViewController(petName: userPet.name,
-                                                                    petImageURL: imageUrl,
-                                                                    trackInfo: trackInfo)
+                    let trackHistoryVC = TrackHistoryViewController(pet: userPet, trackInfo: trackInfo, shouldEdit: false)
                     
                     navigationController?.pushViewController(trackHistoryVC, animated: true)
                 }

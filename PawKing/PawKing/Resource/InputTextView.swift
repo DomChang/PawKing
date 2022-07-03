@@ -33,7 +33,6 @@ class InputTextView: UITextView {
         
         placeholderLabel.anchor(top: topAnchor,
                                 leading: leadingAnchor,
-                                bottom: bottomAnchor,
                                 trailing: trailingAnchor,
                                 padding: UIEdgeInsets(top: 8, left: 8, bottom: 0, right: 0))
     }

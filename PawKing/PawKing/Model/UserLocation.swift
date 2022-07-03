@@ -18,7 +18,7 @@ struct TrackInfo: Codable {
     
     var id: String
     let petId: String
-    let screenShot: String
+    let distanceMeter: Double
     let startTime: Timestamp
     var endTime: Timestamp
     let track: [GeoPoint]

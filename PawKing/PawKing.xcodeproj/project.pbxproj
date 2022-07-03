@@ -219,6 +219,7 @@
 			children = (
 				B63484E9285EEE3000DB7CE7 /* Model */,
 				B63484EA285EEE3900DB7CE7 /* View */,
+				B63484EB285EEE4400DB7CE7 /* Controller */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -241,7 +242,6 @@
 				B6E86AA3285F0B6B002B8C9A /* ContentButtonCell.swift */,
 				B63484EC285EEE8800DB7CE7 /* PhotoItemCell.swift */,
 				B6E86AA5285F0B85002B8C9A /* TrackHostoryCell.swift */,
-				B63484EB285EEE4400DB7CE7 /* Controller */,
 			);
 			path = View;
 			sourceTree = "<group>";

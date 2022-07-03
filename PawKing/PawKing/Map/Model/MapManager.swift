@@ -14,7 +14,7 @@ class MapManager {
     
     lazy var dataBase = Firestore.firestore()
     
-    func uploadTrack(userId: String, trackInfo: inout TrackInfo, completion: @escaping (Result<Void, Error>) -> Void) {
+    func uploadTrack(userId: String, trackInfo: inout TrackInfo, completion: @escaping (Result<TrackInfo, Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
                         .collection(FirebaseCollection.tracks.rawValue).document()
@@ -24,10 +24,33 @@ class MapManager {
         
         do {
             try document.setData(from: trackInfo)
-            completion(.success(()))
+            completion(.success(trackInfo))
             
         } catch {
             completion(.failure(FirebaseError.uploadTrackError))
+        }
+    }
+    
+    func updateTrackNote(userId: String,
+                         trackInfo: TrackInfo,
+                         trackNote: String,
+                         completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+            .collection(FirebaseCollection.tracks.rawValue).document(trackInfo.id)
+        
+        document.updateData([
+            "note": trackNote
+        ]) { error in
+            
+            if error != nil {
+                
+                completion(.failure(FirebaseError.uploadTrackError))
+                
+            } else {
+                
+                completion(.success(()))
+            }
         }
     }
     

@@ -433,31 +433,63 @@ class MapViewController: UIViewController {
         let coordinate = userStoredLocations.map { $0.coordinate }
         let track = coordinate.map { $0.transferToGeopoint() }
         
-        guard let petId = userCurrentPet?.id else {
+        guard let userCurrentPet = userCurrentPet else {
             return
         }
         
-        var trackInfo = TrackInfo(id: user.id,
-                          petId: petId,
-                          screenShot: "",
-                          startTime: trackStartTime,
-                          endTime: Timestamp(),
-                          track: track,
-                          note: "")
+        let distance = computeDistance(from: track.map { $0.transferToCoordinate2D() })
+        
+        var trackInfo = TrackInfo(id: "",
+                                  petId: userCurrentPet.id,
+                                  distanceMeter: distance,
+                                  startTime: trackStartTime,
+                                  endTime: Timestamp(),
+                                  track: track,
+                                  note: "")
+        
+//        var trackInfo = TrackInfo(id: user.id,
+//                          petId: petId,
+//                                  distance: "",
+//                          startTime: trackStartTime,
+//                          endTime: Timestamp(),
+//                          track: track,
+//                          note: "")
         
         mapManager.uploadTrack(userId: user.id, trackInfo: &trackInfo) { [weak self] result in
             
             switch result {
                 
-            case .success:
-                
-                print("===success")
+            case .success(let trackInfo):
                 
                 self?.didFinishTrackButtons()
+                
+                let trackHistoryVC = TrackHistoryViewController(pet: userCurrentPet,
+                                                                trackInfo: trackInfo,
+                                                                shouldEdit: true)
+                
+                self?.navigationController?.pushViewController(trackHistoryVC, animated: true)
                 
             case .failure(let error):
                 print(error)
             }
+        }
+    }
+    
+    func computeDistance(from points: [CLLocationCoordinate2D]) -> Double {
+        
+        guard let first = points.first else { return 0.0 }
+        
+        var prevPoint = first
+        
+        return points.reduce(0.0) { (count, point) -> Double in
+            
+            let newCount = count + CLLocation(latitude: prevPoint.latitude, longitude: prevPoint.longitude).distance(
+                
+                from: CLLocation(latitude: point.latitude, longitude: point.longitude))
+            
+            prevPoint = point
+            
+            return newCount
         }
     }
     

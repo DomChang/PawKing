@@ -78,4 +78,21 @@ extension Date {
         }
         return dateFormatter.string(from: self)
     }
+    
+    func displayTimeInCounterStyle(since startTime: Date) -> String {
+        
+        let delta = startTime.distance(to: self)
+        
+        let dateFormatter = DateComponentsFormatter()
+        
+        dateFormatter.allowedUnits = [.hour, .minute, .second]
+        
+        dateFormatter.zeroFormattingBehavior = .pad
+//
+//        let seconds = secondsAgo % 60
+//        let minute = secondsAgo / 60
+//        let hour = secondsAgo / 3600
+
+        return dateFormatter.string(from: delta) ?? ""
+    }
 }
