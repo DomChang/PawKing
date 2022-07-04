@@ -63,6 +63,11 @@ class UserPhotoWallViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if let user = UserManager.shared.currentUser {
+            
+            setActionSheet(user: user)
+        }
+        
         setup()
         style()
         layout()
@@ -74,7 +79,7 @@ class UserPhotoWallViewController: UIViewController {
             
             self.user = user
             
-            setActionSheet(user: user)
+//            setActionSheet(user: user)
         }
         
         fetchPet(by: otherUser)
@@ -207,6 +212,7 @@ class UserPhotoWallViewController: UIViewController {
     func setActionSheet(user: User) {
         
         if user.blockUsersId.contains(otherUser.id) {
+
             
             let unBlockAction = UIAlertAction(title: "Unblock User", style: .destructive) { [weak self] _ in
                 
