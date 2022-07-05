@@ -262,8 +262,7 @@ extension TabBarViewController: UITabBarControllerDelegate {
             return true
         }
         
-        if let navigaton = viewController as? UINavigationController,
-           navigaton.viewControllers.contains(where: { return $0 is PublishViewController }) {
+        if viewControllers?.firstIndex(of: viewController) == 2 {
             
             photoHelper.presentActionSheet(from: self)
             

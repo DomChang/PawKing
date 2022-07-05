@@ -536,7 +536,7 @@ class MapViewController: UIViewController {
     
     @objc func didTapChoosePet() {
         
-        let choosePetVC = ChoosePetViewController(pets: userPets)
+        let choosePetVC = ChoosePetViewController(pets: userPets, isPost: false)
         
         choosePetVC.delegate = self
         

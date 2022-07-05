@@ -87,6 +87,8 @@ class TrackHistoryViewController: UIViewController {
         let imageUrl = URL(string: pet.petImage)
         
         petImageView.kf.setImage(with: imageUrl)
+        petImageView.layer.borderWidth = 1
+        petImageView.layer.borderColor = UIColor.white.cgColor
         
         petNameLabel.text = pet.name
         
