@@ -17,6 +17,8 @@ class TrackHistoryViewController: UIViewController {
     
     private let trackInfo: TrackInfo
     
+    private let scrollView = UIScrollView()
+    
     private var shouldEdit: Bool
     
     private let petNameLabel = UILabel()
@@ -89,6 +91,7 @@ class TrackHistoryViewController: UIViewController {
         petNameLabel.text = pet.name
         
         noteTextView.delegate = self
+        noteTextView.isScrollEnabled = false
         
         if shouldEdit {
             
@@ -155,11 +158,11 @@ class TrackHistoryViewController: UIViewController {
         
         petImageView.contentMode = .scaleAspectFill
         
-        petNameLabel.textColor = .DarkBlue
+        petNameLabel.textColor = .white
         petNameLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         
         settingButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
-        settingButton.tintColor = .DarkBlue
+        settingButton.tintColor = .white
         
         noteTextView.textColor = .DarkBlue
         noteTextView.font = UIFont.systemFont(ofSize: 16)
@@ -176,6 +179,9 @@ class TrackHistoryViewController: UIViewController {
         hStack.axis = .horizontal
         hStack.distribution = .fill
         hStack.spacing = 15
+        
+        let hStackBackView = UIView()
+        hStackBackView.backgroundColor = .DarkBlue
         
         petImageView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         settingButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
@@ -204,61 +210,78 @@ class TrackHistoryViewController: UIViewController {
         infoHStack.layer.cornerRadius = 20
         infoHStack.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
-        infoHStack.layer.shadowColor = UIColor.darkGray.cgColor
-        infoHStack.layer.shadowOffset = CGSize(width: 0, height: -2)
-        infoHStack.layer.shadowRadius = 1.5
-        infoHStack.layer.shadowOpacity = 0.2
-        infoHStack.layer.masksToBounds = false
-        
         distanceVStack.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-
-        view.addSubview(hStack)
-        view.addSubview(mapView)
-        view.addSubview(infoHStack)
-        view.addSubview(noteTitleLabel)
-        view.addSubview(noteTextView)
-        view.addSubview(updateButton)
+        
+        view.addSubview(scrollView)
+        scrollView.addSubview(hStackBackView)
+        scrollView.addSubview(hStack)
+        scrollView.addSubview(mapView)
+        scrollView.addSubview(infoHStack)
+        scrollView.addSubview(noteTitleLabel)
+        scrollView.addSubview(noteTextView)
+        scrollView.addSubview(updateButton)
+        
+        scrollView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                          leading: view.leadingAnchor,
+                          bottom: view.bottomAnchor,
+                          trailing: view.trailingAnchor)
         
         petImageView.constrainWidth(constant: 40)
         petImageView.constrainHeight(constant: 40)
         
-        hStack.anchor(top: view.safeAreaLayoutGuide.topAnchor,
-                            leading: view.leadingAnchor,
-                            trailing: view.trailingAnchor,
+        hStackBackView.anchor(top: scrollView.topAnchor,
+                              leading: scrollView.leadingAnchor,
+                              bottom: mapView.topAnchor,
+                              trailing: scrollView.trailingAnchor)
+        
+        hStack.anchor(top: scrollView.topAnchor,
+                            leading: scrollView.leadingAnchor,
+                            trailing: scrollView.trailingAnchor,
                             height: 40,
                             padding: UIEdgeInsets(top: 10, left: 20, bottom: 0, right: 20))
         
         mapView.anchor(top: hStack.bottomAnchor,
-                       leading: view.leadingAnchor,
-                       trailing: view.trailingAnchor,
+                       leading: scrollView.leadingAnchor,
+                       trailing: scrollView.trailingAnchor,
                        height: view.frame.width,
                             padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0))
         
-        infoHStack.anchor(leading: mapView.leadingAnchor,
+        mapView.widthAnchor.constraint(
+            equalTo: scrollView.widthAnchor
+        ).isActive = true
+        
+        infoHStack.anchor(leading: scrollView.leadingAnchor,
                           bottom: mapView.bottomAnchor,
-                          trailing: mapView.trailingAnchor)
+                          trailing: scrollView.trailingAnchor)
         
         noteTitleLabel.anchor(top: infoHStack.bottomAnchor,
-                              leading: view.leadingAnchor,
-                              trailing: view.trailingAnchor,
+                              leading: scrollView.leadingAnchor,
+                              trailing: scrollView.trailingAnchor,
                               padding: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 20))
         
         noteTextView.anchor(top: noteTitleLabel.bottomAnchor,
-                         leading: mapView.leadingAnchor,
-                         trailing: mapView.trailingAnchor,
+                         leading: scrollView.leadingAnchor,
+                         trailing: scrollView.trailingAnchor,
                             padding: UIEdgeInsets(top: 5, left: 20, bottom: 0, right: 20))
         
         updateButton.anchor(top: noteTextView.bottomAnchor,
-                            leading: view.leadingAnchor,
-                            trailing: view.trailingAnchor,
+                            leading: scrollView.leadingAnchor,
+                            trailing: scrollView.trailingAnchor,
                             height: 40,
                             padding: UIEdgeInsets(top: 20, left: 40, bottom: 0, right: 40))
         
-        updateButton.bottomAnchor.constraint(greaterThanOrEqualTo: view.bottomAnchor, constant: -50).isActive = true
+        updateButton.bottomAnchor.constraint(
+            lessThanOrEqualTo: scrollView.bottomAnchor, constant: -50
+        ).isActive = true
         
-        view.layoutIfNeeded()
+        scrollView.layoutIfNeeded()
         petImageView.makeRound()
         petImageView.clipsToBounds = true
+        
+        let topView = UIView(frame: CGRect(x: 0, y: -scrollView.bounds.height,
+                width: scrollView.bounds.width, height: scrollView.bounds.height))
+        topView.backgroundColor = .DarkBlue
+        scrollView.addSubview(topView)
     }
     
     @objc func didTapUpdateNote() {
@@ -323,11 +346,8 @@ extension TrackHistoryViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         
-        guard textView == noteTextView,
-              noteTextView.text != ""
+        guard textView == noteTextView
         else {
-            
-            updateButton.isHidden = true
             return
         }
         

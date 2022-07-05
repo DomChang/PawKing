@@ -208,10 +208,6 @@ class PhotoPostViewController: UIViewController {
                 width: tableView.bounds.width, height: tableView.bounds.height))
         topView.backgroundColor = .DarkBlue
         tableView.addSubview(topView)
-        
-//        let topView = UIView(frame: CGRect(x: 0, y: -400, width: UIScreen.main.bounds.width, height: 400.0))
-//        topView.backgroundColor = .DarkBlue
-//        tableView.addSubview(topView)
     }
     
     func listenPostUpdate() {
