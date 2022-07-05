@@ -88,7 +88,10 @@ class PetConfigViewController: UIViewController {
     
     func style() {
 
-        view.backgroundColor = .white
+        view.backgroundColor = .DarkBlue
+        
+        tableView.layer.cornerRadius = 20
+        tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
         tableView.separatorStyle = .none
     }

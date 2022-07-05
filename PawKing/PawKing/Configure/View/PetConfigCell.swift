@@ -192,7 +192,7 @@ class PetConfigCell: UITableViewCell {
         
         genderTextfield.text = pet.gender
         
-        birthdayTextfield.text = pet.birthday.dateValue().displayTimeInBirthdayStyle()
+        birthdayTextfield.text = pet.birthday.dateValue().displayTimeInNormalStyle()
         
         birthday = pet.birthday
     }
@@ -218,7 +218,7 @@ class PetConfigCell: UITableViewCell {
     
     @objc func handleDatePicker(sender: UIDatePicker) {
 
-        birthdayTextfield.text = sender.date.displayTimeInBirthdayStyle()
+        birthdayTextfield.text = sender.date.displayTimeInNormalStyle()
         
         birthday = Timestamp(date: sender.date)
     }

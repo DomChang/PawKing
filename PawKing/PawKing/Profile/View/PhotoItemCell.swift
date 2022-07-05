@@ -46,6 +46,5 @@ class PhotoItemCell: UICollectionViewCell {
         imageView.layer.cornerRadius = 5
 
         imageView.clipsToBounds = true
-        
     }
 }

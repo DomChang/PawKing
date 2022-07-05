@@ -63,13 +63,7 @@ class TrackHostoryCell: UICollectionViewCell {
         
         petNameLabel.text = pet.name
         
-        let dateFormatter = DateFormatter()
-        
-        dateFormatter.dateFormat = "yyyy / MM / dd"
-        
-        let trackDate = dateFormatter.string(from: trackInfo.startTime.dateValue())
-        
-        dateLabel.text = trackDate
+        dateLabel.text = trackInfo.startTime.dateValue().displayTimeInNormalStyle()
         
         let distance = computeDistance(from: trackInfo.track.map { $0.transferToCoordinate2D() })
         

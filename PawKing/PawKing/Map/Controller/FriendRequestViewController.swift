@@ -62,7 +62,11 @@ class FriendRequestViewController: UIViewController {
 
     private func style() {
         
+        view.backgroundColor = .DarkBlue
+        
         tableView.separatorStyle = .none
+        tableView.layer.cornerRadius = 20
+        tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
 
     private func layout() {

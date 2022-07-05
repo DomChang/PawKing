@@ -56,7 +56,7 @@ class ChatRoomViewController: UIViewController {
         
         tableView.separatorStyle = .none
         
-        view.backgroundColor = .white
+        view.backgroundColor = .DarkBlue
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -65,6 +65,9 @@ class ChatRoomViewController: UIViewController {
     
     private func style() {
         
+        tableView.layer.cornerRadius = 20
+        
+        tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
     
     private func layout() {

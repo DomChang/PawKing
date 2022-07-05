@@ -74,8 +74,8 @@ class ContentButtonCell: UICollectionViewCell {
         
         bottomView.anchor(centerY: photoContentButton.centerYAnchor,
                           centerX: photoContentButton.centerXAnchor,
-                          width: 150,
-                          height: 40)
+                          width: 100,
+                          height: 30)
         
         bottomView.layer.cornerRadius = 5
     }

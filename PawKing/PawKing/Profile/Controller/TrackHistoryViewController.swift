@@ -80,7 +80,7 @@ class TrackHistoryViewController: UIViewController {
     
     func setup() {
         
-        navigationItem.title = "\(pet.name)'s Track"
+        navigationItem.title = "\(trackInfo.startTime.dateValue().displayTimeInNormalStyle())"
         
         let imageUrl = URL(string: pet.petImage)
         

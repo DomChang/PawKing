@@ -34,15 +34,6 @@ class MapViewController: UIViewController {
     
     let choosePetImageView = UIImageView()
     
-    let userSetupButton: UIButton = {
-        
-        let button = UIButton()
-        button.backgroundColor = .Orange1
-        button.setTitle("設定", for: .normal)
-        button.layer.cornerRadius = 5
-        return button
-    }()
-    
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
     var strangersPet: [Pet] = [] {
@@ -142,6 +133,7 @@ class MapViewController: UIViewController {
             friendLocations = [:]
             trackButton.isHidden = true
             choosePetImageView.isHidden = true
+            notificationButton.isHidden = true
         }
     }
     
@@ -224,6 +216,9 @@ class MapViewController: UIViewController {
     
     func style() {
         
+        mapView.layer.cornerRadius = 20
+        mapView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        
         userLocationButton.setImage(UIImage.asset(.Icons_36px_UserLocate_Normal), for: .normal)
         userLocationButton.setImage(UIImage.asset(.Icons_36px_UserLocate_Selected), for: .selected)
         
@@ -265,7 +260,10 @@ class MapViewController: UIViewController {
         view.addSubview(collectionView)
         view.addSubview(choosePetImageView)
         
-        mapView.fillSuperview()
+        mapView.anchor(top: view.topAnchor,
+                       leading: view.leadingAnchor,
+                       bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                       trailing: view.trailingAnchor)
         
         userLocationButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,
                                   trailing: view.trailingAnchor,
@@ -622,12 +620,6 @@ class MapViewController: UIViewController {
     }
     
     @objc func didTapNotificationButton() {
-        
-        guard Auth.auth().currentUser != nil else {
-            
-            NotificationCenter.default.post(name: .showSignInView, object: .none)
-            return
-        }
         
         let friendRequestVC = FriendRequestViewController(user: user)
         

@@ -84,6 +84,10 @@ class ResultViewController: UISearchController {
     
     private func style() {
         
+        view.backgroundColor = .DarkBlue
+        
+        tableView.layer.cornerRadius = 20
+        tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
     
     private func layout() {
@@ -114,6 +118,8 @@ class ResultViewController: UISearchController {
 extension ResultViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
+        
+        searchController.searchBar.searchTextField.textColor = .white
         
         if let allUsers = allUsers,
            let searchText = searchController.searchBar.text {

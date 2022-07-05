@@ -143,12 +143,16 @@ class TabBarViewController: UITabBarController {
 
         let tabBarAppearance =  UITabBarAppearance()
         tabBarAppearance.configureWithDefaultBackground()
+        tabBarAppearance.backgroundColor = .white
+        tabBarAppearance.shadowColor = .clear
         tabBar.scrollEdgeAppearance = tabBarAppearance
         tabBar.standardAppearance = tabBarAppearance
         
         let navBarAppearance =  UINavigationBarAppearance()
-        navBarAppearance.backgroundColor = .white
+        navBarAppearance.backgroundColor = .DarkBlue
         navBarAppearance.shadowColor = .clear
+        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.Orange1 ?? .white]
+        
         UINavigationBar.appearance().standardAppearance = navBarAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
         UINavigationBar.appearance().compactAppearance = navBarAppearance

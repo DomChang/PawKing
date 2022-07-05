@@ -59,7 +59,10 @@ class EditProfileViewController: UIViewController {
     
     func style() {
 
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .DarkBlue
+        
+        tableView.layer.cornerRadius = 20
+        tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
         tableView.backgroundColor = .LightGray
         tableView.separatorStyle = .singleLine

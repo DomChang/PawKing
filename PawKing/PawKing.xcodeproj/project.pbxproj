@@ -69,6 +69,7 @@
 		B6D4F6A7285C5F9B0045DDB2 /* StrangerCardViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F6A6285C5F9B0045DDB2 /* StrangerCardViewCell.swift */; };
 		B6D4F6A9285C62F10045DDB2 /* Pet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F6A8285C62F10045DDB2 /* Pet.swift */; };
 		B6D4F6AB285CDB150045DDB2 /* PKPhotoHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F6AA285CDB150045DDB2 /* PKPhotoHelper.swift */; };
+		B6DD66D52872EAE700523197 /* ContentButtonReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DD66D42872EAE700523197 /* ContentButtonReusableView.swift */; };
 		B6E86AA0285F016A002B8C9A /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86A9F285F016A002B8C9A /* Profile.swift */; };
 		B6E86AA2285F0AEE002B8C9A /* ProfileInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86AA1285F0AEE002B8C9A /* ProfileInfoCell.swift */; };
 		B6E86AA4285F0B6B002B8C9A /* ContentButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86AA3285F0B6B002B8C9A /* ContentButtonCell.swift */; };
@@ -150,6 +151,7 @@
 		B6D4F6A6285C5F9B0045DDB2 /* StrangerCardViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrangerCardViewCell.swift; sourceTree = "<group>"; };
 		B6D4F6A8285C62F10045DDB2 /* Pet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pet.swift; sourceTree = "<group>"; };
 		B6D4F6AA285CDB150045DDB2 /* PKPhotoHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PKPhotoHelper.swift; sourceTree = "<group>"; };
+		B6DD66D42872EAE700523197 /* ContentButtonReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentButtonReusableView.swift; sourceTree = "<group>"; };
 		B6E86A9F285F016A002B8C9A /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		B6E86AA1285F0AEE002B8C9A /* ProfileInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoCell.swift; sourceTree = "<group>"; };
 		B6E86AA3285F0B6B002B8C9A /* ContentButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentButtonCell.swift; sourceTree = "<group>"; };
@@ -244,6 +246,7 @@
 				B6E86AA9285F7DAA002B8C9A /* PetItemCell.swift */,
 				B6A91D6A2868909F0049253A /* PetItemBackReusableView.swift */,
 				B6E86AA3285F0B6B002B8C9A /* ContentButtonCell.swift */,
+				B6DD66D42872EAE700523197 /* ContentButtonReusableView.swift */,
 				B63484EC285EEE8800DB7CE7 /* PhotoItemCell.swift */,
 				B6E86AA5285F0B85002B8C9A /* TrackHostoryCell.swift */,
 				B651EDD328717AAC003A5F2B /* EditUserCell.swift */,
@@ -675,6 +678,7 @@
 				B6ABE8ED285AFC2B00B1A977 /* User.swift in Sources */,
 				B6ABE8E0285A06E300B1A977 /* UIColor+Extension.swift in Sources */,
 				B66A15CE2866AE5400DF2663 /* UserPhotoWallViewController.swift in Sources */,
+				B6DD66D52872EAE700523197 /* ContentButtonReusableView.swift in Sources */,
 				B6ABE8E9285AC08200B1A977 /* UserLocation.swift in Sources */,
 				B63484D6285D80F100DB7CE7 /* BaseConfigViewController.swift in Sources */,
 				B651EDD628718B8B003A5F2B /* EditPetCell.swift in Sources */,

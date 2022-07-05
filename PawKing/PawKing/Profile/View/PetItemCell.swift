@@ -64,7 +64,7 @@ class PetItemCell: UICollectionViewCell {
                          leading: contentView.leadingAnchor,
                          bottom: contentView.bottomAnchor,
                          trailing: contentView.trailingAnchor,
-                         padding: UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2))
+                         padding: UIEdgeInsets(top: 3, left: 3, bottom: 3, right: 3))
         
         backBorderView.anchor(top: contentView.topAnchor,
                               leading: contentView.leadingAnchor,

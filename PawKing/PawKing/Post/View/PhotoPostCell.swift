@@ -30,6 +30,8 @@ class PhotoPostCell: UITableViewCell {
     
     let photoImageView = UIImageView()
     
+    let backView = UIView()
+    
     let likeButton = UIButton()
     
     let likeNumLabel = UILabel()
@@ -69,20 +71,28 @@ class PhotoPostCell: UITableViewCell {
     
     private func styleObject() {
         
+        contentView.backgroundColor = .DarkBlue
+        
         petImageView.contentMode = .scaleAspectFill
+        petImageView.layer.borderWidth = 1
+        petImageView.layer.borderColor = UIColor.white.cgColor
         
         photoImageView.contentMode = .scaleAspectFill
         
+        backView.backgroundColor = .white
+        backView.layer.cornerRadius = 20
+        backView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        
         petNameLabel.textAlignment = .left
         petNameLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        petNameLabel.textColor = .LightBlack
+        petNameLabel.textColor = .white
         
         ownerLabel.textAlignment = .left
         ownerLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        ownerLabel.textColor = .DarkBlue
+        ownerLabel.textColor = .white
         
         settingButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
-        settingButton.tintColor = .DarkBlue
+        settingButton.tintColor = .white
         
         likeButton.setImage(UIImage(systemName: "suit.heart",
                                     withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
@@ -146,6 +156,7 @@ class PhotoPostCell: UITableViewCell {
         contentView.addSubview(petImageView)
         contentView.addSubview(petInfoStack)
         contentView.addSubview(photoImageView)
+        contentView.addSubview(backView)
         contentView.addSubview(infoStack)
         contentView.addSubview(vStack)
         
@@ -164,10 +175,16 @@ class PhotoPostCell: UITableViewCell {
         
         photoImageView.anchor(leading: contentView.leadingAnchor,
                               trailing: contentView.trailingAnchor,
-                              height: UIScreen.main.bounds.width,
+                              height: UIScreen.main.bounds.width + 20,
                              padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0))
         
-        infoStack.anchor(top: photoImageView.bottomAnchor,
+        backView.anchor(top: photoImageView.bottomAnchor,
+                        leading: contentView.leadingAnchor,
+                        bottom: contentView.bottomAnchor,
+                        trailing: contentView.trailingAnchor,
+                        padding: UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0))
+        
+        infoStack.anchor(top: backView.topAnchor,
                          leading: contentView.leadingAnchor,
                          trailing: contentView.trailingAnchor,
                          height: 30,
@@ -182,6 +199,7 @@ class PhotoPostCell: UITableViewCell {
         contentView.layoutIfNeeded()
         petImageView.makeRound()
         petImageView.clipsToBounds = true
+        photoImageView.clipsToBounds = true
     }
     
     func configureCell(user: User, pet: Pet, post: Post, likeCount: Int, isLike: Bool) {

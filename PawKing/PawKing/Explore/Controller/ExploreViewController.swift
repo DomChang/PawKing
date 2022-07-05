@@ -35,7 +35,9 @@ class ExploreViewController: UIViewController {
     
     let friendModeButton = UIButton()
     
-    let bottomView = UIView()
+    let buttonIndicatorView = UIView()
+    
+    let buttonBackView = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,17 +61,17 @@ class ExploreViewController: UIViewController {
         
         if friendModeButton.isSelected {
             
-            bottomView.center.x = friendModeButton.center.x
+            buttonIndicatorView.center.x = friendModeButton.center.x
             
         } else {
             
-            bottomView.center.x = allModeButton.center.x
+            buttonIndicatorView.center.x = allModeButton.center.x
         }
     }
     
     private func setup() {
         
-        view.backgroundColor = .white
+        view.backgroundColor = .DarkBlue
         
         navigationItem.title = "Explore"
             
@@ -98,7 +100,11 @@ class ExploreViewController: UIViewController {
         friendModeButton.setTitleColor(.white, for: .selected)
         friendModeButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
-        bottomView.backgroundColor = .Orange1
+        buttonIndicatorView.backgroundColor = .Orange1
+        
+        buttonBackView.backgroundColor = .white
+        buttonBackView.layer.cornerRadius = 20
+        buttonBackView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
     
     private func layout() {
@@ -107,27 +113,33 @@ class ExploreViewController: UIViewController {
         
         let hStackView = UIStackView(arrangedSubviews: [allModeButton, friendModeButton])
         hStackView.distribution = .fillEqually
-        
-        view.addSubview(bottomView)
+        view.addSubview(buttonBackView)
+        view.addSubview(buttonIndicatorView)
         view.addSubview(hStackView)
+        
+        buttonBackView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                              leading: view.leadingAnchor,
+                              bottom: collectionView.topAnchor,
+                              trailing: view.trailingAnchor)
         
         hStackView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                           leading: view.leadingAnchor,
                           trailing: view.trailingAnchor,
-                          height: 50)
+                          height: 30,
+                          padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0))
         
-        bottomView.anchor(centerY: allModeButton.centerYAnchor,
+        buttonIndicatorView.anchor(centerY: allModeButton.centerYAnchor,
                           centerX: allModeButton.centerXAnchor,
-                          width: 150,
-                          height: 40)
+                          width: 100,
+                          height: 30)
         
         collectionView.anchor(top: hStackView.bottomAnchor,
                               leading: view.leadingAnchor,
                               bottom: view.bottomAnchor,
                               trailing: view.trailingAnchor,
-                              padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0))
+                              padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0))
         
-        bottomView.layer.cornerRadius = 5
+        buttonIndicatorView.layer.cornerRadius = 5
     }
     
     private func getAllPosts(without blockIds: [String]) {
@@ -171,6 +183,11 @@ class ExploreViewController: UIViewController {
         )
         searchController?.searchResultsUpdater = resultViewController
         
+        searchController?.searchBar.searchTextField.leftView?.tintColor = .LightGray
+        searchController?.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(
+            string: "Search User",
+            attributes: [.foregroundColor: UIColor.lightGray])
+
         navigationItem.searchController = searchController
         
         definesPresentationContext = true
@@ -200,7 +217,7 @@ class ExploreViewController: UIViewController {
         
         UIView.animate(withDuration: 0.1, animations: {
             
-            self.bottomView.center.x = self.allModeButton.center.x
+            self.buttonIndicatorView.center.x = self.allModeButton.center.x
         })
     }
     
@@ -213,7 +230,7 @@ class ExploreViewController: UIViewController {
         
         UIView.animate(withDuration: 0.1, animations: {
             
-            self.bottomView.center.x = self.friendModeButton.center.x
+            self.buttonIndicatorView.center.x = self.friendModeButton.center.x
         })
     }
 }
