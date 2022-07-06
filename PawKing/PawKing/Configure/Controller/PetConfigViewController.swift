@@ -94,6 +94,8 @@ class PetConfigViewController: UIViewController {
     }
     
     func style() {
+        
+        navigationController?.navigationBar.tintColor = .white
 
         view.backgroundColor = .BattleGrey
         

@@ -80,7 +80,7 @@ class MessageViewController: UIViewController {
         
         navigationItem.title = "\(otherUser.name)"
         
-        navigationController?.navigationBar.tintColor = .Orange1
+        navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
         
         tableView.register(UserMessageCell.self, forCellReuseIdentifier: UserMessageCell.identifer)

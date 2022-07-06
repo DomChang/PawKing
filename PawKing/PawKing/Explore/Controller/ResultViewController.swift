@@ -84,6 +84,8 @@ class ResultViewController: UISearchController {
     
     private func style() {
         
+        navigationController?.navigationBar.tintColor = .white
+        
         view.backgroundColor = .BattleGrey
         
         tableView.backgroundColor = .LightGray

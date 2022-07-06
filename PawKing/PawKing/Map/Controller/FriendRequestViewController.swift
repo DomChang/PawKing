@@ -51,7 +51,7 @@ class FriendRequestViewController: UIViewController {
         
         navigationItem.title = "Connect Requests"
         
-        navigationController?.navigationBar.tintColor = .Orange1
+        navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
 
         tableView.dataSource = self

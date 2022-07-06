@@ -213,6 +213,7 @@ class TabBarViewController: UITabBarController {
                 rootViewController: PublishViewController(image: image))
             
             navPublishVC.modalPresentationStyle = .fullScreen
+            navPublishVC.navigationBar.tintColor = .white
 
             self?.present(navPublishVC, animated: true)
         }

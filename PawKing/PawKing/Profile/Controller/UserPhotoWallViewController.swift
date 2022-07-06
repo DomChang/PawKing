@@ -96,7 +96,7 @@ class UserPhotoWallViewController: UIViewController {
                                                             target: self,
                                                             action: #selector(didTapAction))
         
-        navigationController?.navigationBar.tintColor = .Orange1
+        navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
         
         collectionView.dataSource = self
@@ -570,7 +570,7 @@ extension UserPhotoWallViewController: UICollectionViewDelegate {
                 
                 selectedPetIndex = indexPath.item
                 
-                cell.imageView.layer.borderWidth = 3
+                cell.imageView.layer.borderWidth = 2
                 cell.imageView.layer.borderColor = UIColor.BattleGrey?.cgColor
                 cell.backBorderView.isHidden = false
                 

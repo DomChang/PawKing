@@ -129,7 +129,7 @@ class PhotoPostViewController: UIViewController {
     
     func style() {
         
-        navigationController?.navigationBar.tintColor = .Orange1
+        navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
         
         navigationItem.title = "Post"

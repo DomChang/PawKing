@@ -131,6 +131,8 @@ class ProfileViewController: UIViewController {
     
     private func style() {
         
+        navigationController?.navigationBar.tintColor = .white
+        
         view.backgroundColor = .BattleGrey
         collectionView.backgroundColor = .white
         collectionView.layer.cornerRadius = 20
@@ -588,7 +590,7 @@ extension ProfileViewController: UICollectionViewDelegate {
                 
                 selectedPetIndex = indexPath.item
                 
-                cell.imageView.layer.borderWidth = 3
+                cell.imageView.layer.borderWidth = 2
                 cell.imageView.layer.borderColor = UIColor.BattleGrey?.cgColor
                 cell.backBorderView.isHidden = false
                 
