@@ -6,10 +6,15 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SettingViewController: UIViewController {
     
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
+    
+    private let signOutActionController = UIAlertController(title: "Are you sure you want to sign out?",
+                                                     message: nil,
+                                                     preferredStyle: .actionSheet)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +31,8 @@ class SettingViewController: UIViewController {
         
         tableView.dataSource = self
         tableView.delegate = self
+        
+        setActionSheet()
     }
     
     private func style() {
@@ -49,9 +56,81 @@ class SettingViewController: UIViewController {
                          bottom: view.bottomAnchor,
                          trailing: view.trailingAnchor)
     }
+    
+    private func setActionSheet() {
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        
+        signOutActionController.addAction(cancelAction)
+        
+        let signOutAction  = UIAlertAction(title: "Confirm", style: .destructive) { _ in
+            
+            let firebaseAuth = Auth.auth()
+            do {
+              try firebaseAuth.signOut()
+    
+                UserManager.shared.currentUser =  User(id: "Guest",
+                                                         name: "Guest",
+                                                         petsId: [],
+                                                         currentPetId: "",
+                                                         userImage: "",
+                                                         description: "",
+                                                         friendPetsId: [],
+                                                         friends: [],
+                                                         recieveRequestsId: [],
+                                                         sendRequestsId: [],
+                                                         blockUsersId: [])
+    
+                Auth.auth().currentUser?.reload()
+    
+                DispatchQueue.main.async {
+                   self.tabBarController?.selectedIndex = 0
+                }
+    
+            } catch let signOutError as NSError {
+              print("Error signing out: %@", signOutError)
+            }
+        }
+        signOutActionController.addAction(signOutAction)
+    }
+    
+    @objc private func dismissAlertController() {
+        
+        signOutActionController.dismiss(animated: true)
+    }
 }
 
 extension SettingViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.section {
+            
+        case SettingSections.policy.rawValue:
+            
+            return
+            
+        case SettingSections.blockedUser.rawValue:
+            
+            let blockVC = BlockViewController()
+            
+            navigationController?.pushViewController(blockVC, animated: true)
+            
+        case SettingSections.signOut.rawValue:
+            
+            present(signOutActionController, animated: true) {
+                
+                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissAlertController))
+                
+                self.signOutActionController.view.superview?.subviews[0].addGestureRecognizer(tapGesture)
+            }
+            
+        case SettingSections.deleteAccount.rawValue:
+            
+            return
+        default:
+            return
+        }
+    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         SettingSections.allCases.count

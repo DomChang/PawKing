@@ -64,11 +64,14 @@ class LottieWrapper {
     
     func stopLoading() {
         
-        loadingView.removeFromSuperview()
+        DispatchQueue.main.async {
+            
+            self.loadingView.removeFromSuperview()
 
-        blurView.removeFromSuperview()
-        
-        loadingView.stop()
+            self.blurView.removeFromSuperview()
+            
+            self.loadingView.stop()
+        }
     }
     
     func showError(_ error: Error?) {
