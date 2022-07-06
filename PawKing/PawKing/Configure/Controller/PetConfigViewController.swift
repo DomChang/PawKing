@@ -14,6 +14,8 @@ class PetConfigViewController: UIViewController {
     
     private let userManager = UserManager.shared
     
+    private let lottie = LottieWrapper.shared
+    
     private let photoHelper = PKPhotoHelper()
     
     private var owner: User
@@ -163,11 +165,17 @@ extension PetConfigViewController: PetConfigCellDelegate {
     
     func didTapFinish(From cell: PetConfigCell) {
         
+        lottie.startLoading()
+        
         guard let petName = cell.petNameTextfield.text,
               let gender = cell.genderTextfield.text,
               let petImage = cell.petImageView.image,
               let birthday = cell.birthday
         else {
+            
+            lottie.stopLoading()
+            lottie.showError(nil)
+            
             return
         }
         
@@ -187,13 +195,16 @@ extension PetConfigViewController: PetConfigCellDelegate {
                     
                     cell.finishButtonEnable()
                     
+                    self?.lottie.stopLoading()
+                    
                     self?.navigationController?.popViewController(animated: true)
                     
                 case .failure(let error):
                     
                     cell.finishButtonEnable()
                     
-                    print(error)
+                    self?.lottie.stopLoading()
+                    self?.lottie.showError(error)
                 }
             }
             
@@ -234,6 +245,8 @@ extension PetConfigViewController: PetConfigCellDelegate {
                     
                     cell.finishButtonEnable()
                     
+                    self?.lottie.stopLoading()
+                    
                     self?.navigationController?.popViewController(animated: true)
                     
                     self?.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
@@ -242,7 +255,8 @@ extension PetConfigViewController: PetConfigCellDelegate {
                     
                     cell.finishButtonEnable()
                     
-                    print(error)
+                    self?.lottie.stopLoading()
+                    self?.lottie.showError(error)
                 }
             }
         }

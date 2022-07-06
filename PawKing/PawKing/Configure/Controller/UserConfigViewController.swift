@@ -13,6 +13,8 @@ class UserConfigViewController: UIViewController {
     
     private let userManager = UserManager.shared
     
+    private let lottie = LottieWrapper.shared
+    
     private let tableView = UITableView()
     
     private let photoHelper = PKPhotoHelper()
@@ -152,10 +154,14 @@ extension UserConfigViewController: UserConfigCellDelegate {
     
     func didTapNext(from cell: UserConfigCell) {
         
+        lottie.startLoading()
+        
         guard let userName = cell.userNameTextfield.text,
               let image = cell.userImageView.image,
               var user = user
         else {
+            lottie.stopLoading()
+            lottie.showError(nil)
             return
         }
         
@@ -187,20 +193,20 @@ extension UserConfigViewController: UserConfigCellDelegate {
                         
                     case .success:
                         
-                        self?.showPetConfigVC(user: user)
+                        self?.lottie.stopLoading()
                         
-//                        guard let tabBarVC = self?.tabBarController as? TabBarViewController else { return }
-//
-//                        tabBarVC.configureUserToTab(user: user)
+                        self?.showPetConfigVC(user: user)
                         
                     case .failure(let error):
                         
-                        print(error)
+                        self?.lottie.stopLoading()
+                        self?.lottie.showError(error)
                     }
                 }
             case .failure(let error):
                 
-                print(error)
+                self?.lottie.stopLoading()
+                self?.lottie.showError(error)
             }
         }
     }

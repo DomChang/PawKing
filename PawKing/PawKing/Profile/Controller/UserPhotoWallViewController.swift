@@ -16,6 +16,8 @@ class UserPhotoWallViewController: UIViewController {
     
     private let postManager = PostManager.shared
     
+    private let lottie = LottieWrapper.shared
+    
     var user: User?
     
     var otherUser: User
@@ -291,6 +293,9 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
     func didTapLeftButton(from cell: ProfileInfoCell) {
         
         guard let user = user else {
+            
+            lottie.showError(nil)
+            
             return
         }
         
@@ -308,7 +313,7 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
                 
                 friendRequestButton.isSelected = !friendRequestButton.isSelected
                 
-                userManager.removeFriendRequest(senderId: user.id, recieverId: otherUser.id) { result in
+                userManager.removeFriendRequest(senderId: user.id, recieverId: otherUser.id) { [weak self] result in
                     
                     switch result {
                         
@@ -318,7 +323,7 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
                         
                     case .failure(let error):
                         
-                        print(error)
+                        self?.lottie.showError(error)
                     }
                 }
             }
@@ -338,7 +343,7 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
                     
                 case .failure(let error):
                     
-                    print(error)
+                    self?.lottie.showError(error)
                 }
             }
         }

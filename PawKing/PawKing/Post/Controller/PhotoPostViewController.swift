@@ -16,6 +16,8 @@ class PhotoPostViewController: UIViewController {
     
     private let petManager = PetManager.shared
     
+    private let lottie = LottieWrapper.shared
+    
     private let tableView = UITableView()
     
     private let user: User
@@ -308,6 +310,8 @@ class PhotoPostViewController: UIViewController {
     
     @objc func didTapSendButton() {
         
+        lottie.startLoading()
+        
         sendButtonDisable()
         
         guard let text = userInputTextView.text,
@@ -327,18 +331,7 @@ class PhotoPostViewController: UIViewController {
                 
             case .success:
                 
-//                guard let user = self?.user else { return }
-                
-//                self?.comments?.append(comment)
-                
-//                let userComment = UserComment(user: user, comment: comment)
-//                self?.userComments.append(userComment)
-                
-//                let indexPath = IndexPath(row: commentCount, section: 1)
-//
-//                self?.tableView.insertRows(at: [indexPath], with: .automatic)
-//
-//                self?.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+                self?.lottie.stopLoading()
                 
                 self?.userInputTextView.text = ""
                 
@@ -346,7 +339,8 @@ class PhotoPostViewController: UIViewController {
                 
             case .failure(let error):
                 
-                print(error)
+                self?.lottie.stopLoading()
+                self?.lottie.showError(error)
             }
         }
         

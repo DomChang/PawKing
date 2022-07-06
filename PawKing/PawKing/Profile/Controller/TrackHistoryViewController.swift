@@ -13,6 +13,8 @@ class TrackHistoryViewController: UIViewController {
     
     private let mapManager = MapManager.shared
     
+    private let lottie = LottieWrapper.shared
+    
     private let pet: Pet
     
     private let trackInfo: TrackInfo
@@ -44,10 +46,6 @@ class TrackHistoryViewController: UIViewController {
     private let updateButton = UIButton()
     
     init(pet: Pet, trackInfo: TrackInfo, shouldEdit: Bool) {
-        
-//        self.petName = petName
-//        
-//        self.petImageURL = petImageURL
         
         self.pet = pet
         
@@ -288,6 +286,8 @@ class TrackHistoryViewController: UIViewController {
     
     @objc func didTapUpdateNote() {
         
+        lottie.startLoading()
+        
         guard let trackNote = noteTextView.text else { return }
         
         updateButton.isEnabled = false
@@ -299,11 +299,14 @@ class TrackHistoryViewController: UIViewController {
                 
             case .success:
                 
+                self?.lottie.stopLoading()
+                
                 self?.navigationController?.popViewController(animated: true)
                 
             case .failure(let error):
                 
-                print(error)
+                self?.lottie.stopLoading()
+                self?.lottie.showError(error)
             }
         }
     }

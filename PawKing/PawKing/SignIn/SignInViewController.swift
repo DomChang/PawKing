@@ -9,6 +9,7 @@ import UIKit
 import AuthenticationServices
 import CryptoKit
 import FirebaseAuth
+import Lottie
 
 protocol SignInViewDelegate {
     
@@ -21,27 +22,29 @@ class SignInViewController: UIViewController {
     
     var delegate: SignInViewDelegate?
     
-    let appleButton = ASAuthorizationAppleIDButton(type: .signIn, style: .black)
+    private let appleButton = ASAuthorizationAppleIDButton(type: .signIn, style: .black)
     
-    let userManager = UserManager.shared
+    private let userManager = UserManager.shared
     
-    let signInTitleLabel = UILabel()
+    private let lottie = LottieWrapper.shared
     
-    let emailTextField = InputTextField()
+    private let signInTitleLabel = UILabel()
     
-    let passwordTextField = InputTextField()
+    private let emailTextField = InputTextField()
     
-    let signInButton = UIButton()
+    private let passwordTextField = InputTextField()
     
-    let registerHintLabel = UILabel()
+    private let signInButton = UIButton()
     
-    let registerButton = UIButton()
+    private let registerHintLabel = UILabel()
     
-    let speratorLeftLine = UIView()
+    private let registerButton = UIButton()
     
-    let orLabel = UILabel()
+    private let speratorLeftLine = UIView()
     
-    let speratorRightLine = UIView()
+    private let orLabel = UILabel()
+    
+    private let speratorRightLine = UIView()
     
     fileprivate var currentNonce: String?
     
@@ -168,9 +171,13 @@ class SignInViewController: UIViewController {
     
     @objc func didTapSignIn() {
         
+        lottie.startLoading()
+        
         guard let email = emailTextField.text,
               let password = passwordTextField.text
         else {
+            lottie.stopLoading()
+            lottie.showError(nil)
             return
         }
         
@@ -188,11 +195,16 @@ class SignInViewController: UIViewController {
                     if isExit {
                         
                         self?.delegate?.signInExistUser()
+                        
+                        self?.lottie.stopLoading()
 
                         self?.dismiss(animated: true)
                         
                     } else {
                         
+                        self?.lottie.stopLoading()
+                        
+                        self?.lottie.showError(nil)
                         print("Please Sign Up First!")
                     }
                 })
@@ -426,6 +438,8 @@ extension SignInViewController: RegisterViewDelegate {
     
     func didFinishRegister(uid: String) {
         
+        lottie.startLoading()
+        
         self.dismiss(animated: true) { [weak self] in
             
             let user = User(id: uid,
@@ -445,6 +459,8 @@ extension SignInViewController: RegisterViewDelegate {
                 switch result {
 
                 case .success:
+                    
+                    lottie.stopLoading()
 
                     self?.dismiss(animated: true)
 
@@ -453,8 +469,9 @@ extension SignInViewController: RegisterViewDelegate {
                     UserManager.shared.currentUser = user
 
                 case .failure(let error):
-
-                    print(error)
+                    
+                    lottie.stopLoading()
+                    lottie.showError(error)
                 }
             }
         }

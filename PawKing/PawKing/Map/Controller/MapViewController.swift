@@ -50,6 +50,8 @@ class MapViewController: UIViewController {
     
     let userManager = UserManager.shared
     
+    private let lottie = LottieWrapper.shared
+    
     var trackStartTime = Timestamp()
     
     private var user: User
@@ -436,10 +438,15 @@ class MapViewController: UIViewController {
     
     @objc func didTapSaveTrack() {
         
+        lottie.startLoading()
+        
         let coordinate = userStoredLocations.map { $0.coordinate }
         let track = coordinate.map { $0.transferToGeopoint() }
         
         guard let userCurrentPet = userCurrentPet else {
+            
+            lottie.stopLoading()
+            
             return
         }
         
@@ -453,19 +460,13 @@ class MapViewController: UIViewController {
                                   track: track,
                                   note: "")
         
-//        var trackInfo = TrackInfo(id: user.id,
-//                          petId: petId,
-//                                  distance: "",
-//                          startTime: trackStartTime,
-//                          endTime: Timestamp(),
-//                          track: track,
-//                          note: "")
-        
         mapManager.uploadTrack(userId: user.id, trackInfo: &trackInfo) { [weak self] result in
             
             switch result {
                 
             case .success(let trackInfo):
+                
+                self?.lottie.stopLoading()
                 
                 self?.didFinishTrackButtons()
                 
@@ -476,7 +477,9 @@ class MapViewController: UIViewController {
                 self?.navigationController?.pushViewController(trackHistoryVC, animated: true)
                 
             case .failure(let error):
-                print(error)
+                
+                self?.lottie.stopLoading()
+                self?.lottie.showError(error)
             }
         }
     }
@@ -520,7 +523,7 @@ class MapViewController: UIViewController {
         saveTrackButton.isHidden = true
         deleteTrackButton.isHidden = true
         
-        mapManager.changeUserStatus(userId: user.id, status: .unTrack) { result in
+        mapManager.changeUserStatus(userId: user.id, status: .unTrack) { [weak self] result in
             switch result {
                 
             case .success:
@@ -529,7 +532,7 @@ class MapViewController: UIViewController {
                 
             case .failure(let error):
                 
-                print(error)
+                self?.lottie.showError(error)
             }
         }
     }

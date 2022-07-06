@@ -14,6 +14,8 @@ final class PublishViewController: UIViewController {
     
     private let postManager = PostManager.shared
     
+    private let lottie = LottieWrapper.shared
+    
     private var userPets: [Pet]?
     
     private var user: User?
@@ -289,9 +291,13 @@ final class PublishViewController: UIViewController {
         
         submitButtonDisable()
         
+        lottie.startLoading()
+        
         guard let user = user,
                 let selectedPet = selectedPet
         else {
+            lottie.showError(nil)
+            lottie.stopLoading()
             return
         }
 
@@ -307,18 +313,22 @@ final class PublishViewController: UIViewController {
         postManager.setupPost(userId: user.id,
                               petId: selectedPet.id,
                               post: &post,
-                              postImage: photoImage) { result in
+                              postImage: photoImage) { [weak self] result in
             switch result {
                 
             case .success:
                 
                 print("Create Post success")
                 
-                self.dismiss(animated: true)
+                self?.lottie.stopLoading()
+                
+                self?.dismiss(animated: true)
                 
             case .failure(let error):
                 
-                print(error)
+                self?.lottie.stopLoading()
+                self?.lottie.showError(error)
+                self?.submitButtonEnable()
             }
         }
     }
