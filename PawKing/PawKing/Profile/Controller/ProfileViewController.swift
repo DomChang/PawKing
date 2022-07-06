@@ -19,6 +19,8 @@ class ProfileViewController: UIViewController {
     
     private let photoHelper = PKPhotoHelper()
     
+    private let lottie = LottieWrapper.shared
+    
     var isPhoto = true {
         didSet {
             collectionView.reloadSections(IndexSet(integer: 3))
@@ -94,9 +96,14 @@ class ProfileViewController: UIViewController {
     
     private func setup() {
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "LogOut",
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "LogOut",
+//                                                            style: .plain,
+//                                                            target: self, action: #selector(logout))
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.asset(.Icons_24px_Setting),
                                                             style: .plain,
-                                                            target: self, action: #selector(logout))
+                                                            target: self,
+                                                            action: #selector(didTapSetting))
         
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -157,33 +164,37 @@ class ProfileViewController: UIViewController {
         
     }
     
-    @objc func logout() {
+    @objc func didTapSetting() {
         
-        let firebaseAuth = Auth.auth()
-        do {
-          try firebaseAuth.signOut()
-            
-            UserManager.shared.currentUser =  User(id: "Guest",
-                                                     name: "Guest",
-                                                     petsId: [],
-                                                     currentPetId: "",
-                                                     userImage: "",
-                                                     description: "",
-                                                     friendPetsId: [],
-                                                     friends: [],
-                                                     recieveRequestsId: [],
-                                                     sendRequestsId: [],
-                                                     blockUsersId: [])
-            
-            Auth.auth().currentUser?.reload()
-            
-            DispatchQueue.main.async {
-               self.tabBarController?.selectedIndex = 0
-            }
-            
-        } catch let signOutError as NSError {
-          print("Error signing out: %@", signOutError)
-        }
+        let settingVC = SettingViewController()
+        
+        navigationController?.pushViewController(settingVC, animated: true)
+        
+//        let firebaseAuth = Auth.auth()
+//        do {
+//          try firebaseAuth.signOut()
+//
+//            UserManager.shared.currentUser =  User(id: "Guest",
+//                                                     name: "Guest",
+//                                                     petsId: [],
+//                                                     currentPetId: "",
+//                                                     userImage: "",
+//                                                     description: "",
+//                                                     friendPetsId: [],
+//                                                     friends: [],
+//                                                     recieveRequestsId: [],
+//                                                     sendRequestsId: [],
+//                                                     blockUsersId: [])
+//
+//            Auth.auth().currentUser?.reload()
+//
+//            DispatchQueue.main.async {
+//               self.tabBarController?.selectedIndex = 0
+//            }
+//
+//        } catch let signOutError as NSError {
+//          print("Error signing out: %@", signOutError)
+//        }
     }
     
     func fetchUser() {
@@ -276,8 +287,7 @@ extension ProfileViewController: ProfileInfoCellDelegate {
     
     func didTapLeftButton(from cell: ProfileInfoCell) {
         
-        guard let user = user,
-              let userPets = userPets else { return }
+        guard let user = user else { return }
         
         let editUserVC = EditProfileViewController(user: user)
         
@@ -472,7 +482,7 @@ extension ProfileViewController: UICollectionViewDataSource {
                         
                     case .failure(let error):
                         
-                        print(error)
+                        self?.lottie.showError(error)
                     }
                 }
             }
