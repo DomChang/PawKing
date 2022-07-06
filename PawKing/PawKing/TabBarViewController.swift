@@ -149,9 +149,9 @@ class TabBarViewController: UITabBarController {
         tabBar.standardAppearance = tabBarAppearance
         
         let navBarAppearance =  UINavigationBarAppearance()
-        navBarAppearance.backgroundColor = .DarkBlue
+        navBarAppearance.backgroundColor = .BattleGrey
         navBarAppearance.shadowColor = .clear
-        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.Orange1 ?? .white]
+        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         
         UINavigationBar.appearance().standardAppearance = navBarAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
@@ -235,6 +235,8 @@ extension TabBarViewController: SignInViewDelegate {
         let userConfigVC = UserConfigViewController(uid: uid)
         
         let navUserConfigVC = UINavigationController(rootViewController: userConfigVC)
+        
+        navUserConfigVC.modalPresentationStyle = .fullScreen
 
         present(navUserConfigVC, animated: true)
     }

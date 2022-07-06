@@ -72,6 +72,13 @@ class PetConfigViewController: UIViewController {
         if isInitailSet {
             
             navigationItem.hidesBackButton = true
+            
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(
+                systemName: "xmark",
+                withConfiguration: UIImage.SymbolConfiguration(scale: .small)),
+                                                                style: .plain,
+                                                                target: self,
+                                                                action: #selector(didTapClose))
         }
         
         tableView.dataSource = self
@@ -88,7 +95,7 @@ class PetConfigViewController: UIViewController {
     
     func style() {
 
-        view.backgroundColor = .DarkBlue
+        view.backgroundColor = .BattleGrey
         
         tableView.layer.cornerRadius = 20
         tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -100,7 +107,17 @@ class PetConfigViewController: UIViewController {
         
         view.addSubview(tableView)
         
-        tableView.fillSafeLayout()
+        tableView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                         leading: view.leadingAnchor,
+                         bottom: view.bottomAnchor,
+                         trailing: view.trailingAnchor)
+    }
+    
+    @objc func didTapClose() {
+        
+        navigationController?.popViewController(animated: true)
+        
+        view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
 }
 

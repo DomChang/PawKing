@@ -14,7 +14,7 @@ class ContentButtonReusableView: UICollectionReusableView {
     override init(frame: CGRect) {
             super.init(frame: frame)
         
-        backgroundColor = .DarkBlue
+        backgroundColor = .BattleGrey
         
         layout()
     }

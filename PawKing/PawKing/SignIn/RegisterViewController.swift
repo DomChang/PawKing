@@ -49,7 +49,7 @@ class RegisterViewController: UIViewController {
         view.backgroundColor = .white
         
         signUpTitleLabel.text = "Sign Up"
-        signUpTitleLabel.textColor = .DarkBlue
+        signUpTitleLabel.textColor = .BattleGrey
         signUpTitleLabel.font = UIFont.systemFont(ofSize: 24, weight: .medium)
         
         emailTextField.placeholder = "Email"

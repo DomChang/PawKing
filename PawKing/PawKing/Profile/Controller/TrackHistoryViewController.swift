@@ -119,7 +119,7 @@ class TrackHistoryViewController: UIViewController {
         updateButton.addTarget(self, action: #selector(didTapUpdateNote), for: .touchUpInside)
         
         timeTitleLabel.text = "Time"
-        timeTitleLabel.textColor = .DarkBlue
+        timeTitleLabel.textColor = .BattleGrey
         timeTitleLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         
         let startTime = trackInfo.startTime.dateValue()
@@ -130,7 +130,7 @@ class TrackHistoryViewController: UIViewController {
         timeLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         
         distanceTitleLabel.text = "Distance"
-        distanceTitleLabel.textColor = .DarkBlue
+        distanceTitleLabel.textColor = .BattleGrey
         distanceTitleLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         
         distanceLabel.text = "\(String(format: "%.2f", trackInfo.distanceMeter / 1000)) km"
@@ -138,7 +138,7 @@ class TrackHistoryViewController: UIViewController {
         distanceLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         
         noteTitleLabel.text = "Note:"
-        noteTitleLabel.textColor = .DarkBlue
+        noteTitleLabel.textColor = .BattleGrey
         noteTitleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         
         let location = trackInfo.track[0].transferToCoordinate2D()
@@ -166,7 +166,7 @@ class TrackHistoryViewController: UIViewController {
         settingButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
         settingButton.tintColor = .white
         
-        noteTextView.textColor = .DarkBlue
+        noteTextView.textColor = .BattleGrey
         noteTextView.font = UIFont.systemFont(ofSize: 16)
         
         updateButton.setTitleColor(.white, for: .normal)
@@ -183,7 +183,7 @@ class TrackHistoryViewController: UIViewController {
         hStack.spacing = 15
         
         let hStackBackView = UIView()
-        hStackBackView.backgroundColor = .DarkBlue
+        hStackBackView.backgroundColor = .BattleGrey
         
         petImageView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         settingButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
@@ -282,7 +282,7 @@ class TrackHistoryViewController: UIViewController {
         
         let topView = UIView(frame: CGRect(x: 0, y: -scrollView.bounds.height,
                 width: scrollView.bounds.width, height: scrollView.bounds.height))
-        topView.backgroundColor = .DarkBlue
+        topView.backgroundColor = .BattleGrey
         scrollView.addSubview(topView)
     }
     

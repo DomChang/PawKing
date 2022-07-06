@@ -36,7 +36,7 @@ class UserMessageCell: UITableViewCell {
         userTextView.isUserInteractionEnabled = false
         userTextView.font = UIFont.systemFont(ofSize: 18)
         userTextView.textColor = .white
-        userTextView.backgroundColor = .DarkBlue
+        userTextView.backgroundColor = .BattleGrey
         userTextView.isScrollEnabled = false
         userTextView.layer.borderWidth = 0.2
         userTextView.layer.borderColor = UIColor.LightBlack?.cgColor

@@ -92,13 +92,13 @@ class ProfileInfoCell: UICollectionViewCell {
         
         leftButton.layer.borderWidth = 1
         leftButton.layer.borderColor = UIColor.white.cgColor
-        leftButton.backgroundColor = .DarkBlue
+        leftButton.backgroundColor = .BattleGrey
         leftButton.setTitleColor(.white, for: .normal)
         leftButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         
         rightButton.layer.borderWidth = 1
         rightButton.layer.borderColor = UIColor.white.cgColor
-        rightButton.backgroundColor = .DarkBlue
+        rightButton.backgroundColor = .BattleGrey
         rightButton.setTitleColor(.white, for: .normal)
         rightButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
     }

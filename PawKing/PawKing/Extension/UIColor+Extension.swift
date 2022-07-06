@@ -19,7 +19,7 @@ private enum PKColor: String {
     
     case Blue3
     
-    case DarkBlue
+    case BattleGrey
     
     case Green1
     
@@ -48,7 +48,7 @@ extension UIColor {
     
     static let Blue3 = PKColor(.Blue3)
     
-    static let DarkBlue = PKColor(.DarkBlue)
+    static let BattleGrey = PKColor(.BattleGrey)
     
     static let G1 = PKColor(.Green1)
     

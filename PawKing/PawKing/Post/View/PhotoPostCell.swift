@@ -71,7 +71,7 @@ class PhotoPostCell: UITableViewCell {
     
     private func styleObject() {
         
-        contentView.backgroundColor = .DarkBlue
+        contentView.backgroundColor = .BattleGrey
         
         petImageView.contentMode = .scaleAspectFill
         petImageView.layer.borderWidth = 1
@@ -100,13 +100,13 @@ class PhotoPostCell: UITableViewCell {
         likeButton.setImage(UIImage(systemName: "suit.heart.fill",
                                     withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .selected)
         
-        likeButton.tintColor = .DarkBlue
+        likeButton.tintColor = .BattleGrey
         
         likeNumLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
-        likeNumLabel.textColor = .DarkBlue
+        likeNumLabel.textColor = .BattleGrey
         
         nameContentLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
-        nameContentLabel.textColor = .DarkBlue
+        nameContentLabel.textColor = .BattleGrey
         
         contentLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         contentLabel.textColor = .LightBlack
@@ -261,7 +261,7 @@ class PhotoPostCell: UITableViewCell {
     
     func notLikePost() {
         
-        likeButton.tintColor = .DarkBlue
+        likeButton.tintColor = .BattleGrey
         
         likeButton.isSelected = false
     }

@@ -59,7 +59,7 @@ class FriendRequestCell: UITableViewCell {
     
     private func styleObject() {
         
-        userNameLabel.textColor = .DarkBlue
+        userNameLabel.textColor = .BattleGrey
         userNameLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         
         userImageView.contentMode = .scaleAspectFill
@@ -72,9 +72,9 @@ class FriendRequestCell: UITableViewCell {
         
         denyButton.setTitle("Deny", for: .normal)
         denyButton.layer.borderWidth = 1
-        denyButton.layer.borderColor = UIColor.DarkBlue?.cgColor
+        denyButton.layer.borderColor = UIColor.BattleGrey?.cgColor
         denyButton.backgroundColor = .white
-        denyButton.setTitleColor(.DarkBlue, for: .normal)
+        denyButton.setTitleColor(.BattleGrey, for: .normal)
         denyButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         denyButton.layer.cornerRadius =  5
     }

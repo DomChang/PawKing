@@ -70,8 +70,6 @@ class PetConfigCell: UITableViewCell {
         petImageView.addGestureRecognizer(
             UITapGestureRecognizer(target: self, action: #selector(didTapPetImage)))
         
-        petImageView.isUserInteractionEnabled = true
-        
 //        photoButton.addTarget(self, action: #selector(didTapPhotoButton),
 //                                  for: .touchUpInside)
         
@@ -85,17 +83,17 @@ class PetConfigCell: UITableViewCell {
         petImageView.image = UIImage.asset(.Image_Placeholder)
         petImageView.contentMode = .scaleAspectFill
         
-        nameTitleLabel.text = "Name"
+        nameTitleLabel.text = "Pet Name"
         nameTitleLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        nameTitleLabel.textColor = .DarkBlue
+        nameTitleLabel.textColor = .BattleGrey
         
         genderTitleLabel.text = "Gender"
         genderTitleLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        genderTitleLabel.textColor = .DarkBlue
+        genderTitleLabel.textColor = .BattleGrey
         
         birthdayTitleLabel.text = "Birthday"
         birthdayTitleLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        birthdayTitleLabel.textColor = .DarkBlue
+        birthdayTitleLabel.textColor = .BattleGrey
         
         genderTextfield.inputView = genderPicker
         

@@ -12,7 +12,7 @@ class ProfileInfoReusableView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
     
-        backgroundColor = .DarkBlue
+        backgroundColor = .BattleGrey
     }
     
     required init?(coder: NSCoder) {

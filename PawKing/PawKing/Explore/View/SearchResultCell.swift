@@ -34,16 +34,16 @@ class SearchResultCell: UITableViewCell {
     
     private func styleObject() {
         
-        userNameLabel.textColor = .brown
-        userNameLabel.font = UIFont.systemFont(ofSize: 18)
+        userNameLabel.textColor = .BattleGrey
+        userNameLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
         userImageView.contentMode = .scaleAspectFill
     }
     
     private func layout() {
         
-        userImageView.constrainWidth(constant: 30)
-        userImageView.constrainHeight(constant: 30)
+        userImageView.constrainWidth(constant: 40)
+        userImageView.constrainHeight(constant: 40)
         
         let hStackView = UIStackView(arrangedSubviews: [userImageView, userNameLabel])
         
@@ -57,7 +57,7 @@ class SearchResultCell: UITableViewCell {
                           leading: contentView.leadingAnchor,
                           bottom: contentView.bottomAnchor,
                           trailing: contentView.trailingAnchor,
-                          padding: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
+                          padding: UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20))
         
         userImageView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         

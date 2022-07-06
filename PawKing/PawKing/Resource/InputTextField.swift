@@ -37,7 +37,7 @@ class InputTextField: UITextField {
     func setup() {
         
         layer.cornerRadius = 4
-        layer.borderColor = UIColor.DarkBlue?.cgColor
+        layer.borderColor = UIColor.BattleGrey?.cgColor
         layer.borderWidth = 0.5
         
     }

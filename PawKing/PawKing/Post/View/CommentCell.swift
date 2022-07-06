@@ -40,7 +40,7 @@ class CommentCell: UITableViewCell {
         
         userImageView.contentMode = .scaleAspectFill
         
-        userNameLabel.textColor = .DarkBlue
+        userNameLabel.textColor = .BattleGrey
         userNameLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         
         commentLabel.textColor = .LightBlack

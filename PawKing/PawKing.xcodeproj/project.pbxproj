@@ -70,6 +70,7 @@
 		B6D4F6A9285C62F10045DDB2 /* Pet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F6A8285C62F10045DDB2 /* Pet.swift */; };
 		B6D4F6AB285CDB150045DDB2 /* PKPhotoHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D4F6AA285CDB150045DDB2 /* PKPhotoHelper.swift */; };
 		B6DD66D52872EAE700523197 /* ContentButtonReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DD66D42872EAE700523197 /* ContentButtonReusableView.swift */; };
+		B6DD66D72874329700523197 /* OtherUserPetReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DD66D62874329700523197 /* OtherUserPetReusableView.swift */; };
 		B6E86AA0285F016A002B8C9A /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86A9F285F016A002B8C9A /* Profile.swift */; };
 		B6E86AA2285F0AEE002B8C9A /* ProfileInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86AA1285F0AEE002B8C9A /* ProfileInfoCell.swift */; };
 		B6E86AA4285F0B6B002B8C9A /* ContentButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86AA3285F0B6B002B8C9A /* ContentButtonCell.swift */; };
@@ -152,6 +153,7 @@
 		B6D4F6A8285C62F10045DDB2 /* Pet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pet.swift; sourceTree = "<group>"; };
 		B6D4F6AA285CDB150045DDB2 /* PKPhotoHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PKPhotoHelper.swift; sourceTree = "<group>"; };
 		B6DD66D42872EAE700523197 /* ContentButtonReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentButtonReusableView.swift; sourceTree = "<group>"; };
+		B6DD66D62874329700523197 /* OtherUserPetReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserPetReusableView.swift; sourceTree = "<group>"; };
 		B6E86A9F285F016A002B8C9A /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		B6E86AA1285F0AEE002B8C9A /* ProfileInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoCell.swift; sourceTree = "<group>"; };
 		B6E86AA3285F0B6B002B8C9A /* ContentButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentButtonCell.swift; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 				B6A91D6C28697CCC0049253A /* ProfileInfoReusableView.swift */,
 				B6E86AA9285F7DAA002B8C9A /* PetItemCell.swift */,
 				B6A91D6A2868909F0049253A /* PetItemBackReusableView.swift */,
+				B6DD66D62874329700523197 /* OtherUserPetReusableView.swift */,
 				B6E86AA3285F0B6B002B8C9A /* ContentButtonCell.swift */,
 				B6DD66D42872EAE700523197 /* ContentButtonReusableView.swift */,
 				B63484EC285EEE8800DB7CE7 /* PhotoItemCell.swift */,
@@ -706,6 +709,7 @@
 				B6BF961A2862A9CF003627C1 /* PhotoPostCell.swift in Sources */,
 				B698DDBD2858B8CC0009077E /* ProfileViewController.swift in Sources */,
 				B698DDC22858CE9D0009077E /* UIView+Extension.swift in Sources */,
+				B6DD66D72874329700523197 /* OtherUserPetReusableView.swift in Sources */,
 				B66A15C228658DF500DF2663 /* Message.swift in Sources */,
 				B6E9431A286DCA1700B3157F /* FriendRequestCell.swift in Sources */,
 				B6BF96182862A467003627C1 /* PhotoPostViewController.swift in Sources */,

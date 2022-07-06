@@ -206,7 +206,7 @@ class PhotoPostViewController: UIViewController {
         tableView.layoutIfNeeded()
         let topView = UIView(frame: CGRect(x: 0, y: -tableView.bounds.height,
                 width: tableView.bounds.width, height: tableView.bounds.height))
-        topView.backgroundColor = .DarkBlue
+        topView.backgroundColor = .BattleGrey
         tableView.addSubview(topView)
     }
     

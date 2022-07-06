@@ -131,7 +131,7 @@ class ProfileViewController: UIViewController {
     
     private func style() {
         
-        view.backgroundColor = .DarkBlue
+        view.backgroundColor = .BattleGrey
         collectionView.backgroundColor = .white
         collectionView.layer.cornerRadius = 20
         collectionView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -150,7 +150,7 @@ class ProfileViewController: UIViewController {
         collectionView.layoutIfNeeded()
         let topView = UIView(frame: CGRect(x: 0, y: -collectionView.bounds.height,
                 width: collectionView.bounds.width, height: collectionView.bounds.height))
-        topView.backgroundColor = .DarkBlue
+        topView.backgroundColor = .BattleGrey
         collectionView.addSubview(topView)
         
     }
@@ -589,7 +589,7 @@ extension ProfileViewController: UICollectionViewDelegate {
                 selectedPetIndex = indexPath.item
                 
                 cell.imageView.layer.borderWidth = 3
-                cell.imageView.layer.borderColor = UIColor.DarkBlue?.cgColor
+                cell.imageView.layer.borderColor = UIColor.BattleGrey?.cgColor
                 cell.backBorderView.isHidden = false
                 
             } else {

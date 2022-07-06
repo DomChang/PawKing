@@ -46,11 +46,11 @@ class TrackHostoryCell: UICollectionViewCell {
         
         contentView.layer.cornerRadius = 5
 
-        dateLabel.textColor = .DarkBlue
+        dateLabel.textColor = .BattleGrey
         dateLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         dateLabel.textAlignment = .center
         
-        distanceLabel.textColor = .DarkBlue
+        distanceLabel.textColor = .BattleGrey
         distanceLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         distanceLabel.textAlignment = .center
 

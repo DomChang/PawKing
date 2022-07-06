@@ -69,7 +69,7 @@ class SignInViewController: UIViewController {
         view.backgroundColor = .white
         
         signInTitleLabel.text = "Sign In"
-        signInTitleLabel.textColor = .DarkBlue
+        signInTitleLabel.textColor = .BattleGrey
         signInTitleLabel.font = UIFont.systemFont(ofSize: 24, weight: .medium)
         
         emailTextField.placeholder = "Email"

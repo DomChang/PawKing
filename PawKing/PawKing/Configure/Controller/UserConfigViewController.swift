@@ -23,7 +23,7 @@ class UserConfigViewController: UIViewController {
     
     private var userImageUrl: String?
     
-    private var userDescription: String?
+//    private var userDescription: String?
     
     private var user: User? {
         didSet {
@@ -76,7 +76,12 @@ class UserConfigViewController: UIViewController {
     
     func style() {
 
-        view.backgroundColor = .white
+        view.backgroundColor = .BattleGrey
+        
+        tableView.separatorStyle = .none
+        tableView.layer.cornerRadius = 20
+        tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+
     }
     
     func layout() {
@@ -86,8 +91,7 @@ class UserConfigViewController: UIViewController {
         tableView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                          leading: view.leadingAnchor,
                          bottom: view.bottomAnchor,
-                         trailing: view.trailingAnchor,
-                         padding: UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0))
+                         trailing: view.trailingAnchor)
     }
     
     func getUser() {
@@ -126,7 +130,7 @@ extension UserConfigViewController: UITableViewDataSource, UITableViewDelegate {
         
         if let userImage = userImage {
             
-            cell.photoButton.setImage(userImage, for: .normal)
+            cell.userImageView.image = userImage
         }
         
         if let user = user {
@@ -149,7 +153,7 @@ extension UserConfigViewController: UserConfigCellDelegate {
     func didTapNext(from cell: UserConfigCell) {
         
         guard let userName = cell.userNameTextfield.text,
-              let image = cell.photoButton.image(for: .normal),
+              let image = cell.userImageView.image,
               var user = user
         else {
             return

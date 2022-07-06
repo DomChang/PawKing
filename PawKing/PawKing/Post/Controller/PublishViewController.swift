@@ -121,17 +121,17 @@ final class PublishViewController: UIViewController {
         
         selectPetTitleLabel.text = "Post with"
         selectPetTitleLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        selectPetTitleLabel.textColor = .DarkBlue
+        selectPetTitleLabel.textColor = .BattleGrey
         
         photoImageView.contentMode = .scaleAspectFill
         photoImageView.clipsToBounds = true
         
-        petNameLabel.textColor = .DarkBlue
+        petNameLabel.textColor = .BattleGrey
         petNameLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         
         captionTitleLabel.text = "Caption"
         captionTitleLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        captionTitleLabel.textColor = .DarkBlue
+        captionTitleLabel.textColor = .BattleGrey
         
         captionTextView.placeholder = "Write a caption..."
         captionTextView.isScrollEnabled = false
@@ -225,7 +225,7 @@ final class PublishViewController: UIViewController {
         scrollView.layoutIfNeeded()
         let topView = UIView(frame: CGRect(x: 0, y: -scrollView.bounds.height,
                 width: scrollView.bounds.width, height: scrollView.bounds.height))
-        topView.backgroundColor = .DarkBlue
+        topView.backgroundColor = .BattleGrey
         scrollView.addSubview(topView)
     }
     
