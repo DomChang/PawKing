@@ -333,7 +333,9 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
             
             friendRequestButton.isSelected = !friendRequestButton.isSelected
             
-            userManager.sendFriendRequest(senderId: user.id, recieverId: otherUser.id, recieverBlockIds: otherUser.blockUsersId) { result in
+            userManager.sendFriendRequest(senderId: user.id,
+                                          recieverId: otherUser.id,
+                                          recieverBlockIds: otherUser.blockUsersId) { [weak self] result in
                 
                 switch result {
                     

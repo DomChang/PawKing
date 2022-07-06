@@ -460,7 +460,7 @@ extension SignInViewController: RegisterViewDelegate {
 
                 case .success:
                     
-                    lottie.stopLoading()
+                    self?.lottie.stopLoading()
 
                     self?.dismiss(animated: true)
 
@@ -470,8 +470,8 @@ extension SignInViewController: RegisterViewDelegate {
 
                 case .failure(let error):
                     
-                    lottie.stopLoading()
-                    lottie.showError(error)
+                    self?.lottie.stopLoading()
+                    self?.lottie.showError(error)
                 }
             }
         }
