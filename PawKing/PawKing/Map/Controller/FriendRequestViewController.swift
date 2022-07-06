@@ -51,7 +51,7 @@ class FriendRequestViewController: UIViewController {
         
         navigationItem.title = "Connect Requests"
         
-        navigationController?.navigationBar.tintColor = .Orange1
+        navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
 
         tableView.dataSource = self
@@ -62,7 +62,11 @@ class FriendRequestViewController: UIViewController {
 
     private func style() {
         
+        view.backgroundColor = .BattleGrey
+        
         tableView.separatorStyle = .none
+        tableView.layer.cornerRadius = 20
+        tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
 
     private func layout() {

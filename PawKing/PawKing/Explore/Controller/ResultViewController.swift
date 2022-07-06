@@ -15,7 +15,7 @@ protocol ResultViewControllerDelegate {
 
 class ResultViewController: UISearchController {
     
-    private let tableView = UITableView()
+    private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     
     var resultVCDelegate: ResultViewControllerDelegate?
     
@@ -84,6 +84,13 @@ class ResultViewController: UISearchController {
     
     private func style() {
         
+        navigationController?.navigationBar.tintColor = .white
+        
+        view.backgroundColor = .BattleGrey
+        
+        tableView.backgroundColor = .LightGray
+        tableView.layer.cornerRadius = 20
+        tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
     
     private func layout() {
@@ -115,12 +122,18 @@ extension ResultViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
         
+        searchController.searchBar.searchTextField.textColor = .white
+        
         if let allUsers = allUsers,
            let searchText = searchController.searchBar.text {
               
             let resultUsers = allUsers.filter({ $0.name.lowercased().hasPrefix(searchText.lowercased()) })
             
             self.resultUsers = resultUsers
+            
+            if let user = UserManager.shared.currentUser {
+                self.resultUsers = self.resultUsers?.filter { $0.id != user.id }
+            }
         }
     }
 }

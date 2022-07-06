@@ -13,9 +13,13 @@ class TrackHistoryViewController: UIViewController {
     
     private let mapManager = MapManager.shared
     
+    private let lottie = LottieWrapper.shared
+    
     private let pet: Pet
     
     private let trackInfo: TrackInfo
+    
+    private let scrollView = UIScrollView()
     
     private var shouldEdit: Bool
     
@@ -42,10 +46,6 @@ class TrackHistoryViewController: UIViewController {
     private let updateButton = UIButton()
     
     init(pet: Pet, trackInfo: TrackInfo, shouldEdit: Bool) {
-        
-//        self.petName = petName
-//        
-//        self.petImageURL = petImageURL
         
         self.pet = pet
         
@@ -80,15 +80,18 @@ class TrackHistoryViewController: UIViewController {
     
     func setup() {
         
-        navigationItem.title = "\(pet.name)'s Track"
+        navigationItem.title = "\(trackInfo.startTime.dateValue().displayTimeInNormalStyle())"
         
         let imageUrl = URL(string: pet.petImage)
         
         petImageView.kf.setImage(with: imageUrl)
+        petImageView.layer.borderWidth = 1
+        petImageView.layer.borderColor = UIColor.white.cgColor
         
         petNameLabel.text = pet.name
         
         noteTextView.delegate = self
+        noteTextView.isScrollEnabled = false
         
         if shouldEdit {
             
@@ -114,7 +117,7 @@ class TrackHistoryViewController: UIViewController {
         updateButton.addTarget(self, action: #selector(didTapUpdateNote), for: .touchUpInside)
         
         timeTitleLabel.text = "Time"
-        timeTitleLabel.textColor = .DarkBlue
+        timeTitleLabel.textColor = .BattleGrey
         timeTitleLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         
         let startTime = trackInfo.startTime.dateValue()
@@ -125,7 +128,7 @@ class TrackHistoryViewController: UIViewController {
         timeLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         
         distanceTitleLabel.text = "Distance"
-        distanceTitleLabel.textColor = .DarkBlue
+        distanceTitleLabel.textColor = .BattleGrey
         distanceTitleLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         
         distanceLabel.text = "\(String(format: "%.2f", trackInfo.distanceMeter / 1000)) km"
@@ -133,7 +136,7 @@ class TrackHistoryViewController: UIViewController {
         distanceLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         
         noteTitleLabel.text = "Note:"
-        noteTitleLabel.textColor = .DarkBlue
+        noteTitleLabel.textColor = .BattleGrey
         noteTitleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         
         let location = trackInfo.track[0].transferToCoordinate2D()
@@ -155,13 +158,13 @@ class TrackHistoryViewController: UIViewController {
         
         petImageView.contentMode = .scaleAspectFill
         
-        petNameLabel.textColor = .DarkBlue
+        petNameLabel.textColor = .white
         petNameLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         
         settingButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
-        settingButton.tintColor = .DarkBlue
+        settingButton.tintColor = .white
         
-        noteTextView.textColor = .DarkBlue
+        noteTextView.textColor = .BattleGrey
         noteTextView.font = UIFont.systemFont(ofSize: 16)
         
         updateButton.setTitleColor(.white, for: .normal)
@@ -176,6 +179,9 @@ class TrackHistoryViewController: UIViewController {
         hStack.axis = .horizontal
         hStack.distribution = .fill
         hStack.spacing = 15
+        
+        let hStackBackView = UIView()
+        hStackBackView.backgroundColor = .BattleGrey
         
         petImageView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         settingButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
@@ -204,64 +210,83 @@ class TrackHistoryViewController: UIViewController {
         infoHStack.layer.cornerRadius = 20
         infoHStack.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
-        infoHStack.layer.shadowColor = UIColor.darkGray.cgColor
-        infoHStack.layer.shadowOffset = CGSize(width: 0, height: -2)
-        infoHStack.layer.shadowRadius = 1.5
-        infoHStack.layer.shadowOpacity = 0.2
-        infoHStack.layer.masksToBounds = false
-        
         distanceVStack.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-
-        view.addSubview(hStack)
-        view.addSubview(mapView)
-        view.addSubview(infoHStack)
-        view.addSubview(noteTitleLabel)
-        view.addSubview(noteTextView)
-        view.addSubview(updateButton)
+        
+        view.addSubview(scrollView)
+        scrollView.addSubview(hStackBackView)
+        scrollView.addSubview(hStack)
+        scrollView.addSubview(mapView)
+        scrollView.addSubview(infoHStack)
+        scrollView.addSubview(noteTitleLabel)
+        scrollView.addSubview(noteTextView)
+        scrollView.addSubview(updateButton)
+        
+        scrollView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                          leading: view.leadingAnchor,
+                          bottom: view.bottomAnchor,
+                          trailing: view.trailingAnchor)
         
         petImageView.constrainWidth(constant: 40)
         petImageView.constrainHeight(constant: 40)
         
-        hStack.anchor(top: view.safeAreaLayoutGuide.topAnchor,
-                            leading: view.leadingAnchor,
-                            trailing: view.trailingAnchor,
+        hStackBackView.anchor(top: scrollView.topAnchor,
+                              leading: scrollView.leadingAnchor,
+                              bottom: mapView.topAnchor,
+                              trailing: scrollView.trailingAnchor)
+        
+        hStack.anchor(top: scrollView.topAnchor,
+                            leading: scrollView.leadingAnchor,
+                            trailing: scrollView.trailingAnchor,
                             height: 40,
                             padding: UIEdgeInsets(top: 10, left: 20, bottom: 0, right: 20))
         
         mapView.anchor(top: hStack.bottomAnchor,
-                       leading: view.leadingAnchor,
-                       trailing: view.trailingAnchor,
+                       leading: scrollView.leadingAnchor,
+                       trailing: scrollView.trailingAnchor,
                        height: view.frame.width,
                             padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0))
         
-        infoHStack.anchor(leading: mapView.leadingAnchor,
+        mapView.widthAnchor.constraint(
+            equalTo: scrollView.widthAnchor
+        ).isActive = true
+        
+        infoHStack.anchor(leading: scrollView.leadingAnchor,
                           bottom: mapView.bottomAnchor,
-                          trailing: mapView.trailingAnchor)
+                          trailing: scrollView.trailingAnchor)
         
         noteTitleLabel.anchor(top: infoHStack.bottomAnchor,
-                              leading: view.leadingAnchor,
-                              trailing: view.trailingAnchor,
+                              leading: scrollView.leadingAnchor,
+                              trailing: scrollView.trailingAnchor,
                               padding: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 20))
         
         noteTextView.anchor(top: noteTitleLabel.bottomAnchor,
-                         leading: mapView.leadingAnchor,
-                         trailing: mapView.trailingAnchor,
+                         leading: scrollView.leadingAnchor,
+                         trailing: scrollView.trailingAnchor,
                             padding: UIEdgeInsets(top: 5, left: 20, bottom: 0, right: 20))
         
         updateButton.anchor(top: noteTextView.bottomAnchor,
-                            leading: view.leadingAnchor,
-                            trailing: view.trailingAnchor,
+                            leading: scrollView.leadingAnchor,
+                            trailing: scrollView.trailingAnchor,
                             height: 40,
                             padding: UIEdgeInsets(top: 20, left: 40, bottom: 0, right: 40))
         
-        updateButton.bottomAnchor.constraint(greaterThanOrEqualTo: view.bottomAnchor, constant: -50).isActive = true
+        updateButton.bottomAnchor.constraint(
+            lessThanOrEqualTo: scrollView.bottomAnchor, constant: -50
+        ).isActive = true
         
-        view.layoutIfNeeded()
+        scrollView.layoutIfNeeded()
         petImageView.makeRound()
         petImageView.clipsToBounds = true
+        
+        let topView = UIView(frame: CGRect(x: 0, y: -scrollView.bounds.height,
+                width: scrollView.bounds.width, height: scrollView.bounds.height))
+        topView.backgroundColor = .BattleGrey
+        scrollView.addSubview(topView)
     }
     
     @objc func didTapUpdateNote() {
+        
+        lottie.startLoading()
         
         guard let trackNote = noteTextView.text else { return }
         
@@ -274,11 +299,14 @@ class TrackHistoryViewController: UIViewController {
                 
             case .success:
                 
+                self?.lottie.stopLoading()
+                
                 self?.navigationController?.popViewController(animated: true)
                 
             case .failure(let error):
                 
-                print(error)
+                self?.lottie.stopLoading()
+                self?.lottie.showError(error)
             }
         }
     }
@@ -323,11 +351,8 @@ extension TrackHistoryViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         
-        guard textView == noteTextView,
-              noteTextView.text != ""
+        guard textView == noteTextView
         else {
-            
-            updateButton.isHidden = true
             return
         }
         

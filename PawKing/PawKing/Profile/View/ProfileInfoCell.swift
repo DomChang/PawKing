@@ -65,39 +65,41 @@ class ProfileInfoCell: UICollectionViewCell {
     private func style() {
         
         userImageView.contentMode = .scaleAspectFill
+        userImageView.layer.borderColor = UIColor.white.cgColor
+        userImageView.layer.borderWidth = 1
         
         friendNumTitleLabel.text = "Friends"
         friendNumTitleLabel.textAlignment = .center
-        friendNumTitleLabel.textColor = .DarkBlue
+        friendNumTitleLabel.textColor = .white
         friendNumTitleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         
         friendNumLabel.textAlignment = .center
-        friendNumLabel.textColor = .DarkBlue
+        friendNumLabel.textColor = .white
         friendNumLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
         
         postNumTitleLabel.text = "Posts"
         postNumTitleLabel.textAlignment = .center
-        postNumTitleLabel.textColor = .DarkBlue
+        postNumTitleLabel.textColor = .white
         postNumTitleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         
         postNumLabel.textAlignment = .center
-        postNumLabel.textColor = .DarkBlue
+        postNumLabel.textColor = .white
         postNumLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
         
-        userNameLabel.textColor = .DarkBlue
+        userNameLabel.textColor = .white
         userNameLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         userNameLabel.numberOfLines = 0
         
         leftButton.layer.borderWidth = 1
-        leftButton.layer.borderColor = UIColor.DarkBlue?.cgColor
-        leftButton.backgroundColor = .white
-        leftButton.setTitleColor(.DarkBlue, for: .normal)
+        leftButton.layer.borderColor = UIColor.white.cgColor
+        leftButton.backgroundColor = .BattleGrey
+        leftButton.setTitleColor(.white, for: .normal)
         leftButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         
         rightButton.layer.borderWidth = 1
-        rightButton.layer.borderColor = UIColor.DarkBlue?.cgColor
-        rightButton.backgroundColor = .white
-        rightButton.setTitleColor(.DarkBlue, for: .normal)
+        rightButton.layer.borderColor = UIColor.white.cgColor
+        rightButton.backgroundColor = .BattleGrey
+        rightButton.setTitleColor(.white, for: .normal)
         rightButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
     }
     
@@ -189,7 +191,7 @@ class ProfileInfoCell: UICollectionViewCell {
                                padding: UIEdgeInsets(top: 20, left: 30, bottom: 0, right: 30))
         
         contentView.layoutIfNeeded()
-        userImageView.layer.cornerRadius = 5
+        userImageView.makeRound()
         userImageView.clipsToBounds = true
         
         leftButton.layer.cornerRadius = 5

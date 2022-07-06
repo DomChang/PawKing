@@ -42,7 +42,7 @@ class PetItemCell: UICollectionViewCell {
         
         contentView.backgroundColor = .clear
         
-        backBorderView.backgroundColor = .Orange1
+        backBorderView.backgroundColor = .white
         
         backBorderView.isHidden = true
         

@@ -16,6 +16,8 @@ class UserPhotoWallViewController: UIViewController {
     
     private let postManager = PostManager.shared
     
+    private let lottie = LottieWrapper.shared
+    
     var user: User?
     
     var otherUser: User
@@ -96,7 +98,7 @@ class UserPhotoWallViewController: UIViewController {
                                                             target: self,
                                                             action: #selector(didTapAction))
         
-        navigationController?.navigationBar.tintColor = .Orange1
+        navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
         
         collectionView.dataSource = self
@@ -110,11 +112,14 @@ class UserPhotoWallViewController: UIViewController {
         collectionView.register(ProfileInfoCell.self,
                                 forCellWithReuseIdentifier: ProfileInfoCell.identifier)
         
+        collectionView.collectionViewLayout.register(ProfileInfoReusableView.self,
+                                                     forDecorationViewOfKind: "\(ProfileInfoReusableView.self)")
+        
         collectionView.register(PetItemCell.self,
                                 forCellWithReuseIdentifier: PetItemCell.identifier)
         
-//        collectionView.collectionViewLayout.register(PetItemBackReusableView.self,
-//                                                     forDecorationViewOfKind: "\(PetItemBackReusableView.self)")
+        collectionView.collectionViewLayout.register(OtherUserPetReusableView.self,
+                                                     forDecorationViewOfKind: "\(OtherUserPetReusableView.self)")
         
         collectionView.register(PhotoItemCell.self,
                                 forCellWithReuseIdentifier: PhotoItemCell.identifier)
@@ -131,6 +136,12 @@ class UserPhotoWallViewController: UIViewController {
         
         collectionView.fillSafeLayout()
         
+        // Change top bounce area backgroud color
+        collectionView.layoutIfNeeded()
+        let topView = UIView(frame: CGRect(x: 0, y: -collectionView.bounds.height,
+                width: collectionView.bounds.width, height: collectionView.bounds.height))
+        topView.backgroundColor = .BattleGrey
+        collectionView.addSubview(topView)
     }
     
     func fetchPet(by otherUser: User) {
@@ -198,7 +209,7 @@ class UserPhotoWallViewController: UIViewController {
         
         if sender.isSelected {
             
-            sender.backgroundColor = .white
+            sender.backgroundColor = .BattleGrey
             
             sender.layer.borderWidth = 1
             
@@ -213,7 +224,6 @@ class UserPhotoWallViewController: UIViewController {
         
         if user.blockUsersId.contains(otherUser.id) {
 
-            
             let unBlockAction = UIAlertAction(title: "Unblock User", style: .destructive) { [weak self] _ in
                 
                 guard let self = self else { return }
@@ -283,6 +293,9 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
     func didTapLeftButton(from cell: ProfileInfoCell) {
         
         guard let user = user else {
+            
+            lottie.showError(nil)
+            
             return
         }
         
@@ -300,7 +313,7 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
                 
                 friendRequestButton.isSelected = !friendRequestButton.isSelected
                 
-                userManager.removeFriendRequest(senderId: user.id, recieverId: otherUser.id) { result in
+                userManager.removeFriendRequest(senderId: user.id, recieverId: otherUser.id) { [weak self] result in
                     
                     switch result {
                         
@@ -310,7 +323,7 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
                         
                     case .failure(let error):
                         
-                        print(error)
+                        self?.lottie.showError(error)
                     }
                 }
             }
@@ -320,7 +333,9 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
             
             friendRequestButton.isSelected = !friendRequestButton.isSelected
             
-            userManager.sendFriendRequest(senderId: user.id, recieverId: otherUser.id, recieverBlockIds: otherUser.blockUsersId) { result in
+            userManager.sendFriendRequest(senderId: user.id,
+                                          recieverId: otherUser.id,
+                                          recieverBlockIds: otherUser.blockUsersId) { [weak self] result in
                 
                 switch result {
                     
@@ -330,7 +345,7 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
                     
                 case .failure(let error):
                     
-                    print(error)
+                    self?.lottie.showError(error)
                 }
             }
         }
@@ -379,6 +394,11 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
                 
                 let infoSection = NSCollectionLayoutSection(group: infoGroup)
                 
+                let infoBackView = NSCollectionLayoutDecorationItem.background(
+                    elementKind: "\(ProfileInfoReusableView.self)")
+
+                infoSection.decorationItems = [infoBackView]
+                
                 return infoSection
                 
             case .choosePet:
@@ -395,13 +415,14 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
                 let petSection = NSCollectionLayoutSection(group: petGroup)
                 
                 petSection.orthogonalScrollingBehavior = .continuous
-                petSection.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 20, trailing: 20)
+                petSection.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20)
                 
                 petSection.interGroupSpacing = 10
                 
-//                let petItemBackView = NSCollectionLayoutDecorationItem.background(elementKind: "\(PetItemBackReusableView.self)")
-//
-//                petSection.decorationItems = [petItemBackView]
+                let petItemBackView = NSCollectionLayoutDecorationItem.background(
+                    elementKind: "\(OtherUserPetReusableView.self)")
+
+                petSection.decorationItems = [petItemBackView]
                 
                 return petSection
                 
@@ -419,7 +440,7 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
                 
                 let postSection = NSCollectionLayoutSection(group: postGroup)
                 
-                postSection.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 2, bottom: 0, trailing: 2)
+                postSection.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 2, bottom: 0, trailing: 2)
                 
                 return postSection
 
@@ -469,7 +490,6 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
             
             infoCell.leftButton.setTitle("Connect", for: .normal)
             infoCell.leftButton.setTitleColor(.white, for: .normal)
-            infoCell.leftButton.setTitleColor(.DarkBlue, for: .selected)
             
             if isFriend {
                 infoCell.leftButton.setTitle("Disconnect", for: .selected)
@@ -558,7 +578,7 @@ extension UserPhotoWallViewController: UICollectionViewDelegate {
                 selectedPetIndex = indexPath.item
                 
                 cell.imageView.layer.borderWidth = 2
-                cell.imageView.layer.borderColor = UIColor.white.cgColor
+                cell.imageView.layer.borderColor = UIColor.BattleGrey?.cgColor
                 cell.backBorderView.isHidden = false
                 
             } else {

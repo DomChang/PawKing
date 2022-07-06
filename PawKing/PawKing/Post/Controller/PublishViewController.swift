@@ -14,15 +14,25 @@ final class PublishViewController: UIViewController {
     
     private let postManager = PostManager.shared
     
+    private let lottie = LottieWrapper.shared
+    
     private var userPets: [Pet]?
     
     private var user: User?
     
     private var selectedPet: Pet?
     
+    private let photoHelper = PKPhotoHelper()
+    
+    private let scrollView = UIScrollView()
+    
+    private let selectPetTitleLabel = UILabel()
+    
     let petImageView = UIImageView()
     
     let petNameLabel = UILabel()
+    
+    private let selectPetButton = UIButton()
     
     var photoImage = UIImage()
     
@@ -30,7 +40,7 @@ final class PublishViewController: UIViewController {
     
     let captionTitleLabel = UILabel()
     
-    let captionTextView = UITextView()
+    let captionTextView = InputTextView()
     
     let submitButton = UIButton()
     
@@ -75,82 +85,150 @@ final class PublishViewController: UIViewController {
         
         submitButtonDisable()
         
+        scrollView.isScrollEnabled = true
+        
         photoImageView.image = photoImage
         
+        photoImageView.isUserInteractionEnabled = true
+        
+        photoImageView.addGestureRecognizer(
+            UITapGestureRecognizer(target: self, action: #selector(didTapPhoto)))
+        
+        selectPetButton.addTarget(self, action: #selector(didTapPet), for: .touchUpInside)
+        
         submitButton.addTarget(self, action: #selector(didTapSubmit), for: .touchUpInside)
+        
+        photoHelper.completionHandler = { [weak self] image in
+            
+            self?.photoImage = image
+            self?.photoImageView.image = image
+        }
     }
     
     func style() {
         
+        navigationItem.title = "New Post"
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(
+            systemName: "xmark",
+            withConfiguration: UIImage.SymbolConfiguration(scale: .small)),
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(didTapClose))
+        
         view.backgroundColor = .white
         
+        petImageView.contentMode = .scaleAspectFill
         petImageView.clipsToBounds = true
         
+        selectPetTitleLabel.text = "Post with"
+        selectPetTitleLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        selectPetTitleLabel.textColor = .BattleGrey
+        
         photoImageView.contentMode = .scaleAspectFill
-        photoImageView.layer.cornerRadius = 20
         photoImageView.clipsToBounds = true
         
-        petNameLabel.textColor = .brown
-        petNameLabel.font = UIFont.systemFont(ofSize: 30)
+        petNameLabel.textColor = .BattleGrey
+        petNameLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         
-        captionTitleLabel.text = "相片說明"
-        captionTitleLabel.font = UIFont.systemFont(ofSize: 16)
+        captionTitleLabel.text = "Caption"
+        captionTitleLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        captionTitleLabel.textColor = .BattleGrey
         
-        captionTextView.layer.borderWidth = 1
-        captionTextView.layer.borderColor = UIColor.Gray1?.cgColor
-        captionTextView.layer.cornerRadius = 20
-        
-        captionTextView.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        captionTextView.placeholder = "Write a caption..."
+        captionTextView.isScrollEnabled = false
+        captionTextView.font = UIFont.systemFont(ofSize: 16)
         
         submitButton.setTitle("Submit", for: .normal)
+        submitButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         submitButton.backgroundColor = .Orange1
-        submitButton.layer.cornerRadius = 20
+        submitButton.layer.cornerRadius = 4
     }
     
     func layout() {
         
-        view.addSubview(petImageView)
-        view.addSubview(petNameLabel)
-        view.addSubview(photoImageView)
-        view.addSubview(captionTextView)
-        view.addSubview(captionTitleLabel)
-        view.addSubview(submitButton)
+        let backView = UIView()
+        backView.layer.cornerRadius = 20
+        backView.backgroundColor = .white
         
-        petImageView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
-                            leading: view.leadingAnchor,
-                            width: 60,
-                            height: 60,
-                            padding: UIEdgeInsets(top: 20, left: 30, bottom: 0, right: 0))
+        let hStack = UIStackView(arrangedSubviews: [petImageView, petNameLabel])
+        hStack.axis = .horizontal
+        hStack.distribution = .fill
+        hStack.spacing = 8
         
-        petNameLabel.anchor(leading: petImageView.trailingAnchor,
-                            trailing: view.trailingAnchor,
-                            centerY: petImageView.centerYAnchor,
-                            height: 25,
-                            padding: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 16))
+        selectPetTitleLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        petImageView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         
-        photoImageView.anchor(top: petImageView.bottomAnchor,
-                              centerX: view.centerXAnchor,
-                              width: 200,
-                              height: 200,
-                              padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
+        view.addSubview(scrollView)
+        scrollView.addSubview(photoImageView)
+        scrollView.addSubview(backView)
+        scrollView.addSubview(selectPetTitleLabel)
+        scrollView.addSubview(hStack)
+        scrollView.addSubview(selectPetButton)
+        scrollView.addSubview(captionTextView)
+        scrollView.addSubview(captionTitleLabel)
+        scrollView.addSubview(submitButton)
         
-        captionTitleLabel.anchor(top: photoImageView.bottomAnchor,
-                                 leading: captionTextView.leadingAnchor,
-                                 trailing: view.trailingAnchor,
-                                 height: 20,
-                                 padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0))
+        scrollView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                          leading: view.leadingAnchor,
+                          bottom: view.bottomAnchor,
+                          trailing: view.trailingAnchor)
+        
+        photoImageView.anchor(top: scrollView.topAnchor,
+                              leading: scrollView.leadingAnchor,
+                              trailing: scrollView.trailingAnchor,
+                              width: view.frame.width,
+                              height: view.frame.width + 20)
+        photoImageView.widthAnchor.constraint(
+            equalTo: scrollView.widthAnchor
+        ).isActive = true
+        
+        backView.anchor(top: photoImageView.bottomAnchor,
+                        leading: scrollView.leadingAnchor,
+                        bottom: view.bottomAnchor,
+                        trailing: scrollView.trailingAnchor,
+                        padding: UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0))
+        
+        selectPetTitleLabel.anchor(leading: scrollView.leadingAnchor,
+                                   centerY: hStack.centerYAnchor,
+                                   padding: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
+        
+        petImageView.constrainWidth(constant: 40)
+        
+        hStack.anchor(top: backView.topAnchor,
+                      leading: selectPetTitleLabel.trailingAnchor,
+                      trailing: scrollView.trailingAnchor,
+                      height: 40,
+                      padding: UIEdgeInsets(top: 20, left: 30, bottom: 0, right: 20))
+        
+        selectPetButton.anchor(top: hStack.topAnchor,
+                               leading: selectPetTitleLabel.leadingAnchor,
+                               bottom: hStack.bottomAnchor,
+                               trailing: hStack.trailingAnchor)
+        
+        captionTitleLabel.anchor(top: hStack.bottomAnchor,
+                                 leading: scrollView.leadingAnchor,
+                                 trailing: scrollView.trailingAnchor,
+                                 padding: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 20))
         
         captionTextView.anchor(top: captionTitleLabel.bottomAnchor,
-                               centerX: view.centerXAnchor,
-                               width: 330,
-                               height: 160,
-                               padding: UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0))
+                               leading: scrollView.leadingAnchor,
+                               trailing: scrollView.trailingAnchor,
+                               padding: UIEdgeInsets(top: 8, left: 20, bottom: 0, right: 20))
         
         submitButton.anchor(top: captionTextView.bottomAnchor,
                             leading: captionTextView.leadingAnchor,
+                            bottom: scrollView.bottomAnchor,
                             trailing: captionTextView.trailingAnchor,
-                            height: 50,
-                            padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
+                            height: 40,
+                            padding: UIEdgeInsets(top: 20, left: 0, bottom: 50, right: 0))
+        
+        // Change top bounce area backgroud color
+        scrollView.layoutIfNeeded()
+        let topView = UIView(frame: CGRect(x: 0, y: -scrollView.bounds.height,
+                width: scrollView.bounds.width, height: scrollView.bounds.height))
+        topView.backgroundColor = .BattleGrey
+        scrollView.addSubview(topView)
     }
     
     func getUserPet() {
@@ -213,15 +291,19 @@ final class PublishViewController: UIViewController {
         
         submitButtonDisable()
         
+        lottie.startLoading()
+        
         guard let user = user,
                 let selectedPet = selectedPet
         else {
+            lottie.showError(nil)
+            lottie.stopLoading()
             return
         }
 
         var post = Post(id: "",
                         userId: user.id,
-                        petId: user.currentPetId,
+                        petId: selectedPet.id,
                         photo: "",
                         caption: captionTextView.text,
                         likesId: [],
@@ -231,20 +313,55 @@ final class PublishViewController: UIViewController {
         postManager.setupPost(userId: user.id,
                               petId: selectedPet.id,
                               post: &post,
-                              postImage: photoImage) { result in
+                              postImage: photoImage) { [weak self] result in
             switch result {
                 
             case .success:
                 
                 print("Create Post success")
                 
-                self.dismiss(animated: true)
+                self?.lottie.stopLoading()
+                
+                self?.dismiss(animated: true)
                 
             case .failure(let error):
                 
-                print(error)
+                self?.lottie.stopLoading()
+                self?.lottie.showError(error)
+                self?.submitButtonEnable()
             }
         }
+    }
+    
+    @objc func didTapPhoto() {
+        
+        photoHelper.presentActionSheet(from: self)
+    }
+    
+    @objc func didTapPet() {
+        
+        guard let userPets = userPets else {
+            return
+        }
+        
+        let choosePetVC = ChoosePetViewController(pets: userPets, isPost: true)
+        
+        choosePetVC.delegate = self
+        
+        let navChoosePetVC = UINavigationController(rootViewController: choosePetVC)
+
+        if let sheet = navChoosePetVC.sheetPresentationController {
+            sheet.detents = [.medium()]
+            sheet.preferredCornerRadius = 20
+        }
+        
+        present(navChoosePetVC, animated: true, completion: nil)
+        
+    }
+    
+    @objc func didTapClose() {
+        
+        dismiss(animated: true)
     }
     
     func submitButtonEnable() {
@@ -259,5 +376,19 @@ final class PublishViewController: UIViewController {
         submitButton.isEnabled = false
         
         submitButton.backgroundColor = .Gray1
+    }
+}
+
+extension PublishViewController: ChoosePetViewDelegate {
+    
+    func didChoosePet(with selectedPet: Pet) {
+        
+        self.selectedPet = selectedPet
+        
+        let imageUrl = URL(string: selectedPet.petImage)
+        
+        petImageView.kf.setImage(with: imageUrl)
+        
+        petNameLabel.text = selectedPet.name
     }
 }

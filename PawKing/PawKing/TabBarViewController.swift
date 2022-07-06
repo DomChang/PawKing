@@ -143,12 +143,16 @@ class TabBarViewController: UITabBarController {
 
         let tabBarAppearance =  UITabBarAppearance()
         tabBarAppearance.configureWithDefaultBackground()
+        tabBarAppearance.backgroundColor = .white
+        tabBarAppearance.shadowColor = .clear
         tabBar.scrollEdgeAppearance = tabBarAppearance
         tabBar.standardAppearance = tabBarAppearance
         
         let navBarAppearance =  UINavigationBarAppearance()
-        navBarAppearance.backgroundColor = .white
+        navBarAppearance.backgroundColor = .BattleGrey
         navBarAppearance.shadowColor = .clear
+        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        
         UINavigationBar.appearance().standardAppearance = navBarAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
         UINavigationBar.appearance().compactAppearance = navBarAppearance
@@ -209,6 +213,7 @@ class TabBarViewController: UITabBarController {
                 rootViewController: PublishViewController(image: image))
             
             navPublishVC.modalPresentationStyle = .fullScreen
+            navPublishVC.navigationBar.tintColor = .white
 
             self?.present(navPublishVC, animated: true)
         }
@@ -231,6 +236,8 @@ extension TabBarViewController: SignInViewDelegate {
         let userConfigVC = UserConfigViewController(uid: uid)
         
         let navUserConfigVC = UINavigationController(rootViewController: userConfigVC)
+        
+        navUserConfigVC.modalPresentationStyle = .fullScreen
 
         present(navUserConfigVC, animated: true)
     }
@@ -258,8 +265,7 @@ extension TabBarViewController: UITabBarControllerDelegate {
             return true
         }
         
-        if let navigaton = viewController as? UINavigationController,
-           navigaton.viewControllers.contains(where: { return $0 is PublishViewController }) {
+        if viewControllers?.firstIndex(of: viewController) == 2 {
             
             photoHelper.presentActionSheet(from: self)
             

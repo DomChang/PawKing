@@ -11,6 +11,8 @@ class EditProfileViewController: UIViewController {
     
     private let userManager = UserManager.shared
     
+    private let lottie = LottieWrapper.shared
+    
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     
     private let user: User
@@ -59,7 +61,10 @@ class EditProfileViewController: UIViewController {
     
     func style() {
 
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .BattleGrey
+        
+        tableView.layer.cornerRadius = 20
+        tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
         tableView.backgroundColor = .LightGray
         tableView.separatorStyle = .singleLine
@@ -94,17 +99,22 @@ extension EditProfileViewController: EditUserCellDelegate {
     
     func didEditUserName(to userName: String) {
         
+        lottie.startLoading()
+        
         userManager.updateUserInfo(userId: user.id, userName: userName) { [weak self] result in
             
             switch result {
                 
             case .success:
                 
+                self?.lottie.stopLoading()
+                
                 self?.navigationController?.popViewController(animated: true)
                 
             case .failure(let error):
                 
-                print(error)
+                self?.lottie.stopLoading()
+                self?.lottie.showError(error)
             }
         }
     }

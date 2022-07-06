@@ -22,9 +22,11 @@ class UserConfigCell: UITableViewCell {
     
     var delegate: UserConfigCellDelegate?
     
-    let photoButton = UIButton()
+    let userImageView = UIImageView()
     
-    let userNameTextfield = UITextField()
+    private let nameTitleLabel = UILabel()
+    
+    let userNameTextfield = InputTextField()
     
     let descriptionTextView = UITextView()
     
@@ -44,10 +46,14 @@ class UserConfigCell: UITableViewCell {
     
     func setup() {
         
-        photoButton.isUserInteractionEnabled = true
+        userImageView.isUserInteractionEnabled = true
         
-        photoButton.addTarget(self, action: #selector(didTapPhotoButton),
-                                  for: .touchUpInside)
+        userImageView.addGestureRecognizer(
+            UITapGestureRecognizer(target: self, action: #selector(didTapPhoto)))
+        
+        nameTitleLabel.text = "User Name"
+        nameTitleLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        nameTitleLabel.textColor = .BattleGrey
         
 //        userNameTextfield.addTarget(self, action: #selector(textFieldDidChange(_:)),
 //                                  for: .editingChanged)
@@ -57,8 +63,8 @@ class UserConfigCell: UITableViewCell {
     
     func styleObject() {
         
-        photoButton.setImage(UIImage.asset(.Image_Placeholder), for: .normal)
-        photoButton.imageView?.contentMode = .scaleAspectFill
+        userImageView.image = UIImage.asset(.Image_Placeholder)
+        userImageView.contentMode = .scaleAspectFill
         
         userNameTextfield.layer.borderColor = UIColor.Gray1?.cgColor
         userNameTextfield.layer.borderWidth = 1
@@ -67,42 +73,55 @@ class UserConfigCell: UITableViewCell {
         descriptionTextView.layer.borderWidth = 1
         
         nextButton.setTitle("Next", for: .normal)
+        nextButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         nextButton.backgroundColor = .Orange1
+        nextButton.layer.cornerRadius = 4
     }
     
     func layout() {
         
-        contentView.addSubview(photoButton)
+        contentView.addSubview(userImageView)
+        contentView.addSubview(nameTitleLabel)
         contentView.addSubview(userNameTextfield)
-        contentView.addSubview(descriptionTextView)
+//        contentView.addSubview(descriptionTextView)
         contentView.addSubview(nextButton)
         
-        photoButton.anchor(top: contentView.topAnchor,
+        userImageView.anchor(top: contentView.topAnchor,
                            centerX: contentView.centerXAnchor,
                            width: 150,
                            height: 150,
                            padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
         
-        userNameTextfield.anchor(top: photoButton.bottomAnchor,
-                                 leading: contentView.leadingAnchor,
+        nameTitleLabel.anchor(top: userImageView.bottomAnchor,
+                              leading: contentView.leadingAnchor,
+                              trailing: contentView.trailingAnchor,
+                              height: 20,
+                              padding: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 0))
+        
+        userNameTextfield.anchor(top: nameTitleLabel.bottomAnchor,
+                                 leading: nameTitleLabel.leadingAnchor,
                                  trailing: contentView.trailingAnchor,
-                                 height: 30,
-                                 padding: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 20))
+                                 height: 40,
+                                 padding: UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 20))
+       
+//        descriptionTextView.anchor(top: userNameTextfield.bottomAnchor,
+//                                   leading: userNameTextfield.leadingAnchor,
+//                                   trailing: userNameTextfield.trailingAnchor,
+//                                   height: 200,
+//                                   padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
         
-        descriptionTextView.anchor(top: userNameTextfield.bottomAnchor,
-                                   leading: userNameTextfield.leadingAnchor,
-                                   trailing: userNameTextfield.trailingAnchor,
-                                   height: 200,
-                                   padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
+        nextButton.anchor(top: userNameTextfield.bottomAnchor,
+                          leading: userNameTextfield.leadingAnchor,
+                          trailing: userNameTextfield.trailingAnchor,
+                          height: 40,
+                          padding: UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0))
         
-        nextButton.anchor(top: descriptionTextView.bottomAnchor,
-                          leading: contentView.leadingAnchor,
-                          trailing: contentView.trailingAnchor,
-                          height: 50,
-                          padding: UIEdgeInsets(top: 20, left: 30, bottom: 0, right: 30))
+        userImageView.layoutIfNeeded()
+        userImageView.makeRound()
+        userImageView.clipsToBounds = true
     }
     
-    @objc func didTapPhotoButton() {
+    @objc func didTapPhoto() {
         
         self.delegate?.didTapPhoto()
     }
@@ -111,15 +130,4 @@ class UserConfigCell: UITableViewCell {
         
         self.delegate?.didTapNext(from: self)
     }
-    
-//    @objc func textFieldDidChange(_ textField: UITextField) {
-//
-//        guard textField == userNameTextfield else { return }
-//
-//        self.delegate?.textFieldDidChange(From: textField)
-//    }
-}
-
-extension UserConfigCell: UITextViewDelegate {
-    
 }

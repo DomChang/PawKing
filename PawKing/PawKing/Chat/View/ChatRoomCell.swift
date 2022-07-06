@@ -40,7 +40,7 @@ class ChatRoomCell: UITableViewCell {
         
         recieverImgeView.contentMode = .scaleAspectFill
         
-        recieverNameLabel.textColor = .DarkBlue
+        recieverNameLabel.textColor = .BattleGrey
         recieverNameLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         recieverNameLabel.textAlignment = .left
         

@@ -16,6 +16,8 @@ class PhotoPostViewController: UIViewController {
     
     private let petManager = PetManager.shared
     
+    private let lottie = LottieWrapper.shared
+    
     private let tableView = UITableView()
     
     private let user: User
@@ -129,7 +131,7 @@ class PhotoPostViewController: UIViewController {
     
     func style() {
         
-        navigationController?.navigationBar.tintColor = .Orange1
+        navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
         
         navigationItem.title = "Post"
@@ -201,6 +203,13 @@ class PhotoPostViewController: UIViewController {
         inputBackView.layoutIfNeeded()
         userImageView.makeRound()
         userImageView.clipsToBounds = true
+        
+        // Change bottom bounce area backgroud color
+        tableView.layoutIfNeeded()
+        let topView = UIView(frame: CGRect(x: 0, y: -tableView.bounds.height,
+                width: tableView.bounds.width, height: tableView.bounds.height))
+        topView.backgroundColor = .BattleGrey
+        tableView.addSubview(topView)
     }
     
     func listenPostUpdate() {
@@ -301,6 +310,8 @@ class PhotoPostViewController: UIViewController {
     
     @objc func didTapSendButton() {
         
+        lottie.startLoading()
+        
         sendButtonDisable()
         
         guard let text = userInputTextView.text,
@@ -320,18 +331,7 @@ class PhotoPostViewController: UIViewController {
                 
             case .success:
                 
-//                guard let user = self?.user else { return }
-                
-//                self?.comments?.append(comment)
-                
-//                let userComment = UserComment(user: user, comment: comment)
-//                self?.userComments.append(userComment)
-                
-//                let indexPath = IndexPath(row: commentCount, section: 1)
-//
-//                self?.tableView.insertRows(at: [indexPath], with: .automatic)
-//
-//                self?.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+                self?.lottie.stopLoading()
                 
                 self?.userInputTextView.text = ""
                 
@@ -339,7 +339,8 @@ class PhotoPostViewController: UIViewController {
                 
             case .failure(let error):
                 
-                print(error)
+                self?.lottie.stopLoading()
+                self?.lottie.showError(error)
             }
         }
         

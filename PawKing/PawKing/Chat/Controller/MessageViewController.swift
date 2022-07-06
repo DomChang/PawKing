@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseFirestore
+import IQKeyboardManagerSwift
 
 class MessageViewController: UIViewController {
     
@@ -27,6 +28,10 @@ class MessageViewController: UIViewController {
     private let inputBackView = UIView()
     
     private let inputSeperatorLine = UIView()
+    
+    private let bottomBackView = UIView()
+    
+    private var userInputTopAnchor: NSLayoutConstraint!
     
     var messages: [Message] = [] {
         didSet {
@@ -60,18 +65,22 @@ class MessageViewController: UIViewController {
         getMessageHistory()
         
         tabBarController?.tabBar.isHidden = true
+        
+        IQKeyboardManager.shared.enable = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         
         tabBarController?.tabBar.isHidden = false
+        
+        IQKeyboardManager.shared.enable = true
     }
     
     func setup() {
         
         navigationItem.title = "\(otherUser.name)"
         
-        navigationController?.navigationBar.tintColor = .Orange1
+        navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
         
         tableView.register(UserMessageCell.self, forCellReuseIdentifier: UserMessageCell.identifer)
@@ -87,12 +96,24 @@ class MessageViewController: UIViewController {
         userInputTextView.delegate = self
         
         sendButton.addTarget(self, action: #selector(didTapSendButton), for: .touchUpInside)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillAppear(notification:)),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide(notification:)),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
     }
     
     func style() {
         
-        view.backgroundColor = .white
+        view.backgroundColor = .BattleGrey
         
+        tableView.layer.cornerRadius = 20
+        tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         tableView.backgroundColor = .white
         tableView.separatorStyle = .none
         
@@ -115,6 +136,8 @@ class MessageViewController: UIViewController {
                             for: .disabled)
         
         inputBackView.backgroundColor = .white
+        
+        bottomBackView.backgroundColor = .white
     }
     
     func layout() {
@@ -125,6 +148,7 @@ class MessageViewController: UIViewController {
         inputBackView.addSubview(userImageView)
         inputBackView.addSubview(userInputTextView)
         inputBackView.addSubview(sendButton)
+        view.addSubview(bottomBackView)
         
         tableView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                          leading: view.leadingAnchor,
@@ -150,13 +174,21 @@ class MessageViewController: UIViewController {
                           padding: UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 20))
         
         inputBackView.anchor(leading: view.leadingAnchor,
-                             bottom: view.safeAreaLayoutGuide.bottomAnchor,
                              trailing: view.trailingAnchor)
+        
+        userInputTopAnchor = inputBackView.bottomAnchor.constraint(equalTo:
+                                                                    view.safeAreaLayoutGuide.bottomAnchor)
+        userInputTopAnchor.isActive = true
         
         inputSeperatorLine.anchor(leading: inputBackView.leadingAnchor,
                                   bottom: inputBackView.topAnchor,
                                   trailing: inputBackView.trailingAnchor,
                                   height: 0.5)
+        
+        bottomBackView.anchor(top: inputBackView.bottomAnchor,
+                              leading: view.leadingAnchor,
+                              bottom: view.bottomAnchor,
+                              trailing: view.trailingAnchor)
         
         inputBackView.layoutIfNeeded()
         userImageView.makeRound()
@@ -233,14 +265,15 @@ class MessageViewController: UIViewController {
         }
     }
     
-//    @objc func keyboardWillShow(sender: NSNotification) {
-//        userInputTopAnchor.constant = -352
-//    }
-//
-//    @objc func keyboardWillHide(sender: NSNotification) {
-//        userInputTopAnchor.constant = -52
-//    }
-//
+    @objc func keyboardDidChangeFrame(_ notification: Notification) {
+      guard let kbSize = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey]
+          as? CGRect else {
+        return
+      }
+        
+        userInputTopAnchor.constant = -kbSize.height
+    }
+    
     func sendButtonEnable() {
         
         sendButton.isEnabled = true
@@ -251,6 +284,25 @@ class MessageViewController: UIViewController {
         
         sendButton.isEnabled = false
         sendButton.tintColor = .Gray1
+    }
+    
+    @objc func keyboardWillAppear(notification: Notification) {
+        
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            
+            let keyboardHeight = keyboardRectangle.height
+            
+            userInputTopAnchor.constant = -keyboardHeight + view.safeAreaInsets.bottom
+            
+            scrollToBottom()
+        }
+    }
+
+    @objc func keyboardWillHide(notification: Notification) {
+        
+        userInputTopAnchor.constant = 0
     }
     
     func scrollToBottom() {

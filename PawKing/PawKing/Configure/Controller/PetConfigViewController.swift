@@ -14,6 +14,8 @@ class PetConfigViewController: UIViewController {
     
     private let userManager = UserManager.shared
     
+    private let lottie = LottieWrapper.shared
+    
     private let photoHelper = PKPhotoHelper()
     
     private var owner: User
@@ -72,6 +74,13 @@ class PetConfigViewController: UIViewController {
         if isInitailSet {
             
             navigationItem.hidesBackButton = true
+            
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(
+                systemName: "xmark",
+                withConfiguration: UIImage.SymbolConfiguration(scale: .small)),
+                                                                style: .plain,
+                                                                target: self,
+                                                                action: #selector(didTapClose))
         }
         
         tableView.dataSource = self
@@ -87,8 +96,13 @@ class PetConfigViewController: UIViewController {
     }
     
     func style() {
+        
+        navigationController?.navigationBar.tintColor = .white
 
-        view.backgroundColor = .white
+        view.backgroundColor = .BattleGrey
+        
+        tableView.layer.cornerRadius = 20
+        tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
         tableView.separatorStyle = .none
     }
@@ -97,7 +111,17 @@ class PetConfigViewController: UIViewController {
         
         view.addSubview(tableView)
         
-        tableView.fillSafeLayout()
+        tableView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                         leading: view.leadingAnchor,
+                         bottom: view.bottomAnchor,
+                         trailing: view.trailingAnchor)
+    }
+    
+    @objc func didTapClose() {
+        
+        navigationController?.popViewController(animated: true)
+        
+        view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -141,11 +165,17 @@ extension PetConfigViewController: PetConfigCellDelegate {
     
     func didTapFinish(From cell: PetConfigCell) {
         
+        lottie.startLoading()
+        
         guard let petName = cell.petNameTextfield.text,
               let gender = cell.genderTextfield.text,
               let petImage = cell.petImageView.image,
               let birthday = cell.birthday
         else {
+            
+            lottie.stopLoading()
+            lottie.showError(nil)
+            
             return
         }
         
@@ -165,13 +195,16 @@ extension PetConfigViewController: PetConfigCellDelegate {
                     
                     cell.finishButtonEnable()
                     
+                    self?.lottie.stopLoading()
+                    
                     self?.navigationController?.popViewController(animated: true)
                     
                 case .failure(let error):
                     
                     cell.finishButtonEnable()
                     
-                    print(error)
+                    self?.lottie.stopLoading()
+                    self?.lottie.showError(error)
                 }
             }
             
@@ -212,6 +245,8 @@ extension PetConfigViewController: PetConfigCellDelegate {
                     
                     cell.finishButtonEnable()
                     
+                    self?.lottie.stopLoading()
+                    
                     self?.navigationController?.popViewController(animated: true)
                     
                     self?.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
@@ -220,7 +255,8 @@ extension PetConfigViewController: PetConfigCellDelegate {
                     
                     cell.finishButtonEnable()
                     
-                    print(error)
+                    self?.lottie.stopLoading()
+                    self?.lottie.showError(error)
                 }
             }
         }

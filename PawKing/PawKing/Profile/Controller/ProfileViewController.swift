@@ -119,6 +119,9 @@ class ProfileViewController: UIViewController {
         collectionView.register(ContentButtonCell.self,
                                 forCellWithReuseIdentifier: ContentButtonCell.identifier)
         
+        collectionView.collectionViewLayout.register(ContentButtonReusableView.self,
+                                                     forDecorationViewOfKind: "\(ContentButtonReusableView.self)")
+        
         collectionView.register(PhotoItemCell.self,
                                 forCellWithReuseIdentifier: PhotoItemCell.identifier)
         
@@ -128,7 +131,12 @@ class ProfileViewController: UIViewController {
     
     private func style() {
         
-        view.backgroundColor = .systemBackground
+        navigationController?.navigationBar.tintColor = .white
+        
+        view.backgroundColor = .BattleGrey
+        collectionView.backgroundColor = .white
+        collectionView.layer.cornerRadius = 20
+        collectionView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
     
     private func layout() {
@@ -139,6 +147,13 @@ class ProfileViewController: UIViewController {
                                leading: view.leadingAnchor,
                                bottom: view.safeAreaLayoutGuide.bottomAnchor,
                                trailing: view.trailingAnchor)
+        
+        // Change top bounce area backgroud color
+        collectionView.layoutIfNeeded()
+        let topView = UIView(frame: CGRect(x: 0, y: -collectionView.bounds.height,
+                width: collectionView.bounds.width, height: collectionView.bounds.height))
+        topView.backgroundColor = .BattleGrey
+        collectionView.addSubview(topView)
         
     }
     
@@ -316,11 +331,11 @@ extension ProfileViewController: UICollectionViewDataSource {
                 let infoGroup = NSCollectionLayoutGroup.vertical(layoutSize: infoGroupSize, subitems: [infoItem])
                 
                 let infoSection = NSCollectionLayoutSection(group: infoGroup)
-                 
-//                let infoBackView = NSCollectionLayoutDecorationItem.background(
-//                    elementKind: "\(ProfileInfoReusableView.self)")
-//
-//                infoSection.decorationItems = [infoBackView]
+                
+                let infoBackView = NSCollectionLayoutDecorationItem.background(
+                    elementKind: "\(ProfileInfoReusableView.self)")
+
+                infoSection.decorationItems = [infoBackView]
                 
                 return infoSection
                 
@@ -342,10 +357,10 @@ extension ProfileViewController: UICollectionViewDataSource {
                 
                 petSection.interGroupSpacing = 10
                 
-//                let petItemBackView = NSCollectionLayoutDecorationItem.background(
-//                    elementKind: "\(PetItemBackReusableView.self)")
-//
-//                petSection.decorationItems = [petItemBackView]
+                let petItemBackView = NSCollectionLayoutDecorationItem.background(
+                    elementKind: "\(PetItemBackReusableView.self)")
+
+                petSection.decorationItems = [petItemBackView]
                 
                 return petSection
                 
@@ -356,13 +371,18 @@ extension ProfileViewController: UICollectionViewDataSource {
                 let chooseItem = NSCollectionLayoutItem(layoutSize: chooseItemSize)
                 
                 let chooseGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                             heightDimension: .absolute(50))
+                                                             heightDimension: .absolute(40))
                 let chooseGroup = NSCollectionLayoutGroup.horizontal(layoutSize: chooseGroupSize,
                                                                      subitems: [chooseItem])
                 
                 let chooseSection = NSCollectionLayoutSection(group: chooseGroup)
                 
                 chooseSection.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0)
+                
+                let chooseBackView = NSCollectionLayoutDecorationItem.background(
+                    elementKind: "\(ContentButtonReusableView.self)")
+
+                chooseSection.decorationItems = [chooseBackView]
                 
                 return chooseSection
                 
@@ -571,7 +591,7 @@ extension ProfileViewController: UICollectionViewDelegate {
                 selectedPetIndex = indexPath.item
                 
                 cell.imageView.layer.borderWidth = 2
-                cell.imageView.layer.borderColor = UIColor.white.cgColor
+                cell.imageView.layer.borderColor = UIColor.BattleGrey?.cgColor
                 cell.backBorderView.isHidden = false
                 
             } else {

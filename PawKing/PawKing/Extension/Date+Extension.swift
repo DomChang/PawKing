@@ -92,7 +92,7 @@ extension Date {
         return dateFormatter.string(from: delta) ?? ""
     }
     
-    func displayTimeInBirthdayStyle() -> String {
+    func displayTimeInNormalStyle() -> String {
         
         let dateFormatter = DateFormatter()
         

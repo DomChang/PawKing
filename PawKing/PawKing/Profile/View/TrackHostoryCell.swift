@@ -46,11 +46,11 @@ class TrackHostoryCell: UICollectionViewCell {
         
         contentView.layer.cornerRadius = 5
 
-        dateLabel.textColor = .DarkBlue
+        dateLabel.textColor = .BattleGrey
         dateLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         dateLabel.textAlignment = .center
         
-        distanceLabel.textColor = .DarkBlue
+        distanceLabel.textColor = .BattleGrey
         distanceLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         distanceLabel.textAlignment = .center
 
@@ -63,13 +63,7 @@ class TrackHostoryCell: UICollectionViewCell {
         
         petNameLabel.text = pet.name
         
-        let dateFormatter = DateFormatter()
-        
-        dateFormatter.dateFormat = "yyyy / MM / dd"
-        
-        let trackDate = dateFormatter.string(from: trackInfo.startTime.dateValue())
-        
-        dateLabel.text = trackDate
+        dateLabel.text = trackInfo.startTime.dateValue().displayTimeInNormalStyle()
         
         let distance = computeDistance(from: trackInfo.track.map { $0.transferToCoordinate2D() })
         

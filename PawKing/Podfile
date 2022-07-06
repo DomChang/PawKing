@@ -19,6 +19,7 @@ target 'PawKing' do
   pod 'FirebaseFirestoreSwift'
   pod 'Kingfisher'
   pod 'IQKeyboardManagerSwift'
+  pod 'lottie-ios'
 
 post_install do |installer|
  installer.pods_project.targets.each do |target|

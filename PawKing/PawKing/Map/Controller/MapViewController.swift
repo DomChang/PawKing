@@ -34,15 +34,6 @@ class MapViewController: UIViewController {
     
     let choosePetImageView = UIImageView()
     
-    let userSetupButton: UIButton = {
-        
-        let button = UIButton()
-        button.backgroundColor = .Orange1
-        button.setTitle("設定", for: .normal)
-        button.layer.cornerRadius = 5
-        return button
-    }()
-    
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
     var strangersPet: [Pet] = [] {
@@ -58,6 +49,8 @@ class MapViewController: UIViewController {
     let mapManager = MapManager.shared
     
     let userManager = UserManager.shared
+    
+    private let lottie = LottieWrapper.shared
     
     var trackStartTime = Timestamp()
     
@@ -142,6 +135,7 @@ class MapViewController: UIViewController {
             friendLocations = [:]
             trackButton.isHidden = true
             choosePetImageView.isHidden = true
+            notificationButton.isHidden = true
         }
     }
     
@@ -224,6 +218,9 @@ class MapViewController: UIViewController {
     
     func style() {
         
+        mapView.layer.cornerRadius = 20
+        mapView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        
         userLocationButton.setImage(UIImage.asset(.Icons_36px_UserLocate_Normal), for: .normal)
         userLocationButton.setImage(UIImage.asset(.Icons_36px_UserLocate_Selected), for: .selected)
         
@@ -265,7 +262,10 @@ class MapViewController: UIViewController {
         view.addSubview(collectionView)
         view.addSubview(choosePetImageView)
         
-        mapView.fillSuperview()
+        mapView.anchor(top: view.topAnchor,
+                       leading: view.leadingAnchor,
+                       bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                       trailing: view.trailingAnchor)
         
         userLocationButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,
                                   trailing: view.trailingAnchor,
@@ -438,10 +438,15 @@ class MapViewController: UIViewController {
     
     @objc func didTapSaveTrack() {
         
+        lottie.startLoading()
+        
         let coordinate = userStoredLocations.map { $0.coordinate }
         let track = coordinate.map { $0.transferToGeopoint() }
         
         guard let userCurrentPet = userCurrentPet else {
+            
+            lottie.stopLoading()
+            
             return
         }
         
@@ -455,19 +460,13 @@ class MapViewController: UIViewController {
                                   track: track,
                                   note: "")
         
-//        var trackInfo = TrackInfo(id: user.id,
-//                          petId: petId,
-//                                  distance: "",
-//                          startTime: trackStartTime,
-//                          endTime: Timestamp(),
-//                          track: track,
-//                          note: "")
-        
         mapManager.uploadTrack(userId: user.id, trackInfo: &trackInfo) { [weak self] result in
             
             switch result {
                 
             case .success(let trackInfo):
+                
+                self?.lottie.stopLoading()
                 
                 self?.didFinishTrackButtons()
                 
@@ -478,7 +477,9 @@ class MapViewController: UIViewController {
                 self?.navigationController?.pushViewController(trackHistoryVC, animated: true)
                 
             case .failure(let error):
-                print(error)
+                
+                self?.lottie.stopLoading()
+                self?.lottie.showError(error)
             }
         }
     }
@@ -522,7 +523,7 @@ class MapViewController: UIViewController {
         saveTrackButton.isHidden = true
         deleteTrackButton.isHidden = true
         
-        mapManager.changeUserStatus(userId: user.id, status: .unTrack) { result in
+        mapManager.changeUserStatus(userId: user.id, status: .unTrack) { [weak self] result in
             switch result {
                 
             case .success:
@@ -531,14 +532,14 @@ class MapViewController: UIViewController {
                 
             case .failure(let error):
                 
-                print(error)
+                self?.lottie.showError(error)
             }
         }
     }
     
     @objc func didTapChoosePet() {
         
-        let choosePetVC = ChoosePetViewController(pets: userPets)
+        let choosePetVC = ChoosePetViewController(pets: userPets, isPost: false)
         
         choosePetVC.delegate = self
         
@@ -622,12 +623,6 @@ class MapViewController: UIViewController {
     }
     
     @objc func didTapNotificationButton() {
-        
-        guard Auth.auth().currentUser != nil else {
-            
-            NotificationCenter.default.post(name: .showSignInView, object: .none)
-            return
-        }
         
         let friendRequestVC = FriendRequestViewController(user: user)
         

@@ -18,10 +18,13 @@ class ChoosePetViewController: UIViewController {
     
     private var pets: [Pet]
     
+    private var isPost: Bool
+    
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     
-    init(pets: [Pet]) {
+    init(pets: [Pet], isPost: Bool) {
         self.pets = pets
+        self.isPost = isPost
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -39,7 +42,13 @@ class ChoosePetViewController: UIViewController {
     
     func setup() {
         
-        navigationItem.title = "Who do you want to walk with?"
+        if isPost {
+            
+            navigationItem.title = "Who do you want to post with?"
+        } else {
+         
+            navigationItem.title = "Who do you want to walk with?"
+        }
         
         tableView.register(ChoosePetTableViewCell.self,
                            forCellReuseIdentifier: ChoosePetTableViewCell.identifier)
@@ -60,8 +69,6 @@ class ChoosePetViewController: UIViewController {
         navigationItem.scrollEdgeAppearance = appearance
         
         tableView.backgroundColor = .LightGray
-        
-//        tableView.separatorStyle = .none
     }
     
     func layout() {

@@ -40,7 +40,7 @@ class EditPetCell: UITableViewCell {
         petImageView.layer.borderWidth = 2
         petImageView.contentMode = .scaleAspectFill
         
-        petNameLabel.textColor = .DarkBlue
+        petNameLabel.textColor = .BattleGrey
         petNameLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
     }
     

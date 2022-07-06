@@ -23,15 +23,6 @@ class ChatRoomViewController: UIViewController {
         }
     }
     
-//    init(user: User) {
-//        self.user = user
-//        super.init(nibName: nil, bundle: nil)
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -56,7 +47,7 @@ class ChatRoomViewController: UIViewController {
         
         tableView.separatorStyle = .none
         
-        view.backgroundColor = .white
+        view.backgroundColor = .BattleGrey
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -65,6 +56,9 @@ class ChatRoomViewController: UIViewController {
     
     private func style() {
         
+        tableView.layer.cornerRadius = 20
+        
+        tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
     
     private func layout() {
