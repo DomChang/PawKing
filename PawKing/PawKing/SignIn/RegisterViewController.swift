@@ -44,16 +44,12 @@ class RegisterViewController: UIViewController {
         setup()
         style()
         layout()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        
         playVideo()
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
+    deinit {
+        
         videoPlayer = nil
-        videoView.layer.sublayers?.removeAll()
     }
     
     func setup() {

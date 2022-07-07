@@ -63,18 +63,14 @@ class SignInViewController: UIViewController {
         setup()
         style()
         layout()
+        playVideo()
         
         setupAppleButton()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    deinit {
         
-        playVideo()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
         videoPlayer = nil
-        videoView.layer.sublayers?.removeAll()
     }
     
     func setup() {
