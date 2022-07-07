@@ -171,11 +171,15 @@ class SignInViewController: UIViewController {
     
     @objc func didTapSignIn() {
         
+        signInButtonDisable()
+        
         lottie.startLoading()
         
         guard let email = emailTextField.text,
               let password = passwordTextField.text
         else {
+            
+            signInButtonEnable()
             lottie.stopLoading()
             lottie.showError(nil)
             return
@@ -184,7 +188,8 @@ class SignInViewController: UIViewController {
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
             if let error = error {
                 
-                print(error.localizedDescription)
+                self?.signInButtonEnable()
+                self?.lottie.showError(error)
                 
             } else {
                 
@@ -194,6 +199,8 @@ class SignInViewController: UIViewController {
                     
                     if isExit {
                         
+                        self?.signInButtonEnable()
+                        
                         self?.delegate?.signInExistUser()
                         
                         self?.lottie.stopLoading()
@@ -201,6 +208,8 @@ class SignInViewController: UIViewController {
                         self?.dismiss(animated: true)
                         
                     } else {
+                        
+                        self?.signInButtonEnable()
                         
                         self?.lottie.stopLoading()
                         
@@ -286,6 +295,18 @@ class SignInViewController: UIViewController {
       }.joined()
 
       return hashString
+    }
+    
+    func signInButtonEnable() {
+        
+        signInButton.isEnabled = true
+        signInButton.backgroundColor = .Orange1
+    }
+    
+    func signInButtonDisable() {
+        
+        signInButton.isEnabled = false
+        signInButton.backgroundColor = .Gray1
     }
 }
 

@@ -491,13 +491,13 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
             infoCell.leftButton.setTitle("Connect", for: .normal)
             infoCell.leftButton.setTitleColor(.white, for: .normal)
             
+            setConnectState(sender: infoCell.leftButton)
+            
             if isFriend {
                 infoCell.leftButton.setTitle("Disconnect", for: .selected)
             } else {
                 infoCell.leftButton.setTitle("Requested", for: .selected)
             }
-            
-            setConnectState(sender: infoCell.leftButton)
             
             setConnectButtonColor(sender: infoCell.leftButton)
             

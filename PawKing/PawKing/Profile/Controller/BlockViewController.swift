@@ -43,7 +43,7 @@ class BlockViewController: UIViewController {
     
     private func style() {
         
-        navigationItem.title = "Setting"
+        navigationItem.title = "Block Users"
         
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
         

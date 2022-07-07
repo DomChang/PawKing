@@ -85,6 +85,7 @@ class SettingViewController: UIViewController {
     
                 DispatchQueue.main.async {
                    self.tabBarController?.selectedIndex = 0
+                    NotificationCenter.default.post(name: .showSignInView, object: .none)
                 }
     
             } catch let signOutError as NSError {
@@ -106,6 +107,10 @@ extension SettingViewController: UITableViewDataSource, UITableViewDelegate {
         switch indexPath.section {
             
         case SettingSections.policy.rawValue:
+            
+            let policyVC = PrivacyViewController()
+            
+            present(policyVC, animated: true)
             
             return
             
