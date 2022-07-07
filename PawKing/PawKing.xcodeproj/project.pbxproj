@@ -167,16 +167,13 @@
 		B6DD66D928752DAB00523197 /* LottieWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieWrapper.swift; sourceTree = "<group>"; };
 		B6DD66DE287538C200523197 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		B6DD66E22875538B00523197 /* error.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error.json; sourceTree = "<group>"; };
-<<<<<<< HEAD
 		B6DD66E4287578D700523197 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		B6DD66E6287579F800523197 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
 		B6DD66E828757A5B00523197 /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
 		B6DD66EA2875AD7A00523197 /* BlockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockViewController.swift; sourceTree = "<group>"; };
 		B6DD66EC2876803A00523197 /* PrivacyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyViewController.swift; sourceTree = "<group>"; };
 		B6DD66EF2876875400523197 /* EULAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EULAViewController.swift; sourceTree = "<group>"; };
-=======
 		B6E157332876C5E600D05796 /* signUp.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = signUp.mp4; sourceTree = "<group>"; };
->>>>>>> feature/UI_modification
 		B6E86A9F285F016A002B8C9A /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		B6E86AA1285F0AEE002B8C9A /* ProfileInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoCell.swift; sourceTree = "<group>"; };
 		B6E86AA3285F0B6B002B8C9A /* ContentButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentButtonCell.swift; sourceTree = "<group>"; };
