@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B60008002876AB7B0087717F /* signIn.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B60007FF2876AB770087717F /* signIn.mp4 */; };
 		B63484D3285D80C600DB7CE7 /* UserConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484D2285D80C600DB7CE7 /* UserConfigViewController.swift */; };
 		B63484D6285D80F100DB7CE7 /* BaseConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484D5285D80F100DB7CE7 /* BaseConfigViewController.swift */; };
 		B63484DB285D85E900DB7CE7 /* UserConfigCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484DA285D85E900DB7CE7 /* UserConfigCell.swift */; };
@@ -73,6 +74,7 @@
 		B6DD66DA28752DAB00523197 /* LottieWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DD66D928752DAB00523197 /* LottieWrapper.swift */; };
 		B6DD66DF287538C200523197 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = B6DD66DE287538C200523197 /* loading.json */; };
 		B6DD66E32875538B00523197 /* error.json in Resources */ = {isa = PBXBuildFile; fileRef = B6DD66E22875538B00523197 /* error.json */; };
+		B6E157342876C5EF00D05796 /* signUp.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B6E157332876C5E600D05796 /* signUp.mp4 */; };
 		B6E86AA0285F016A002B8C9A /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86A9F285F016A002B8C9A /* Profile.swift */; };
 		B6E86AA2285F0AEE002B8C9A /* ProfileInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86AA1285F0AEE002B8C9A /* ProfileInfoCell.swift */; };
 		B6E86AA4285F0B6B002B8C9A /* ContentButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86AA3285F0B6B002B8C9A /* ContentButtonCell.swift */; };
@@ -89,6 +91,7 @@
 /* Begin PBXFileReference section */
 		3892957CF3DC689420745EBB /* Pods-PawKing.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PawKing.debug.xcconfig"; path = "Target Support Files/Pods-PawKing/Pods-PawKing.debug.xcconfig"; sourceTree = "<group>"; };
 		5AF034E01BB911618BEB17BE /* Pods-PawKing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PawKing.release.xcconfig"; path = "Target Support Files/Pods-PawKing/Pods-PawKing.release.xcconfig"; sourceTree = "<group>"; };
+		B60007FF2876AB770087717F /* signIn.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = signIn.mp4; sourceTree = "<group>"; };
 		B63484D2285D80C600DB7CE7 /* UserConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConfigViewController.swift; sourceTree = "<group>"; };
 		B63484D5285D80F100DB7CE7 /* BaseConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseConfigViewController.swift; sourceTree = "<group>"; };
 		B63484DA285D85E900DB7CE7 /* UserConfigCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConfigCell.swift; sourceTree = "<group>"; };
@@ -158,6 +161,7 @@
 		B6DD66D928752DAB00523197 /* LottieWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieWrapper.swift; sourceTree = "<group>"; };
 		B6DD66DE287538C200523197 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		B6DD66E22875538B00523197 /* error.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error.json; sourceTree = "<group>"; };
+		B6E157332876C5E600D05796 /* signUp.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = signUp.mp4; sourceTree = "<group>"; };
 		B6E86A9F285F016A002B8C9A /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		B6E86AA1285F0AEE002B8C9A /* ProfileInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoCell.swift; sourceTree = "<group>"; };
 		B6E86AA3285F0B6B002B8C9A /* ContentButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentButtonCell.swift; sourceTree = "<group>"; };
@@ -383,6 +387,8 @@
 				B66A15BD2865898500DF2663 /* Chat */,
 				B698DDA0285881FB0009077E /* TabBarViewController.swift */,
 				B698DDA2285881FB0009077E /* Main.storyboard */,
+				B60007FF2876AB770087717F /* signIn.mp4 */,
+				B6E157332876C5E600D05796 /* signUp.mp4 */,
 				B698DDA5285881FD0009077E /* Assets.xcassets */,
 				B698DDA7285881FD0009077E /* LaunchScreen.storyboard */,
 				B698DDAA285881FD0009077E /* Info.plist */,
@@ -608,8 +614,10 @@
 				B698DDA9285881FD0009077E /* LaunchScreen.storyboard in Resources */,
 				B698DDB328588D280009077E /* GoogleService-Info.plist in Resources */,
 				B698DDA6285881FD0009077E /* Assets.xcassets in Resources */,
+				B60008002876AB7B0087717F /* signIn.mp4 in Resources */,
 				B698DDA4285881FB0009077E /* Main.storyboard in Resources */,
 				B6DD66DF287538C200523197 /* loading.json in Resources */,
+				B6E157342876C5EF00D05796 /* signUp.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

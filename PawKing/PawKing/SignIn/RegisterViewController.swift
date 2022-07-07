@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import AVFoundation
 
 protocol RegisterViewDelegate {
     
@@ -19,6 +20,8 @@ class RegisterViewController: UIViewController {
     
     let userManager = UserManager.shared
     
+    private let welcomeImageView = UIImageView()
+    
     let signUpTitleLabel = UILabel()
     
     let emailTextField = InputTextField()
@@ -28,6 +31,10 @@ class RegisterViewController: UIViewController {
     let comfirmPasswordTextField = InputTextField()
     
     let signUpButton = UIButton()
+    
+    private let videoView = UIView()
+    
+    private var videoPlayer: AVPlayerLooper?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +46,16 @@ class RegisterViewController: UIViewController {
         layout()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        
+        playVideo()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        videoPlayer = nil
+        videoView.layer.sublayers?.removeAll()
+    }
+    
     func setup() {
         
         signUpButton.addTarget(self, action: #selector(didTapSignUp), for: .touchUpInside)
@@ -48,22 +65,44 @@ class RegisterViewController: UIViewController {
         
         view.backgroundColor = .white
         
+        welcomeImageView.image = UIImage.asset(.signUp)
+        welcomeImageView.contentMode = .scaleAspectFill
+        
         signUpTitleLabel.text = "Sign Up"
-        signUpTitleLabel.textColor = .BattleGrey
+        signUpTitleLabel.textColor = .white
         signUpTitleLabel.font = UIFont.systemFont(ofSize: 24, weight: .medium)
         
-        emailTextField.placeholder = "Email"
         emailTextField.autocapitalizationType = .none
+        emailTextField.layer.borderColor = UIColor.white.cgColor
+        emailTextField.backgroundColor = .black.withAlphaComponent(0.2)
+        emailTextField.textColor = .white
+        emailTextField.attributedPlaceholder = NSAttributedString(
+            string: "Email",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.LightGray ?? .white]
+        )
         
-        passwordTextField.placeholder = "Password"
         passwordTextField.autocapitalizationType = .none
         passwordTextField.isSecureTextEntry = true
+        passwordTextField.layer.borderColor = UIColor.white.cgColor
+        passwordTextField.backgroundColor = .black.withAlphaComponent(0.2)
+        passwordTextField.textColor = .white
+        passwordTextField.attributedPlaceholder = NSAttributedString(
+            string: "Password",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.LightGray ?? .white]
+        )
         
         comfirmPasswordTextField.placeholder = "Comfirm password"
         comfirmPasswordTextField.autocapitalizationType = .none
         comfirmPasswordTextField.isSecureTextEntry = true
+        comfirmPasswordTextField.layer.borderColor = UIColor.white.cgColor
+        comfirmPasswordTextField.backgroundColor = .black.withAlphaComponent(0.2)
+        comfirmPasswordTextField.textColor = .white
+        comfirmPasswordTextField.attributedPlaceholder = NSAttributedString(
+            string: "Comfirm password",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.LightGray ?? .white]
+        )
         
-        signUpButton.backgroundColor = .Orange1
+        signUpButton.backgroundColor = .Orange1?.withAlphaComponent(0.8)
         signUpButton.setTitle("Sign Up", for: .normal)
         signUpButton.setTitleColor(.white, for: .normal)
         signUpButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
@@ -71,6 +110,9 @@ class RegisterViewController: UIViewController {
     }
     
     func layout() {
+        
+        view.addSubview(videoView)
+        view.addSubview(welcomeImageView)
 
         let registerVStack = UIStackView(arrangedSubviews: [emailTextField, passwordTextField, comfirmPasswordTextField, signUpButton])
         
@@ -80,6 +122,14 @@ class RegisterViewController: UIViewController {
         registerVStack.axis = .vertical
         registerVStack.distribution = .fillEqually
         registerVStack.spacing = 20
+        
+        videoView.fillSuperview()
+        
+        welcomeImageView.anchor(bottom: signUpTitleLabel.topAnchor,
+                             centerX: view.centerXAnchor,
+                             width: 60,
+                             height: 60,
+                             padding: UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0))
         
         signUpTitleLabel.anchor(top: view.topAnchor,
                                 leading: view.leadingAnchor,
@@ -91,6 +141,21 @@ class RegisterViewController: UIViewController {
                           trailing: view.trailingAnchor,
                           height: 240,
                           padding: UIEdgeInsets(top: 24, left: 20, bottom: 0, right: 20))
+    }
+    
+    func playVideo() {
+        
+        guard let path = Bundle.main.path(forResource: "signUp", ofType: "mp4") else { return }
+       
+        let player = AVQueuePlayer()
+        let item = AVPlayerItem(url: URL(fileURLWithPath: path))
+        videoPlayer = AVPlayerLooper(player: player, templateItem: item)
+        let playerLayer = AVPlayerLayer(player: player)
+        playerLayer.frame = view.bounds
+        playerLayer.videoGravity = .resizeAspectFill
+        videoView.layer.addSublayer(playerLayer)
+        
+        player.play()
     }
     
     @objc func didTapSignUp() {

@@ -39,6 +39,10 @@ enum ImageAsset: String {
     case Icons_30px_Grid
     case Icons_30px_Grid_fill
     
+    case pawking_logo
+    
+    case signUp
+    
     case Image_Placeholder
 }
 // swiftlint:enable identifier_name
