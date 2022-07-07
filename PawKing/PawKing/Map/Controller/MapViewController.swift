@@ -18,7 +18,9 @@ class MapViewController: UIViewController {
     
     let mapView = MKMapView()
     
-    let locationManager = CLLocationManager()
+    var locationManager: CLLocationManager?
+    
+    var locationAlert: UIAlertController?
     
     let userLocationButton = UIButton()
     
@@ -68,7 +70,15 @@ class MapViewController: UIViewController {
     var userCurrentPet: Pet? {
         didSet {
             
-            trackButton.isHidden = !collectionView.isHidden
+            if locationManager?.authorizationStatus == .denied ||
+                locationManager?.authorizationStatus == .restricted ||
+                locationManager?.authorizationStatus == .notDetermined {
+                
+                trackButton.isHidden = true
+            } else {
+
+                trackButton.isHidden = !collectionView.isHidden
+            }
             
             if !trackButton.isSelected && collectionView.isHidden {
                 
@@ -109,14 +119,15 @@ class MapViewController: UIViewController {
         setup()
         style()
         layout()
-        
-//        setupUserSettingButton()
+        setAlertController()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         navigationController?.navigationBar.isHidden = true
+        
+        setAlertController()
         
         if let user = UserManager.shared.currentUser {
             
@@ -150,6 +161,8 @@ class MapViewController: UIViewController {
         navigationController?.navigationBar.isHidden = false
         
         listeners?.forEach { $0.remove() }
+        
+        locationAlert = nil
     }
     
     deinit {
@@ -169,16 +182,17 @@ class MapViewController: UIViewController {
         
         fetchUserPets()
         
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.distanceFilter = 10
+        locationManager = CLLocationManager()
+        locationManager?.delegate = self
+        locationManager?.requestWhenInUseAuthorization()
+        locationManager?.allowsBackgroundLocationUpdates = true
+        locationManager?.distanceFilter = 10
+        locationManager?.checkLocationPermission()
         
         mapView.showsUserLocation = true
-        mapView.mapType = .mutedStandard
-        
-        mapView.register(MKAnnotationView.self, forAnnotationViewWithReuseIdentifier: "UserAnnotationView")
-        
-        locationManager.delegate = self
         mapView.delegate = self
+        mapView.mapType = .mutedStandard
+        mapView.register(MKAnnotationView.self, forAnnotationViewWithReuseIdentifier: "UserAnnotationView")
         
         choosePetImageView.addGestureRecognizer(
             UITapGestureRecognizer(target: self, action: #selector(didTapChoosePet)))
@@ -420,8 +434,8 @@ class MapViewController: UIViewController {
         
         if trackButton.isSelected {
             
-            locationManager.startUpdatingLocation()
-            locationManager.startUpdatingHeading()
+            locationManager?.startUpdatingLocation()
+            locationManager?.startUpdatingHeading()
             trackStartTime = Timestamp(date: Date())
             
         } else {
@@ -509,8 +523,8 @@ class MapViewController: UIViewController {
     
     func didFinishTrackButtons() {
         
-        locationManager.stopUpdatingLocation()
-        locationManager.stopUpdatingHeading()
+        locationManager?.stopUpdatingLocation()
+        locationManager?.stopUpdatingHeading()
         
         userStoredLocations = []
         
@@ -564,7 +578,14 @@ class MapViewController: UIViewController {
         if Auth.auth().currentUser != nil,
             userCurrentPet != nil {
             
-            trackButton.isHidden = strangerButton.isSelected
+            if locationManager?.authorizationStatus == .denied ||
+                locationManager?.authorizationStatus == .restricted ||
+                locationManager?.authorizationStatus == .notDetermined {
+                
+                trackButton.isHidden = true
+            } else {
+                trackButton.isHidden = strangerButton.isSelected
+            }
             
             if !trackButton.isSelected {
                 choosePetImageView.isHidden = strangerButton.isSelected
@@ -716,6 +737,28 @@ class MapViewController: UIViewController {
 
         }
     }
+    
+    func openAppSettings() {
+        if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
+
+           UIApplication.shared.open(settingsUrl)
+         }
+    }
+    
+    func setAlertController() {
+        
+        locationAlert = UIAlertController(title: "Allow \"PawKing\" To Access Your Location While You Use The App." ,
+                                                message: "PawKing requires your precise location to track your walk.",
+                                                preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        locationAlert?.addAction(cancelAction)
+        
+        let settingAction = UIAlertAction(title: "Settings", style: .default) { _ in
+            self.openAppSettings()
+        }
+        locationAlert?.addAction(settingAction)
+    }
 }
 
 extension MapViewController: ChoosePetViewDelegate {
@@ -741,6 +784,33 @@ extension MapViewController: ChoosePetViewDelegate {
 }
 
 extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
+    
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        let locationStatus = manager.authorizationStatus
+        
+        switch locationStatus {
+            
+        case .restricted, .denied:
+            
+            if let locationAlert = self.locationAlert {
+                self.present(locationAlert, animated: true)
+            }
+            
+            locationManager?.requestWhenInUseAuthorization()
+            
+        case .notDetermined:
+            
+            trackButton.isHidden = true
+
+        case .authorizedAlways, .authorizedWhenInUse:
+            
+            trackButton.isHidden = false
+            return
+            
+        @unknown default:
+            return
+        }
+    }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
 
