@@ -95,7 +95,7 @@ class PostManager {
         }
     }
     
-    func fetchAllPosts(blockIds:[String], completion: @escaping (Result<[Post], Error>) -> Void) {
+    func fetchAllPosts(blockIds: [String], completion: @escaping (Result<[Post], Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.posts.rawValue)
                                 .order(by: "createdTime", descending: true)

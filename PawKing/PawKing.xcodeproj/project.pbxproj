@@ -73,6 +73,12 @@
 		B6DD66DA28752DAB00523197 /* LottieWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DD66D928752DAB00523197 /* LottieWrapper.swift */; };
 		B6DD66DF287538C200523197 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = B6DD66DE287538C200523197 /* loading.json */; };
 		B6DD66E32875538B00523197 /* error.json in Resources */ = {isa = PBXBuildFile; fileRef = B6DD66E22875538B00523197 /* error.json */; };
+		B6DD66E5287578D700523197 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DD66E4287578D700523197 /* SettingViewController.swift */; };
+		B6DD66E7287579F800523197 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DD66E6287579F800523197 /* SettingCell.swift */; };
+		B6DD66E928757A5B00523197 /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DD66E828757A5B00523197 /* Setting.swift */; };
+		B6DD66EB2875AD7A00523197 /* BlockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DD66EA2875AD7A00523197 /* BlockViewController.swift */; };
+		B6DD66ED2876803A00523197 /* PrivacyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DD66EC2876803A00523197 /* PrivacyViewController.swift */; };
+		B6DD66F02876875400523197 /* EULAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DD66EF2876875400523197 /* EULAViewController.swift */; };
 		B6E86AA0285F016A002B8C9A /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86A9F285F016A002B8C9A /* Profile.swift */; };
 		B6E86AA2285F0AEE002B8C9A /* ProfileInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86AA1285F0AEE002B8C9A /* ProfileInfoCell.swift */; };
 		B6E86AA4285F0B6B002B8C9A /* ContentButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86AA3285F0B6B002B8C9A /* ContentButtonCell.swift */; };
@@ -158,6 +164,12 @@
 		B6DD66D928752DAB00523197 /* LottieWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieWrapper.swift; sourceTree = "<group>"; };
 		B6DD66DE287538C200523197 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		B6DD66E22875538B00523197 /* error.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error.json; sourceTree = "<group>"; };
+		B6DD66E4287578D700523197 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		B6DD66E6287579F800523197 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
+		B6DD66E828757A5B00523197 /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
+		B6DD66EA2875AD7A00523197 /* BlockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockViewController.swift; sourceTree = "<group>"; };
+		B6DD66EC2876803A00523197 /* PrivacyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyViewController.swift; sourceTree = "<group>"; };
+		B6DD66EF2876875400523197 /* EULAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EULAViewController.swift; sourceTree = "<group>"; };
 		B6E86A9F285F016A002B8C9A /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		B6E86AA1285F0AEE002B8C9A /* ProfileInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoCell.swift; sourceTree = "<group>"; };
 		B6E86AA3285F0B6B002B8C9A /* ContentButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentButtonCell.swift; sourceTree = "<group>"; };
@@ -240,6 +252,7 @@
 			isa = PBXGroup;
 			children = (
 				B6E86A9F285F016A002B8C9A /* Profile.swift */,
+				B6DD66E828757A5B00523197 /* Setting.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -258,6 +271,7 @@
 				B6E86AA5285F0B85002B8C9A /* TrackHostoryCell.swift */,
 				B651EDD328717AAC003A5F2B /* EditUserCell.swift */,
 				B651EDD528718B8B003A5F2B /* EditPetCell.swift */,
+				B6DD66E6287579F800523197 /* SettingCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -269,6 +283,9 @@
 				B6E86AAB2860309F002B8C9A /* EditProfileViewController.swift */,
 				B6BF96132861EABC003627C1 /* TrackHistoryViewController.swift */,
 				B66A15CD2866AE5400DF2663 /* UserPhotoWallViewController.swift */,
+				B6DD66E4287578D700523197 /* SettingViewController.swift */,
+				B6DD66EA2875AD7A00523197 /* BlockViewController.swift */,
+				B6DD66EC2876803A00523197 /* PrivacyViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -419,6 +436,7 @@
 			children = (
 				B6A91D79286BE5A50049253A /* SignInViewController.swift */,
 				B651EDCD286ED454003A5F2B /* RegisterViewController.swift */,
+				B6DD66EF2876875400523197 /* EULAViewController.swift */,
 			);
 			path = SignIn;
 			sourceTree = "<group>";
@@ -697,6 +715,7 @@
 				B66A15CA2865EC4300DF2663 /* UserMessageCell.swift in Sources */,
 				B63484E3285DC8D000DB7CE7 /* PetManager.swift in Sources */,
 				B6A91D6D28697CCC0049253A /* ProfileInfoReusableView.swift in Sources */,
+				B6DD66ED2876803A00523197 /* PrivacyViewController.swift in Sources */,
 				B698DD9D285881FB0009077E /* AppDelegate.swift in Sources */,
 				B66A15C82865E82D00DF2663 /* MessageViewController.swift in Sources */,
 				B63484E1285DC70D00DB7CE7 /* PetConfigCell.swift in Sources */,
@@ -706,6 +725,7 @@
 				B6ABE8E0285A06E300B1A977 /* UIColor+Extension.swift in Sources */,
 				B66A15CE2866AE5400DF2663 /* UserPhotoWallViewController.swift in Sources */,
 				B6DD66D52872EAE700523197 /* ContentButtonReusableView.swift in Sources */,
+				B6DD66E7287579F800523197 /* SettingCell.swift in Sources */,
 				B6DD66DA28752DAB00523197 /* LottieWrapper.swift in Sources */,
 				B6ABE8E9285AC08200B1A977 /* UserLocation.swift in Sources */,
 				B63484D6285D80F100DB7CE7 /* BaseConfigViewController.swift in Sources */,
@@ -720,22 +740,26 @@
 				B66A15C42865917300DF2663 /* ChatManager.swift in Sources */,
 				B6A91D692868372B0049253A /* NoStrangerCell.swift in Sources */,
 				B6E86AA2285F0AEE002B8C9A /* ProfileInfoCell.swift in Sources */,
+				B6DD66E928757A5B00523197 /* Setting.swift in Sources */,
 				B63484E5285E1E5300DB7CE7 /* ChoosePetViewController.swift in Sources */,
 				B6BF96142861EABC003627C1 /* TrackHistoryViewController.swift in Sources */,
 				B6ABE8F4285B87AB00B1A977 /* UserAnnotation.swift in Sources */,
 				B698DDC02858B99F0009077E /* UIImage+Extension.swift in Sources */,
 				B6A91D6B2868909F0049253A /* PetItemBackReusableView.swift in Sources */,
 				B698DDBB2858B8BA0009077E /* ChatRoomViewController.swift in Sources */,
+				B6DD66EB2875AD7A00523197 /* BlockViewController.swift in Sources */,
 				B698DDB72858B8850009077E /* ExploreViewController.swift in Sources */,
 				B6D4F6AB285CDB150045DDB2 /* PKPhotoHelper.swift in Sources */,
 				B698DD9F285881FB0009077E /* SceneDelegate.swift in Sources */,
 				B6A91D72286ACFDE0049253A /* Date+Extension.swift in Sources */,
 				B6BF961A2862A9CF003627C1 /* PhotoPostCell.swift in Sources */,
 				B698DDBD2858B8CC0009077E /* ProfileViewController.swift in Sources */,
+				B6DD66E5287578D700523197 /* SettingViewController.swift in Sources */,
 				B698DDC22858CE9D0009077E /* UIView+Extension.swift in Sources */,
 				B6DD66D72874329700523197 /* OtherUserPetReusableView.swift in Sources */,
 				B66A15C228658DF500DF2663 /* Message.swift in Sources */,
 				B6E9431A286DCA1700B3157F /* FriendRequestCell.swift in Sources */,
+				B6DD66F02876875400523197 /* EULAViewController.swift in Sources */,
 				B6BF96182862A467003627C1 /* PhotoPostViewController.swift in Sources */,
 				B698DDB52858B8540009077E /* MapViewController.swift in Sources */,
 				B6E94318286DC83100B3157F /* FriendRequestViewController.swift in Sources */,
