@@ -45,6 +45,9 @@ enum ImageAsset: String {
     case Icons_60px_Block
     case Icons_60px_SignOut
     case Icons_60px_DeleteAccount
+    case pawking_logo
+    
+    case signUp
     
     case Image_Placeholder
 }

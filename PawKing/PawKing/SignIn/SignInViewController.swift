@@ -10,6 +10,7 @@ import AuthenticationServices
 import CryptoKit
 import FirebaseAuth
 import Lottie
+import AVFoundation
 
 protocol SignInViewDelegate {
     
@@ -27,6 +28,8 @@ class SignInViewController: UIViewController {
     private let userManager = UserManager.shared
     
     private let lottie = LottieWrapper.shared
+    
+    private let logoImageView = UIImageView()
     
     private let signInTitleLabel = UILabel()
     
@@ -48,16 +51,30 @@ class SignInViewController: UIViewController {
     
     fileprivate var currentNonce: String?
     
+    private let videoView = UIView()
+    
+    private var videoPlayer: AVPlayerLooper?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .white
         
-        setupAppleButton()
-        
         setup()
         style()
         layout()
+        
+        setupAppleButton()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        playVideo()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        videoPlayer = nil
+        videoView.layer.sublayers?.removeAll()
     }
     
     func setup() {
@@ -71,37 +88,52 @@ class SignInViewController: UIViewController {
         
         view.backgroundColor = .white
         
+        logoImageView.image = UIImage.asset(.pawking_logo)
+        logoImageView.contentMode = .scaleAspectFill
+        
         signInTitleLabel.text = "Sign In"
-        signInTitleLabel.textColor = .BattleGrey
+        signInTitleLabel.textColor = .white
         signInTitleLabel.font = UIFont.systemFont(ofSize: 24, weight: .medium)
         
-        emailTextField.placeholder = "Email"
         emailTextField.autocapitalizationType = .none
+        emailTextField.layer.borderColor = UIColor.white.cgColor
+        emailTextField.backgroundColor = .black.withAlphaComponent(0.2)
+        emailTextField.textColor = .white
+        emailTextField.attributedPlaceholder = NSAttributedString(
+            string: "Email",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.LightGray ?? .white]
+        )
         
-        passwordTextField.placeholder = "Password"
         passwordTextField.autocapitalizationType = .none
         passwordTextField.isSecureTextEntry = true
+        passwordTextField.layer.borderColor = UIColor.white.cgColor
+        passwordTextField.backgroundColor = .black.withAlphaComponent(0.2)
+        passwordTextField.textColor = .white
+        passwordTextField.attributedPlaceholder = NSAttributedString(
+            string: "Password",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.LightGray ?? .white]
+        )
         
-        signInButton.backgroundColor = .Orange1
+        signInButton.backgroundColor = .Orange1?.withAlphaComponent(0.8)
         signInButton.setTitle("Sign in", for: .normal)
         signInButton.setTitleColor(.white, for: .normal)
         signInButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         signInButton.layer.cornerRadius = 4
         
         registerHintLabel.text = "Don't haven an account?"
-        registerHintLabel.textColor = .darkGray
+        registerHintLabel.textColor = .white
         registerHintLabel.textAlignment = .right
         registerHintLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         
         registerButton.setTitle("Sign up", for: .normal)
         registerButton.setTitleColor(.Orange1, for: .normal)
-        registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         
-        speratorLeftLine.backgroundColor = .Gray1
-        speratorRightLine.backgroundColor = .Gray1
+        speratorLeftLine.backgroundColor = .white
+        speratorRightLine.backgroundColor = .white
         
         orLabel.text = "OR"
-        orLabel.textColor = .Gray1
+        orLabel.textColor = .white
         orLabel.textAlignment = .center
         orLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
     }
@@ -112,12 +144,15 @@ class SignInViewController: UIViewController {
         
         let registerHStack = UIStackView(arrangedSubviews: [registerHintLabel, registerButton])
         
+        view.addSubview(videoView)
+        view.addSubview(logoImageView)
         view.addSubview(signInTitleLabel)
         view.addSubview(signVStack)
         view.addSubview(registerHStack)
         view.addSubview(speratorLeftLine)
         view.addSubview(speratorRightLine)
         view.addSubview(orLabel)
+        view.addSubview(appleButton)
         
         signVStack.axis = .vertical
         signVStack.distribution = .fillEqually
@@ -127,6 +162,7 @@ class SignInViewController: UIViewController {
         registerHStack.distribution = .fill
         registerHStack.spacing = 10
         
+        videoView.fillSuperview()
         
         registerButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
 //
@@ -135,6 +171,12 @@ class SignInViewController: UIViewController {
 //                        trailing: view.trailingAnchor,
 //                        height: 400,
 //                        padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
+        
+        logoImageView.anchor(top: view.topAnchor,
+                             centerX: view.centerXAnchor,
+                             width: 100,
+                             height: 100,
+                             padding: UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0))
         
         signInTitleLabel.anchor(leading: view.leadingAnchor,
                                 bottom: signVStack.topAnchor,
@@ -167,6 +209,21 @@ class SignInViewController: UIViewController {
                                  height: 0.5,
                                 padding: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 20))
         
+    }
+    
+    func playVideo() {
+        
+        guard let path = Bundle.main.path(forResource: "signIn", ofType: "mp4") else { return }
+       
+        let player = AVQueuePlayer()
+        let item = AVPlayerItem(url: URL(fileURLWithPath: path))
+        videoPlayer = AVPlayerLooper(player: player, templateItem: item)
+        let playerLayer = AVPlayerLayer(player: player)
+        playerLayer.frame = view.bounds
+        playerLayer.videoGravity = .resizeAspectFill
+        videoView.layer.addSublayer(playerLayer)
+        
+        player.play()
     }
     
     @objc func didTapSignIn() {
@@ -231,7 +288,6 @@ class SignInViewController: UIViewController {
     }
     
     func setupAppleButton() {
-        view.addSubview(appleButton)
         appleButton.layer.cornerRadius = 12
         appleButton.addTarget(self, action: #selector(startSignInWithAppleFlow), for: .touchUpInside)
         
