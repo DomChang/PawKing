@@ -132,6 +132,7 @@ extension SettingViewController: UITableViewDataSource, UITableViewDelegate {
         case SettingSections.deleteAccount.rawValue:
             
             return
+            
         default:
             return
         }

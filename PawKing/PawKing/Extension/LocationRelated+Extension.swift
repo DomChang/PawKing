@@ -38,3 +38,17 @@ extension GeoPoint {
         return coordinate2D
     }
 }
+
+extension CLLocationManager {
+    
+    func checkLocationPermission() {
+        
+        if self.authorizationStatus != .authorizedWhenInUse && self.authorizationStatus != .authorizedAlways {
+            
+            self.requestAlwaysAuthorization()
+            
+        }
+        
+    }
+    
+}

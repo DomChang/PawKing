@@ -81,6 +81,8 @@
 		B6DD66ED2876803A00523197 /* PrivacyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DD66EC2876803A00523197 /* PrivacyViewController.swift */; };
 		B6DD66F02876875400523197 /* EULAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DD66EF2876875400523197 /* EULAViewController.swift */; };
 		B6E157342876C5EF00D05796 /* signUp.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B6E157332876C5E600D05796 /* signUp.mp4 */; };
+		B6E1573628772AC000D05796 /* TrackAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E1573528772AC000D05796 /* TrackAnnotation.swift */; };
+		B6E157382877310700D05796 /* TrackAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E157372877310700D05796 /* TrackAnnotationView.swift */; };
 		B6E86AA0285F016A002B8C9A /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86A9F285F016A002B8C9A /* Profile.swift */; };
 		B6E86AA2285F0AEE002B8C9A /* ProfileInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86AA1285F0AEE002B8C9A /* ProfileInfoCell.swift */; };
 		B6E86AA4285F0B6B002B8C9A /* ContentButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E86AA3285F0B6B002B8C9A /* ContentButtonCell.swift */; };
@@ -174,6 +176,8 @@
 		B6DD66EC2876803A00523197 /* PrivacyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyViewController.swift; sourceTree = "<group>"; };
 		B6DD66EF2876875400523197 /* EULAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EULAViewController.swift; sourceTree = "<group>"; };
 		B6E157332876C5E600D05796 /* signUp.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = signUp.mp4; sourceTree = "<group>"; };
+		B6E1573528772AC000D05796 /* TrackAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackAnnotation.swift; sourceTree = "<group>"; };
+		B6E157372877310700D05796 /* TrackAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackAnnotationView.swift; sourceTree = "<group>"; };
 		B6E86A9F285F016A002B8C9A /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		B6E86AA1285F0AEE002B8C9A /* ProfileInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoCell.swift; sourceTree = "<group>"; };
 		B6E86AA3285F0B6B002B8C9A /* ContentButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentButtonCell.swift; sourceTree = "<group>"; };
@@ -257,6 +261,8 @@
 			children = (
 				B6E86A9F285F016A002B8C9A /* Profile.swift */,
 				B6DD66E828757A5B00523197 /* Setting.swift */,
+				B6E1573528772AC000D05796 /* TrackAnnotation.swift */,
+				B6E157372877310700D05796 /* TrackAnnotationView.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -580,6 +586,7 @@
 				B698DD97285881FB0009077E /* Resources */,
 				40CC832ED6627C2E4E5E7ED9 /* [CP] Embed Pods Frameworks */,
 				B6ABE8DE285998C700B1A977 /* Run SwiftLint */,
+				B6E157392878297D00D05796 /* Run Crashlytics */,
 			);
 			buildRules = (
 			);
@@ -699,6 +706,26 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"\n\n";
 		};
+		B6E157392878297D00D05796 /* Run Crashlytics */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "Run Crashlytics";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -717,6 +744,7 @@
 				B63484DF285DC62D00DB7CE7 /* PetConfigViewController.swift in Sources */,
 				B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */,
 				B63484E7285E36F700DB7CE7 /* ChoosePetTableViewCell.swift in Sources */,
+				B6E157382877310700D05796 /* TrackAnnotationView.swift in Sources */,
 				B66A15B92864606700DF2663 /* ResultViewController.swift in Sources */,
 				B6E86AA4285F0B6B002B8C9A /* ContentButtonCell.swift in Sources */,
 				B6D4F69E285C35F80045DDB2 /* UserManager.swift in Sources */,
@@ -746,6 +774,7 @@
 				B6ABE8E2285A0B7400B1A977 /* MapManager.swift in Sources */,
 				B6A91D7D286C827B0049253A /* Notification+Extension.swift in Sources */,
 				B66A15C42865917300DF2663 /* ChatManager.swift in Sources */,
+				B6E1573628772AC000D05796 /* TrackAnnotation.swift in Sources */,
 				B6A91D692868372B0049253A /* NoStrangerCell.swift in Sources */,
 				B6E86AA2285F0AEE002B8C9A /* ProfileInfoCell.swift in Sources */,
 				B6DD66E928757A5B00523197 /* Setting.swift in Sources */,
@@ -930,6 +959,7 @@
 				CODE_SIGN_ENTITLEMENTS = PawKing/PawKing.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = RUXNPB6ZP3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PawKing/Info.plist;
