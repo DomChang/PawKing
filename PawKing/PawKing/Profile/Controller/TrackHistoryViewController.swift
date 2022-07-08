@@ -139,17 +139,31 @@ class TrackHistoryViewController: UIViewController {
         noteTitleLabel.textColor = .BattleGrey
         noteTitleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         
-        let location = trackInfo.track[0].transferToCoordinate2D()
+//        if let startLocation = trackInfo.track.first?.transferToCoordinate2D(),
+//           let endLocation = trackInfo.track.last?.transferToCoordinate2D() {
+//
+//            let centerLatitude = (startLocation.latitude + endLocation.latitude) / 2
+//            let centerLongitude = (startLocation.longitude + endLocation.longitude) / 2
+//
+//            let center = CLLocationCoordinate2D(latitude: centerLatitude, longitude: centerLongitude)
+//
+//            let distance = startLocation.distanceTo(coordinate: endLocation)
+//
+//            let region = MKCoordinateRegion(center: center,
+//                                            latitudinalMeters: 2 * distance,
+//                                            longitudinalMeters: 2 * distance)
+//
+//            let adjustRegion = mapView.regionThatFits(region)
+//
+//            mapView.setRegion(adjustRegion, animated: false)
+//        }
         
-        let region = MKCoordinateRegion(center: location,
-                                        span: .init(latitudeDelta: 0.005,
-                                                    longitudeDelta: 0.005))
-        
-        mapView.setRegion(region, animated: false)
-        
+        mapView.register(TrackAnnotationView.self,
+                         forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
         mapView.delegate = self
         
         drawTrack()
+        setAnnotation()
     }
     
     func style() {
@@ -318,14 +332,51 @@ class TrackHistoryViewController: UIViewController {
         let polyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
 
         mapView.addOverlay(polyline, level: .aboveRoads)
+        
+        var regionRect = polyline.boundingMapRect
+
+       let wPadding = regionRect.size.width * 0.8
+       let hPadding = regionRect.size.height * 0.8
+
+       // Add padding to the region
+       regionRect.size.width += wPadding
+       regionRect.size.height += hPadding
+
+       // Center the region on the line
+       regionRect.origin.x -= wPadding / 2
+       regionRect.origin.y -= hPadding / 2
+
+        mapView.setRegion(MKCoordinateRegion(regionRect), animated: true)
+    }
+    
+    func setAnnotation() {
+        
+        guard let startPoint = trackInfo.track.first,
+                let endPoint = trackInfo.track.last else { return }
+        
+        let startAnnotation = TrackAnnotation(title: "Start", coordinate: startPoint.transferToCoordinate2D())
+        
+        let endAnnotation = TrackAnnotation(title: "End", coordinate: endPoint.transferToCoordinate2D())
+        
+        mapView.addAnnotations([startAnnotation, endAnnotation])
     }
 }
 
 extension TrackHistoryViewController: MKMapViewDelegate, CLLocationManagerDelegate {
 
-//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+//    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
 //
+//         guard let view = mapView.dequeueReusableAnnotationView(
+//            withIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier,
+//            for: annotation
+//         ) as? MKMarkerAnnotationView else {
 //
+//             return MKMarkerAnnotationView()
+//         }
+//
+//        view.markerTintColor = .BattleGrey
+//
+//        return view
 //    }
 
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {

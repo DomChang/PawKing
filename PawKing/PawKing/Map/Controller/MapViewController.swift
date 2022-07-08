@@ -480,6 +480,8 @@ class MapViewController: UIViewController {
                 
             case .success(let trackInfo):
                 
+                self?.mapView.removeOverlays(self?.mapView.overlays ?? [])
+                
                 self?.lottie.stopLoading()
                 
                 self?.didFinishTrackButtons()
@@ -519,6 +521,7 @@ class MapViewController: UIViewController {
     @objc func didTapDeleteTrack() {
         
         didFinishTrackButtons()
+        mapView.removeOverlays(mapView.overlays ?? [])
     }
     
     func didFinishTrackButtons() {
