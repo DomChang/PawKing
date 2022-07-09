@@ -108,6 +108,8 @@ class ExploreViewController: UIViewController {
         buttonBackView.backgroundColor = .white
         buttonBackView.layer.cornerRadius = 20
         buttonBackView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        
+        refreshControl.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
     }
     
     private func layout() {
