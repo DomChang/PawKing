@@ -18,6 +18,18 @@ class UserManager {
     
     var currentUser: User?
     
+    var guestUser = User(id: "Guest",
+                         name: "Guest",
+                         petsId: [],
+                         currentPetId: "",
+                         userImage: "",
+                         description: "",
+                         friendPetsId: [],
+                         friends: [],
+                         recieveRequestsId: [],
+                         sendRequestsId: [],
+                         blockUsersId: [])
+    
     lazy var dataBase = Firestore.firestore()
     
     func checkUserExist(uid: String, completion: @escaping (Bool) -> Void) {

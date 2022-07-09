@@ -56,7 +56,7 @@ class MapViewController: UIViewController {
     
     var trackStartTime = Timestamp()
     
-    private var user: User?
+    private var user: User
     
     var userPets: [Pet] = [] {
         didSet {
@@ -101,15 +101,16 @@ class MapViewController: UIViewController {
     
     var listeners: [ListenerRegistration]?
     
-//    init(user: User) {
-//
-//        self.user = user
-//        super.init(nibName: nil, bundle: nil)
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
+    init() {
+
+        self.user = userManager.currentUser ?? userManager.guestUser
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -132,15 +133,13 @@ class MapViewController: UIViewController {
         if let user = UserManager.shared.currentUser {
             
             self.user = user
-            listenFriendsLocation()
         }
         
         if Auth.auth().currentUser != nil {
             
-            if let user = user {
-                fetchUserPets(user: user)
-            }
-            
+            fetchUserPets(user: user)
+            listenFriendsLocation()
+
         } else {
             userCurrentPet = nil
             userPets = []
@@ -154,6 +153,7 @@ class MapViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
         didSelectUserLocation()
     }
@@ -480,8 +480,7 @@ class MapViewController: UIViewController {
         let coordinate = userStoredLocations.map { $0.coordinate }
         let track = coordinate.map { $0.transferToGeopoint() }
         
-        guard let user = user,
-                let userCurrentPet = userCurrentPet else {
+        guard let userCurrentPet = userCurrentPet else {
             
             lottie.stopLoading()
             
@@ -545,7 +544,7 @@ class MapViewController: UIViewController {
     @objc func didTapDeleteTrack() {
         
         didFinishTrackButtons()
-        mapView.removeOverlays(mapView.overlays ?? [])
+        mapView.removeOverlays(mapView.overlays)
     }
     
     func didFinishTrackButtons() {
@@ -563,10 +562,6 @@ class MapViewController: UIViewController {
         
         saveTrackButton.isHidden = true
         deleteTrackButton.isHidden = true
-        
-        guard let user = user else {
-            return
-        }
         
         mapManager.changeUserStatus(userId: user.id, status: .unTrack) { [weak self] result in
             switch result {
@@ -599,10 +594,6 @@ class MapViewController: UIViewController {
     }
     
     @objc func didTapStrangerButton() {
-
-        guard let user = user else {
-            return
-        }
         
         strangerButton.isSelected = !strangerButton.isSelected
         
@@ -637,7 +628,7 @@ class MapViewController: UIViewController {
                     return
                 }
                 
-                nearStrangersId.removeAll(where: { $0 == user.id })
+                nearStrangersId.removeAll(where: { $0 == self?.user.id })
                 
                 self?.fetchPets(from: nearStrangersId) { pets in
                     
@@ -678,11 +669,9 @@ class MapViewController: UIViewController {
     
     @objc func didTapNotificationButton() {
         
-        if let user = user {
-            let friendRequestVC = FriendRequestViewController(user: user)
-            
-            navigationController?.pushViewController(friendRequestVC, animated: true)
-        }
+        let friendRequestVC = FriendRequestViewController(user: user)
+        
+        navigationController?.pushViewController(friendRequestVC, animated: true)
     }
     
     func fetchPets(from usersId: [String], completion: @escaping ([Pet]) -> Void) {
@@ -720,9 +709,10 @@ class MapViewController: UIViewController {
     }
     
     func listenFriendsLocation() {
-
-        guard let user = user else {
-            return
+        
+        if listeners?.count != 0 {
+            
+            listeners?.forEach { $0.remove() }
         }
 
         let friends = user.friends
@@ -806,10 +796,6 @@ extension MapViewController: ChoosePetViewDelegate {
         
         self.userCurrentPet = selectedPet
         
-        guard let user = user else {
-            return
-        }
-        
         userManager.updateCurrentPet(userId: user.id, pet: selectedPet) { result in
             
             switch result {
@@ -873,8 +859,7 @@ extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
         
         mapView.addOverlay(polyline, level: .aboveLabels)
         
-        guard let user = user,
-                let location = locations.last?.coordinate,
+        guard let location = locations.last?.coordinate,
               let currentPet = userCurrentPet
         else {
             return
