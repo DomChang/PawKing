@@ -7,6 +7,11 @@
 
 import Foundation
 
+enum UserStatus: String {
+    
+    case unknown = "unknown"
+}
+
 struct User: Codable {
     
     var id: String

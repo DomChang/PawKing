@@ -95,9 +95,10 @@ extension ChatRoomViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         guard let user = user,
-              let otherUser = chatRoooms?[indexPath.row].otherUser else { return }
+              let otherUser = chatRoooms?[indexPath.row].otherUser,
+              let otherUserId = chatRoooms?[indexPath.row].message.otherUserId else { return }
         
-        let messageVC = MessageViewController(user: user, otherUser: otherUser)
+        let messageVC = MessageViewController(user: user, otherUser: otherUser, otherUserId: otherUserId)
         
         navigationController?.pushViewController(messageVC, animated: true)
     }

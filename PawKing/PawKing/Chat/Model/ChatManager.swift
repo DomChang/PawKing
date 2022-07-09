@@ -134,10 +134,10 @@ class ChatManager {
         }
     }
     
-    func fetchMessageHistory(user: User, otherUser: User, completion: @escaping (Result<[Message], Error>) -> Void) {
+    func fetchMessageHistory(user: User, otherUser: User, otherUserId: String, completion: @escaping (Result<[Message], Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.chats.rawValue).document(user.id)
-            .collection(otherUser.id).order(by: "createdTime", descending: false)
+            .collection(otherUserId).order(by: "createdTime", descending: false)
         
         document.getDocuments { snapshots, _ in
 

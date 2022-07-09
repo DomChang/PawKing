@@ -360,7 +360,7 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
         }
 
        let messageVC = MessageViewController(user: user,
-                                             otherUser: otherUser)
+                                             otherUser: otherUser, otherUserId: otherUser.id)
         
 //        let navMessage = UINavigationController(rootViewController: messageVC)
         
