@@ -16,29 +16,29 @@ import Kingfisher
 
 class MapViewController: UIViewController {
     
-    let mapView = MKMapView()
+    private let mapView = MKMapView()
     
-    var locationManager: CLLocationManager?
+    private var locationManager: CLLocationManager?
     
-    var locationAlert: UIAlertController?
+    private var locationAlert: UIAlertController?
     
-    let userLocationButton = UIButton()
+    private let userLocationButton = UIButton()
     
-    let trackButton = UIButton()
+    private let trackButton = UIButton()
     
-    let saveTrackButton = UIButton()
+    private let saveTrackButton = UIButton()
     
-    let deleteTrackButton = UIButton()
+    private let deleteTrackButton = UIButton()
     
-    let strangerButton = UIButton()
+    private let strangerButton = UIButton()
     
-    let notificationButton = UIButton()
+    private let notificationButton = UIButton()
     
-    let choosePetImageView = UIImageView()
+    private let choosePetImageView = UIImageView()
     
-    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
-    var strangersPet: [Pet] = [] {
+    private var strangersPet: [Pet] = [] {
 
         didSet {
             
@@ -46,19 +46,19 @@ class MapViewController: UIViewController {
         }
     }
     
-    var userStoredLocations: [CLLocation] = []
+    private var userStoredLocations: [CLLocation] = []
     
-    let mapManager = MapManager.shared
+    private let mapManager = MapManager.shared
     
-    let userManager = UserManager.shared
+    private let userManager = UserManager.shared
     
     private let lottie = LottieWrapper.shared
     
-    var trackStartTime = Timestamp()
+    private var trackStartTime = Timestamp()
     
     private var user: User
     
-    var userPets: [Pet] = [] {
+    private var userPets: [Pet] = [] {
         didSet {
             if userPets.count == 0 {
                 
@@ -67,7 +67,7 @@ class MapViewController: UIViewController {
         }
     }
     
-    var userCurrentPet: Pet? {
+    private var userCurrentPet: Pet? {
         didSet {
             
             if locationManager?.authorizationStatus == .denied ||
@@ -91,15 +91,15 @@ class MapViewController: UIViewController {
         }
     }
     
-    var friendAnnotationsInfo: [String: UserAnnotation] = [:]
+    private var friendAnnotationsInfo: [String: UserAnnotation] = [:]
     
-    var friendLocations: [String: UserLocation] = [:] {
+    private var friendLocations: [String: UserLocation] = [:] {
         didSet {
             updateAnnotation()
         }
     }
     
-    var listeners: [ListenerRegistration]?
+    private var listeners: [ListenerRegistration]?
     
     init() {
 
@@ -129,27 +129,6 @@ class MapViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         
         setAlertController()
-        
-        if let user = UserManager.shared.currentUser {
-            
-            self.user = user
-        }
-        
-        if Auth.auth().currentUser != nil {
-            
-            fetchUserPets(user: user)
-            listenFriendsLocation()
-
-        } else {
-            userCurrentPet = nil
-            userPets = []
-            listeners = nil
-            friendAnnotationsInfo = [:]
-            friendLocations = [:]
-            trackButton.isHidden = true
-            choosePetImageView.isHidden = true
-            notificationButton.isHidden = true
-        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -173,7 +152,36 @@ class MapViewController: UIViewController {
         mapView.delegate = nil
     }
     
-    func setup() {
+    @objc private func updateData() {
+        
+        if let user = UserManager.shared.currentUser {
+            
+            self.user = user
+        }
+        
+        if Auth.auth().currentUser != nil {
+            
+            fetchUserPets(user: user)
+            listenFriendsLocation()
+
+        } else {
+            userCurrentPet = nil
+            userPets = []
+            listeners = nil
+            friendAnnotationsInfo = [:]
+            friendLocations = [:]
+            trackButton.isHidden = true
+            choosePetImageView.isHidden = true
+            notificationButton.isHidden = true
+        }
+    }
+    
+    private func setup() {
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(updateData),
+                                               name: .updateUser,
+                                               object: nil)
         
         trackButton.isHidden = true
         
@@ -183,7 +191,7 @@ class MapViewController: UIViewController {
         
 //        strangerButtonEnable()
         
-        getUser()
+//        getUser()
         
         locationManager = CLLocationManager()
         locationManager?.delegate = self
@@ -233,7 +241,7 @@ class MapViewController: UIViewController {
         collectionView.isHidden = true
     }
     
-    func style() {
+    private func style() {
         
         mapView.layer.cornerRadius = 20
         mapView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
@@ -267,7 +275,7 @@ class MapViewController: UIViewController {
         collectionView.showsHorizontalScrollIndicator = false
     }
     
-    func layout() {
+    private func layout() {
         
         view.addSubview(mapView)
         view.addSubview(userLocationButton)
@@ -342,27 +350,27 @@ class MapViewController: UIViewController {
 
     }
     
-    private func getUser() {
-        
-        guard let userId = Auth.auth().currentUser?.uid else { return }
-        
-        userManager.fetchUserInfo(userId: userId) { [weak self] result in
-            
-            switch result {
-                
-            case .success(let user):
-                
-                self?.user = user
-                self?.fetchUserPets(user: user)
-                
-            case .failure(let error):
-                
-                self?.lottie.showError(error)
-            }
-        }
-    }
+//    private func getUser() {
+//
+//        guard let userId = Auth.auth().currentUser?.uid else { return }
+//
+//        userManager.fetchUserInfo(userId: userId) { [weak self] result in
+//
+//            switch result {
+//
+//            case .success(let user):
+//
+//                self?.user = user
+//                self?.fetchUserPets(user: user)
+//
+//            case .failure(let error):
+//
+//                self?.lottie.showError(error)
+//            }
+//        }
+//    }
     
-    func focusUserLocation() {
+    private func focusUserLocation() {
     
         let location = mapView.userLocation
         
@@ -373,7 +381,7 @@ class MapViewController: UIViewController {
         mapView.setRegion(region, animated: false)
     }
     
-    func fetchStoredUserLocation(user: User) {
+    private func fetchStoredUserLocation(user: User) {
         
         userManager.fetchUserLocation(userId: user.id) { [weak self] result in
             switch result {
@@ -395,7 +403,7 @@ class MapViewController: UIViewController {
         }
     }
     
-    func fetchUserPets(user: User) {
+    private func fetchUserPets(user: User) {
         
         userManager.fetchPets(userId: user.id) { [weak self] result in
             
@@ -413,7 +421,7 @@ class MapViewController: UIViewController {
         }
     }
     
-    func styleCurrentPetButton() {
+    private func styleCurrentPetButton() {
         
         choosePetImageView.makeRoundDoubleBorder(borderWidth: 2,
                                                  outterColor: .Orange1,

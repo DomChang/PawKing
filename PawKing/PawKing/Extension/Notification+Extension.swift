@@ -12,4 +12,6 @@ extension Notification.Name {
     static let showSignInView = Notification.Name("showSignInView")
     
     static let resetTab = Notification.Name("resetTab")
+    
+    static let updateUser = Notification.Name("updateUser")
 }

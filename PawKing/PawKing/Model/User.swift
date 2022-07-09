@@ -9,7 +9,7 @@ import Foundation
 
 enum UserStatus: String {
     
-    case unknown = "unknown"
+    case unknown
 }
 
 struct User: Codable {
