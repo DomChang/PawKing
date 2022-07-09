@@ -12,10 +12,22 @@ class SettingViewController: UIViewController {
     
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     
+    private let userManager = UserManager.shared
+    
+    private let lottie = LottieWrapper.shared
+    
     private let signOutActionController = UIAlertController(title: "Are you sure you want to sign out?",
                                                      message: nil,
                                                      preferredStyle: .actionSheet)
+    
+    private let deleteActionController = UIAlertController(title: "Are you sure you want to delete account?",
+                                                     message: "All Data from your account will be delete",
+                                                           preferredStyle: .alert)
 
+    private let resignInActionController = UIAlertController(title: "You need to re-sign in to deleteaccount",
+                                                             message: "All Data from your account will be delete",
+                                                                   preferredStyle: .alert)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -32,7 +44,9 @@ class SettingViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
-        setActionSheet()
+        setSignOutActionSheet()
+        
+        setDeleteActionSheet()
     }
     
     private func style() {
@@ -57,47 +71,90 @@ class SettingViewController: UIViewController {
                          trailing: view.trailingAnchor)
     }
     
-    private func setActionSheet() {
+    private func signOut() {
+        
+        userManager.signOut { [weak self] result in
+            
+            switch result {
+                
+            case .success:
+                
+                self?.showSignInView()
+                
+            case .failure(let error):
+                
+                self?.lottie.showError(error)
+            }
+        }
+    }
+    
+    private func setSignOutActionSheet() {
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
         
         signOutActionController.addAction(cancelAction)
         
-        let signOutAction  = UIAlertAction(title: "Confirm", style: .destructive) { _ in
+        let signOutAction  = UIAlertAction(title: "Confirm", style: .destructive) { [weak self] _ in
             
-            let firebaseAuth = Auth.auth()
-            do {
-              try firebaseAuth.signOut()
-    
-                UserManager.shared.currentUser =  User(id: "Guest",
-                                                         name: "Guest",
-                                                         petsId: [],
-                                                         currentPetId: "",
-                                                         userImage: "",
-                                                         description: "",
-                                                         friendPetsId: [],
-                                                         friends: [],
-                                                         recieveRequestsId: [],
-                                                         sendRequestsId: [],
-                                                         blockUsersId: [])
-    
-                Auth.auth().currentUser?.reload()
-    
-                DispatchQueue.main.async {
-                   self.tabBarController?.selectedIndex = 0
-                    NotificationCenter.default.post(name: .showSignInView, object: .none)
-                }
-    
-            } catch let signOutError as NSError {
-              print("Error signing out: %@", signOutError)
-            }
+            self?.signOut()
         }
         signOutActionController.addAction(signOutAction)
     }
     
-    @objc private func dismissAlertController() {
+    private func setDeleteActionSheet() {
         
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        
+        let deleteAction  = UIAlertAction(title: "Confirm", style: .destructive) { [weak self] _ in
+            
+            guard let user = self?.userManager.currentUser else { return }
+            
+            self?.userManager.deleteUser(userId: user.id) { result  in
+                switch result {
+                    
+                case .success:
+                    
+                    self?.showSignInView()
+                    
+                case .failure(let error):
+                    
+                    guard let errorCode = AuthErrorCode.Code(rawValue: error._code) else { return }
+                    
+                    if errorCode == .requiresRecentLogin {
+                        
+                        guard let self = self else { return }
+                        
+                        let okAction = UIAlertAction(title: "Ok", style: .default) { _ in
+                            
+                            self.signOut()
+                        }
+                        
+                        self.resignInActionController.addAction(okAction)
+                        
+                        self.present(self.resignInActionController, animated: true)
+                    }
+                }
+            }
+        }
+        deleteActionController.addAction(deleteAction)
+        deleteActionController.addAction(cancelAction)
+    }
+    
+    @objc private func dismissSignOutAlertController() {
+
         signOutActionController.dismiss(animated: true)
+    }
+    
+    func showSignInView() {
+        
+        DispatchQueue.main.async {
+            
+           self.tabBarController?.selectedIndex = 0
+            
+            NotificationCenter.default.post(name: .resetTab, object: .none)
+            
+            NotificationCenter.default.post(name: .showSignInView, object: .none)
+        }
     }
 }
 
@@ -124,14 +181,17 @@ extension SettingViewController: UITableViewDataSource, UITableViewDelegate {
             
             present(signOutActionController, animated: true) {
                 
-                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissAlertController))
+                let tapGesture = UITapGestureRecognizer(
+                    target: self,
+                    action: #selector(self.dismissSignOutAlertController)
+                )
                 
                 self.signOutActionController.view.superview?.subviews[0].addGestureRecognizer(tapGesture)
             }
             
         case SettingSections.deleteAccount.rawValue:
             
-            return
+            present(deleteActionController, animated: true)
             
         default:
             return

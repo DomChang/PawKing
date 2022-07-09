@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseFirestore
 import FirebaseAuth
 
 private enum Tab {
@@ -20,13 +21,13 @@ private enum Tab {
     
     case profile
 
-    func controller(user: User) -> UIViewController {
+    func controller() -> UIViewController {
 
         var controller: UIViewController
 
         switch self {
 
-        case .map: controller = UINavigationController(rootViewController: MapViewController(user: user))
+        case .map: controller = UINavigationController(rootViewController: MapViewController())
 
         case .explore: controller = UINavigationController(rootViewController: ExploreViewController())
             
@@ -36,7 +37,7 @@ private enum Tab {
             
         case .chat: controller = UINavigationController(rootViewController: ChatRoomViewController())
 
-        case .profile: controller = UINavigationController(rootViewController: ProfileViewController(user: user))
+        case .profile: controller = UINavigationController(rootViewController: ProfileViewController())
             
         }
 
@@ -98,13 +99,21 @@ class TabBarViewController: UITabBarController {
     private let userManager = UserManager.shared
     
     private let photoHelper = PKPhotoHelper()
+    
+    private var listener: ListenerRegistration?
 
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(showSignInView),
                                                name: .showSignInView,
+                                               object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(resetTab),
+                                               name: .resetTab,
                                                object: nil)
         
         view.backgroundColor = .white
@@ -118,10 +127,9 @@ class TabBarViewController: UITabBarController {
         tabBar.isHidden = false
         
         if let userId = Auth.auth().currentUser?.uid {
-            
-//            let userId = "6jRPSQJEw7NWuyZl2BCs"
-            getUser(userId: userId)
-            
+
+            listenUser(userId: userId)
+
         } else {
 
             let user = User(id: "Guest",
@@ -135,11 +143,11 @@ class TabBarViewController: UITabBarController {
                             recieveRequestsId: [],
                             sendRequestsId: [],
                             blockUsersId: [])
-
-            configureUserToTab(user: user)
-            
+  
             UserManager.shared.currentUser = user
         }
+        
+        configureUserToTab()
 
         let tabBarAppearance =  UITabBarAppearance()
         tabBarAppearance.configureWithDefaultBackground()
@@ -175,17 +183,22 @@ class TabBarViewController: UITabBarController {
         }
     }
     
-    @objc func getUser(userId: String) {
+    @objc func listenUser(userId: String) {
         
-        userManager.fetchUserInfo(userId: userId) { [weak self] result in
+        if listener != nil {
+            
+            listener?.remove()
+        }
+        
+        listener = userManager.listenUserInfo(userId: userId) { [weak self] result in
             
             switch result {
                 
             case .success(let user):
                 
-                UserManager.shared.currentUser = user
+                print("===22222")
                 
-                self?.configureUserToTab(user: user)
+                UserManager.shared.currentUser = user
                 
             case .failure(let error):
                 
@@ -193,19 +206,12 @@ class TabBarViewController: UITabBarController {
             }
         }
     }
-    
-//    @objc func didSetCurrentUser() {
-//        
-//        guard let user = userManager.currentUser else { return }
-//        
-//        configureUserToTab(user: user)
-//    }
-    
-    func configureUserToTab(user: User) {
+
+    func configureUserToTab() {
         
         tabBar.isHidden = false
         
-        viewControllers = tabs.map({ $0.controller(user: user) })
+        viewControllers = tabs.map({ $0.controller() })
         
         photoHelper.completionHandler = { [weak self] image in
             
@@ -218,6 +224,11 @@ class TabBarViewController: UITabBarController {
             self?.present(navPublishVC, animated: true)
         }
     }
+    
+    @objc func resetTab() {
+        
+        viewControllers = tabs.map({ $0.controller() })
+    }
 }
 
 extension TabBarViewController: SignInViewDelegate {
@@ -226,12 +237,14 @@ extension TabBarViewController: SignInViewDelegate {
         
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        getUser(userId: uid)
+        listenUser(userId: uid)
     }
     
     func showNewUserConfigure() {
         
         guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        listenUser(userId: uid)
         
         let userConfigVC = UserConfigViewController(uid: uid)
         

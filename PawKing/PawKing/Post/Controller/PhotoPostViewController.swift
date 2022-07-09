@@ -299,7 +299,9 @@ class PhotoPostViewController: UIViewController {
                 
                 let userComment = UserComment(user: user, comment: comment)
                 
-                self?.userComments.append(userComment)
+                if userComment.user.id != "unknown" {
+                    self?.userComments.append(userComment)
+                }
                 
             case .failure(let error):
                 

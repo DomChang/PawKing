@@ -8,6 +8,9 @@
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 import FirebaseStorage
+import FirebaseAuth
+
+// swiftlint:disable file_length
 
 class UserManager {
     
@@ -178,11 +181,11 @@ class UserManager {
         }
     }
     
-    func listenUserInfo(userId: String, completion: @escaping (Result<User, Error>) -> Void) {
+    func listenUserInfo(userId: String, completion: @escaping (Result<User, Error>) -> Void) -> ListenerRegistration {
         
         let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
             
-        document.addSnapshotListener { snapshot, _ in
+        let listener = document.addSnapshotListener { snapshot, _ in
             
             guard let snapshot = snapshot
             
@@ -205,6 +208,8 @@ class UserManager {
             }
             
         }
+        
+        return listener
     }
     
     func fetchUserLocation(userId: String, completion: @escaping (Result<UserLocation, Error>) -> Void) {
@@ -539,7 +544,7 @@ class UserManager {
             "recieveRequestsId": FieldValue.arrayRemove([senderId])
         ], forDocument: recieverDoc)
         
-        batch.commit() { err in
+        batch.commit { err in
             
             if let err = err {
                 
@@ -605,7 +610,7 @@ class UserManager {
             "recieveRequestsId": FieldValue.arrayRemove([senderId])
         ], forDocument: userDoc)
         
-        batch.commit() { err in
+        batch.commit { err in
             
             if let err = err {
                 
@@ -615,6 +620,39 @@ class UserManager {
                 
                 UserManager.shared.currentUser?.recieveRequestsId.removeAll(where: { $0 == senderId })
                 UserManager.shared.currentUser?.friends.append(senderId)
+                
+                completion(.success(()))
+            }
+        }
+    }
+    
+    func removeFriend(userId: String,
+                      friendId: String,
+                      completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let batch = dataBase.batch()
+        
+        let userDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+        
+        let friendDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(friendId)
+        
+        batch.updateData([
+            "friends": FieldValue.arrayRemove([friendId])
+        ], forDocument: userDoc)
+        
+        batch.updateData([
+            "friends": FieldValue.arrayRemove([userId])
+        ], forDocument: friendDoc)
+        
+        batch.commit { err in
+            
+            if let err = err {
+                
+                completion(.failure(err))
+                
+            } else {
+                
+                UserManager.shared.currentUser?.friends.removeAll(where: { $0 == friendId })
                 
                 completion(.success(()))
             }
@@ -668,4 +706,132 @@ class UserManager {
             }
         }
     }
+    
+    func signOut(completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let firebaseAuth = Auth.auth()
+        do {
+          try firebaseAuth.signOut()
+
+            UserManager.shared.currentUser =  User(id: "Guest",
+                                                     name: "Guest",
+                                                     petsId: [],
+                                                     currentPetId: "",
+                                                     userImage: "",
+                                                     description: "",
+                                                     friendPetsId: [],
+                                                     friends: [],
+                                                     recieveRequestsId: [],
+                                                     sendRequestsId: [],
+                                                     blockUsersId: [])
+
+            Auth.auth().currentUser?.reload()
+
+            completion(.success(()))
+
+        } catch let signOutError {
+            
+            completion(.failure(signOutError))
+        }
+    }
+    
+    func deleteUser(userId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        guard let user = currentUser else { return }
+        
+        let friends = user.friends
+        
+        let batch = dataBase.batch()
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        let dispatchQueue = DispatchQueue.global()
+        
+        dispatchQueue.async { [weak self] in
+        
+            Auth.auth().currentUser?.delete(completion: { error in
+
+                if let error = error {
+
+                completion(.failure(error))
+
+                } else {
+                    
+                    semaphore.signal()
+                }
+            })
+            semaphore.wait()
+            
+            friends.forEach { friendId in
+                
+                if let friendDoc = self?.dataBase.collection(FirebaseCollection.users.rawValue).document(friendId) {
+                    
+                    batch.updateData([
+                        
+                        "friends": FieldValue.arrayRemove([userId])
+                    
+                    ], forDocument: friendDoc)
+                    
+                    semaphore.signal()
+                }
+                semaphore.wait()
+            }
+            
+            if let postDoc = self?.dataBase.collection(FirebaseCollection.posts.rawValue)
+                .whereField("userId", isEqualTo: userId) {
+                
+                postDoc.getDocuments { snapshots, _ in
+                    
+                        snapshots?.documents.forEach({ snapshot in
+                            
+                            batch.deleteDocument(snapshot.reference)
+                            
+                        })
+                    semaphore.signal()
+                }
+            }
+            semaphore.wait()
+            
+            let userDoc = self?.dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+            
+            let unkownUser = User(id: "unknown",
+                            name: "Unknown",
+                            petsId: [],
+                            currentPetId: "",
+                            userImage: "",
+                            description: "",
+                            friendPetsId: [],
+                            friends: [],
+                            recieveRequestsId: [],
+                            sendRequestsId: [],
+                            blockUsersId: [])
+            
+            do {
+                if let userDoc = userDoc {
+                    try batch.setData(from: unkownUser, forDocument: userDoc)
+                }
+            } catch {
+                completion(.failure(FirebaseError.deleteUserError))
+            }
+            
+            if let userLocationDoc = self?.dataBase.collection(FirebaseCollection.userLocations.rawValue)
+                .document(userId) {
+                
+                batch.deleteDocument(userLocationDoc)
+            }
+            
+            batch.commit { error in
+                if error != nil {
+                    
+                    completion(.failure(FirebaseError.deleteUserError))
+                } else {
+                    
+                    Auth.auth().currentUser?.reload()
+                    completion(.success(()))
+                }
+            }
+        }
+    }
 }
+
+// swiftlint:enable file_length

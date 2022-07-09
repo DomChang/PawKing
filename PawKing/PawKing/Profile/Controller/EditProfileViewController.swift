@@ -124,14 +124,16 @@ extension EditProfileViewController: UITableViewDataSource, UITableViewDelegate 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        guard let userPet = userPets?[indexPath.row] else { return }
-        
-        let petConfigVC = PetConfigViewController(user: user,
-                                                  editPet: userPet,
-                                                  isInitailSet: false,
-                                                  isEdit: true)
-        
-        navigationController?.pushViewController(petConfigVC, animated: true)
+        if indexPath.section == 1 {
+            guard let userPet = userPets?[indexPath.row] else { return }
+            
+            let petConfigVC = PetConfigViewController(user: user,
+                                                      editPet: userPet,
+                                                      isInitailSet: false,
+                                                      isEdit: true)
+            
+            navigationController?.pushViewController(petConfigVC, animated: true)
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

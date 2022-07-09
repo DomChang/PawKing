@@ -57,6 +57,8 @@ enum FirebaseError: Error {
     
     case decodeMessageError
     
+    case deleteUserError
+    
     var errorMessage: String {
         
         switch self {
@@ -156,6 +158,10 @@ enum FirebaseError: Error {
         case .decodeMessageError:
             
             return "無法解析訊息"
+            
+        case .deleteUserError:
+            
+            return "Delete user error"
         }
     }
 }

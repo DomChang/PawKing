@@ -10,4 +10,6 @@ import Foundation
 extension Notification.Name {
     
     static let showSignInView = Notification.Name("showSignInView")
+    
+    static let resetTab = Notification.Name("resetTab")
 }
