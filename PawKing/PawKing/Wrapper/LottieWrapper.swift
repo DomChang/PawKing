@@ -40,8 +40,6 @@ class LottieWrapper {
     
     func startLoading() {
         
-        currentWindow?.isUserInteractionEnabled = false
-        
         blurView.frame = CGRect(x: 0, y: 0, width: width, height: height)
         
         blurView.backgroundColor = .BattleGrey?.withAlphaComponent(0.3)
@@ -57,6 +55,9 @@ class LottieWrapper {
         currentWindow?.addSubview(loadingView)
         
         DispatchQueue.main.async {
+            
+            self.currentWindow?.isUserInteractionEnabled = false
+            
             self.loadingView.play()
         }
         
@@ -65,9 +66,9 @@ class LottieWrapper {
     
     func stopLoading() {
         
-        currentWindow?.isUserInteractionEnabled = true
-        
         DispatchQueue.main.async {
+            
+            self.currentWindow?.isUserInteractionEnabled = true
             
             self.loadingView.removeFromSuperview()
 

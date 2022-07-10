@@ -564,13 +564,13 @@ class UserManager {
             
             if let err = err {
                 
-                print("Error writing batch \(err)")
+                completion(.failure(err))
                 
             } else {
                 
 //                UserManager.shared.currentUser?.sendRequestsId.removeAll(where: { $0 == recieverId })
                 
-                print("Batch write succeeded.")
+                completion(.success(()))
             }
         }
     }
@@ -677,23 +677,35 @@ class UserManager {
     
     func addBlockUser(userId: String, blockId: String, completion: @escaping (Result<Void, Error>) -> Void) {
         
-        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+        let batch = dataBase.batch()
         
-        document.updateData([
+        let userDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+        
+        batch.updateData([
             
             "blockUsersId": FieldValue.arrayUnion([blockId]),
             "recieveRequestsId": FieldValue.arrayRemove([blockId]),
+            "sendRequestsId": FieldValue.arrayRemove([blockId]),
             "friends": FieldValue.arrayRemove([blockId])
             
-        ]) { error in
+        ], forDocument: userDoc)
+        
+        let blockDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(blockId)
+        
+        batch.updateData([
+            
+            "recieveRequestsId": FieldValue.arrayRemove([userId]),
+            "friends": FieldValue.arrayRemove([userId])
+            
+        ], forDocument: blockDoc)
+        
+        batch.commit { error in
             
             if let error = error {
                 
                 completion(.failure(error))
                 
             } else {
-                
-//                UserManager.shared.currentUser?.blockUsersId.append(blockId)
                 
                 completion(.success(()))
             }

@@ -12,6 +12,8 @@ protocol PhotoItemCellDelegate {
 //    func didTapPetImage()
     
     func didTapLike(for cell: PhotoPostCell, like: Bool)
+    
+    func didTapAction()
 }
 
 class PhotoPostCell: UITableViewCell {
@@ -67,6 +69,8 @@ class PhotoPostCell: UITableViewCell {
         likeButton.addTarget(self, action: #selector(didTapLikeButton), for: .touchUpInside)
         
         likeButton.isHidden = true
+        
+        settingButton.addTarget(self, action: #selector(didTapAction), for: .touchUpInside)
     }
     
     private func styleObject() {
@@ -266,8 +270,8 @@ class PhotoPostCell: UITableViewCell {
         likeButton.isSelected = false
     }
     
-//    @objc func didTapPetImage() {
-//        
-//        self.delegate?.didTapPetImage()
-//    }
+    @objc func didTapAction() {
+        
+        self.delegate?.didTapAction()
+    }
 }

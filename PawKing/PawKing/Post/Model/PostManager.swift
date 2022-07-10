@@ -253,6 +253,35 @@ class PostManager {
         }
     }
     
+    func deletePost(post: Post, completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let batch = dataBase.batch()
+        
+        let postDoc = dataBase.collection(FirebaseCollection.posts.rawValue).document(post.id)
+        
+        batch.deleteDocument(postDoc)
+        
+        let petDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(post.userId)
+            .collection(FirebaseCollection.pets.rawValue).document(post.petId)
+        
+        batch.updateData([
+            "postsId": FieldValue.arrayRemove([post.id])
+        ], forDocument: petDoc)
+        
+        batch.commit { err in
+            
+            if let err = err {
+                
+                completion(.failure(err))
+                
+            } else {
+                
+                completion(.success(()))
+            }
+        }
+        
+    }
+    
     func updatePostComment(postId: String,
                            commentId: String,
                            completion: @escaping (Result<Void, Error>) -> Void) {
