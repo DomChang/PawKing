@@ -521,6 +521,8 @@ class MapViewController: UIViewController {
                                                                 trackInfo: trackInfo,
                                                                 shouldEdit: true)
                 
+                NotificationCenter.default.post(name: .updateTrackHistory, object: .none)
+                
                 self?.navigationController?.pushViewController(trackHistoryVC, animated: true)
                 
             case .failure(let error):

@@ -46,6 +46,7 @@
 		B698DDBD2858B8CC0009077E /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDBC2858B8CC0009077E /* ProfileViewController.swift */; };
 		B698DDC02858B99F0009077E /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDBF2858B99F0009077E /* UIImage+Extension.swift */; };
 		B698DDC22858CE9D0009077E /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDC12858CE9D0009077E /* UIView+Extension.swift */; };
+		B69C562A287A71A7004DD552 /* UIRefreshControl+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69C5629287A71A7004DD552 /* UIRefreshControl+Extension.swift */; };
 		B6A91D692868372B0049253A /* NoStrangerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D682868372B0049253A /* NoStrangerCell.swift */; };
 		B6A91D6B2868909F0049253A /* PetItemBackReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D6A2868909F0049253A /* PetItemBackReusableView.swift */; };
 		B6A91D6D28697CCC0049253A /* ProfileInfoReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D6C28697CCC0049253A /* ProfileInfoReusableView.swift */; };
@@ -140,6 +141,7 @@
 		B698DDBC2858B8CC0009077E /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		B698DDBF2858B99F0009077E /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		B698DDC12858CE9D0009077E /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		B69C5629287A71A7004DD552 /* UIRefreshControl+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIRefreshControl+Extension.swift"; sourceTree = "<group>"; };
 		B6A91D682868372B0049253A /* NoStrangerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoStrangerCell.swift; sourceTree = "<group>"; };
 		B6A91D6A2868909F0049253A /* PetItemBackReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetItemBackReusableView.swift; sourceTree = "<group>"; };
 		B6A91D6C28697CCC0049253A /* ProfileInfoReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoReusableView.swift; sourceTree = "<group>"; };
@@ -430,6 +432,7 @@
 				B66A15D22867421800DF2663 /* UIImageView+Extension.swift */,
 				B6A91D71286ACFDE0049253A /* Date+Extension.swift */,
 				B6A91D7C286C827B0049253A /* Notification+Extension.swift */,
+				B69C5629287A71A7004DD552 /* UIRefreshControl+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -770,6 +773,7 @@
 				B66A15BB28648B4900DF2663 /* SearchResultCell.swift in Sources */,
 				B651EDD428717AAC003A5F2B /* EditUserCell.swift in Sources */,
 				B6E86AA0285F016A002B8C9A /* Profile.swift in Sources */,
+				B69C562A287A71A7004DD552 /* UIRefreshControl+Extension.swift in Sources */,
 				B6A91D7A286BE5A60049253A /* SignInViewController.swift in Sources */,
 				B6ABE8E2285A0B7400B1A977 /* MapManager.swift in Sources */,
 				B6A91D7D286C827B0049253A /* Notification+Extension.swift in Sources */,

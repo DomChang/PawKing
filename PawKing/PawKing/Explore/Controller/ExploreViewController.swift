@@ -153,6 +153,8 @@ class ExploreViewController: UIViewController {
         user = UserManager.shared.currentUser
         
         guard let blockIds = user?.blockUsersId else { return }
+            
+        refreshControl.beginRefreshingWithAnimation()
         
         postManager.fetchAllPosts(blockIds: blockIds) { [weak self] result in
             

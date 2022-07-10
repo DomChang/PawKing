@@ -14,4 +14,6 @@ extension Notification.Name {
     static let resetTab = Notification.Name("resetTab")
     
     static let updateUser = Notification.Name("updateUser")
+    
+    static let updateTrackHistory = Notification.Name("updateTrackHistory")
 }
