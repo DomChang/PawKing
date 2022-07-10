@@ -196,7 +196,7 @@ class UserPhotoWallViewController: UIViewController {
                     
                     self?.lottie.stopLoading()
                     
-                    self?.lottie.showError(error)
+                    self?.lottie.showError(error: error)
                     
                     semaphore.signal()
                 }
@@ -408,7 +408,7 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
         guard let user = user,
               let otherUser = otherUser else {
             
-            lottie.showError(nil)
+            lottie.showError(error: nil)
             
             return
         }
@@ -438,7 +438,7 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
                         
                     case .failure(let error):
                         
-                        self?.lottie.showError(error)
+                        self?.lottie.showError(error: error)
                     }
                 }
             }
@@ -460,7 +460,7 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
                     
                 case .failure(let error):
                     
-                    self?.lottie.showError(error)
+                    self?.lottie.showError(error: error)
                 }
             }
         }

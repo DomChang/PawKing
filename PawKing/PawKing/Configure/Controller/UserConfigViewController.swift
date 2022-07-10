@@ -154,6 +154,8 @@ extension UserConfigViewController: UserConfigCellDelegate {
     
     func didTapNext(from cell: UserConfigCell) {
         
+        cell.nextButtonDisable()
+        
         lottie.startLoading()
         
         guard let userName = cell.userNameTextfield.text,
@@ -161,7 +163,16 @@ extension UserConfigViewController: UserConfigCellDelegate {
               var user = user
         else {
             lottie.stopLoading()
-            lottie.showError(nil)
+            cell.nextButtonEnable()
+            lottie.showError(error: nil)
+            return
+        }
+        
+        guard cell.userNameTextfield.text != "" else {
+            
+            lottie.showError(errorMessage: "Username empty")
+            lottie.stopLoading()
+            cell.nextButtonEnable()
             return
         }
         
@@ -194,19 +205,21 @@ extension UserConfigViewController: UserConfigCellDelegate {
                     case .success:
                         
                         self?.lottie.stopLoading()
-                        
+                        cell.nextButtonEnable()
                         self?.showPetConfigVC(user: user)
                         
                     case .failure(let error):
                         
                         self?.lottie.stopLoading()
-                        self?.lottie.showError(error)
+                        cell.nextButtonEnable()
+                        self?.lottie.showError(error: error)
                     }
                 }
             case .failure(let error):
                 
                 self?.lottie.stopLoading()
-                self?.lottie.showError(error)
+                cell.nextButtonEnable()
+                self?.lottie.showError(error: error)
             }
         }
     }
@@ -215,28 +228,4 @@ extension UserConfigViewController: UserConfigCellDelegate {
         
         photoHelper.presentActionSheet(from: self)
     }
-    
-//    func textFieldDidChange(From textField: UITextField) {
-//
-//        if textField.text != "" && isPhotoExist {
-//
-//            userName = textField.text
-//
-//            confirmButtonEnable()
-//
-//            isNameExit = true
-//
-//        } else if textField.text != "" {
-//
-//            userName = textField.text
-//
-//            isNameExit = true
-//
-//        } else {
-//
-//            isNameExit = false
-//
-//            confirmButtonDisable()
-//        }
-//    }
 }

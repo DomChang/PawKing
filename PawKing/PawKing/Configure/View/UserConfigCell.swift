@@ -130,4 +130,16 @@ class UserConfigCell: UITableViewCell {
         
         self.delegate?.didTapNext(from: self)
     }
+    
+    func nextButtonEnable() {
+        
+        nextButton.isEnabled = true
+        nextButton.backgroundColor = .Orange1
+    }
+    
+    func nextButtonDisable() {
+        
+        nextButton.isEnabled = false
+        nextButton.backgroundColor = .Gray1
+    }
 }

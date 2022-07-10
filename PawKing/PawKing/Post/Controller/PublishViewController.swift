@@ -296,7 +296,7 @@ final class PublishViewController: UIViewController {
         guard let user = user,
                 let selectedPet = selectedPet
         else {
-            lottie.showError(nil)
+            lottie.showError(error: nil)
             lottie.stopLoading()
             return
         }
@@ -327,7 +327,7 @@ final class PublishViewController: UIViewController {
             case .failure(let error):
                 
                 self?.lottie.stopLoading()
-                self?.lottie.showError(error)
+                self?.lottie.showError(error: error)
                 self?.submitButtonEnable()
             }
         }

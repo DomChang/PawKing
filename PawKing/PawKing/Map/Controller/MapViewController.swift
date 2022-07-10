@@ -558,7 +558,7 @@ class MapViewController: UIViewController {
             case .failure(let error):
                 
                 self?.lottie.stopLoading()
-                self?.lottie.showError(error)
+                self?.lottie.showError(error: error)
             }
         }
     }
@@ -612,7 +612,7 @@ class MapViewController: UIViewController {
                 
             case .failure(let error):
                 print(error)
-                self?.lottie.showError(error)
+                self?.lottie.showError(error: error)
             }
         }
     }

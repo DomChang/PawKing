@@ -114,7 +114,7 @@ extension EditProfileViewController: EditUserCellDelegate {
             case .failure(let error):
                 
                 self?.lottie.stopLoading()
-                self?.lottie.showError(error)
+                self?.lottie.showError(error: error)
             }
         }
     }

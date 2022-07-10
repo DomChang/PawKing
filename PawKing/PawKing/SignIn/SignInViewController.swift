@@ -276,7 +276,7 @@ class SignInViewController: UIViewController {
             
             signInButtonEnable()
             lottie.stopLoading()
-            lottie.showError(nil)
+            lottie.showError(error: nil)
             return
         }
         
@@ -284,7 +284,7 @@ class SignInViewController: UIViewController {
             if let error = error {
                 
                 self?.signInButtonEnable()
-                self?.lottie.showError(error)
+                self?.lottie.showError(error: error)
                 self?.lottie.stopLoading()
                 
             } else {
@@ -309,7 +309,7 @@ class SignInViewController: UIViewController {
                         
                         self?.lottie.stopLoading()
                         
-                        self?.lottie.showError(nil)
+                        self?.lottie.showError(error: nil)
                         print("Please Sign Up First!")
                     }
                 })
@@ -599,7 +599,7 @@ extension SignInViewController: RegisterViewDelegate {
                 case .failure(let error):
                     
                     self?.lottie.stopLoading()
-                    self?.lottie.showError(error)
+                    self?.lottie.showError(error: error)
                 }
             }
         }
