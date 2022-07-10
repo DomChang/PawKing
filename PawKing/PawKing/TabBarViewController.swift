@@ -100,6 +100,10 @@ class TabBarViewController: UITabBarController {
     
     private let photoHelper = PKPhotoHelper()
     
+    private let alertController = UIAlertController(title: "No Pet",
+                                                    message: "Cannot post with no pet, please add pet first!",
+                                                    preferredStyle: .alert)
+    
     private var listener: ListenerRegistration?
 
     override func viewDidLoad() {
@@ -125,6 +129,13 @@ class TabBarViewController: UITabBarController {
         delegate = self
         
         tabBar.isHidden = false
+        
+        let cancelAction = UIAlertAction(title: "Ok", style: .cancel, handler: { _ in
+            
+            self.selectedIndex = 4
+        })
+        
+        alertController.addAction(cancelAction)
         
         if let userId = Auth.auth().currentUser?.uid {
 
@@ -267,7 +278,16 @@ extension TabBarViewController: UITabBarControllerDelegate {
             return true
         }
         
+        let user = UserManager.shared.currentUser
+        
         if viewControllers?.firstIndex(of: viewController) == 2 {
+            
+            if user?.petsId.count == 0 {
+                
+                present(alertController, animated: true)
+                
+                return false
+            }
             
             photoHelper.presentActionSheet(from: self)
             

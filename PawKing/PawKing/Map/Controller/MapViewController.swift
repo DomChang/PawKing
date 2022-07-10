@@ -72,7 +72,8 @@ class MapViewController: UIViewController {
             
             if locationManager?.authorizationStatus == .denied ||
                 locationManager?.authorizationStatus == .restricted ||
-                locationManager?.authorizationStatus == .notDetermined {
+                locationManager?.authorizationStatus == .notDetermined ||
+                user.petsId.isEmpty {
                 
                 trackButton.isHidden = true
             } else {
@@ -99,7 +100,7 @@ class MapViewController: UIViewController {
         }
     }
     
-    private var listeners: [ListenerRegistration]?
+    private var listeners: [ListenerRegistration] = []
     
     init() {
 
@@ -129,6 +130,11 @@ class MapViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         
         setAlertController()
+        
+        if Auth.auth().currentUser != nil {
+            
+            listenFriendsLocation()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -142,7 +148,9 @@ class MapViewController: UIViewController {
         
         navigationController?.navigationBar.isHidden = false
         
-        listeners?.forEach { $0.remove() }
+        listeners.forEach { $0.remove() }
+        
+        mapView.removeAnnotations(mapView.annotations)
         
         locationAlert = nil
     }
@@ -167,7 +175,7 @@ class MapViewController: UIViewController {
         } else {
             userCurrentPet = nil
             userPets = []
-            listeners = nil
+            listeners.forEach { $0.remove() }
             friendAnnotationsInfo = [:]
             friendLocations = [:]
             trackButton.isHidden = true
@@ -328,11 +336,11 @@ class MapViewController: UIViewController {
                               height: 45,
                               padding: UIEdgeInsets(top: 80, left: 0, bottom: 0, right: 35))
         
-        collectionView.anchor(leading: view.leadingAnchor,
-                              bottom: view.safeAreaLayoutGuide.bottomAnchor,
+        collectionView.anchor(top: strangerButton.bottomAnchor,
+                              leading: view.leadingAnchor,
                               trailing: view.trailingAnchor,
                               height: 150,
-                              padding: UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0))
+                              padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0))
         
         choosePetImageView.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,
                                centerX: view.centerXAnchor,
@@ -624,7 +632,7 @@ class MapViewController: UIViewController {
                 trackButton.isHidden = strangerButton.isSelected
             }
             
-            if !trackButton.isSelected {
+            if !trackButton.isSelected || !user.petsId.isEmpty {
                 choosePetImageView.isHidden = strangerButton.isSelected
             }
         }
@@ -723,9 +731,9 @@ class MapViewController: UIViewController {
     
     func listenFriendsLocation() {
         
-        if listeners?.count != 0 {
+        if listeners.count != 0 {
             
-            listeners?.forEach { $0.remove() }
+            listeners.forEach { $0.remove() }
         }
 
         let friends = user.friends
@@ -745,16 +753,13 @@ class MapViewController: UIViewController {
                     print(error)
                 }
             }
-            listeners?.append(listener)
+            listeners.append(listener)
         }
     }
     
     func updateAnnotation() {
         
-        for annotation in mapView.annotations {
-            
-            mapView.removeAnnotation(annotation)
-        }
+        mapView.removeAnnotations(mapView.annotations)
         
         for friend in friendLocations.values {
             

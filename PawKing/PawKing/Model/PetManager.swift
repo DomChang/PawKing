@@ -210,4 +210,84 @@ class PetManager {
             }
         }
     }
+    
+    func deletePet(userId: String,
+                   petId: String,
+                   completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let batch = dataBase.batch()
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        let dispatchQueue = DispatchQueue.global()
+        
+        dispatchQueue.async { [weak self] in
+            
+            guard let self = self else { return }
+            
+            let trackDoc = self.dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+                .collection(FirebaseCollection.tracks.rawValue).whereField("petId", isEqualTo: petId)
+            
+            trackDoc.getDocuments { snapshots, _ in
+                
+                    snapshots?.documents.forEach({ snapshot in
+                        
+                        batch.deleteDocument(snapshot.reference)
+                        
+                    })
+                semaphore.signal()
+            }
+            semaphore.wait()
+            
+            let postDoc = self.dataBase.collection(FirebaseCollection.posts.rawValue).whereField("petId", isEqualTo: petId)
+            
+            postDoc.getDocuments { snapshots, _ in
+                
+                    snapshots?.documents.forEach({ snapshot in
+                        
+                        batch.deleteDocument(snapshot.reference)
+                        
+                    })
+                semaphore.signal()
+            }
+            semaphore.wait()
+            
+            let locationDoc = self.dataBase.collection(FirebaseCollection.userLocations.rawValue).whereField("currentPetId", isEqualTo: petId)
+            
+            locationDoc.getDocuments { snapshots, _ in
+                
+                    snapshots?.documents.forEach({ snapshot in
+                        
+                        batch.deleteDocument(snapshot.reference)
+                        
+                    })
+                semaphore.signal()
+            }
+            semaphore.wait()
+            
+            let userDoc = self.dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+            
+            batch.updateData([
+                
+                "petsId": FieldValue.arrayRemove([petId])
+            
+            ], forDocument: userDoc)
+            
+            let petDoc = self.dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+                .collection(FirebaseCollection.pets.rawValue).document(petId)
+            
+            batch.deleteDocument(petDoc)
+            
+            batch.commit { error in
+                
+                if let error = error {
+                    
+                    completion(.failure(error))
+                } else {
+                    
+                    completion(.success(()))
+                }
+            }
+        }
+    }
 }
