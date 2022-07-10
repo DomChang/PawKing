@@ -21,15 +21,20 @@ class TrackHostoryCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        styleObject()
+        layout()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configureCell(pet: Pet, trackInfo: TrackInfo) {
+    private func styleObject() {
         
         contentView.backgroundColor = .Blue2
+    }
+    
+    private func layout() {
         
         let vStack = UIStackView(arrangedSubviews: [dateLabel, distanceLabel, petNameLabel])
         
@@ -60,6 +65,10 @@ class TrackHostoryCell: UICollectionViewCell {
         petNameLabel.backgroundColor = .Blue1
         petNameLabel.layer.cornerRadius = 5
         petNameLabel.layer.masksToBounds = true
+        
+    }
+    
+    func configureCell(pet: Pet, trackInfo: TrackInfo) {
         
         petNameLabel.text = pet.name
         
