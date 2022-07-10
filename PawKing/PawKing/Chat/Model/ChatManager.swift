@@ -209,4 +209,48 @@ class ChatManager {
             }
         }
     }
+    
+    func removeChat(userId: String, otherUserId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let batch = dataBase.batch()
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        let dispatchQueue = DispatchQueue.global()
+        
+        dispatchQueue.async { [weak self] in
+            
+            if let messageDoc = self?.dataBase.collection(FirebaseCollection.chats.rawValue).document(userId)
+                .collection(otherUserId) {
+                
+                messageDoc.getDocuments { snapshots, _ in
+                    
+                    snapshots?.documents.forEach({ snapshot in
+                        
+                        batch.deleteDocument(snapshot.reference)
+                        
+                    })
+                    semaphore.signal()
+                }
+            }
+            semaphore.wait()
+            
+            if let recentDoc = self?.dataBase.collection(FirebaseCollection.chats.rawValue).document(userId)
+                .collection(FirebaseCollection.recentMessages.rawValue).document(otherUserId) {
+                
+                batch.deleteDocument(recentDoc)
+            }
+            
+            batch.commit { error in
+                
+                if let error = error {
+                    
+                    completion(.failure(error))
+                } else {
+                    
+                    completion(.success(()))
+                }
+            }
+        }
+    }
 }
