@@ -18,19 +18,21 @@ class RegisterViewController: UIViewController {
 
     var delegate: RegisterViewDelegate?
     
-    let userManager = UserManager.shared
+    private let userManager = UserManager.shared
+    
+    private let lottie = LottieWrapper.shared
     
     private let welcomeImageView = UIImageView()
     
-    let signUpTitleLabel = UILabel()
+    private let signUpTitleLabel = UILabel()
     
-    let emailTextField = InputTextField()
+    private let emailTextField = InputTextField()
     
-    let passwordTextField = InputTextField()
+    private let passwordTextField = InputTextField()
     
-    let comfirmPasswordTextField = InputTextField()
+    private let comfirmPasswordTextField = InputTextField()
     
-    let signUpButton = UIButton()
+    private let signUpButton = UIButton()
     
     private let policyLabel = UILabel()
     
@@ -203,35 +205,55 @@ class RegisterViewController: UIViewController {
     
     @objc func didTapSignUp() {
         
+        signUpButtonDisable()
+        
         guard let email = emailTextField.text,
               let password = passwordTextField.text,
               let comfirmPassword = comfirmPasswordTextField.text
         else {
+            signUpButtonEnable()
+            
             return
         }
         
-        guard password == comfirmPassword else { return }
+        guard password == comfirmPassword else {
+            
+            signUpButtonEnable()
+            return
+        }
+        
+        lottie.startLoading()
         
         Auth.auth().createUser(withEmail: email, password: password) { [weak self] authResult, error in
             
             if let error = error {
 
                 print(error.localizedDescription)
+                self?.signUpButtonEnable()
+                
+                self?.lottie.stopLoading()
 
             } else {
                 
-                guard let uid = authResult?.user.uid else { return }
+                guard let uid = authResult?.user.uid else {
+                    self?.signUpButtonEnable()
+                    self?.lottie.stopLoading()
+                    return
+                }
                 
                 self?.userManager.checkUserExist(uid: uid, completion: { isExit in
                     
                     if isExit {
                         
                         print("This account already exist")
-                        
+                        self?.signUpButtonEnable()
+                        self?.lottie.stopLoading()
                         return
                         
                     } else {
                         
+                        self?.signUpButtonEnable()
+                        self?.lottie.stopLoading()
                         self?.dismiss(animated: true, completion: {
                             
                             self?.delegate?.didFinishRegister(uid: uid)
@@ -252,5 +274,17 @@ class RegisterViewController: UIViewController {
         
         let eulaVC = EULAViewController()
         present(eulaVC, animated: true)
+    }
+    
+    private func signUpButtonEnable() {
+        
+        signUpButton.isEnabled = true
+        signUpButton.backgroundColor = .Orange1
+    }
+    
+    private func signUpButtonDisable() {
+        
+        signUpButton.isEnabled = false
+        signUpButton.backgroundColor = .Gray1
     }
 }
