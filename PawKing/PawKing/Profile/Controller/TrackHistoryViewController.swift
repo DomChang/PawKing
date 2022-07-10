@@ -45,6 +45,8 @@ class TrackHistoryViewController: UIViewController {
     
     private let updateButton = UIButton()
     
+    private let actionController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+    
     init(pet: Pet, trackInfo: TrackInfo, shouldEdit: Bool) {
         
         self.pet = pet
@@ -78,7 +80,7 @@ class TrackHistoryViewController: UIViewController {
         tabBarController?.tabBar.isHidden = false
     }
     
-    func setup() {
+    private func setup() {
         
         navigationItem.title = "\(trackInfo.startTime.dateValue().displayTimeInNormalStyle())"
         
@@ -89,6 +91,8 @@ class TrackHistoryViewController: UIViewController {
         petImageView.layer.borderColor = UIColor.white.cgColor
         
         petNameLabel.text = pet.name
+        
+        settingButton.addTarget(self, action: #selector(didTapSetting), for: .touchUpInside)
         
         noteTextView.delegate = self
         noteTextView.isScrollEnabled = false
@@ -164,9 +168,11 @@ class TrackHistoryViewController: UIViewController {
         
         drawTrack()
         setAnnotation()
+        
+        setActionSheet()
     }
     
-    func style() {
+    private func style() {
         
         view.backgroundColor = .white
         
@@ -187,7 +193,7 @@ class TrackHistoryViewController: UIViewController {
         updateButton.layer.cornerRadius = 4
     }
     
-    func layout() {
+    private func layout() {
         
         let hStack = UIStackView(arrangedSubviews: [petImageView, petNameLabel, settingButton])
         hStack.axis = .horizontal
@@ -298,7 +304,7 @@ class TrackHistoryViewController: UIViewController {
         scrollView.addSubview(topView)
     }
     
-    @objc func didTapUpdateNote() {
+    @objc private func didTapUpdateNote() {
         
         lottie.startLoading()
         
@@ -325,7 +331,60 @@ class TrackHistoryViewController: UIViewController {
         }
     }
     
-    func drawTrack() {
+    @objc private func didTapSetting() {
+        
+        present(actionController, animated: true) {
+            
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissAlertController))
+            
+            self.actionController.view.superview?.subviews[0].addGestureRecognizer(tapGesture)
+        }
+    }
+    
+    @objc private func dismissAlertController() {
+        
+        actionController.dismiss(animated: true)
+    }
+    
+    private func setActionSheet() {
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        
+        let deleteAlert  = UIAlertAction(title: "Delete Track", style: .destructive) { [weak self] _ in
+            
+            guard let self = self,
+                  let userId = UserManager.shared.currentUser?.id
+            else { return }
+            
+            self.lottie.startLoading()
+            
+            self.mapManager.deleteTrack(userId: userId,
+                                        petId: self.trackInfo.petId,
+                                        trackId: self.trackInfo.id) { result in
+                switch result {
+                    
+                case .success:
+                    
+                    self.lottie.stopLoading()
+                    
+                    NotificationCenter.default.post(name: .updateUser, object: .none)
+                    
+                    self.navigationController?.popViewController(animated: true)
+                    
+                case .failure(let error):
+                    
+                    self.lottie.stopLoading()
+                    
+                    self.lottie.showError(error)
+                }
+            }
+        }
+        
+        actionController.addAction(deleteAlert)
+        actionController.addAction(cancelAction)
+    }
+    
+    private func drawTrack() {
         
         let coordinates = trackInfo.track.map { $0.transferToCoordinate2D() }
 
@@ -349,7 +408,7 @@ class TrackHistoryViewController: UIViewController {
         mapView.setRegion(MKCoordinateRegion(regionRect), animated: true)
     }
     
-    func setAnnotation() {
+    private func setAnnotation() {
         
         guard let startPoint = trackInfo.track.first,
                 let endPoint = trackInfo.track.last else { return }

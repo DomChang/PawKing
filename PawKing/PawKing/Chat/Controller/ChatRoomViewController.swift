@@ -31,16 +31,6 @@ class ChatRoomViewController: UIViewController {
         layout()
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//
-//        if let user = UserManager.shared.currentUser {
-//
-//            self.user = user
-//
-//            getChatRooms()
-//        }
-//    }
-    
     private func setup() {
         
         getChatRooms()
@@ -126,5 +116,35 @@ extension ChatRoomViewController: UITableViewDataSource, UITableViewDelegate {
         cell.configureCell(user: chatRoom.otherUser, recentMessage: chatRoom.message)
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView,
+                   commit editingStyle: UITableViewCell.EditingStyle,
+                   forRowAt indexPath: IndexPath) {
+        
+        if editingStyle == .delete {
+            
+            guard let user = user  else { return }
+            
+            let otherUserId = chatRoooms[indexPath.row].message.otherUserId
+
+            chatRoooms.remove(at: indexPath.row)
+
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            
+            chatManager.removeChat(userId: user.id, otherUserId: otherUserId) { result in
+                    
+                switch result {
+                    
+                case .success:
+                    
+                    print("Chat deleted")
+                    
+                case .failure(let error):
+                    
+                    print(error)
+                }
+            }
+        }
     }
 }

@@ -32,6 +32,8 @@ class PetConfigViewController: UIViewController {
     
     private var isEdit: Bool
     
+    private let deleteActionController = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+    
     var petImage: UIImage? {
         didSet {
             tableView.reloadData()
@@ -61,7 +63,7 @@ class PetConfigViewController: UIViewController {
         layout()
     }
     
-    func setup() {
+    private func setup() {
         
         if isEdit {
             
@@ -81,6 +83,22 @@ class PetConfigViewController: UIViewController {
                                                                 style: .plain,
                                                                 target: self,
                                                                 action: #selector(didTapClose))
+        } else if isEdit {
+            
+            navigationItem.rightBarButtonItem = UIBarButtonItem(
+                image: UIImage(systemName: "minus.circle.fill"),
+                style: .plain,
+                target: self,
+                action: #selector(didTapAction))
+            
+            if let editPet = editPet {
+                
+                deleteActionController.title = "Are you sure you want to delete \(editPet.name)?"
+                
+                deleteActionController.message = "All Data according to \(editPet.name) will be delete"
+                
+                setActionAlert(pet: editPet)
+            }
         }
         
         tableView.dataSource = self
@@ -95,7 +113,7 @@ class PetConfigViewController: UIViewController {
         }
     }
     
-    func style() {
+    private func style() {
         
         navigationController?.navigationBar.tintColor = .white
 
@@ -107,7 +125,7 @@ class PetConfigViewController: UIViewController {
         tableView.separatorStyle = .none
     }
     
-    func layout() {
+    private func layout() {
         
         view.addSubview(tableView)
         
@@ -117,11 +135,47 @@ class PetConfigViewController: UIViewController {
                          trailing: view.trailingAnchor)
     }
     
-    @objc func didTapClose() {
+    @objc private func didTapClose() {
         
         navigationController?.popViewController(animated: true)
         
         view.window?.rootViewController?.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc private func didTapAction() {
+        
+        present(deleteActionController, animated: true)
+        
+    }
+    
+    private func setActionAlert(pet: Pet) {
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        
+        let deleteAction  = UIAlertAction(title: "Confirm", style: .destructive) { [weak self] _ in
+            
+            guard let self = self else { return }
+            
+            self.lottie.startLoading()
+            
+            self.petManager.deletePet(userId: self.owner.id, petId: pet.id) { result in
+                
+                switch result {
+                    
+                case .success:
+                    
+                    self.lottie.stopLoading()
+                    self.navigationController?.popViewController(animated: true)
+                    
+                case .failure(let error):
+                    
+                    self.lottie.stopLoading()
+                    self.lottie.showError(error)
+                }
+            }
+        }
+        deleteActionController.addAction(deleteAction)
+        deleteActionController.addAction(cancelAction)
     }
 }
 

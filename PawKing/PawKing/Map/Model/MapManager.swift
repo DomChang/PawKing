@@ -149,4 +149,34 @@ class MapManager {
             }
         }
     }
+    
+    func deleteTrack(userId: String, petId: String, trackId:String, completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let batch = dataBase.batch()
+        
+        let trackDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+            .collection(FirebaseCollection.tracks.rawValue).document(trackId)
+        
+        batch.deleteDocument(trackDoc)
+        
+        let petDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+            .collection(FirebaseCollection.pets.rawValue).document(petId)
+        
+        batch.updateData([
+            
+            "tracksId": FieldValue.arrayRemove([trackId])
+        
+        ], forDocument: petDoc)
+        
+        batch.commit { error in
+            if let error = error {
+                
+                completion(.failure(error))
+                
+            } else {
+                
+                completion(.success(()))
+            }
+        }
+    }
 }

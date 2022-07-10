@@ -20,7 +20,7 @@ class MapViewController: UIViewController {
     
     private var locationManager: CLLocationManager?
     
-    private var locationAlert: UIAlertController?
+    private var locationAlertController: UIAlertController?
     
     private let userLocationButton = UIButton()
     
@@ -69,18 +69,19 @@ class MapViewController: UIViewController {
     
     private var userCurrentPet: Pet? {
         didSet {
-            
-            if locationManager?.authorizationStatus == .denied ||
-                locationManager?.authorizationStatus == .restricted ||
-                locationManager?.authorizationStatus == .notDetermined {
-                
-                trackButton.isHidden = true
-            } else {
+//
+//            if locationManager?.authorizationStatus == .denied ||
+//                locationManager?.authorizationStatus == .restricted ||
+//                locationManager?.authorizationStatus == .notDetermined ||
+//                user.petsId.isEmpty {
+//
+//                trackButton.isHidden = true
+//            } else {
 
-                trackButton.isHidden = !collectionView.isHidden
-            }
+//                trackButton.isHidden = !collectionView.isHidden
+//            }
             
-            if !trackButton.isSelected && collectionView.isHidden {
+            if !trackButton.isSelected {
                 
                 choosePetImageView.isHidden = false
             } else {
@@ -99,7 +100,11 @@ class MapViewController: UIViewController {
         }
     }
     
-    private var listeners: [ListenerRegistration]?
+    private var listeners: [ListenerRegistration] = []
+    
+    private let noPetAlertController = UIAlertController(title: "No Pet",
+                                                    message: "Cannot track with no pet, please add pet first!",
+                                                    preferredStyle: .alert)
     
     init() {
 
@@ -120,7 +125,8 @@ class MapViewController: UIViewController {
         setup()
         style()
         layout()
-        setAlertController()
+        setLocationAlert()
+        setNoPetAlert()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -128,7 +134,12 @@ class MapViewController: UIViewController {
         
         navigationController?.navigationBar.isHidden = true
         
-        setAlertController()
+        setLocationAlert()
+        
+        if Auth.auth().currentUser != nil {
+            
+            listenFriendsLocation()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -142,9 +153,11 @@ class MapViewController: UIViewController {
         
         navigationController?.navigationBar.isHidden = false
         
-        listeners?.forEach { $0.remove() }
+        listeners.forEach { $0.remove() }
         
-        locationAlert = nil
+        mapView.removeAnnotations(mapView.annotations)
+        
+        locationAlertController = nil
     }
     
     deinit {
@@ -167,7 +180,7 @@ class MapViewController: UIViewController {
         } else {
             userCurrentPet = nil
             userPets = []
-            listeners = nil
+            listeners.forEach { $0.remove() }
             friendAnnotationsInfo = [:]
             friendLocations = [:]
             trackButton.isHidden = true
@@ -182,8 +195,6 @@ class MapViewController: UIViewController {
                                                selector: #selector(updateData),
                                                name: .updateUser,
                                                object: nil)
-        
-        trackButton.isHidden = true
         
         choosePetImageView.isHidden = true
         
@@ -328,11 +339,11 @@ class MapViewController: UIViewController {
                               height: 45,
                               padding: UIEdgeInsets(top: 80, left: 0, bottom: 0, right: 35))
         
-        collectionView.anchor(leading: view.leadingAnchor,
-                              bottom: view.safeAreaLayoutGuide.bottomAnchor,
+        collectionView.anchor(top: strangerButton.bottomAnchor,
+                              leading: view.leadingAnchor,
                               trailing: view.trailingAnchor,
                               height: 150,
-                              padding: UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0))
+                              padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0))
         
         choosePetImageView.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,
                                centerX: view.centerXAnchor,
@@ -417,7 +428,7 @@ class MapViewController: UIViewController {
                 self?.fetchStoredUserLocation(user: user)
                 self?.lottie.stopLoading()
                 
-            case .failure(let error):
+            case .failure:
                 
                 self?.lottie.stopLoading()
             }
@@ -455,6 +466,22 @@ class MapViewController: UIViewController {
     }
     
     @objc func didTapRecordTrack() {
+        
+        guard !user.petsId.isEmpty else {
+            
+            present(noPetAlertController, animated: true)
+            return
+        }
+        
+        guard locationManager?.authorizationStatus != .denied &&
+                locationManager?.authorizationStatus != .restricted &&
+                locationManager?.authorizationStatus != .notDetermined else {
+            
+            if let locationAlertController = locationAlertController {
+                present(locationAlertController, animated: true)
+            }
+            return
+        }
         
         trackButton.isSelected = !trackButton.isSelected
         saveTrackButton.isHidden = trackButton.isSelected
@@ -612,24 +639,24 @@ class MapViewController: UIViewController {
         
         collectionView.isHidden = !strangerButton.isSelected
         
-        if Auth.auth().currentUser != nil,
-            userCurrentPet != nil {
-            
-            if locationManager?.authorizationStatus == .denied ||
-                locationManager?.authorizationStatus == .restricted ||
-                locationManager?.authorizationStatus == .notDetermined {
-                
-                trackButton.isHidden = true
-            } else {
-                trackButton.isHidden = strangerButton.isSelected
-            }
-            
-            if !trackButton.isSelected {
-                choosePetImageView.isHidden = strangerButton.isSelected
-            }
-        }
-        userLocationButton.isHidden = strangerButton.isSelected
-        
+//        if Auth.auth().currentUser != nil,
+//            userCurrentPet != nil {
+//
+//            if locationManager?.authorizationStatus == .denied ||
+//                locationManager?.authorizationStatus == .restricted ||
+//                locationManager?.authorizationStatus == .notDetermined {
+//
+//                trackButton.isHidden = true
+//            } else {
+//                trackButton.isHidden = strangerButton.isSelected
+//            }
+//
+//            if !trackButton.isSelected || !user.petsId.isEmpty {
+//                choosePetImageView.isHidden = strangerButton.isSelected
+//            }
+//        }
+//        userLocationButton.isHidden = strangerButton.isSelected
+//
         mapManager.fetchStrangerLocations(friend: user.friends, blockIds: user.blockUsersId) { [weak self] result in
             
             switch result {
@@ -723,9 +750,9 @@ class MapViewController: UIViewController {
     
     func listenFriendsLocation() {
         
-        if listeners?.count != 0 {
+        if listeners.count != 0 {
             
-            listeners?.forEach { $0.remove() }
+            listeners.forEach { $0.remove() }
         }
 
         let friends = user.friends
@@ -745,16 +772,13 @@ class MapViewController: UIViewController {
                     print(error)
                 }
             }
-            listeners?.append(listener)
+            listeners.append(listener)
         }
     }
     
     func updateAnnotation() {
         
-        for annotation in mapView.annotations {
-            
-            mapView.removeAnnotation(annotation)
-        }
+        mapView.removeAnnotations(mapView.annotations)
         
         for friend in friendLocations.values {
             
@@ -787,19 +811,29 @@ class MapViewController: UIViewController {
          }
     }
     
-    func setAlertController() {
+    func setLocationAlert() {
         
-        locationAlert = UIAlertController(title: "Allow \"PawKing\" To Access Your Location While You Use The App." ,
+        locationAlertController = UIAlertController(title: "Allow \"PawKing\" To Access Your Location While You Use The App." ,
                                                 message: "PawKing requires your precise location to track your walk.",
                                                 preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
-        locationAlert?.addAction(cancelAction)
+        locationAlertController?.addAction(cancelAction)
         
         let settingAction = UIAlertAction(title: "Settings", style: .default) { _ in
             self.openAppSettings()
         }
-        locationAlert?.addAction(settingAction)
+        locationAlertController?.addAction(settingAction)
+    }
+    
+    func setNoPetAlert() {
+        
+        let noPetCancelAction = UIAlertAction(title: "Ok", style: .cancel, handler: { _ in
+            
+            self.tabBarController?.selectedIndex = 4
+        })
+        
+        noPetAlertController.addAction(noPetCancelAction)
     }
 }
 
@@ -834,22 +868,14 @@ extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
             
         case .restricted, .denied:
             
-            if let locationAlert = self.locationAlert {
+            if let locationAlert = self.locationAlertController {
                 self.present(locationAlert, animated: true)
             }
             
             locationManager?.requestWhenInUseAuthorization()
-            
-        case .notDetermined:
-            
-            trackButton.isHidden = true
 
-        case .authorizedAlways, .authorizedWhenInUse:
+        default:
             
-            trackButton.isHidden = false
-            return
-            
-        @unknown default:
             return
         }
     }

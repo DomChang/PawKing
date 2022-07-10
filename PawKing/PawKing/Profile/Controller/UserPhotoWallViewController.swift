@@ -478,12 +478,6 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
        let messageVC = MessageViewController(user: user,
                                              otherUser: otherUser, otherUserId: otherUser.id)
         
-//        let navMessage = UINavigationController(rootViewController: messageVC)
-        
-//        navMessage.modalPresentationStyle = .overFullScreen
-        
-//        navigationController?.present(navMessage, animated: true)
-        
         navigationController?.pushViewController(messageVC, animated: true)
     }
 }
