@@ -73,12 +73,12 @@ class ChatManager {
         }
     }
     
-    func fetchChatRooms(userId: String, blockIds: [String], completion: @escaping (Result<[Conversation], Error>) -> Void) {
+    func listenChatRooms(userId: String, blockIds: [String], completion: @escaping (Result<[Conversation], Error>) -> Void) {
 
         let document = dataBase.collection(FirebaseCollection.chats.rawValue).document(userId)
             .collection(FirebaseCollection.recentMessages.rawValue)
 
-        document.getDocuments { [weak self] snapshots, _ in
+        document.addSnapshotListener { [weak self] snapshots, _ in
 
             var chatRooms: [Conversation] = []
             
@@ -124,6 +124,8 @@ class ChatManager {
                         }
                         semaphore.wait()
                     }
+                    
+                    chatRooms.sort { $0.message.createdTime.dateValue() > $1.message.createdTime.dateValue() }
                     completion(.success(chatRooms))
                     
                 } catch {
@@ -134,10 +136,10 @@ class ChatManager {
         }
     }
     
-    func fetchMessageHistory(user: User, otherUser: User, completion: @escaping (Result<[Message], Error>) -> Void) {
+    func fetchMessageHistory(user: User, otherUser: User, otherUserId: String, completion: @escaping (Result<[Message], Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.chats.rawValue).document(user.id)
-            .collection(otherUser.id).order(by: "createdTime", descending: false)
+            .collection(otherUserId).order(by: "createdTime", descending: false)
         
         document.getDocuments { snapshots, _ in
 
@@ -189,16 +191,13 @@ class ChatManager {
             
             do {
 
-                for diff in snapshots.documentChanges {
+                for diff in snapshots.documentChanges where diff.type == .added {
+                        
+                    let message = try diff.document.data(as: Message.self)
                     
-                    if diff.type == .added {
+                    if message.senderId != user.id {
                         
-                        let message = try diff.document.data(as: Message.self)
-                        
-                        if message.senderId != user.id {
-                            
-                            messages.append(message)
-                        }
+                        messages.append(message)
                     }
                 }
                 

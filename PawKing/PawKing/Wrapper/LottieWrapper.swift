@@ -25,11 +25,12 @@ class LottieWrapper {
     
     private let height = UIScreen.main.bounds.height
     
-    private let currentWindow = UIApplication
-                                            .shared
-                                            .connectedScenes
-                                            .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
-                                            .first { $0.isKeyWindow }
+    private let currentWindow = UIApplication.shared
+                                                    .connectedScenes
+                                                    .compactMap { $0 as? UIWindowScene }
+                                                    .first?
+                                                    .windows
+                                                    .first
     
     private let loadingView = AnimationView(name: LottieName.loading.rawValue)
     
@@ -39,13 +40,11 @@ class LottieWrapper {
     
     func startLoading() {
         
-        blurView.isUserInteractionEnabled = false
-        
-        loadingView.isUserInteractionEnabled = false
+        currentWindow?.isUserInteractionEnabled = false
         
         blurView.frame = CGRect(x: 0, y: 0, width: width, height: height)
         
-        blurView.backgroundColor = .white.withAlphaComponent(0.1)
+        blurView.backgroundColor = .BattleGrey?.withAlphaComponent(0.3)
         
         currentWindow?.addSubview(blurView)
         
@@ -57,12 +56,16 @@ class LottieWrapper {
         
         currentWindow?.addSubview(loadingView)
         
-        loadingView.play()
+        DispatchQueue.main.async {
+            self.loadingView.play()
+        }
         
         loadingView.loopMode = .loop
     }
     
     func stopLoading() {
+        
+        currentWindow?.isUserInteractionEnabled = true
         
         DispatchQueue.main.async {
             
@@ -75,8 +78,6 @@ class LottieWrapper {
     }
     
     func showError(_ error: Error?) {
-        
-        blurView.isUserInteractionEnabled = false
         
         blurView.frame = CGRect(x: 0, y: 0, width: width, height: height)
         
@@ -95,8 +96,6 @@ class LottieWrapper {
         vStack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0)
         
         vStack.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
-        
-        vStack.isUserInteractionEnabled = false
         
         if let error = error {
             errorLabel.text = String(describing: error)

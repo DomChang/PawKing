@@ -17,6 +17,8 @@ class MessageViewController: UIViewController {
     
     private let otherUser: User
     
+    private let otherUserId: String
+    
     private let tableView = UITableView()
     
     private let userImageView = UIImageView()
@@ -40,10 +42,12 @@ class MessageViewController: UIViewController {
         }
     }
     
-    init(user: User, otherUser: User) {
+    init(user: User, otherUser: User, otherUserId: String) {
         
         self.user = user
         self.otherUser = otherUser
+        self.otherUserId = otherUserId
+        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -92,7 +96,17 @@ class MessageViewController: UIViewController {
         tableView.estimatedRowHeight = 80
         
         userInputTextView.isScrollEnabled = false
-        userInputTextView.placeholder = "Aa"
+        
+        if otherUser.id == UserStatus.unknown.rawValue {
+            
+            userInputTextView.placeholder = "User not found"
+            userInputTextView.isEditable = false
+            
+        } else {
+            
+            userInputTextView.placeholder = "Aa"
+        }
+        
         userInputTextView.delegate = self
         
         sendButton.addTarget(self, action: #selector(didTapSendButton), for: .touchUpInside)
@@ -197,7 +211,9 @@ class MessageViewController: UIViewController {
     
     func getMessageHistory() {
         
-        chatManager.fetchMessageHistory(user: user, otherUser: otherUser) { [weak self] result in
+        chatManager.fetchMessageHistory(user: user,
+                                        otherUser: otherUser,
+                                        otherUserId: otherUserId) { [weak self] result in
             
             switch result {
                 

@@ -318,7 +318,7 @@ final class PublishViewController: UIViewController {
                 
             case .success:
                 
-                print("Create Post success")
+                NotificationCenter.default.post(name: .updateUser, object: .none)
                 
                 self?.lottie.stopLoading()
                 

@@ -13,9 +13,9 @@ class FriendRequestViewController: UIViewController {
 
     private let userManager = UserManager.shared
 
-    var user: User
+    private var user = UserManager.shared.currentUser
 
-    var senders: [User] = [] {
+    private var senders: [User] = [] {
         
         didSet {
             DispatchQueue.main.async {
@@ -24,23 +24,23 @@ class FriendRequestViewController: UIViewController {
         }
     }
 
-    init(user: User) {
-
-        self.user = user
-
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+//    init(user: User) {
+//
+//        self.user = user
+//
+//        super.init(nibName: nil, bundle: nil)
+//    }
+//
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = .white
         
-        listenUserInfo()
+        updateUser()
         
         setup()
         style()
@@ -48,6 +48,11 @@ class FriendRequestViewController: UIViewController {
     }
 
     private func setup() {
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(updateUser),
+                                               name: .updateUser,
+                                               object: nil)
         
         navigationItem.title = "Connect Requests"
         
@@ -76,26 +81,28 @@ class FriendRequestViewController: UIViewController {
         tableView.fillSafeLayout()
     }
     
-    func listenUserInfo() {
+    @objc private func updateUser() {
         
-        userManager.listenUserInfo(userId: user.id) { [weak self] result in
-            
-            switch result {
+//        userManager.listenUserInfo(userId: user.id) { [weak self] result in
+//
+//            switch result {
+//
+//            case .success(let user):
                 
-            case .success(let user):
+                user = UserManager.shared.currentUser
                 
-                self?.user = user
+                getSenderInfo()
                 
-                self?.getSenderInfo()
-                
-            case .failure(let error):
-                
-                print(error)
-            }
-        }
+//            case .failure(let error):
+//
+//                print(error)
+//            }
+//        }
     }
     
-    func getSenderInfo() {
+    private func getSenderInfo() {
+        
+        guard let user = user else { return }
         
         userManager.fetchUsers(userIds: user.recieveRequestsId) { [weak self] result in
             
@@ -117,7 +124,8 @@ extension FriendRequestViewController: FriendRequestCellDelegate {
     
     func didTapAccept(from cell: FriendRequestCell) {
         
-        guard let sender = cell.sender else { return }
+        guard let user = user,
+              let sender = cell.sender else { return }
                 
         userManager.acceptFriendRequest(senderId: sender.id,
                                         userId: user.id) { result in
@@ -136,7 +144,8 @@ extension FriendRequestViewController: FriendRequestCellDelegate {
     
     func didTapDeny(from cell: FriendRequestCell) {
         
-        guard let sender = cell.sender else { return }
+        guard let user = user,
+              let sender = cell.sender else { return }
         
         userManager.denyFriendRequest(senderId: sender.id, userId: user.id) { result in
             

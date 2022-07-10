@@ -15,7 +15,7 @@ class ChatRoomViewController: UIViewController {
     
     private let chatManager = ChatManager.shared
     
-    private var chatRoooms: [Conversation]? {
+    private var chatRoooms: [Conversation] = [] {
         didSet {
             DispatchQueue.main.async {
                 self.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
@@ -31,17 +31,19 @@ class ChatRoomViewController: UIViewController {
         layout()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-        if let user = UserManager.shared.currentUser {
-            
-            self.user = user
-            
-            getChatRooms(without: user.blockUsersId)
-        }
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//
+//        if let user = UserManager.shared.currentUser {
+//
+//            self.user = user
+//
+//            getChatRooms()
+//        }
+//    }
     
     private func setup() {
+        
+        getChatRooms()
         
         navigationItem.title = "Chatroom"
         
@@ -68,13 +70,15 @@ class ChatRoomViewController: UIViewController {
         tableView.fillSafeLayout()
     }
     
-    func getChatRooms(without blockIds: [String]) {
+    func getChatRooms() {
         
-        guard let user = user else {
+        guard let user = UserManager.shared.currentUser else {
             return
         }
         
-        chatManager.fetchChatRooms(userId: user.id, blockIds: blockIds) { [weak self] result in
+        self.user = user
+        
+        chatManager.listenChatRooms(userId: user.id, blockIds: user.blockUsersId) { [weak self] result in
             
             switch result {
                 
@@ -94,16 +98,19 @@ extension ChatRoomViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        guard let user = user,
-              let otherUser = chatRoooms?[indexPath.row].otherUser else { return }
+        guard let user = user else { return }
         
-        let messageVC = MessageViewController(user: user, otherUser: otherUser)
+        let otherUser = chatRoooms[indexPath.row].otherUser
+        
+        let otherUserId = chatRoooms[indexPath.row].message.otherUserId
+        
+        let messageVC = MessageViewController(user: user, otherUser: otherUser, otherUserId: otherUserId)
         
         navigationController?.pushViewController(messageVC, animated: true)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        chatRoooms?.count ?? 0
+        chatRoooms.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -114,7 +121,7 @@ extension ChatRoomViewController: UITableViewDataSource, UITableViewDelegate {
             fatalError("Cannot dequeue ChatRoomCell")
         }
         
-        guard let chatRoom = chatRoooms?[indexPath.row] else { return cell}
+        let chatRoom = chatRoooms[indexPath.row]
         
         cell.configureCell(user: chatRoom.otherUser, recentMessage: chatRoom.message)
         

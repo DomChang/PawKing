@@ -9,6 +9,7 @@ import UIKit
 import CoreLocation
 import FirebaseCore
 import IQKeyboardManagerSwift
+import Lottie
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {

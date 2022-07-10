@@ -16,9 +16,25 @@ class UserManager {
     
     static let shared = UserManager()
     
-    var currentUser: User?
+    var currentUser: User? {
+        didSet {
+            NotificationCenter.default.post(name: .updateUser, object: .none)
+        }
+    }
     
-    lazy var dataBase = Firestore.firestore()
+    var guestUser = User(id: "Guest",
+                         name: "Guest",
+                         petsId: [],
+                         currentPetId: "",
+                         userImage: "",
+                         description: "",
+                         friendPetsId: [],
+                         friends: [],
+                         recieveRequestsId: [],
+                         sendRequestsId: [],
+                         blockUsersId: [])
+    
+    private lazy var dataBase = Firestore.firestore()
     
     func checkUserExist(uid: String, completion: @escaping (Bool) -> Void) {
         
@@ -84,7 +100,7 @@ class UserManager {
                 
                 completion(.success(()))
                 
-                UserManager.shared.currentUser?.name = userName
+//                UserManager.shared.currentUser?.name = userName
             }
         }
     }
@@ -104,8 +120,8 @@ class UserManager {
                 
             } else {
                 
-                UserManager.shared.currentUser?.petsId.append(petId)
-                UserManager.shared.currentUser?.currentPetId = petId
+//                UserManager.shared.currentUser?.petsId.append(petId)
+//                UserManager.shared.currentUser?.currentPetId = petId
                 
                 completion(.success(()))
             }
@@ -143,7 +159,7 @@ class UserManager {
                         
                     } else {
                         
-                        UserManager.shared.currentUser?.currentPetId = pet.id
+//                        UserManager.shared.currentUser?.currentPetId = pet.id
                         
                         completion(.success(()))
                     }
@@ -393,7 +409,7 @@ class UserManager {
                                     
                                 } else {
                                     
-                                    UserManager.shared.currentUser?.userImage = userImageUrlString
+//                                    UserManager.shared.currentUser?.userImage = userImageUrlString
                                     
                                     completion(.success(()))
                                 }
@@ -520,7 +536,7 @@ class UserManager {
                 
             } else {
                 
-                UserManager.shared.currentUser?.sendRequestsId.append(recieverId)
+//                UserManager.shared.currentUser?.sendRequestsId.append(recieverId)
                 print("Batch write succeeded.")
             }
         })
@@ -552,7 +568,7 @@ class UserManager {
                 
             } else {
                 
-                UserManager.shared.currentUser?.sendRequestsId.removeAll(where: { $0 == recieverId })
+//                UserManager.shared.currentUser?.sendRequestsId.removeAll(where: { $0 == recieverId })
                 
                 print("Batch write succeeded.")
             }
@@ -577,7 +593,7 @@ class UserManager {
                 
             } else {
                 
-                UserManager.shared.currentUser?.recieveRequestsId.removeAll(where: { $0 == senderId })
+//                UserManager.shared.currentUser?.recieveRequestsId.removeAll(where: { $0 == senderId })
                 
                 completion(.success(()))
             }
@@ -618,8 +634,8 @@ class UserManager {
                 
             } else {
                 
-                UserManager.shared.currentUser?.recieveRequestsId.removeAll(where: { $0 == senderId })
-                UserManager.shared.currentUser?.friends.append(senderId)
+//                UserManager.shared.currentUser?.recieveRequestsId.removeAll(where: { $0 == senderId })
+//                UserManager.shared.currentUser?.friends.append(senderId)
                 
                 completion(.success(()))
             }
@@ -652,7 +668,7 @@ class UserManager {
                 
             } else {
                 
-                UserManager.shared.currentUser?.friends.removeAll(where: { $0 == friendId })
+//                UserManager.shared.currentUser?.friends.removeAll(where: { $0 == friendId })
                 
                 completion(.success(()))
             }
@@ -677,7 +693,7 @@ class UserManager {
                 
             } else {
                 
-                UserManager.shared.currentUser?.blockUsersId.append(blockId)
+//                UserManager.shared.currentUser?.blockUsersId.append(blockId)
                 
                 completion(.success(()))
             }
@@ -700,7 +716,7 @@ class UserManager {
                 
             } else {
                 
-                UserManager.shared.currentUser?.blockUsersId.removeAll(where: {$0 == blockId})
+//                UserManager.shared.currentUser?.blockUsersId.removeAll(where: {$0 == blockId})
                 
                 completion(.success(()))
             }

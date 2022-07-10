@@ -29,16 +29,18 @@ class BlockViewController: UIViewController {
     
     private func setup() {
         
-        lottie.startLoading()
-        
-        fetchBlockedUsers()
-        
         tableView.register(SearchResultCell.self,
                            forCellReuseIdentifier: SearchResultCell.identifier)
         
         tableView.dataSource = self
         tableView.delegate = self
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        fetchBlockedUsers()
     }
     
     private func style() {
@@ -70,7 +72,9 @@ class BlockViewController: UIViewController {
             lottie.stopLoading()
             return
         }
-
+        
+        lottie.startLoading()
+        
         userManager.fetchUsers(userIds: user.blockUsersId) { [weak self] result in
             
             switch result {

@@ -110,7 +110,10 @@ class RegisterViewController: UIViewController {
         view.addSubview(videoView)
         view.addSubview(welcomeImageView)
 
-        let registerVStack = UIStackView(arrangedSubviews: [emailTextField, passwordTextField, comfirmPasswordTextField, signUpButton])
+        let registerVStack = UIStackView(arrangedSubviews: [emailTextField,
+                                                            passwordTextField,
+                                                            comfirmPasswordTextField,
+                                                            signUpButton])
         
         view.addSubview(signUpTitleLabel)
         view.addSubview(registerVStack)

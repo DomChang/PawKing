@@ -83,7 +83,7 @@ class SettingViewController: UIViewController {
                 
             case .failure(let error):
                 
-                self?.lottie.showError(error)
+                print(error)
             }
         }
     }

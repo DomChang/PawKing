@@ -131,20 +131,8 @@ class TabBarViewController: UITabBarController {
             listenUser(userId: userId)
 
         } else {
-
-            let user = User(id: "Guest",
-                            name: "Guest",
-                            petsId: [],
-                            currentPetId: "",
-                            userImage: "",
-                            description: "",
-                            friendPetsId: [],
-                            friends: [],
-                            recieveRequestsId: [],
-                            sendRequestsId: [],
-                            blockUsersId: [])
   
-            UserManager.shared.currentUser = user
+            UserManager.shared.currentUser = userManager.guestUser
         }
         
         configureUserToTab()
@@ -167,6 +155,7 @@ class TabBarViewController: UITabBarController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
         showSignInView()
     }
@@ -190,7 +179,7 @@ class TabBarViewController: UITabBarController {
             listener?.remove()
         }
         
-        listener = userManager.listenUserInfo(userId: userId) { [weak self] result in
+        listener = userManager.listenUserInfo(userId: userId) { result in
             
             switch result {
                 

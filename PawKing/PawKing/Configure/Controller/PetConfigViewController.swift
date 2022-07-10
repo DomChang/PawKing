@@ -199,6 +199,8 @@ extension PetConfigViewController: PetConfigCellDelegate {
                     
                     self?.navigationController?.popViewController(animated: true)
                     
+                    NotificationCenter.default.post(name: .updateUser, object: .none)
+                    
                 case .failure(let error):
                     
                     cell.finishButtonEnable()

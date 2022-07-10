@@ -61,18 +61,7 @@ class ProfileViewController: UIViewController {
     }
     
     var selectedPetIndex: Int?
-//    
-//    init(user: User) {
-//        
-//        self.user = user
-//        
-//        super.init(nibName: nil, bundle: nil)
-//    }
-//    
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -80,25 +69,20 @@ class ProfileViewController: UIViewController {
         style()
         layout()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        
-        fetchUser()
-        
-        collectionView.visibleCells.forEach { cell in
-            guard let petCell = cell as? PetItemCell else { return }
-            
-            petCell.imageView.layer.borderWidth = 0
-            
-            petCell.backBorderView.isHidden = true
-        }
-    }
-    
+
     private func setup() {
         
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "LogOut",
-//                                                            style: .plain,
-//                                                            target: self, action: #selector(logout))
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(fetchUser),
+                                               name: .updateUser,
+                                               object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(fetchUser),
+                                               name: .updateTrackHistory,
+                                               object: nil)
+        
+        fetchUser()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.asset(.Icons_24px_Setting),
                                                             style: .plain,
@@ -169,37 +153,13 @@ class ProfileViewController: UIViewController {
         let settingVC = SettingViewController()
         
         navigationController?.pushViewController(settingVC, animated: true)
-        
-//        let firebaseAuth = Auth.auth()
-//        do {
-//          try firebaseAuth.signOut()
-//
-//            UserManager.shared.currentUser =  User(id: "Guest",
-//                                                     name: "Guest",
-//                                                     petsId: [],
-//                                                     currentPetId: "",
-//                                                     userImage: "",
-//                                                     description: "",
-//                                                     friendPetsId: [],
-//                                                     friends: [],
-//                                                     recieveRequestsId: [],
-//                                                     sendRequestsId: [],
-//                                                     blockUsersId: [])
-//
-//            Auth.auth().currentUser?.reload()
-//
-//            DispatchQueue.main.async {
-//               self.tabBarController?.selectedIndex = 0
-//            }
-//
-//        } catch let signOutError as NSError {
-//          print("Error signing out: %@", signOutError)
-//        }
     }
     
-    func fetchUser() {
+    @objc private func fetchUser() {
         
         guard let user = UserManager.shared.currentUser else { return }
+        
+        lottie.startLoading()
         
         userManager.fetchUserInfo(userId: user.id) { [weak self] result in
             
@@ -215,11 +175,21 @@ class ProfileViewController: UIViewController {
                 
                 self?.fetchPost(by: user)
                 
-                self?.fetchTrack(by: user) 
+                self?.fetchTrack(by: user)
                 
-            case .failure(let error):
+                self?.collectionView.visibleCells.forEach { cell in
+                    guard let petCell = cell as? PetItemCell else { return }
+                    
+                    petCell.imageView.layer.borderWidth = 0
+                    
+                    petCell.backBorderView.isHidden = true
+                }
                 
-                print(error)
+                self?.lottie.stopLoading()
+                
+            case .failure:
+                
+                self?.lottie.stopLoading()
             }
         }
     }
@@ -548,8 +518,11 @@ extension ProfileViewController: UICollectionViewDataSource {
                 
             } else {
                 
-                guard let trackCell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackHostoryCell.identifier,
-                                                                         for: indexPath) as? TrackHostoryCell
+                guard let trackCell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: TrackHostoryCell.identifier,
+                    for: indexPath
+                ) as? TrackHostoryCell
+                        
                 else {
                     fatalError("Cannot dequeue TrackHostoryCell")
                 }
@@ -640,7 +613,9 @@ extension ProfileViewController: UICollectionViewDelegate {
                     
 //                    guard let imageUrl = URL(string: userPet.petImage) else { return }
                     
-                    let trackHistoryVC = TrackHistoryViewController(pet: userPet, trackInfo: trackInfo, shouldEdit: false)
+                    let trackHistoryVC = TrackHistoryViewController(pet: userPet,
+                                                                    trackInfo: trackInfo,
+                                                                    shouldEdit: false)
                     
                     navigationController?.pushViewController(trackHistoryVC, animated: true)
                 }

@@ -19,6 +19,8 @@ class ExploreViewController: UIViewController {
     
     private let userManager = UserManager.shared
     
+    private let lottie = LottieWrapper.shared
+    
     private var user: User?
     
     private var allPosts: [Post]?
@@ -31,30 +33,22 @@ class ExploreViewController: UIViewController {
         }
     }
     
-    let allModeButton = UIButton()
+    private let refreshControl = UIRefreshControl()
     
-    let friendModeButton = UIButton()
+    private let allModeButton = UIButton()
     
-    let buttonIndicatorView = UIView()
+    private let friendModeButton = UIButton()
     
-    let buttonBackView = UIView()
+    private let buttonIndicatorView = UIView()
+    
+    private let buttonBackView = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setup()
         style()
         layout()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        
-        if let user = UserManager.shared.currentUser {
-            
-            self.user = user
-            
-            getAllPosts(without: user.blockUsersId)
-        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -71,16 +65,27 @@ class ExploreViewController: UIViewController {
     
     private func setup() {
         
+        lottie.startLoading()
+        
+        getAllPosts()
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(getAllPosts),
+                                               name: .updateUser,
+                                               object: nil)
+        
         view.backgroundColor = .BattleGrey
         
         navigationItem.title = "Explore"
             
         navigationItem.searchController = searchController
-
+        
         collectionView.dataSource = self
         collectionView.delegate = self
         
         collectionView.register(PhotoItemCell.self, forCellWithReuseIdentifier: PhotoItemCell.identifier)
+        
+        refreshControl.addTarget(self, action: #selector(getAllPosts), for: .valueChanged)
         
         setSearchController()
         
@@ -105,11 +110,14 @@ class ExploreViewController: UIViewController {
         buttonBackView.backgroundColor = .white
         buttonBackView.layer.cornerRadius = 20
         buttonBackView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        
+        refreshControl.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
     }
     
     private func layout() {
         
         view.addSubview(collectionView)
+        collectionView.addSubview(refreshControl)
         
         let hStackView = UIStackView(arrangedSubviews: [allModeButton, friendModeButton])
         hStackView.distribution = .fillEqually
@@ -142,13 +150,19 @@ class ExploreViewController: UIViewController {
         buttonIndicatorView.layer.cornerRadius = 5
     }
     
-    private func getAllPosts(without blockIds: [String]) {
+    @objc private func getAllPosts() {
+        
+        user = UserManager.shared.currentUser
+        
+        guard let blockIds = user?.blockUsersId else { return }
         
         postManager.fetchAllPosts(blockIds: blockIds) { [weak self] result in
             
             switch result {
                 
             case .success(let posts):
+                
+                self?.refreshControl.endRefreshing()
                 
                 self?.allPosts = posts
                 
@@ -163,9 +177,15 @@ class ExploreViewController: UIViewController {
                 
                 self?.getFriendPosts()
                 
+                self?.lottie.stopLoading()
+                
             case .failure(let error):
                 
-                print(error)
+                self?.refreshControl.endRefreshing()
+                
+                self?.lottie.stopLoading()
+                
+                self?.lottie.showError(error)
             }
         }
     }
@@ -193,9 +213,9 @@ class ExploreViewController: UIViewController {
         definesPresentationContext = true
     }
     
-    private func getFriendPosts() {
+    @objc private func getFriendPosts() {
         
-        guard let user = user,
+        guard let user = UserManager.shared.currentUser,
               let posts = allPosts else { return }
         
         var friendPosts: [Post] = []
@@ -239,7 +259,7 @@ extension ExploreViewController: ResultViewControllerDelegate {
     
     func didSelectResultUser(theOtherUser: User) {
         
-        let userPhotoVC = UserPhotoWallViewController(otherUser: theOtherUser)
+        let userPhotoVC = UserPhotoWallViewController(otherUserId: theOtherUser.id)
                     
         navigationController?.pushViewController(userPhotoVC, animated: true)
     }
