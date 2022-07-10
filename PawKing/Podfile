@@ -19,7 +19,7 @@ target 'PawKing' do
   pod 'FirebaseFirestoreSwift'
   pod 'Kingfisher'
   pod 'IQKeyboardManagerSwift'
-  pod 'lottie-ios'
+  pod 'lottie-ios', '~> 3.3.0'
   pod 'FirebaseCrashlytics'
 
 post_install do |installer|

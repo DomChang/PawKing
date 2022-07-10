@@ -187,9 +187,9 @@ class ProfileViewController: UIViewController {
                 
                 self?.lottie.stopLoading()
                 
-            case .failure(let error):
+            case .failure:
                 
-                self?.lottie.showError(error)
+                self?.lottie.stopLoading()
             }
         }
     }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 class UserPhotoWallViewController: UIViewController {
 
@@ -18,54 +19,62 @@ class UserPhotoWallViewController: UIViewController {
     
     private let lottie = LottieWrapper.shared
     
-    var user: User?
+    private var user = UserManager.shared.currentUser
     
-    var otherUser: User
+    private var otherUserId: String
     
-    var otherUserPets: [Pet]? {
+    private var otherUser: User?
+    
+    private var otherUserListener: ListenerRegistration?
+    
+    private var otherUserPets: [Pet]? {
         didSet {
             collectionView.reloadSections(IndexSet(integer: 1))
         }
     }
     
-    var posts: [Post]? {
+    private var posts: [Post]? {
         didSet {
             collectionView.reloadSections(IndexSet(integer: 2))
             collectionView.reloadItems(at: [IndexPath(item: 0, section: 0)])
         }
     }
     
-    var displayPosts: [Post]? {
+    private var displayPosts: [Post]? {
         didSet {
             collectionView.reloadSections(IndexSet(integer: 2))
         }
     }
     
-    var selectedPetIndex: Int?
+    private var selectedPetIndex: Int?
     
-    var isFriend = false {
+    private var isFriend = false {
         didSet {
             collectionView.reloadSections(IndexSet(integer: 0))
         }
     }
     
-    let actionController = UIAlertController(title: "Actions", message: nil, preferredStyle: .actionSheet)
+    private let actionController = UIAlertController(title: "Actions", message: nil, preferredStyle: .actionSheet)
     
-    init(otherUser: User) {
+    private let disconnectActionController = UIAlertController(title: "Are you sure you want to disconnect?",
+                                                     message: nil,
+                                                     preferredStyle: .alert)
+    
+    init(otherUserId: String) {
 
-        self.otherUser = otherUser
-        
+        self.otherUserId = otherUserId
+
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let user = UserManager.shared.currentUser {
+        if let user = user {
             
             setActionSheet(user: user)
         }
@@ -75,23 +84,26 @@ class UserPhotoWallViewController: UIViewController {
         layout()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-        if let user = UserManager.shared.currentUser {
-            
-            self.user = user
-            
+//    override func viewWillAppear(_ animated: Bool) {
+//
+//        if let user = UserManager.shared.currentUser,
+//            let otherUser = otherUser {
+//
+//            self.user = user
+//
 //            setActionSheet(user: user)
-        }
+//        }
+//    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         
-        fetchPet(by: otherUser)
-        
-        fetchPost(by: otherUser)
+        otherUserListener?.remove()
     }
     
     private func setup() {
         
-        navigationItem.title = "\(otherUser.name)"
+        listenOtherUser()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"),
                                                             style: .plain,
@@ -144,6 +156,63 @@ class UserPhotoWallViewController: UIViewController {
         collectionView.addSubview(topView)
     }
     
+    func listenOtherUser() {
+        
+        if otherUserListener != nil {
+            
+            otherUserListener?.remove()
+        }
+        
+        lottie.startLoading()
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        let dispatchQueue = DispatchQueue.global()
+        
+        dispatchQueue.async { [weak self] in
+            
+            guard let otherUserId = self?.otherUserId else { return }
+            
+            self?.otherUserListener =  self?.userManager.listenUserInfo(userId: otherUserId,
+                                                                        completion: { result in
+                
+                switch result {
+                    
+                case .success(let otherUser):
+                    
+                    self?.user = UserManager.shared.currentUser
+                    
+                    self?.otherUser = otherUser
+                    
+                    semaphore.signal()
+                    
+                    self?.navigationItem.title = "\(otherUser.name)"
+                    
+                    self?.fetchPet(by: otherUser)
+                    
+                    self?.fetchPost(by: otherUser)
+                    
+                case .failure(let error):
+                    
+                    self?.lottie.stopLoading()
+                    
+                    self?.lottie.showError(error)
+                    
+                    semaphore.signal()
+                }
+            })
+            
+            semaphore.wait()
+            
+            guard let user = self?.user else {
+                return
+            }
+            
+            self?.setActionSheet(user: user)
+            self?.setDisconnectAlert()
+        }
+    }
+    
     func fetchPet(by otherUser: User) {
         
         userManager.fetchPets(userId: otherUser.id) { [weak self] result in
@@ -169,10 +238,14 @@ class UserPhotoWallViewController: UIViewController {
                 
             case .success(let posts):
                 
+                self?.lottie.stopLoading()
+                
                 self?.posts = posts
                 self?.displayPosts = posts
                 
             case .failure(let error):
+                
+                self?.lottie.stopLoading()
                 
                 print(error)
             }
@@ -181,17 +254,18 @@ class UserPhotoWallViewController: UIViewController {
     
     func setConnectState(sender: UIButton) {
         
-        guard let user = user else {
+        guard let user = user,
+              let otherUser = otherUser else {
             return
         }
         
-        if user.friends.contains(otherUser.id) && otherUser.friends.contains(user.id) {
+        if otherUser.friends.contains(user.id) {
             
             isFriend = true
             
             sender.isSelected = true
             
-        } else if user.sendRequestsId.contains(otherUser.id) {
+        } else if otherUser.recieveRequestsId.contains(user.id) {
             
             isFriend = false
             
@@ -222,13 +296,17 @@ class UserPhotoWallViewController: UIViewController {
     
     func setActionSheet(user: User) {
         
+        guard let otherUser = otherUser else {
+            return
+        }
+        
         if user.blockUsersId.contains(otherUser.id) {
 
             let unBlockAction = UIAlertAction(title: "Unblock User", style: .destructive) { [weak self] _ in
                 
                 guard let self = self else { return }
                 
-                self.userManager.removeBlockUser(userId: user.id, blockId: self.otherUser.id) { result in
+                self.userManager.removeBlockUser(userId: user.id, blockId: self.otherUserId) { result in
                     
                     switch result {
                         
@@ -242,15 +320,16 @@ class UserPhotoWallViewController: UIViewController {
                     }
                 }
             }
-            actionController.addAction(unBlockAction)
-            
+            DispatchQueue.main.async {
+                self.actionController.addAction(unBlockAction)
+            }
         } else {
             
             let blockAction = UIAlertAction(title: "Block User", style: .destructive) { [weak self] _ in
                 
                 guard let self = self else { return }
                 
-                self.userManager.addBlockUser(userId: user.id, blockId: self.otherUser.id) { result in
+                self.userManager.addBlockUser(userId: user.id, blockId: self.otherUserId) { result in
                     
                     switch result {
                         
@@ -264,12 +343,46 @@ class UserPhotoWallViewController: UIViewController {
                     }
                 }
             }
-            actionController.addAction(blockAction)
+            DispatchQueue.main.async {
+                self.actionController.addAction(blockAction)
+            }
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
-        actionController.addAction(cancelAction)
+        DispatchQueue.main.async {
+            self.actionController.addAction(cancelAction)
+        }
+    }
+    
+    func setDisconnectAlert() {
+        
+        guard let user = user,
+              let otherUser = otherUser else {
+            return
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        
+        let disconnectAlert  = UIAlertAction(title: "Disconnect", style: .destructive) { [weak self] _ in
+            
+            self?.userManager.removeFriend(userId: user.id, friendId: otherUser.id) { result in
+                switch result {
+                    
+                case .success:
+                    
+                    print("disconnected")
+                    
+                case .failure(let error):
+                    
+                    print(error)
+                }
+            }
+        }
+        DispatchQueue.main.async {
+            self.disconnectActionController.addAction(cancelAction)
+            self.disconnectActionController.addAction(disconnectAlert)
+        }
     }
     
     @objc func didTapAction() {
@@ -292,7 +405,8 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
     
     func didTapLeftButton(from cell: ProfileInfoCell) {
         
-        guard let user = user else {
+        guard let user = user,
+              let otherUser = otherUser else {
             
             lottie.showError(nil)
             
@@ -307,6 +421,7 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
             if isFriend {
                 // show disConnect alert
                 
+                present(disconnectActionController, animated: true)
                 
             } else {
                 // requested
@@ -355,7 +470,8 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
     
     func didTapRightButton() {
         
-        guard let user = user else {
+        guard let user = user,
+              let otherUser = otherUser else {
             return
         }
 
@@ -503,7 +619,9 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
             
             infoCell.rightButton.setTitle("Send Message", for: .normal)
             
-            infoCell.configureCell(user: otherUser, postCount: posts?.count ?? 0)
+            if let otherUser = otherUser {
+                infoCell.configureCell(user: otherUser, postCount: posts?.count ?? 0)
+            }
             
             infoCell.delegate = self
             

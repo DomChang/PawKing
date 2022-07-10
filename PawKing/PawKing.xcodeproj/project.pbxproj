@@ -47,6 +47,7 @@
 		B698DDC02858B99F0009077E /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDBF2858B99F0009077E /* UIImage+Extension.swift */; };
 		B698DDC22858CE9D0009077E /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDC12858CE9D0009077E /* UIView+Extension.swift */; };
 		B69C562A287A71A7004DD552 /* UIRefreshControl+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69C5629287A71A7004DD552 /* UIRefreshControl+Extension.swift */; };
+		B69C562C287A7C47004DD552 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = B69C562B287A7C47004DD552 /* loading.json */; };
 		B6A91D692868372B0049253A /* NoStrangerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D682868372B0049253A /* NoStrangerCell.swift */; };
 		B6A91D6B2868909F0049253A /* PetItemBackReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D6A2868909F0049253A /* PetItemBackReusableView.swift */; };
 		B6A91D6D28697CCC0049253A /* ProfileInfoReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D6C28697CCC0049253A /* ProfileInfoReusableView.swift */; };
@@ -73,7 +74,6 @@
 		B6DD66D52872EAE700523197 /* ContentButtonReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DD66D42872EAE700523197 /* ContentButtonReusableView.swift */; };
 		B6DD66D72874329700523197 /* OtherUserPetReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DD66D62874329700523197 /* OtherUserPetReusableView.swift */; };
 		B6DD66DA28752DAB00523197 /* LottieWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DD66D928752DAB00523197 /* LottieWrapper.swift */; };
-		B6DD66DF287538C200523197 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = B6DD66DE287538C200523197 /* loading.json */; };
 		B6DD66E32875538B00523197 /* error.json in Resources */ = {isa = PBXBuildFile; fileRef = B6DD66E22875538B00523197 /* error.json */; };
 		B6DD66E5287578D700523197 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DD66E4287578D700523197 /* SettingViewController.swift */; };
 		B6DD66E7287579F800523197 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DD66E6287579F800523197 /* SettingCell.swift */; };
@@ -142,6 +142,7 @@
 		B698DDBF2858B99F0009077E /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		B698DDC12858CE9D0009077E /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		B69C5629287A71A7004DD552 /* UIRefreshControl+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIRefreshControl+Extension.swift"; sourceTree = "<group>"; };
+		B69C562B287A7C47004DD552 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		B6A91D682868372B0049253A /* NoStrangerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoStrangerCell.swift; sourceTree = "<group>"; };
 		B6A91D6A2868909F0049253A /* PetItemBackReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetItemBackReusableView.swift; sourceTree = "<group>"; };
 		B6A91D6C28697CCC0049253A /* ProfileInfoReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoReusableView.swift; sourceTree = "<group>"; };
@@ -169,7 +170,6 @@
 		B6DD66D42872EAE700523197 /* ContentButtonReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentButtonReusableView.swift; sourceTree = "<group>"; };
 		B6DD66D62874329700523197 /* OtherUserPetReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserPetReusableView.swift; sourceTree = "<group>"; };
 		B6DD66D928752DAB00523197 /* LottieWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieWrapper.swift; sourceTree = "<group>"; };
-		B6DD66DE287538C200523197 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		B6DD66E22875538B00523197 /* error.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error.json; sourceTree = "<group>"; };
 		B6DD66E4287578D700523197 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		B6DD66E6287579F800523197 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
@@ -533,7 +533,7 @@
 		B6DD66DB2875355F00523197 /* AnimationJson */ = {
 			isa = PBXGroup;
 			children = (
-				B6DD66DE287538C200523197 /* loading.json */,
+				B69C562B287A7C47004DD552 /* loading.json */,
 				B6DD66E22875538B00523197 /* error.json */,
 			);
 			path = AnimationJson;
@@ -640,11 +640,11 @@
 			files = (
 				B6DD66E32875538B00523197 /* error.json in Resources */,
 				B698DDA9285881FD0009077E /* LaunchScreen.storyboard in Resources */,
+				B69C562C287A7C47004DD552 /* loading.json in Resources */,
 				B698DDB328588D280009077E /* GoogleService-Info.plist in Resources */,
 				B698DDA6285881FD0009077E /* Assets.xcassets in Resources */,
 				B60008002876AB7B0087717F /* signIn.mp4 in Resources */,
 				B698DDA4285881FB0009077E /* Main.storyboard in Resources */,
-				B6DD66DF287538C200523197 /* loading.json in Resources */,
 				B6E157342876C5EF00D05796 /* signUp.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

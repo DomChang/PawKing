@@ -65,6 +65,8 @@ class ExploreViewController: UIViewController {
     
     private func setup() {
         
+        lottie.startLoading()
+        
         getAllPosts()
         
         NotificationCenter.default.addObserver(self,
@@ -153,8 +155,6 @@ class ExploreViewController: UIViewController {
         user = UserManager.shared.currentUser
         
         guard let blockIds = user?.blockUsersId else { return }
-            
-        refreshControl.beginRefreshingWithAnimation()
         
         postManager.fetchAllPosts(blockIds: blockIds) { [weak self] result in
             
@@ -177,9 +177,13 @@ class ExploreViewController: UIViewController {
                 
                 self?.getFriendPosts()
                 
+                self?.lottie.stopLoading()
+                
             case .failure(let error):
                 
                 self?.refreshControl.endRefreshing()
+                
+                self?.lottie.stopLoading()
                 
                 self?.lottie.showError(error)
             }
@@ -255,7 +259,7 @@ extension ExploreViewController: ResultViewControllerDelegate {
     
     func didSelectResultUser(theOtherUser: User) {
         
-        let userPhotoVC = UserPhotoWallViewController(otherUser: theOtherUser)
+        let userPhotoVC = UserPhotoWallViewController(otherUserId: theOtherUser.id)
                     
         navigationController?.pushViewController(userPhotoVC, animated: true)
     }

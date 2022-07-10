@@ -405,6 +405,8 @@ class MapViewController: UIViewController {
     
     private func fetchUserPets(user: User) {
         
+        lottie.startLoading()
+        
         userManager.fetchPets(userId: user.id) { [weak self] result in
             
             switch result {
@@ -413,10 +415,11 @@ class MapViewController: UIViewController {
                 
                 self?.userPets = pets
                 self?.fetchStoredUserLocation(user: user)
+                self?.lottie.stopLoading()
                 
             case .failure(let error):
                 
-                print(error)
+                self?.lottie.stopLoading()
             }
         }
     }
@@ -581,7 +584,7 @@ class MapViewController: UIViewController {
                 print("===renew status success")
                 
             case .failure(let error):
-                
+                print(error)
                 self?.lottie.showError(error)
             }
         }
@@ -679,7 +682,7 @@ class MapViewController: UIViewController {
     
     @objc func didTapNotificationButton() {
         
-        let friendRequestVC = FriendRequestViewController(user: user)
+        let friendRequestVC = FriendRequestViewController()
         
         navigationController?.pushViewController(friendRequestVC, animated: true)
     }
@@ -962,25 +965,25 @@ extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
 
         guard let annotation = view.annotation as? UserAnnotation else { return }
+        
+        let userPhotoWallVC = UserPhotoWallViewController(otherUserId: annotation.userId)
 
-        userManager.fetchUserInfo(userId: annotation.userId) { [weak self] result in
+        navigationController?.pushViewController(userPhotoWallVC, animated: true)
 
-            switch result {
-
-            case .success(let otherUser):
+//        userManager.fetchUserInfo(userId: annotation.userId) { [weak self] result in
+//
+//            switch result {
+//
+//            case .success(let otherUser):
 
 //                guard let user = self?.user else { return }
+//
+//            case .failure(let error):
+//
+//                print(error)
 
-                let userPhotoWallVC = UserPhotoWallViewController(otherUser: otherUser)
-
-                self?.navigationController?.pushViewController(userPhotoWallVC, animated: true)
-
-            case .failure(let error):
-
-                print(error)
-
-            }
-        }
+//            }
+//        }
     }
 }
 
@@ -996,24 +999,24 @@ extension MapViewController: UICollectionViewDataSource, UICollectionViewDelegat
         
         guard strangersPet.count != 0 else { return }
         
-        userManager.fetchUserInfo(userId: strangersPet[indexPath.item].ownerId) { [weak self] result in
-
-            switch result {
-
-            case .success(let otherUser):
+//        userManager.fetchUserInfo(userId: strangersPet[indexPath.item].ownerId) { [weak self] result in
+//
+//            switch result {
+//
+//            case .success(let otherUser):
 
 //                guard let user = self?.user else { return }
 
-                let userPhotoWallVC = UserPhotoWallViewController(otherUser: otherUser)
+                let userPhotoWallVC = UserPhotoWallViewController(otherUserId: strangersPet[indexPath.item].ownerId)
 
-                self?.navigationController?.pushViewController(userPhotoWallVC, animated: true)
+                navigationController?.pushViewController(userPhotoWallVC, animated: true)
 
-            case .failure(let error):
+//            case .failure(let error):
+//
+//                print(error)
 
-                print(error)
-
-            }
-        }
+//            }
+//        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

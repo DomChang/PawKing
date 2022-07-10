@@ -243,6 +243,7 @@ class SignInViewController: UIViewController {
                 
                 self?.signInButtonEnable()
                 self?.lottie.showError(error)
+                self?.lottie.stopLoading()
                 
             } else {
                 
