@@ -51,6 +51,12 @@ class SignInViewController: UIViewController {
     
     fileprivate var currentNonce: String?
     
+    private let policyLabel = UILabel()
+    
+    private let privacyButton = UIButton()
+    
+    private let eulaButton = UIButton()
+    
     private let videoView = UIView()
     
     private var videoPlayer: AVPlayerLooper?
@@ -78,6 +84,10 @@ class SignInViewController: UIViewController {
         signInButton.addTarget(self, action: #selector(didTapSignIn), for: .touchUpInside)
         
         registerButton.addTarget(self, action: #selector(didTapRegister), for: .touchUpInside)
+        
+        privacyButton.addTarget(self, action: #selector(didTapPrivacy), for: .touchUpInside)
+        
+        eulaButton.addTarget(self, action: #selector(didTapEULA), for: .touchUpInside)
     }
     
     func style() {
@@ -132,6 +142,20 @@ class SignInViewController: UIViewController {
         orLabel.textColor = .white
         orLabel.textAlignment = .center
         orLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        
+        policyLabel.text = "By signing in, you agree to our privacy policy and EULA as below."
+        policyLabel.textColor = .white
+        policyLabel.textAlignment = .center
+        policyLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        policyLabel.numberOfLines = 0
+        
+        privacyButton.setTitle("Privacy Policy", for: .normal)
+        privacyButton.setTitleColor(.Orange1, for: .normal)
+        privacyButton.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .bold)
+        
+        eulaButton.setTitle("EULA", for: .normal)
+        eulaButton.setTitleColor(.Orange1, for: .normal)
+        eulaButton.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .bold)
     }
     
     func layout() {
@@ -139,6 +163,8 @@ class SignInViewController: UIViewController {
         let signVStack = UIStackView(arrangedSubviews: [emailTextField, passwordTextField, signInButton])
         
         let registerHStack = UIStackView(arrangedSubviews: [registerHintLabel, registerButton])
+        
+        let policyHStack = UIStackView(arrangedSubviews: [privacyButton, eulaButton])
         
         view.addSubview(videoView)
         view.addSubview(logoImageView)
@@ -149,6 +175,8 @@ class SignInViewController: UIViewController {
         view.addSubview(speratorRightLine)
         view.addSubview(orLabel)
         view.addSubview(appleButton)
+        view.addSubview(policyLabel)
+        view.addSubview(policyHStack)
         
         signVStack.axis = .vertical
         signVStack.distribution = .fillEqually
@@ -157,6 +185,10 @@ class SignInViewController: UIViewController {
         registerHStack.axis = .horizontal
         registerHStack.distribution = .fill
         registerHStack.spacing = 10
+        
+        policyHStack.axis = .horizontal
+        policyHStack.distribution = .fillEqually
+        policyHStack.spacing = 0
         
         videoView.fillSuperview()
         
@@ -205,6 +237,16 @@ class SignInViewController: UIViewController {
                                  height: 0.5,
                                 padding: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 20))
         
+        policyLabel.anchor(top: appleButton.bottomAnchor
+                           ,leading: appleButton.leadingAnchor,
+                           trailing: appleButton.trailingAnchor,
+                           padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0))
+        
+        policyHStack.anchor(top: policyLabel.bottomAnchor,
+                            leading: policyLabel.leadingAnchor,
+                            trailing: policyLabel.trailingAnchor,
+                            height: 10,
+                            padding: UIEdgeInsets(top: 5, left: 20, bottom: 0, right: 20))
     }
     
     func playVideo() {
@@ -234,7 +276,7 @@ class SignInViewController: UIViewController {
             
             signInButtonEnable()
             lottie.stopLoading()
-            lottie.showError(nil)
+            lottie.showError(error: nil)
             return
         }
         
@@ -242,7 +284,7 @@ class SignInViewController: UIViewController {
             if let error = error {
                 
                 self?.signInButtonEnable()
-                self?.lottie.showError(error)
+                self?.lottie.showError(error: error)
                 self?.lottie.stopLoading()
                 
             } else {
@@ -267,7 +309,7 @@ class SignInViewController: UIViewController {
                         
                         self?.lottie.stopLoading()
                         
-                        self?.lottie.showError(nil)
+                        self?.lottie.showError(error: nil)
                         print("Please Sign Up First!")
                     }
                 })
@@ -275,7 +317,7 @@ class SignInViewController: UIViewController {
         }
     }
     
-    @objc func didTapRegister() {
+    @objc private func didTapRegister() {
         
         let registerVC = RegisterViewController()
         
@@ -284,15 +326,27 @@ class SignInViewController: UIViewController {
         present(registerVC, animated: true)
     }
     
+    @objc private func didTapPrivacy() {
+        
+        let privacyVC = PrivacyViewController()
+        present(privacyVC, animated: true)
+    }
+    
+    @objc private func didTapEULA() {
+        
+        let eulaVC = EULAViewController()
+        present(eulaVC, animated: true)
+    }
+    
     func setupAppleButton() {
         appleButton.layer.cornerRadius = 12
         appleButton.addTarget(self, action: #selector(startSignInWithAppleFlow), for: .touchUpInside)
         
-        appleButton.anchor(bottom: view.bottomAnchor,
-                           centerX: view.centerXAnchor,
-                           width: 235,
+        appleButton.anchor(leading: signInButton.leadingAnchor,
+                           bottom: view.bottomAnchor,
+                           trailing: signInButton.trailingAnchor,
                            height: 45,
-                           padding: UIEdgeInsets(top: 0, left: 0, bottom: 80, right: 0))
+                           padding: UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0))
     }
     
     @objc func startSignInWithAppleFlow() {
@@ -545,7 +599,7 @@ extension SignInViewController: RegisterViewDelegate {
                 case .failure(let error):
                     
                     self?.lottie.stopLoading()
-                    self?.lottie.showError(error)
+                    self?.lottie.showError(error: error)
                 }
             }
         }

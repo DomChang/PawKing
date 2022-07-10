@@ -348,7 +348,7 @@ class PhotoPostViewController: UIViewController {
             case .failure(let error):
                 
                 self?.lottie.stopLoading()
-                self?.lottie.showError(error)
+                self?.lottie.showError(error: error)
             }
         }
         
@@ -409,7 +409,7 @@ class PhotoPostViewController: UIViewController {
                     
                     self.lottie.stopLoading()
                     
-                    self.lottie.showError(error)
+                    self.lottie.showError(error: error)
                 }
             }
         }
@@ -434,7 +434,7 @@ class PhotoPostViewController: UIViewController {
                     
                     self.lottie.stopLoading()
                     
-                    self.lottie.showError(error)
+                    self.lottie.showError(error: error)
                 }
             }
         }

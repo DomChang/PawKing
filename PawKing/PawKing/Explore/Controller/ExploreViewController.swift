@@ -185,7 +185,7 @@ class ExploreViewController: UIViewController {
                 
                 self?.lottie.stopLoading()
                 
-                self?.lottie.showError(error)
+                self?.lottie.showError(error: error)
             }
         }
     }

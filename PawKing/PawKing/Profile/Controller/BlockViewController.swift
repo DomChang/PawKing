@@ -91,7 +91,7 @@ class BlockViewController: UIViewController {
             case .failure(let error):
                 
                 self?.lottie.stopLoading()
-                self?.lottie.showError(error)
+                self?.lottie.showError(error: error)
             }
         }
     }
@@ -141,7 +141,7 @@ extension BlockViewController: UITableViewDataSource, UITableViewDelegate {
                     
                 case .failure:
                     
-                    self?.lottie.showError(nil)
+                    self?.lottie.showError(error: nil)
                 }
             }
 

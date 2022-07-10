@@ -78,7 +78,7 @@ class LottieWrapper {
         }
     }
     
-    func showError(_ error: Error?) {
+    func showError(error: Error?) {
         
         blurView.frame = CGRect(x: 0, y: 0, width: width, height: height)
         
@@ -100,6 +100,52 @@ class LottieWrapper {
         
         if let error = error {
             errorLabel.text = String(describing: error)
+        } else {
+            errorLabel.text = "Failure"
+        }
+        
+        errorLabel.textColor = .Orange1
+        
+        errorLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        
+        errorView.contentMode = .scaleAspectFill
+        
+        currentWindow?.addSubview(vStack)
+        
+        vStack.center = currentWindow?.center ?? CGPoint(x: width / 2, y: height / 2)
+        
+        errorView.play()
+        
+        errorView.loopMode = .loop
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+
+            vStack.removeFromSuperview()
+        }
+    }
+    
+    func showError(errorMessage: String?) {
+        
+        blurView.frame = CGRect(x: 0, y: 0, width: width, height: height)
+        
+        blurView.backgroundColor = .white.withAlphaComponent(0.1)
+        
+        currentWindow?.addSubview(blurView)
+        
+        let vStack = UIStackView(arrangedSubviews: [errorView, errorLabel])
+        
+        vStack.axis = .vertical
+        vStack.alignment = .center
+        vStack.backgroundColor = .LightGray?.withAlphaComponent(0.8)
+        vStack.spacing = 5
+        vStack.layer.cornerRadius = 20
+        vStack.isLayoutMarginsRelativeArrangement = true
+        vStack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0)
+        
+        vStack.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
+        
+        if let errorMessage = errorMessage {
+            errorLabel.text = errorMessage
         } else {
             errorLabel.text = "Failure"
         }

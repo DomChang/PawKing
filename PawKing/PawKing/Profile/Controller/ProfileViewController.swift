@@ -452,7 +452,7 @@ extension ProfileViewController: UICollectionViewDataSource {
                         
                     case .failure(let error):
                         
-                        self?.lottie.showError(error)
+                        self?.lottie.showError(error: error)
                     }
                 }
             }

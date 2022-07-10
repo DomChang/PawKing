@@ -139,6 +139,17 @@ class MapViewController: UIViewController {
         if Auth.auth().currentUser != nil {
             
             listenFriendsLocation()
+            trackButton.isHidden = false
+            notificationButton.isHidden = false
+        } else {
+            userCurrentPet = nil
+            userPets = []
+            listeners.forEach { $0.remove() }
+            friendAnnotationsInfo = [:]
+            friendLocations = [:]
+            trackButton.isHidden = true
+            choosePetImageView.isHidden = true
+            notificationButton.isHidden = true
         }
     }
     
@@ -176,6 +187,8 @@ class MapViewController: UIViewController {
             
             fetchUserPets(user: user)
             listenFriendsLocation()
+            trackButton.isHidden = false
+            notificationButton.isHidden = false
 
         } else {
             userCurrentPet = nil
@@ -518,7 +531,8 @@ class MapViewController: UIViewController {
         let coordinate = userStoredLocations.map { $0.coordinate }
         let track = coordinate.map { $0.transferToGeopoint() }
         
-        guard let userCurrentPet = userCurrentPet else {
+        guard let userCurrentPet = userCurrentPet,
+              !coordinate.isEmpty else {
             
             lottie.stopLoading()
             
@@ -558,7 +572,7 @@ class MapViewController: UIViewController {
             case .failure(let error):
                 
                 self?.lottie.stopLoading()
-                self?.lottie.showError(error)
+                self?.lottie.showError(error: error)
             }
         }
     }
@@ -612,7 +626,7 @@ class MapViewController: UIViewController {
                 
             case .failure(let error):
                 print(error)
-                self?.lottie.showError(error)
+                self?.lottie.showError(error: error)
             }
         }
     }

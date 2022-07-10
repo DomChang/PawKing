@@ -170,7 +170,7 @@ class PetConfigViewController: UIViewController {
                 case .failure(let error):
                     
                     self.lottie.stopLoading()
-                    self.lottie.showError(error)
+                    self.lottie.showError(error: error)
                 }
             }
         }
@@ -228,7 +228,7 @@ extension PetConfigViewController: PetConfigCellDelegate {
         else {
             
             lottie.stopLoading()
-            lottie.showError(nil)
+            lottie.showError(error: nil)
             
             return
         }
@@ -260,7 +260,7 @@ extension PetConfigViewController: PetConfigCellDelegate {
                     cell.finishButtonEnable()
                     
                     self?.lottie.stopLoading()
-                    self?.lottie.showError(error)
+                    self?.lottie.showError(error: error)
                 }
             }
             
@@ -312,7 +312,7 @@ extension PetConfigViewController: PetConfigCellDelegate {
                     cell.finishButtonEnable()
                     
                     self?.lottie.stopLoading()
-                    self?.lottie.showError(error)
+                    self?.lottie.showError(error: error)
                 }
             }
         }

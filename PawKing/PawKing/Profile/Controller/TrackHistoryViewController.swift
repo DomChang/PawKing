@@ -326,7 +326,7 @@ class TrackHistoryViewController: UIViewController {
             case .failure(let error):
                 
                 self?.lottie.stopLoading()
-                self?.lottie.showError(error)
+                self?.lottie.showError(error: error)
             }
         }
     }
@@ -375,7 +375,7 @@ class TrackHistoryViewController: UIViewController {
                     
                     self.lottie.stopLoading()
                     
-                    self.lottie.showError(error)
+                    self.lottie.showError(error: error)
                 }
             }
         }
