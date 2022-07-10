@@ -32,6 +32,12 @@ class RegisterViewController: UIViewController {
     
     let signUpButton = UIButton()
     
+    private let policyLabel = UILabel()
+    
+    private let privacyButton = UIButton()
+    
+    private let eulaButton = UIButton()
+    
     private let videoView = UIView()
     
     private var videoPlayer: AVPlayerLooper?
@@ -55,6 +61,10 @@ class RegisterViewController: UIViewController {
     func setup() {
         
         signUpButton.addTarget(self, action: #selector(didTapSignUp), for: .touchUpInside)
+        
+        privacyButton.addTarget(self, action: #selector(didTapPrivacy), for: .touchUpInside)
+        
+        eulaButton.addTarget(self, action: #selector(didTapEULA), for: .touchUpInside)
     }
     
     func style() {
@@ -103,6 +113,20 @@ class RegisterViewController: UIViewController {
         signUpButton.setTitleColor(.white, for: .normal)
         signUpButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         signUpButton.layer.cornerRadius = 4
+        
+        policyLabel.text = "By signing up, you agree to our privacy policy and EULA as below."
+        policyLabel.textColor = .white
+        policyLabel.textAlignment = .center
+        policyLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        policyLabel.numberOfLines = 0
+        
+        privacyButton.setTitle("Privacy Policy", for: .normal)
+        privacyButton.setTitleColor(.Orange1, for: .normal)
+        privacyButton.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .bold)
+        
+        eulaButton.setTitle("EULA", for: .normal)
+        eulaButton.setTitleColor(.Orange1, for: .normal)
+        eulaButton.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .bold)
     }
     
     func layout() {
@@ -140,6 +164,26 @@ class RegisterViewController: UIViewController {
                           trailing: view.trailingAnchor,
                           height: 240,
                           padding: UIEdgeInsets(top: 24, left: 20, bottom: 0, right: 20))
+        
+        let policyHStack = UIStackView(arrangedSubviews: [privacyButton, eulaButton])
+        
+        policyHStack.axis = .horizontal
+        policyHStack.distribution = .fillEqually
+        policyHStack.spacing = 0
+        
+        view.addSubview(policyLabel)
+        view.addSubview(policyHStack)
+        
+        policyLabel.anchor(top: registerVStack.bottomAnchor,
+                           leading: registerVStack.leadingAnchor,
+                           trailing: registerVStack.trailingAnchor,
+                           padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0))
+        
+        policyHStack.anchor(top: policyLabel.bottomAnchor,
+                            leading: policyLabel.leadingAnchor,
+                            trailing: policyLabel.trailingAnchor,
+                            height: 10,
+                            padding: UIEdgeInsets(top: 5, left: 20, bottom: 0, right: 20))
     }
     
     func playVideo() {
@@ -196,5 +240,17 @@ class RegisterViewController: UIViewController {
                 })
             }
         }
+    }
+    
+    @objc private func didTapPrivacy() {
+        
+        let privacyVC = PrivacyViewController()
+        present(privacyVC, animated: true)
+    }
+    
+    @objc private func didTapEULA() {
+        
+        let eulaVC = EULAViewController()
+        present(eulaVC, animated: true)
     }
 }
