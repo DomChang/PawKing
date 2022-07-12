@@ -17,11 +17,11 @@ class TrackHistoryViewController: UIViewController {
     
     private let pet: Pet
     
-    private let trackInfo: TrackInfo
+    private var trackInfo: TrackInfo
     
     private let scrollView = UIScrollView()
     
-    private var shouldEdit: Bool
+    private var isNew: Bool
     
     private let petNameLabel = UILabel()
     
@@ -45,15 +45,23 @@ class TrackHistoryViewController: UIViewController {
     
     private let updateButton = UIButton()
     
-    private let actionController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+    private let abortButton = UIButton()
     
-    init(pet: Pet, trackInfo: TrackInfo, shouldEdit: Bool) {
+    private let deleteActionController = UIAlertController(title: nil,
+                                                           message: nil,
+                                                           preferredStyle: .actionSheet)
+    
+    private let abortActionController = UIAlertController(title: "Abort Track",
+                                                          message: "Are you sure to abort track?",
+                                                          preferredStyle: .alert)
+    
+    init(pet: Pet, trackInfo: TrackInfo, isNew: Bool) {
         
         self.pet = pet
         
         self.trackInfo = trackInfo
         
-        self.shouldEdit = shouldEdit
+        self.isNew = isNew
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -97,11 +105,11 @@ class TrackHistoryViewController: UIViewController {
         noteTextView.delegate = self
         noteTextView.isScrollEnabled = false
         
-        if shouldEdit {
+        if isNew {
             
             noteTextView.placeholder = "Write anything worthwhile..."
             
-            updateButton.setTitle("Add Note", for: .normal)
+            updateButton.setTitle("Save", for: .normal)
             updateButton.isHidden = false
             settingButton.isHidden = true
             
@@ -118,30 +126,11 @@ class TrackHistoryViewController: UIViewController {
             updateButton.isHidden = true
             updateButton.setTitle("Update Note", for: .normal)
         }
+        
+        abortButton.setTitle("Abort", for: .normal)
+        
         updateButton.addTarget(self, action: #selector(didTapUpdateNote), for: .touchUpInside)
-        
-        timeTitleLabel.text = "Time"
-        timeTitleLabel.textColor = .BattleGrey
-        timeTitleLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        
-        let startTime = trackInfo.startTime.dateValue()
-        let endTime = trackInfo.endTime.dateValue()
-        let durationString = endTime.displayTimeInCounterStyle(since: startTime)
-        timeLabel.text = durationString
-        timeLabel.textColor = .Orange1
-        timeLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        
-        distanceTitleLabel.text = "Distance"
-        distanceTitleLabel.textColor = .BattleGrey
-        distanceTitleLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        
-        distanceLabel.text = "\(String(format: "%.2f", trackInfo.distanceMeter / 1000)) km"
-        distanceLabel.textColor = .Orange1
-        distanceLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        
-        noteTitleLabel.text = "Note:"
-        noteTitleLabel.textColor = .BattleGrey
-        noteTitleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        abortButton.addTarget(self, action: #selector(didTapAbort), for: .touchUpInside)
         
 //        if let startLocation = trackInfo.track.first?.transferToCoordinate2D(),
 //           let endLocation = trackInfo.track.last?.transferToCoordinate2D() {
@@ -169,7 +158,8 @@ class TrackHistoryViewController: UIViewController {
         drawTrack()
         setAnnotation()
         
-        setActionSheet()
+        setDeleteActionSheet()
+        setAbortAlert()
     }
     
     private func style() {
@@ -191,6 +181,36 @@ class TrackHistoryViewController: UIViewController {
         updateButton.backgroundColor = .Orange1
         updateButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         updateButton.layer.cornerRadius = 4
+        
+        abortButton.setTitleColor(.Orange1, for: .normal)
+        abortButton.backgroundColor = .white
+        abortButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        abortButton.layer.cornerRadius = 4
+        abortButton.layer.borderColor = UIColor.Orange1?.cgColor
+        abortButton.layer.borderWidth = 1
+        
+        timeTitleLabel.text = "Time"
+        timeTitleLabel.textColor = .BattleGrey
+        timeTitleLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        
+        let startTime = trackInfo.startTime.dateValue()
+        let endTime = trackInfo.endTime.dateValue()
+        let durationString = endTime.displayTimeInCounterStyle(since: startTime)
+        timeLabel.text = durationString
+        timeLabel.textColor = .Orange1
+        timeLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        
+        distanceTitleLabel.text = "Distance"
+        distanceTitleLabel.textColor = .BattleGrey
+        distanceTitleLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        
+        distanceLabel.text = "\(String(format: "%.2f", trackInfo.distanceMeter / 1000)) km"
+        distanceLabel.textColor = .Orange1
+        distanceLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        
+        noteTitleLabel.text = "Note:"
+        noteTitleLabel.textColor = .BattleGrey
+        noteTitleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
     }
     
     private func layout() {
@@ -239,7 +259,6 @@ class TrackHistoryViewController: UIViewController {
         scrollView.addSubview(infoHStack)
         scrollView.addSubview(noteTitleLabel)
         scrollView.addSubview(noteTextView)
-        scrollView.addSubview(updateButton)
         
         scrollView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                           leading: view.leadingAnchor,
@@ -284,15 +303,39 @@ class TrackHistoryViewController: UIViewController {
                          trailing: scrollView.trailingAnchor,
                             padding: UIEdgeInsets(top: 5, left: 20, bottom: 0, right: 20))
         
-        updateButton.anchor(top: noteTextView.bottomAnchor,
-                            leading: scrollView.leadingAnchor,
-                            trailing: scrollView.trailingAnchor,
-                            height: 40,
-                            padding: UIEdgeInsets(top: 20, left: 40, bottom: 0, right: 40))
-        
-        updateButton.bottomAnchor.constraint(
-            lessThanOrEqualTo: scrollView.bottomAnchor, constant: -50
-        ).isActive = true
+        if isNew {
+            
+            let buttonHStack = UIStackView(arrangedSubviews: [abortButton, updateButton])
+            buttonHStack.axis = .horizontal
+            buttonHStack.distribution = .fillEqually
+            buttonHStack.spacing = 40
+            
+            scrollView.addSubview(buttonHStack)
+            
+            buttonHStack.anchor(top: noteTextView.bottomAnchor,
+                                leading: scrollView.leadingAnchor,
+                                trailing: scrollView.trailingAnchor,
+                                height: 40,
+                                padding: UIEdgeInsets(top: 20, left: 40, bottom: 0, right: 40))
+            
+            buttonHStack.bottomAnchor.constraint(
+                lessThanOrEqualTo: scrollView.bottomAnchor, constant: -50
+            ).isActive = true
+            
+        } else {
+            
+            scrollView.addSubview(updateButton)
+            
+            updateButton.anchor(top: noteTextView.bottomAnchor,
+                                leading: scrollView.leadingAnchor,
+                                trailing: scrollView.trailingAnchor,
+                                height: 40,
+                                padding: UIEdgeInsets(top: 20, left: 40, bottom: 0, right: 40))
+            
+            updateButton.bottomAnchor.constraint(
+                lessThanOrEqualTo: scrollView.bottomAnchor, constant: -50
+            ).isActive = true
+        }
         
         scrollView.layoutIfNeeded()
         petImageView.makeRound()
@@ -308,7 +351,51 @@ class TrackHistoryViewController: UIViewController {
         
         lottie.startLoading()
         
-        guard let trackNote = noteTextView.text else { return }
+        if isNew {
+            
+            addTrack()
+            
+        } else {
+            
+            updateNote()
+        }
+    }
+    
+    private func addTrack() {
+        
+        guard let user = UserManager.shared.currentUser else {
+            
+            lottie.stopLoading()
+            return
+        }
+        
+        mapManager.uploadTrack(userId: user.id, trackInfo: &trackInfo) { [weak self] result in
+            
+            switch result {
+                
+            case .success:
+                
+                self?.lottie.stopLoading()
+                
+                NotificationCenter.default.post(name: .updateTrackHistory, object: .none)
+                
+                self?.navigationController?.popViewController(animated: true)
+                
+            case .failure(let error):
+                
+                self?.lottie.stopLoading()
+                self?.lottie.showError(error: error)
+            }
+        }
+    }
+    
+    private func updateNote() {
+        
+        guard let trackNote = noteTextView.text else {
+            
+            lottie.stopLoading()
+            return
+        }
         
         updateButton.isEnabled = false
         updateButton.backgroundColor = .Gray1
@@ -335,22 +422,39 @@ class TrackHistoryViewController: UIViewController {
         }
     }
     
+    @objc private func didTapAbort() {
+        
+        present(abortActionController, animated: true)
+    }
+    
     @objc private func didTapSetting() {
         
-        present(actionController, animated: true) {
+        present(deleteActionController, animated: true) {
             
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissAlertController))
             
-            self.actionController.view.superview?.subviews[0].addGestureRecognizer(tapGesture)
+            self.deleteActionController.view.superview?.subviews[0].addGestureRecognizer(tapGesture)
         }
     }
     
     @objc private func dismissAlertController() {
         
-        actionController.dismiss(animated: true)
+        deleteActionController.dismiss(animated: true)
     }
     
-    private func setActionSheet() {
+    private func setAbortAlert() {
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        
+        let abortAction  = UIAlertAction(title: "Abort", style: .destructive) { [weak self] _ in
+            
+            self?.navigationController?.popViewController(animated: true)
+        }
+        abortActionController.addAction(abortAction)
+        abortActionController.addAction(cancelAction)
+    }
+    
+    private func setDeleteActionSheet() {
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
         
@@ -384,8 +488,8 @@ class TrackHistoryViewController: UIViewController {
             }
         }
         
-        actionController.addAction(deleteAlert)
-        actionController.addAction(cancelAction)
+        deleteActionController.addAction(deleteAlert)
+        deleteActionController.addAction(cancelAction)
     }
     
     private func drawTrack() {

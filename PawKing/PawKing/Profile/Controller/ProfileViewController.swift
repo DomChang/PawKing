@@ -615,7 +615,7 @@ extension ProfileViewController: UICollectionViewDelegate {
                     
                     let trackHistoryVC = TrackHistoryViewController(pet: userPet,
                                                                     trackInfo: trackInfo,
-                                                                    shouldEdit: false)
+                                                                    isNew: false)
                     
                     navigationController?.pushViewController(trackHistoryVC, animated: true)
                 }
