@@ -475,10 +475,10 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
 
               } else {
 
-                  guard let userName = appleIDCredential.fullName?.givenName else { return }
+                  let userName = appleIDCredential.fullName?.givenName
 
                   let user = User(id: uid,
-                                  name: userName,
+                                  name: userName ?? "",
                                   petsId: [],
                                   currentPetId: "",
                                   userImage: "",

@@ -24,11 +24,11 @@ class MapViewController: UIViewController {
     
     private let userLocationButton = UIButton()
     
-    private let trackButton = UIButton()
+    private let startTrackButton = UIButton()
     
-    private let saveTrackButton = UIButton()
-    
-    private let deleteTrackButton = UIButton()
+//    private let saveTrackButton = UIButton()
+//
+//    private let deleteTrackButton = UIButton()
     
     private let strangerButton = UIButton()
     
@@ -80,14 +80,15 @@ class MapViewController: UIViewController {
 
 //                trackButton.isHidden = !collectionView.isHidden
 //            }
-            
-            if !trackButton.isSelected {
-                
-                choosePetImageView.isHidden = false
-            } else {
-                
-                choosePetImageView.isHidden = true
-            }
+//
+//            if !startTrackButton.isSelected {
+//
+//                choosePetImageView.isHidden = false
+//            } else {
+//
+//                choosePetImageView.isHidden = true
+//            }
+            choosePetImageView.isHidden = false
             styleCurrentPetButton()
         }
     }
@@ -139,7 +140,7 @@ class MapViewController: UIViewController {
         if Auth.auth().currentUser != nil {
             
             listenFriendsLocation()
-            trackButton.isHidden = false
+            startTrackButton.isHidden = false
             notificationButton.isHidden = false
         } else {
             userCurrentPet = nil
@@ -147,7 +148,7 @@ class MapViewController: UIViewController {
             listeners.forEach { $0.remove() }
             friendAnnotationsInfo = [:]
             friendLocations = [:]
-            trackButton.isHidden = true
+            startTrackButton.isHidden = true
             choosePetImageView.isHidden = true
             notificationButton.isHidden = true
         }
@@ -187,7 +188,7 @@ class MapViewController: UIViewController {
             
             fetchUserPets(user: user)
             listenFriendsLocation()
-            trackButton.isHidden = false
+            startTrackButton.isHidden = false
             notificationButton.isHidden = false
 
         } else {
@@ -196,7 +197,7 @@ class MapViewController: UIViewController {
             listeners.forEach { $0.remove() }
             friendAnnotationsInfo = [:]
             friendLocations = [:]
-            trackButton.isHidden = true
+            startTrackButton.isHidden = true
             choosePetImageView.isHidden = true
             notificationButton.isHidden = true
         }
@@ -236,19 +237,19 @@ class MapViewController: UIViewController {
         
         userLocationButton.addTarget(self, action: #selector(didSelectUserLocation), for: .touchUpInside)
         
-        trackButton.addTarget(self, action: #selector(didTapRecordTrack), for: .touchUpInside)
+        startTrackButton.addTarget(self, action: #selector(didTapRecordTrack), for: .touchUpInside)
         
-        saveTrackButton.addTarget(self, action: #selector(didTapSaveTrack), for: .touchUpInside)
-        
-        deleteTrackButton.addTarget(self, action: #selector(didTapDeleteTrack), for: .touchUpInside)
+//        saveTrackButton.addTarget(self, action: #selector(didTapSaveTrack), for: .touchUpInside)
+//
+//        deleteTrackButton.addTarget(self, action: #selector(didTapDeleteTrack), for: .touchUpInside)
         
         strangerButton.addTarget(self, action: #selector(didTapStrangerButton), for: .touchUpInside)
         
         notificationButton.addTarget(self, action: #selector(didTapNotificationButton), for: .touchUpInside)
         
-        saveTrackButton.isHidden = true
-        
-        deleteTrackButton.isHidden = true
+//        saveTrackButton.isHidden = true
+//
+//        deleteTrackButton.isHidden = true
         
         collectionView.register(
             StrangerCardViewCell.self,
@@ -270,19 +271,18 @@ class MapViewController: UIViewController {
         mapView.layer.cornerRadius = 20
         mapView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         
-        userLocationButton.setImage(UIImage.asset(.Icons_36px_UserLocate_Normal), for: .normal)
-        userLocationButton.setImage(UIImage.asset(.Icons_36px_UserLocate_Selected), for: .selected)
+        userLocationButton.setImage(UIImage.asset(.Icons_60px_UserLocate), for: .normal)
         
-        trackButton.setImage(UIImage.asset(.Icons_90px_Start), for: .normal)
-        trackButton.setImage(UIImage.asset(.Icons_36px_RecordTrack_Selected), for: .selected)
+        startTrackButton.setImage(UIImage.asset(.Icons_90px_Start), for: .normal)
+        startTrackButton.setImage(UIImage.asset(.Icons_90px_Stop), for: .selected)
         
-        saveTrackButton.setTitle("Save", for: .normal)
-        saveTrackButton.backgroundColor = .Orange1
-        saveTrackButton.layer.cornerRadius = 5
-        
-        deleteTrackButton.setTitle("Abort", for: .normal)
-        deleteTrackButton.backgroundColor = .Gray1
-        deleteTrackButton.layer.cornerRadius = 5
+//        saveTrackButton.setTitle("Save", for: .normal)
+//        saveTrackButton.backgroundColor = .Orange1
+//        saveTrackButton.layer.cornerRadius = 5
+//
+//        deleteTrackButton.setTitle("Abort", for: .normal)
+//        deleteTrackButton.backgroundColor = .Gray1
+//        deleteTrackButton.layer.cornerRadius = 5
         
         styleCurrentPetButton()
         
@@ -303,9 +303,9 @@ class MapViewController: UIViewController {
         
         view.addSubview(mapView)
         view.addSubview(userLocationButton)
-        view.addSubview(trackButton)
-        view.addSubview(saveTrackButton)
-        view.addSubview(deleteTrackButton)
+        view.addSubview(startTrackButton)
+//        view.addSubview(saveTrackButton)
+//        view.addSubview(deleteTrackButton)
         view.addSubview(strangerButton)
         view.addSubview(notificationButton)
         view.addSubview(collectionView)
@@ -322,23 +322,23 @@ class MapViewController: UIViewController {
                                   height: 36,
                                   padding: UIEdgeInsets(top: 0, left: 0, bottom: 35, right: 35))
         
-        trackButton.anchor(leading: view.leadingAnchor,
+        choosePetImageView.anchor(leading: view.leadingAnchor,
                            bottom: view.safeAreaLayoutGuide.bottomAnchor,
-                           width: 36,
-                           height: 36,
+                           width: 65,
+                           height: 65,
                            padding: UIEdgeInsets(top: 0, left: 35, bottom: 35, right: 0))
         
-        deleteTrackButton.anchor(leading: view.leadingAnchor,
-                           bottom: view.safeAreaLayoutGuide.bottomAnchor,
-                           width: 60,
-                           height: 36,
-                           padding: UIEdgeInsets(top: 0, left: 35, bottom: 35, right: 0))
-        
-        saveTrackButton.anchor(leading: view.leadingAnchor,
-                           bottom: view.safeAreaLayoutGuide.bottomAnchor,
-                           width: 60,
-                           height: 36,
-                           padding: UIEdgeInsets(top: 0, left: 35, bottom: 35, right: 0))
+//        deleteTrackButton.anchor(leading: view.leadingAnchor,
+//                           bottom: view.safeAreaLayoutGuide.bottomAnchor,
+//                           width: 60,
+//                           height: 36,
+//                           padding: UIEdgeInsets(top: 0, left: 35, bottom: 35, right: 0))
+//
+//        saveTrackButton.anchor(leading: view.leadingAnchor,
+//                           bottom: view.safeAreaLayoutGuide.bottomAnchor,
+//                           width: 60,
+//                           height: 36,
+//                           padding: UIEdgeInsets(top: 0, left: 35, bottom: 35, right: 0))
         
         strangerButton.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                               leading: view.leadingAnchor,
@@ -358,10 +358,10 @@ class MapViewController: UIViewController {
                               height: 150,
                               padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0))
         
-        choosePetImageView.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,
+        startTrackButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,
                                centerX: view.centerXAnchor,
-                               width: 100,
-                               height: 100,
+                               width: 80,
+                               height: 80,
                                padding: UIEdgeInsets(top: 0, left: 0, bottom: 35, right: 0))
         
         strangerButton.setRadiusWithShadow()
@@ -370,7 +370,7 @@ class MapViewController: UIViewController {
         
         userLocationButton.setRadiusWithShadow()
         
-        trackButton.setRadiusWithShadow()
+        startTrackButton.setRadiusWithShadow()
 
     }
     
@@ -451,7 +451,7 @@ class MapViewController: UIViewController {
     private func styleCurrentPetButton() {
         
         choosePetImageView.makeRoundDoubleBorder(borderWidth: 2,
-                                                 outterColor: .Orange1,
+                                                 outterColor: .BattleGrey,
                                                  innerColor: .white)
         
         choosePetImageView.contentMode = .scaleAspectFill
@@ -506,17 +506,17 @@ class MapViewController: UIViewController {
             return
         }
         
-        trackButton.isSelected = !trackButton.isSelected
-        saveTrackButton.isHidden = trackButton.isSelected
-        deleteTrackButton.isHidden = trackButton.isSelected
+        startTrackButton.isSelected = !startTrackButton.isSelected
+//        saveTrackButton.isHidden = startTrackButton.isSelected
+//        deleteTrackButton.isHidden = startTrackButton.isSelected
         
-        userLocationButton.isHidden = !trackButton.isSelected
+        userLocationButton.isHidden = !startTrackButton.isSelected
         
-        choosePetImageView.isHidden = true
+//        choosePetImageView.isHidden = true
         
-        mapView.isUserInteractionEnabled = trackButton.isSelected
+        mapView.isUserInteractionEnabled = startTrackButton.isSelected
         
-        if trackButton.isSelected {
+        if startTrackButton.isSelected {
             
             locationManager?.startUpdatingLocation()
             locationManager?.startUpdatingHeading()
@@ -528,8 +528,8 @@ class MapViewController: UIViewController {
             
             UIView.animate(withDuration: 0.3) { [weak self] in
                 
-                self?.saveTrackButton.center.x = 250
-                self?.deleteTrackButton.center.x = 150
+//                self?.saveTrackButton.center.x = 250
+//                self?.deleteTrackButton.center.x = 150
             }
         }
     }
@@ -624,8 +624,8 @@ class MapViewController: UIViewController {
         
         choosePetImageView.isHidden = false
         
-        saveTrackButton.isHidden = true
-        deleteTrackButton.isHidden = true
+//        saveTrackButton.isHidden = true
+//        deleteTrackButton.isHidden = true
         
         mapManager.changeUserStatus(userId: user.id, status: .unTrack) { [weak self] result in
             switch result {
