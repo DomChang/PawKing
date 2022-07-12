@@ -313,7 +313,9 @@ class TrackHistoryViewController: UIViewController {
         updateButton.isEnabled = false
         updateButton.backgroundColor = .Gray1
         
-        mapManager.updateTrackNote(userId: pet.ownerId, trackInfo: trackInfo, trackNote: trackNote) { [weak self] result in
+        mapManager.updateTrackNote(userId: pet.ownerId,
+                                   trackInfo: trackInfo,
+                                   trackNote: trackNote) { [weak self] result in
             
             switch result {
                 
@@ -322,6 +324,8 @@ class TrackHistoryViewController: UIViewController {
                 self?.lottie.stopLoading()
                 
                 self?.navigationController?.popViewController(animated: true)
+                
+                NotificationCenter.default.post(name: .updateUser, object: .none)
                 
             case .failure(let error):
                 

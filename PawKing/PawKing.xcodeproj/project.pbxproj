@@ -37,7 +37,6 @@
 		B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDA0285881FB0009077E /* TabBarViewController.swift */; };
 		B698DDA4285881FB0009077E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B698DDA2285881FB0009077E /* Main.storyboard */; };
 		B698DDA6285881FD0009077E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B698DDA5285881FD0009077E /* Assets.xcassets */; };
-		B698DDA9285881FD0009077E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B698DDA7285881FD0009077E /* LaunchScreen.storyboard */; };
 		B698DDB328588D280009077E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B698DDB228588D280009077E /* GoogleService-Info.plist */; };
 		B698DDB52858B8540009077E /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDB42858B8540009077E /* MapViewController.swift */; };
 		B698DDB72858B8850009077E /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDB62858B8850009077E /* ExploreViewController.swift */; };
@@ -48,6 +47,8 @@
 		B698DDC22858CE9D0009077E /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDC12858CE9D0009077E /* UIView+Extension.swift */; };
 		B69C562A287A71A7004DD552 /* UIRefreshControl+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69C5629287A71A7004DD552 /* UIRefreshControl+Extension.swift */; };
 		B69C562C287A7C47004DD552 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = B69C562B287A7C47004DD552 /* loading.json */; };
+		B69C5630287C657B004DD552 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B69C562F287C657B004DD552 /* LaunchScreen.storyboard */; };
+		B69C5632287CFE18004DD552 /* pawking_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = B69C5631287CFE18004DD552 /* pawking_icon.png */; };
 		B6A91D692868372B0049253A /* NoStrangerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D682868372B0049253A /* NoStrangerCell.swift */; };
 		B6A91D6B2868909F0049253A /* PetItemBackReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D6A2868909F0049253A /* PetItemBackReusableView.swift */; };
 		B6A91D6D28697CCC0049253A /* ProfileInfoReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D6C28697CCC0049253A /* ProfileInfoReusableView.swift */; };
@@ -131,7 +132,6 @@
 		B698DDA0285881FB0009077E /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		B698DDA3285881FB0009077E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B698DDA5285881FD0009077E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		B698DDA8285881FD0009077E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B698DDAA285881FD0009077E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B698DDB228588D280009077E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B698DDB42858B8540009077E /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -143,6 +143,8 @@
 		B698DDC12858CE9D0009077E /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		B69C5629287A71A7004DD552 /* UIRefreshControl+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIRefreshControl+Extension.swift"; sourceTree = "<group>"; };
 		B69C562B287A7C47004DD552 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
+		B69C562F287C657B004DD552 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		B69C5631287CFE18004DD552 /* pawking_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pawking_icon.png; sourceTree = "<group>"; };
 		B6A91D682868372B0049253A /* NoStrangerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoStrangerCell.swift; sourceTree = "<group>"; };
 		B6A91D6A2868909F0049253A /* PetItemBackReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetItemBackReusableView.swift; sourceTree = "<group>"; };
 		B6A91D6C28697CCC0049253A /* ProfileInfoReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoReusableView.swift; sourceTree = "<group>"; };
@@ -414,10 +416,11 @@
 				B698DDA2285881FB0009077E /* Main.storyboard */,
 				B60007FF2876AB770087717F /* signIn.mp4 */,
 				B6E157332876C5E600D05796 /* signUp.mp4 */,
+				B69C5631287CFE18004DD552 /* pawking_icon.png */,
 				B698DDA5285881FD0009077E /* Assets.xcassets */,
-				B698DDA7285881FD0009077E /* LaunchScreen.storyboard */,
 				B698DDAA285881FD0009077E /* Info.plist */,
 				B698DDB228588D280009077E /* GoogleService-Info.plist */,
+				B69C562F287C657B004DD552 /* LaunchScreen.storyboard */,
 			);
 			path = PawKing;
 			sourceTree = "<group>";
@@ -639,8 +642,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				B6DD66E32875538B00523197 /* error.json in Resources */,
-				B698DDA9285881FD0009077E /* LaunchScreen.storyboard in Resources */,
 				B69C562C287A7C47004DD552 /* loading.json in Resources */,
+				B69C5630287C657B004DD552 /* LaunchScreen.storyboard in Resources */,
+				B69C5632287CFE18004DD552 /* pawking_icon.png in Resources */,
 				B698DDB328588D280009077E /* GoogleService-Info.plist in Resources */,
 				B698DDA6285881FD0009077E /* Assets.xcassets in Resources */,
 				B60008002876AB7B0087717F /* signIn.mp4 in Resources */,
@@ -827,14 +831,6 @@
 				B698DDA3285881FB0009077E /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		B698DDA7285881FD0009077E /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B698DDA8285881FD0009077E /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
