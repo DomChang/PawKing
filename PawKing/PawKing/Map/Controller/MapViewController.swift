@@ -273,7 +273,7 @@ class MapViewController: UIViewController {
         userLocationButton.setImage(UIImage.asset(.Icons_36px_UserLocate_Normal), for: .normal)
         userLocationButton.setImage(UIImage.asset(.Icons_36px_UserLocate_Selected), for: .selected)
         
-        trackButton.setImage(UIImage.asset(.Icons_36px_RecordTrack_Normal), for: .normal)
+        trackButton.setImage(UIImage.asset(.Icons_90px_Start), for: .normal)
         trackButton.setImage(UIImage.asset(.Icons_36px_RecordTrack_Selected), for: .selected)
         
         saveTrackButton.setTitle("Save", for: .normal)
