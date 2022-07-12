@@ -276,11 +276,11 @@ class MapViewController: UIViewController {
         trackButton.setImage(UIImage.asset(.Icons_36px_RecordTrack_Normal), for: .normal)
         trackButton.setImage(UIImage.asset(.Icons_36px_RecordTrack_Selected), for: .selected)
         
-        saveTrackButton.setTitle("儲存", for: .normal)
+        saveTrackButton.setTitle("Save", for: .normal)
         saveTrackButton.backgroundColor = .Orange1
         saveTrackButton.layer.cornerRadius = 5
         
-        deleteTrackButton.setTitle("放棄", for: .normal)
+        deleteTrackButton.setTitle("Abort", for: .normal)
         deleteTrackButton.backgroundColor = .Gray1
         deleteTrackButton.layer.cornerRadius = 5
         
@@ -470,6 +470,16 @@ class MapViewController: UIViewController {
     }
     
     @objc func didSelectUserLocation() {
+        
+        guard locationManager?.authorizationStatus != .denied &&
+                locationManager?.authorizationStatus != .restricted &&
+                locationManager?.authorizationStatus != .notDetermined else {
+            
+            if let locationAlertController = locationAlertController {
+                present(locationAlertController, animated: true)
+            }
+            return
+        }
         
         userLocationButton.isSelected = true
         
