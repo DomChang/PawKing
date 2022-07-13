@@ -28,9 +28,11 @@ class MapViewController: UIViewController {
     
     private let stopTrackButton = UIImageView()
     
-    private var stopTimer: Timer?
+    private var stopWidthAnchor: NSLayoutConstraint?
     
-    private let holdToStopLabel = UILabel()
+    private var stopHeightAnchor: NSLayoutConstraint?
+    
+    private var stopTimer: Timer?
     
     private var isTracking = false
     
@@ -121,9 +123,7 @@ class MapViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         
         setLocationAlert()
-        
-        holdToStopLabel.isHidden = true
-        
+
         if Auth.auth().currentUser != nil {
             
             listenFriendsLocation()
@@ -254,11 +254,6 @@ class MapViewController: UIViewController {
         startTrackButton.image = UIImage.asset(.Icons_90px_Start)
         stopTrackButton.image = UIImage.asset(.Icons_90px_Stop)
         
-        holdToStopLabel.text = "HOLD TO STOP"
-        holdToStopLabel.textColor = .Orange1
-        holdToStopLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
-        holdToStopLabel.textAlignment = .center
-        
         styleCurrentPetButton()
         
         strangerButton.setImage(UIImage.asset(.Icons_60px_Stranger), for: .normal)
@@ -280,7 +275,6 @@ class MapViewController: UIViewController {
         view.addSubview(userLocationButton)
         view.addSubview(stopTrackButton)
         view.addSubview(startTrackButton)
-        view.addSubview(holdToStopLabel)
         view.addSubview(strangerButton)
         view.addSubview(notificationButton)
         view.addSubview(collectionView)
@@ -328,13 +322,12 @@ class MapViewController: UIViewController {
                                padding: UIEdgeInsets(top: 0, left: 0, bottom: 35, right: 0))
         
         stopTrackButton.anchor(centerY: startTrackButton.centerYAnchor,
-                               centerX: startTrackButton.centerXAnchor,
-                               width: 80,
-                               height: 80)
+                               centerX: startTrackButton.centerXAnchor)
         
-        holdToStopLabel.anchor(bottom: stopTrackButton.topAnchor,
-                               centerX: view.centerXAnchor,
-                               padding: UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0))
+        stopWidthAnchor = stopTrackButton.widthAnchor.constraint(equalToConstant: 80)
+        stopHeightAnchor = stopTrackButton.heightAnchor.constraint(equalToConstant: 80)
+        stopWidthAnchor?.isActive = true
+        stopHeightAnchor?.isActive = true
         
         strangerButton.setRadiusWithShadow()
         
@@ -351,7 +344,7 @@ class MapViewController: UIViewController {
         let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(didLongTapEndTrack))
         
         tapGesture.numberOfTapsRequired = 1
-        longGesture.minimumPressDuration = 1
+        longGesture.minimumPressDuration = 0
 
         startTrackButton.addGestureRecognizer(tapGesture)
         stopTrackButton.addGestureRecognizer(longGesture)
@@ -486,123 +479,74 @@ class MapViewController: UIViewController {
         trackStartTime = Timestamp(date: Date())
     }
     
-//    @objc private func didTapEndTrack(_ sender: UIGestureRecognizer) {
-//
-//        if sender.state == .began {
-//
-//            holdToStopLabel.isHidden = false
-//
-//        } else if sender.state == .ended {
-//
-//            holdToStopLabel.isHidden = true
-//        }
-//    }
-    
-//    @objc private func didLongTapEndTrack(_ sender: UIGestureRecognizer) {
-//
-//        var count: Double = 0
-//
-//        if sender.state == .began {
-//
-//            stopTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { [weak self] _ in
-//
-//                guard let self = self else {
-//                    return
-//                }
-//
-//                count += 0.5
-//
-//                print("===\(count)")
-//
-//                UIView.animate(withDuration: 0.2, animations: {
-//
-//                    self.stopTrackButton.frame.size.height += 10
-//                    self.stopTrackButton.frame.size.width += 10
-//                })
-//
-//                if count == 2 {
-//
-//                    self.focusUserLocation()
-//
-//                    let coordinate = self.userStoredLocations.map { $0.coordinate }
-//                    let track = coordinate.map { $0.transferToGeopoint() }
-//
-//                    guard let userCurrentPet = self.userCurrentPet,
-//                          !coordinate.isEmpty else {
-//
-//                        return
-//                    }
-//
-//                    self.isTracking = false
-//
-//                    self.holdToStopLabel.isHidden = true
-//
-//                    self.notTracking()
-//
-//                    self.didFinishTrackButtons()
-//                    self.mapView.removeOverlays(self.mapView.overlays)
-//
-//                    let distance = self.computeDistance(from: track.map { $0.transferToCoordinate2D() })
-//
-//                    let trackInfo = TrackInfo(id: "",
-//                                              petId: userCurrentPet.id,
-//                                              distanceMeter: distance,
-//                                              startTime: self.trackStartTime,
-//                                              endTime: Timestamp(),
-//                                              track: track,
-//                                              note: "")
-//
-//                    let trackHistoryVC = TrackHistoryViewController(pet: userCurrentPet,
-//                                                                    trackInfo: trackInfo,
-//                                                                    isNew: true)
-//
-//                    self.stopTimer?.invalidate()
-//
-//                    self.navigationController?.pushViewController(trackHistoryVC, animated: true)
-//                }
-//            })
-//        }
-//    }
-    
     @objc private func didLongTapEndTrack(_ sender: UIGestureRecognizer) {
-        
-        focusUserLocation()
-        
-        let coordinate = userStoredLocations.map { $0.coordinate }
-        let track = coordinate.map { $0.transferToGeopoint() }
-        
-        guard let userCurrentPet = userCurrentPet,
-              !coordinate.isEmpty else {
+
+        var count: Double = 0
+
+        if sender.state == .began {
+
+            stopTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true, block: { [weak self] _ in
+
+                guard let self = self else {
+                    return
+                }
+
+                count += 0.05
+                self.stopWidthAnchor?.constant += 1
+                self.stopHeightAnchor?.constant += 1
+
+                if count >= 1 {
+
+                    self.focusUserLocation()
+
+                    let coordinate = self.userStoredLocations.map { $0.coordinate }
+                    let track = coordinate.map { $0.transferToGeopoint() }
+
+                    guard let userCurrentPet = self.userCurrentPet,
+                          !coordinate.isEmpty else {
+
+                        return
+                    }
+
+                    self.isTracking = false
+                    
+                    self.notTracking()
+
+                    self.didFinishTrackButtons()
+                    self.mapView.removeOverlays(self.mapView.overlays)
+
+                    let distance = self.computeDistance(from: track.map { $0.transferToCoordinate2D() })
+
+                    let trackInfo = TrackInfo(id: "",
+                                              petId: userCurrentPet.id,
+                                              distanceMeter: distance,
+                                              startTime: self.trackStartTime,
+                                              endTime: Timestamp(),
+                                              track: track,
+                                              note: "")
+
+                    let trackHistoryVC = TrackHistoryViewController(pet: userCurrentPet,
+                                                                    trackInfo: trackInfo,
+                                                                    isNew: true)
+                    
+                    self.stopTimer?.invalidate()
+                    self.stopTimer = nil
+                    count = 0
+                    self.stopWidthAnchor?.constant = 80
+                    self.stopHeightAnchor?.constant = 80
+                    UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                    
+                    self.navigationController?.pushViewController(trackHistoryVC, animated: true)
+                }
+            })
+        } else if sender.state == .ended {
             
-            return
+            count = 0
+            stopTimer?.invalidate()
+            stopTimer = nil
+            stopWidthAnchor?.constant = 80
+            stopHeightAnchor?.constant = 80
         }
-        
-        isTracking = false
-        
-        holdToStopLabel.isHidden = true
-        
-        notTracking()
-        
-        didFinishTrackButtons()
-        mapView.removeOverlays(mapView.overlays)
-        
-        let distance = computeDistance(from: track.map { $0.transferToCoordinate2D() })
-        
-        let trackInfo = TrackInfo(id: "",
-                                  petId: userCurrentPet.id,
-                                  distanceMeter: distance,
-                                  startTime: trackStartTime,
-                                  endTime: Timestamp(),
-                                  track: track,
-                                  note: "")
-        
-        let trackHistoryVC = TrackHistoryViewController(pet: userCurrentPet,
-                                                        trackInfo: trackInfo,
-                                                        isNew: true)
-        
-        stopTimer?.invalidate()
-        
-        navigationController?.pushViewController(trackHistoryVC, animated: true)
     }
     
     private func computeDistance(from points: [CLLocationCoordinate2D]) -> Double {
@@ -855,8 +799,6 @@ class MapViewController: UIViewController {
         
         startTrackButton.isUserInteractionEnabled = false
         stopTrackButton.isUserInteractionEnabled = true
-        
-        holdToStopLabel.isHidden = false
     }
     
     func notTracking() {
@@ -866,8 +808,6 @@ class MapViewController: UIViewController {
         
         startTrackButton.isUserInteractionEnabled = true
         stopTrackButton.isUserInteractionEnabled = false
-        
-        holdToStopLabel.isHidden = true
     }
 }
 
