@@ -28,11 +28,11 @@ class MapViewController: UIViewController {
     
     private let stopTrackButton = UIImageView()
     
-//    private var isTracking = false
+    private var stopTimer: Timer?
     
-//    private let saveTrackButton = UIButton()
-//
-//    private let deleteTrackButton = UIButton()
+    private let holdToStopLabel = UILabel()
+    
+    private var isTracking = false
     
     private let strangerButton = UIButton()
     
@@ -122,6 +122,8 @@ class MapViewController: UIViewController {
         
         setLocationAlert()
         
+        holdToStopLabel.isHidden = true
+        
         if Auth.auth().currentUser != nil {
             
             listenFriendsLocation()
@@ -171,7 +173,14 @@ class MapViewController: UIViewController {
             
             fetchUserPets(user: user)
             listenFriendsLocation()
-            startTrackButton.isHidden = false
+            
+            if isTracking {
+                
+                beTracking()
+            } else {
+                notTracking()
+            }
+            
             notificationButton.isHidden = false
 
         } else {
@@ -180,7 +189,7 @@ class MapViewController: UIViewController {
             listeners.forEach { $0.remove() }
             friendAnnotationsInfo = [:]
             friendLocations = [:]
-            startTrackButton.isHidden = true
+            notTracking()
             choosePetImageView.isHidden = true
             notificationButton.isHidden = true
         }
@@ -194,12 +203,6 @@ class MapViewController: UIViewController {
                                                object: nil)
         
         choosePetImageView.isHidden = true
-        
-//        strangerButtonDisable()
-        
-//        strangerButtonEnable()
-        
-//        getUser()
         
         locationManager = CLLocationManager()
         locationManager?.delegate = self
@@ -219,21 +222,11 @@ class MapViewController: UIViewController {
         choosePetImageView.isUserInteractionEnabled = true
         
         userLocationButton.addTarget(self, action: #selector(didSelectUserLocation), for: .touchUpInside)
-        
-//        startTrackButton.addTarget(self, action: #selector(didTapRecordTrack), for: .touchUpInside)
-        
-//        saveTrackButton.addTarget(self, action: #selector(didTapSaveTrack), for: .touchUpInside)
-//
-//        deleteTrackButton.addTarget(self, action: #selector(didTapDeleteTrack), for: .touchUpInside)
-        
+
         strangerButton.addTarget(self, action: #selector(didTapStrangerButton), for: .touchUpInside)
         
         notificationButton.addTarget(self, action: #selector(didTapNotificationButton), for: .touchUpInside)
-        
-//        saveTrackButton.isHidden = true
-//
-//        deleteTrackButton.isHidden = true
-        
+
         collectionView.register(
             StrangerCardViewCell.self,
             forCellWithReuseIdentifier: StrangerCardViewCell.identifier)
@@ -261,13 +254,10 @@ class MapViewController: UIViewController {
         startTrackButton.image = UIImage.asset(.Icons_90px_Start)
         stopTrackButton.image = UIImage.asset(.Icons_90px_Stop)
         
-//        saveTrackButton.setTitle("Save", for: .normal)
-//        saveTrackButton.backgroundColor = .Orange1
-//        saveTrackButton.layer.cornerRadius = 5
-//
-//        deleteTrackButton.setTitle("Abort", for: .normal)
-//        deleteTrackButton.backgroundColor = .Gray1
-//        deleteTrackButton.layer.cornerRadius = 5
+        holdToStopLabel.text = "HOLD TO STOP"
+        holdToStopLabel.textColor = .Orange1
+        holdToStopLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        holdToStopLabel.textAlignment = .center
         
         styleCurrentPetButton()
         
@@ -290,8 +280,7 @@ class MapViewController: UIViewController {
         view.addSubview(userLocationButton)
         view.addSubview(stopTrackButton)
         view.addSubview(startTrackButton)
-//        view.addSubview(saveTrackButton)
-//        view.addSubview(deleteTrackButton)
+        view.addSubview(holdToStopLabel)
         view.addSubview(strangerButton)
         view.addSubview(notificationButton)
         view.addSubview(collectionView)
@@ -313,18 +302,6 @@ class MapViewController: UIViewController {
                            width: 65,
                            height: 65,
                            padding: UIEdgeInsets(top: 0, left: 35, bottom: 35, right: 0))
-        
-//        deleteTrackButton.anchor(leading: view.leadingAnchor,
-//                           bottom: view.safeAreaLayoutGuide.bottomAnchor,
-//                           width: 60,
-//                           height: 36,
-//                           padding: UIEdgeInsets(top: 0, left: 35, bottom: 35, right: 0))
-//
-//        saveTrackButton.anchor(leading: view.leadingAnchor,
-//                           bottom: view.safeAreaLayoutGuide.bottomAnchor,
-//                           width: 60,
-//                           height: 36,
-//                           padding: UIEdgeInsets(top: 0, left: 35, bottom: 35, right: 0))
         
         strangerButton.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                               leading: view.leadingAnchor,
@@ -355,6 +332,10 @@ class MapViewController: UIViewController {
                                width: 80,
                                height: 80)
         
+        holdToStopLabel.anchor(bottom: stopTrackButton.topAnchor,
+                               centerX: view.centerXAnchor,
+                               padding: UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0))
+        
         strangerButton.setRadiusWithShadow()
         
         notificationButton.setRadiusWithShadow()
@@ -362,23 +343,20 @@ class MapViewController: UIViewController {
         userLocationButton.setRadiusWithShadow()
         
         startTrackButton.setRadiusWithShadow()
-
     }
     
     func setupTrackButton() {
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapStartTrack))
-        
         let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(didLongTapEndTrack))
         
         tapGesture.numberOfTapsRequired = 1
-        
+        longGesture.minimumPressDuration = 1
+
         startTrackButton.addGestureRecognizer(tapGesture)
         stopTrackButton.addGestureRecognizer(longGesture)
         
-        startTrackButton.isUserInteractionEnabled = true
-        startTrackButton.isHidden = false
-        stopTrackButton.isHidden = true
+        notTracking()
     }
     
     private func focusUserLocation() {
@@ -499,26 +477,96 @@ class MapViewController: UIViewController {
             return
         }
         
-        stopTrackButton.isHidden = false
-        stopTrackButton.isUserInteractionEnabled = true
-        startTrackButton.isHidden = true
-//        isTracking = true
-//        mapView.isUserInteractionEnabled = true
+        isTracking = true
+        
+        beTracking()
         
         locationManager?.startUpdatingLocation()
         locationManager?.startUpdatingHeading()
         trackStartTime = Timestamp(date: Date())
     }
     
-    @objc func didLongTapEndTrack() {
-        
-        startTrackButton.isHidden = false
-        startTrackButton.isUserInteractionEnabled = true
-        stopTrackButton.isHidden = true
-//        isTracking = false
+//    @objc private func didTapEndTrack(_ sender: UIGestureRecognizer) {
+//
+//        if sender.state == .began {
+//
+//            holdToStopLabel.isHidden = false
+//
+//        } else if sender.state == .ended {
+//
+//            holdToStopLabel.isHidden = true
+//        }
+//    }
+    
+//    @objc private func didLongTapEndTrack(_ sender: UIGestureRecognizer) {
+//
+//        var count: Double = 0
+//
+//        if sender.state == .began {
+//
+//            stopTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { [weak self] _ in
+//
+//                guard let self = self else {
+//                    return
+//                }
+//
+//                count += 0.5
+//
+//                print("===\(count)")
+//
+//                UIView.animate(withDuration: 0.2, animations: {
+//
+//                    self.stopTrackButton.frame.size.height += 10
+//                    self.stopTrackButton.frame.size.width += 10
+//                })
+//
+//                if count == 2 {
+//
+//                    self.focusUserLocation()
+//
+//                    let coordinate = self.userStoredLocations.map { $0.coordinate }
+//                    let track = coordinate.map { $0.transferToGeopoint() }
+//
+//                    guard let userCurrentPet = self.userCurrentPet,
+//                          !coordinate.isEmpty else {
+//
+//                        return
+//                    }
+//
+//                    self.isTracking = false
+//
+//                    self.holdToStopLabel.isHidden = true
+//
+//                    self.notTracking()
+//
+//                    self.didFinishTrackButtons()
+//                    self.mapView.removeOverlays(self.mapView.overlays)
+//
+//                    let distance = self.computeDistance(from: track.map { $0.transferToCoordinate2D() })
+//
+//                    let trackInfo = TrackInfo(id: "",
+//                                              petId: userCurrentPet.id,
+//                                              distanceMeter: distance,
+//                                              startTime: self.trackStartTime,
+//                                              endTime: Timestamp(),
+//                                              track: track,
+//                                              note: "")
+//
+//                    let trackHistoryVC = TrackHistoryViewController(pet: userCurrentPet,
+//                                                                    trackInfo: trackInfo,
+//                                                                    isNew: true)
+//
+//                    self.stopTimer?.invalidate()
+//
+//                    self.navigationController?.pushViewController(trackHistoryVC, animated: true)
+//                }
+//            })
+//        }
+//    }
+    
+    @objc private func didLongTapEndTrack(_ sender: UIGestureRecognizer) {
         
         focusUserLocation()
-//        mapView.isUserInteractionEnabled = false
         
         let coordinate = userStoredLocations.map { $0.coordinate }
         let track = coordinate.map { $0.transferToGeopoint() }
@@ -528,6 +576,12 @@ class MapViewController: UIViewController {
             
             return
         }
+        
+        isTracking = false
+        
+        holdToStopLabel.isHidden = true
+        
+        notTracking()
         
         didFinishTrackButtons()
         mapView.removeOverlays(mapView.overlays)
@@ -546,10 +600,12 @@ class MapViewController: UIViewController {
                                                         trackInfo: trackInfo,
                                                         isNew: true)
         
+        stopTimer?.invalidate()
+        
         navigationController?.pushViewController(trackHistoryVC, animated: true)
     }
     
-    func computeDistance(from points: [CLLocationCoordinate2D]) -> Double {
+    private func computeDistance(from points: [CLLocationCoordinate2D]) -> Double {
         
         guard let first = points.first else { return 0.0 }
         
@@ -567,27 +623,12 @@ class MapViewController: UIViewController {
         }
     }
     
-//    @objc func didTapDeleteTrack() {
-//
-//        didFinishTrackButtons()
-//        mapView.removeOverlays(mapView.overlays)
-//    }
-    
     func didFinishTrackButtons() {
         
         locationManager?.stopUpdatingLocation()
         locationManager?.stopUpdatingHeading()
         
         userStoredLocations = []
-        
-//        mapView.isUserInteractionEnabled = true
-        
-//        userLocationButton.isHidden = false
-//
-//        choosePetImageView.isHidden = false
-        
-//        saveTrackButton.isHidden = true
-//        deleteTrackButton.isHidden = true
         
         mapManager.changeUserStatus(userId: user.id, status: .unTrack) { [weak self] result in
             switch result {
@@ -624,25 +665,7 @@ class MapViewController: UIViewController {
         strangerButton.isSelected = !strangerButton.isSelected
         
         collectionView.isHidden = !strangerButton.isSelected
-        
-//        if Auth.auth().currentUser != nil,
-//            userCurrentPet != nil {
-//
-//            if locationManager?.authorizationStatus == .denied ||
-//                locationManager?.authorizationStatus == .restricted ||
-//                locationManager?.authorizationStatus == .notDetermined {
-//
-//                trackButton.isHidden = true
-//            } else {
-//                trackButton.isHidden = strangerButton.isSelected
-//            }
-//
-//            if !trackButton.isSelected || !user.petsId.isEmpty {
-//                choosePetImageView.isHidden = strangerButton.isSelected
-//            }
-//        }
-//        userLocationButton.isHidden = strangerButton.isSelected
-//
+
         mapManager.fetchStrangerLocations(friend: user.friends, blockIds: user.blockUsersId) { [weak self] result in
             
             switch result {
@@ -799,9 +822,12 @@ class MapViewController: UIViewController {
     
     func setLocationAlert() {
         
-        locationAlertController = UIAlertController(title: "Allow \"PawKing\" To Access Your Location While You Use The App." ,
-                                                message: "PawKing requires your precise location to track your walk.",
-                                                preferredStyle: .alert)
+        locationAlertController = UIAlertController(
+            title: "Allow \"PawKing\" To Access Your Location While You Use The App.",
+            message: "PawKing requires your precise location to track your pet walks which you could check out later " +
+                      "and provide you feature of showing the pets near by you. " +
+                      "We will not disclose any location of you to others.",
+            preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
         locationAlertController?.addAction(cancelAction)
@@ -820,6 +846,28 @@ class MapViewController: UIViewController {
         })
         
         noPetAlertController.addAction(noPetCancelAction)
+    }
+    
+    func beTracking() {
+        
+        startTrackButton.isHidden = true
+        stopTrackButton.isHidden = false
+        
+        startTrackButton.isUserInteractionEnabled = false
+        stopTrackButton.isUserInteractionEnabled = true
+        
+        holdToStopLabel.isHidden = false
+    }
+    
+    func notTracking() {
+        
+        startTrackButton.isHidden = false
+        stopTrackButton.isHidden = true
+        
+        startTrackButton.isUserInteractionEnabled = true
+        stopTrackButton.isUserInteractionEnabled = false
+        
+        holdToStopLabel.isHidden = true
     }
 }
 
@@ -981,21 +1029,6 @@ extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
         let userPhotoWallVC = UserPhotoWallViewController(otherUserId: annotation.userId)
 
         navigationController?.pushViewController(userPhotoWallVC, animated: true)
-
-//        userManager.fetchUserInfo(userId: annotation.userId) { [weak self] result in
-//
-//            switch result {
-//
-//            case .success(let otherUser):
-
-//                guard let user = self?.user else { return }
-//
-//            case .failure(let error):
-//
-//                print(error)
-
-//            }
-//        }
     }
 }
 
@@ -1010,25 +1043,10 @@ extension MapViewController: UICollectionViewDataSource, UICollectionViewDelegat
         }
         
         guard strangersPet.count != 0 else { return }
-        
-//        userManager.fetchUserInfo(userId: strangersPet[indexPath.item].ownerId) { [weak self] result in
-//
-//            switch result {
-//
-//            case .success(let otherUser):
-
-//                guard let user = self?.user else { return }
 
                 let userPhotoWallVC = UserPhotoWallViewController(otherUserId: strangersPet[indexPath.item].ownerId)
 
                 navigationController?.pushViewController(userPhotoWallVC, animated: true)
-
-//            case .failure(let error):
-//
-//                print(error)
-
-//            }
-//        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -1088,5 +1106,4 @@ extension MapViewController: UICollectionViewDataSource, UICollectionViewDelegat
         return UIEdgeInsets(top: 0, left: frameSize.width * 0.15, bottom: 0, right: frameSize.width * 0.15)
     }
 }
-
 // swiftlint:enable file_length

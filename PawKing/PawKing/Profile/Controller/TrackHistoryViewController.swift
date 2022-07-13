@@ -52,7 +52,7 @@ class TrackHistoryViewController: UIViewController {
                                                            preferredStyle: .actionSheet)
     
     private let abortActionController = UIAlertController(title: "Abort Track",
-                                                          message: "Are you sure to abort track?",
+                                                          message: "Are you sure you want to abort track?",
                                                           preferredStyle: .alert)
     
     init(pet: Pet, trackInfo: TrackInfo, isNew: Bool) {
@@ -107,6 +107,8 @@ class TrackHistoryViewController: UIViewController {
         
         if isNew {
             
+            navigationItem.setHidesBackButton(true, animated: true)
+            
             noteTextView.placeholder = "Write anything worthwhile..."
             
             updateButton.setTitle("Save", for: .normal)
@@ -131,25 +133,6 @@ class TrackHistoryViewController: UIViewController {
         
         updateButton.addTarget(self, action: #selector(didTapUpdateNote), for: .touchUpInside)
         abortButton.addTarget(self, action: #selector(didTapAbort), for: .touchUpInside)
-        
-//        if let startLocation = trackInfo.track.first?.transferToCoordinate2D(),
-//           let endLocation = trackInfo.track.last?.transferToCoordinate2D() {
-//
-//            let centerLatitude = (startLocation.latitude + endLocation.latitude) / 2
-//            let centerLongitude = (startLocation.longitude + endLocation.longitude) / 2
-//
-//            let center = CLLocationCoordinate2D(latitude: centerLatitude, longitude: centerLongitude)
-//
-//            let distance = startLocation.distanceTo(coordinate: endLocation)
-//
-//            let region = MKCoordinateRegion(center: center,
-//                                            latitudinalMeters: 2 * distance,
-//                                            longitudinalMeters: 2 * distance)
-//
-//            let adjustRegion = mapView.regionThatFits(region)
-//
-//            mapView.setRegion(adjustRegion, animated: false)
-//        }
         
         mapView.register(TrackAnnotationView.self,
                          forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)

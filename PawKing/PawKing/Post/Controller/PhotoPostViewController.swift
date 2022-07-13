@@ -414,7 +414,7 @@ class PhotoPostViewController: UIViewController {
             }
         }
         
-        let blockAlert = UIAlertAction(title: "Block User", style: .destructive) { [weak self] _ in
+        let blockAlert = UIAlertAction(title: "Block and Report User", style: .destructive) { [weak self] _ in
             
             guard let self = self else { return }
             
