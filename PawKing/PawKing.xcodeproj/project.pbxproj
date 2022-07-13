@@ -963,9 +963,9 @@
 				DEVELOPMENT_TEAM = RUXNPB6ZP3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PawKing/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "Used to upload photo";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Used to locate";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Used to upload photo";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Please allows PawKing to access your camera that you could take your pet's photo and share to others.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "PawKing requires your precise location to track your pet walk and show you the pets near by you. We will not disclose any location of you to others.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Please allows PawKing to access your photos that you could share your pet's photo to others.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -996,9 +996,9 @@
 				DEVELOPMENT_TEAM = RUXNPB6ZP3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PawKing/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "Used to upload photo";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Used to locate";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Used to upload photo";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Please allows PawKing to access your camera that you could take your pet's photo and share to others.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "PawKing requires your precise location to track your pet walk and show you the pets near by you. We will not disclose any location of you to others.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Please allows PawKing to access your photos that you could share your pet's photo to others.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
