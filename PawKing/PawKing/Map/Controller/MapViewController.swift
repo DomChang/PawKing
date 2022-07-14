@@ -160,7 +160,18 @@ class MapViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        didSelectUserLocation()
+        guard locationManager?.authorizationStatus != .denied &&
+                locationManager?.authorizationStatus != .restricted &&
+                locationManager?.authorizationStatus != .notDetermined else {
+            
+            return
+        }
+        
+        userLocationButton.isSelected = true
+        
+        focusUserLocation()
+        
+        mapView.userTrackingMode = .follow
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -513,7 +524,8 @@ class MapViewController: UIViewController {
                 locationManager?.authorizationStatus != .restricted &&
                 locationManager?.authorizationStatus != .notDetermined else {
             
-            if let locationAlertController = locationAlertController {
+            if let locationAlertController = locationAlertController,
+                    !locationAlertController.isBeingPresented {
                 present(locationAlertController, animated: true)
             }
             return
@@ -544,7 +556,8 @@ class MapViewController: UIViewController {
                 locationManager?.authorizationStatus != .restricted &&
                 locationManager?.authorizationStatus != .notDetermined else {
             
-            if let locationAlertController = locationAlertController {
+            if let locationAlertController = locationAlertController,
+                    !locationAlertController.isBeingPresented {
                 present(locationAlertController, animated: true)
             }
             return
@@ -963,15 +976,15 @@ extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         let locationStatus = manager.authorizationStatus
-        
+
         switch locationStatus {
-            
+
         case .restricted, .denied:
-            
+
             locationManager?.requestWhenInUseAuthorization()
 
         default:
-            
+
             return
         }
     }
