@@ -287,18 +287,12 @@ class MapViewController: UIViewController {
         collectionView.showsHorizontalScrollIndicator = false
         
         timeIcon.image = UIImage.asset(.Icons_24px_Clock)
-//        timeTitleLabel.text = "Time"
-//        timeTitleLabel.textColor = .white
-//        timeTitleLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         
         timeLabel.textColor = .white
         timeLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         timeLabel.textAlignment = .center
         timeLabel.text = "00:00:00"
-        
-//        distanceIcon.text = "Distance"
-//        distanceIcon.textColor = .white
-//        distanceIcon.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+
         distanceIcon.image = UIImage.asset(.Icons_24px_Distance)
         
         distanceLabel.textColor = .white
@@ -320,10 +314,6 @@ class MapViewController: UIViewController {
         view.addSubview(notificationButton)
         view.addSubview(collectionView)
         view.addSubview(choosePetImageView)
-//        infoBackView.addSubview(timeTitleLabel)
-//        infoBackView.addSubview(timeLabel)
-//        infoBackView.addSubview(distanceTitleLabel)
-//        infoBackView.addSubview(distanceLabel)
         
         mapView.anchor(top: view.topAnchor,
                        leading: view.leadingAnchor,
@@ -387,7 +377,7 @@ class MapViewController: UIViewController {
         infoBackView.anchor(leading: view.leadingAnchor,
                             trailing: view.trailingAnchor,
                             height: view.safeAreaInsets.top + 90,
-                            padding: UIEdgeInsets(top: 0, left: 120, bottom: 0, right: 120))
+                            padding: UIEdgeInsets(top: 0, left: 116, bottom: 0, right: 116))
         
         infoBackView.setRadiusWithShadow(20)
         
@@ -906,6 +896,7 @@ class MapViewController: UIViewController {
                       "and provide you feature of showing the pets near by you. " +
                       "We will not disclose any location of you to others.",
             preferredStyle: .alert)
+        locationAlertController?.view.tintColor = .BattleGrey
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
         locationAlertController?.addAction(cancelAction)
@@ -922,6 +913,7 @@ class MapViewController: UIViewController {
             
             self.tabBarController?.selectedIndex = 4
         })
+        noPetAlertController.view.tintColor = .BattleGrey
         
         noPetAlertController.addAction(noPetCancelAction)
     }
@@ -975,10 +967,6 @@ extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
         switch locationStatus {
             
         case .restricted, .denied:
-            
-            if let locationAlert = self.locationAlertController {
-                self.present(locationAlert, animated: true)
-            }
             
             locationManager?.requestWhenInUseAuthorization()
 

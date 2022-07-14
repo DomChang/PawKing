@@ -29,7 +29,7 @@ class NoStrangerCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 20
         contentView.layer.masksToBounds = true
         
-        contentView.backgroundColor = .BattleGrey
+        contentView.backgroundColor = .BattleGreyLight
         
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 18, weight: .semibold)

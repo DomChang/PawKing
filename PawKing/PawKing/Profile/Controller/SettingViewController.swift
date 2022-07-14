@@ -59,6 +59,10 @@ class SettingViewController: UIViewController {
         
         tableView.backgroundColor = .LightGray
         tableView.layer.cornerRadius = 20
+        
+        signOutActionController.view.tintColor = .BattleGrey
+        resignInActionController.view.tintColor = .BattleGrey
+        deleteActionController.view.tintColor = .BattleGrey
     }
     
     private func layout() {

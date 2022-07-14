@@ -97,6 +97,8 @@ class PetConfigViewController: UIViewController {
                 
                 deleteActionController.message = "All Data according to \(editPet.name) will be delete"
                 
+                deleteActionController.view.tintColor = .BattleGrey
+                
                 setActionAlert(pet: editPet)
             }
         }

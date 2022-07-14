@@ -439,6 +439,8 @@ class PhotoPostViewController: UIViewController {
             }
         }
         
+        actionController.view.tintColor = .BattleGrey
+        
         DispatchQueue.main.async {
             
             if self.user.id == postUser.id {

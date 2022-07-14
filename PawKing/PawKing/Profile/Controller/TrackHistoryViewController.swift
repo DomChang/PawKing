@@ -433,6 +433,7 @@ class TrackHistoryViewController: UIViewController {
             
             self?.navigationController?.popViewController(animated: true)
         }
+        abortActionController.view.tintColor = .BattleGrey
         abortActionController.addAction(abortAction)
         abortActionController.addAction(cancelAction)
     }
@@ -470,7 +471,7 @@ class TrackHistoryViewController: UIViewController {
                 }
             }
         }
-        
+        deleteActionController.view.tintColor = .BattleGrey
         deleteActionController.addAction(deleteAlert)
         deleteActionController.addAction(cancelAction)
     }

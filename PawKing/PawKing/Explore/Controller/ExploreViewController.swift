@@ -65,6 +65,8 @@ class ExploreViewController: UIViewController {
     
     private func setup() {
         
+        navigationController?.navigationBar.tintColor = .white
+        
         lottie.startLoading()
         
         getAllPosts()

@@ -36,7 +36,7 @@ class StrangerCardViewCell: UICollectionViewCell {
         
         contentView.layer.cornerRadius = 20
         contentView.layer.masksToBounds = true
-        contentView.backgroundColor = .BattleGrey
+        contentView.backgroundColor = .BattleGreyLight
         
         petImageView.contentMode = .scaleAspectFill
         petImageView.layer.borderWidth = 2

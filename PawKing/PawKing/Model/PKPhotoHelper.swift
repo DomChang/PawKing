@@ -20,6 +20,8 @@ class PKPhotoHelper: NSObject {
         let alertController = UIAlertController(title: nil,
                                                 message: nil,
                                                 preferredStyle: .actionSheet)
+        
+        alertController.view.tintColor = .BattleGrey
 
         // 2
         if UIImagePickerController.isSourceTypeAvailable(.camera) {

@@ -300,6 +300,8 @@ class UserPhotoWallViewController: UIViewController {
             return
         }
         
+        actionController.view.tintColor = .BattleGrey
+        
         if user.blockUsersId.contains(otherUser.id) {
 
             let unBlockAction = UIAlertAction(title: "Unblock User", style: .destructive) { [weak self] _ in
@@ -361,6 +363,8 @@ class UserPhotoWallViewController: UIViewController {
               let otherUser = otherUser else {
             return
         }
+        
+        disconnectActionController.view.tintColor = .BattleGrey
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
         
