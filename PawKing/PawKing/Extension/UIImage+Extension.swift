@@ -28,6 +28,7 @@ enum ImageAsset: String {
     
     case Icons_36px_UserLocate_Normal
     case Icons_36px_UserLocate_Selected
+    case Icons_60px_UserLocate
     
     case Icons_36px_RecordTrack_Normal
     case Icons_36px_RecordTrack_Selected
@@ -41,10 +42,18 @@ enum ImageAsset: String {
     
     case Icons_24px_Setting
     
+    case Icons_24px_Clock
+    case Icons_24px_Distance
+    
     case Icons_60px_Policy
     case Icons_60px_Block
     case Icons_60px_SignOut
     case Icons_60px_DeleteAccount
+    
+    case Icons_90px_Start
+    
+    case Icons_90px_Stop
+    
     case pawking_logo
     
     case signUp
