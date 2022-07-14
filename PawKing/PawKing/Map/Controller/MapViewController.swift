@@ -28,11 +28,29 @@ class MapViewController: UIViewController {
     
     private let stopTrackButton = UIImageView()
     
-    private var stopWidthAnchor: NSLayoutConstraint?
+    private var stopWidthAnchor: NSLayoutConstraint!
     
-    private var stopHeightAnchor: NSLayoutConstraint?
+    private var stopHeightAnchor: NSLayoutConstraint!
+    
+    private let timeIcon = UIImageView()
+    
+    private let timeLabel = UILabel()
+    
+    private let distanceIcon = UIImageView()
+    
+    private let distanceLabel = UILabel()
+    
+    private let infoBackView = UIView()
+    
+    private var infoBottomAnchor: NSLayoutConstraint!
+    
+    private var trackTimer: Timer?
     
     private var stopTimer: Timer?
+    
+    private var timerDuration: Int = 0
+    
+    private var distance: Double = 0
     
     private var isTracking = false
     
@@ -208,7 +226,7 @@ class MapViewController: UIViewController {
         locationManager?.delegate = self
         locationManager?.requestWhenInUseAuthorization()
         locationManager?.allowsBackgroundLocationUpdates = true
-        locationManager?.distanceFilter = 10
+        locationManager?.distanceFilter = 20
         locationManager?.checkLocationPermission()
         
         mapView.showsUserLocation = true
@@ -267,6 +285,28 @@ class MapViewController: UIViewController {
         collectionView.backgroundColor = .clear
         collectionView.isPagingEnabled = false
         collectionView.showsHorizontalScrollIndicator = false
+        
+        timeIcon.image = UIImage.asset(.Icons_24px_Clock)
+//        timeTitleLabel.text = "Time"
+//        timeTitleLabel.textColor = .white
+//        timeTitleLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        
+        timeLabel.textColor = .white
+        timeLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        timeLabel.textAlignment = .center
+        timeLabel.text = "00:00:00"
+        
+//        distanceIcon.text = "Distance"
+//        distanceIcon.textColor = .white
+//        distanceIcon.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        distanceIcon.image = UIImage.asset(.Icons_24px_Distance)
+        
+        distanceLabel.textColor = .white
+        distanceLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        distanceLabel.textAlignment = .center
+        distanceLabel.text = "0.00 km"
+        
+        infoBackView.backgroundColor = .BattleGrey
     }
     
     private func layout() {
@@ -275,10 +315,15 @@ class MapViewController: UIViewController {
         view.addSubview(userLocationButton)
         view.addSubview(stopTrackButton)
         view.addSubview(startTrackButton)
+        view.addSubview(infoBackView)
         view.addSubview(strangerButton)
         view.addSubview(notificationButton)
         view.addSubview(collectionView)
         view.addSubview(choosePetImageView)
+//        infoBackView.addSubview(timeTitleLabel)
+//        infoBackView.addSubview(timeLabel)
+//        infoBackView.addSubview(distanceTitleLabel)
+//        infoBackView.addSubview(distanceLabel)
         
         mapView.anchor(top: view.topAnchor,
                        leading: view.leadingAnchor,
@@ -336,6 +381,51 @@ class MapViewController: UIViewController {
         userLocationButton.setRadiusWithShadow()
         
         startTrackButton.setRadiusWithShadow()
+        
+        stopTrackButton.setRadiusWithShadow()
+        
+        infoBackView.anchor(leading: view.leadingAnchor,
+                            trailing: view.trailingAnchor,
+                            height: view.safeAreaInsets.top + 90,
+                            padding: UIEdgeInsets(top: 0, left: 120, bottom: 0, right: 120))
+        
+        infoBackView.setRadiusWithShadow(20)
+        
+        infoBottomAnchor = infoBackView.bottomAnchor.constraint(equalTo: view.topAnchor, constant: 0)
+        infoBottomAnchor.isActive = true
+        
+        let timeHStack = UIStackView(arrangedSubviews: [timeIcon, timeLabel])
+        timeHStack.axis = .horizontal
+        timeHStack.distribution = .fillProportionally
+        timeHStack.spacing = 5
+        
+        timeIcon.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        
+        let distanceHStack = UIStackView(arrangedSubviews: [distanceIcon, distanceLabel])
+        distanceHStack.axis = .horizontal
+        distanceHStack.distribution = .fillProportionally
+        distanceHStack.spacing = 5
+        
+        timeIcon.constrainWidth(constant: 20)
+        timeIcon.constrainHeight(constant: 20)
+        
+        distanceIcon.constrainWidth(constant: 20)
+        distanceIcon.constrainHeight(constant: 20)
+        
+        distanceIcon.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        
+        infoBackView.addSubview(timeHStack)
+        infoBackView.addSubview(distanceHStack)
+        
+        timeHStack.anchor(leading: infoBackView.leadingAnchor,
+                          bottom: infoBackView.centerYAnchor,
+                          trailing: infoBackView.trailingAnchor,
+                            padding: UIEdgeInsets(top: 0, left: 16, bottom: 5, right: 16))
+        
+        distanceHStack.anchor(top: infoBackView.centerYAnchor,
+                              leading: timeHStack.leadingAnchor,
+                              trailing: timeHStack.trailingAnchor,
+                            padding: UIEdgeInsets(top: 5, left: 0, bottom: 10, right: 0))
     }
     
     func setupTrackButton() {
@@ -472,11 +562,38 @@ class MapViewController: UIViewController {
         
         isTracking = true
         
+        trackTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { [weak self] _ in
+            
+            guard let self = self else { return }
+            
+            self.timerDuration += 1
+            
+            self.timeLabel.text = self.timeString(time: TimeInterval(self.timerDuration))
+        })
+        
         beTracking()
         
         locationManager?.startUpdatingLocation()
         locationManager?.startUpdatingHeading()
         trackStartTime = Timestamp(date: Date())
+        
+        self.infoBottomAnchor.constant = self.view.safeAreaInsets.top +
+                                              self.infoBackView.frame.height
+        
+        UIView.animate(withDuration: 1) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    private func timeString(time: TimeInterval) -> String {
+        
+        let hours = Int(time) / 3600
+        
+        let minutes = Int(time) / 60 % 60
+        
+        let seconds = Int(time) % 60
+        
+        return String(format: "%02i:%02i:%02i", hours, minutes, seconds)
     }
     
     @objc private func didLongTapEndTrack(_ sender: UIGestureRecognizer) {
@@ -485,15 +602,19 @@ class MapViewController: UIViewController {
 
         if sender.state == .began {
 
-            stopTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true, block: { [weak self] _ in
+            stopTimer = Timer.scheduledTimer(withTimeInterval: 0.03, repeats: true, block: { [weak self] _ in
 
                 guard let self = self else {
                     return
                 }
 
-                count += 0.05
-                self.stopWidthAnchor?.constant += 1
-                self.stopHeightAnchor?.constant += 1
+                count += 0.03
+                self.stopWidthAnchor?.constant += 2
+                self.stopHeightAnchor?.constant += 2
+                
+                UIView.animate(withDuration: 0.02) {
+                    self.view.layoutIfNeeded()
+                }
 
                 if count >= 1 {
 
@@ -507,7 +628,13 @@ class MapViewController: UIViewController {
 
                         return
                     }
-
+                    
+                    self.timerDuration = 0
+                    self.timeLabel.text = "00:00:00"
+                    self.trackTimer?.invalidate()
+                    self.trackTimer = nil
+                    self.distance = 0
+                    self.distanceLabel.text = "0.00 km"
                     self.isTracking = false
                     
                     self.notTracking()
@@ -532,9 +659,12 @@ class MapViewController: UIViewController {
                     self.stopTimer?.invalidate()
                     self.stopTimer = nil
                     count = 0
-                    self.stopWidthAnchor?.constant = 80
-                    self.stopHeightAnchor?.constant = 80
+                    self.stopWidthAnchor.constant = 80
+                    self.stopHeightAnchor.constant = 80
+                    
                     UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                    
+                    self.infoBottomAnchor.constant = 0
                     
                     self.navigationController?.pushViewController(trackHistoryVC, animated: true)
                 }
@@ -544,8 +674,12 @@ class MapViewController: UIViewController {
             count = 0
             stopTimer?.invalidate()
             stopTimer = nil
-            stopWidthAnchor?.constant = 80
-            stopHeightAnchor?.constant = 80
+            stopWidthAnchor.constant = 80
+            stopHeightAnchor.constant = 80
+            
+            UIView.animate(withDuration: 0.2) {
+                self.view.layoutIfNeeded()
+            }
         }
     }
     
@@ -867,9 +1001,13 @@ extension MapViewController: MKMapViewDelegate, CLLocationManagerDelegate {
         if previousCoordinate == nil { return }
 
         var coordinates = [previousCoordinate!, currentLocation.coordinate]
+        
+        distance += computeDistance(from: coordinates) / 1000
+        
+        distanceLabel.text = "\(String(format: "%.2f", distance)) km"
     
         let polyline = MKPolyline(coordinates: &coordinates, count: coordinates.count)
-        
+
         mapView.addOverlay(polyline, level: .aboveLabels)
         
         guard let location = locations.last?.coordinate,

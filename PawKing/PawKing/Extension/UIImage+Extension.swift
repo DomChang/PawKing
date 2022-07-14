@@ -42,6 +42,9 @@ enum ImageAsset: String {
     
     case Icons_24px_Setting
     
+    case Icons_24px_Clock
+    case Icons_24px_Distance
+    
     case Icons_60px_Policy
     case Icons_60px_Block
     case Icons_60px_SignOut
