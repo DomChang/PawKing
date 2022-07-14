@@ -80,7 +80,7 @@ class PetConfigCell: UITableViewCell {
     
     func styleObject() {
         
-        petImageView.image = UIImage.asset(.Image_Placeholder)
+        petImageView.image = UIImage.asset(.Image_Placeholder_Paw)
         petImageView.contentMode = .scaleAspectFill
         
         nameTitleLabel.text = "Pet Name"

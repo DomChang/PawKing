@@ -506,7 +506,7 @@ extension ProfileViewController: UICollectionViewDataSource {
                     fatalError("Cannot dequeue PhotoItemCell")
                 }
                 
-                photoCell.imageView.image = UIImage.asset(.Image_Placeholder)
+                photoCell.imageView.image = UIImage.asset(.Image_Placeholder_Paw)
                 
                 guard let posts = displayPosts else { return photoCell }
                 

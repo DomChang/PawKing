@@ -63,7 +63,7 @@ class UserConfigCell: UITableViewCell {
     
     func styleObject() {
         
-        userImageView.image = UIImage.asset(.Image_Placeholder)
+        userImageView.image = UIImage.asset(.Image_Placeholder_Human)
         userImageView.contentMode = .scaleAspectFill
         
         userNameTextfield.layer.borderColor = UIColor.Gray1?.cgColor

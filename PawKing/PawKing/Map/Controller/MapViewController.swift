@@ -514,7 +514,7 @@ class MapViewController: UIViewController {
             choosePetImageView.kf.setImage(with: URL(string: imageUrlSting))
         } else {
             
-            choosePetImageView.image = UIImage.asset(.Image_Placeholder)
+            choosePetImageView.image = UIImage.asset(.Image_Placeholder_Paw)
         }
     }
     

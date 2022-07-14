@@ -63,7 +63,7 @@ class ChoosePetViewController: UIViewController {
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .white
         appearance.shadowColor = .clear
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.Orange1 ?? .white]
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.BattleGrey ?? .white]
         
         navigationItem.standardAppearance = appearance
         navigationItem.scrollEdgeAppearance = appearance

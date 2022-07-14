@@ -96,7 +96,7 @@ extension Date {
         
         let dateFormatter = DateFormatter()
         
-        dateFormatter.dateFormat = "yyyy / MM / dd"
+        dateFormatter.dateFormat = "MMM dd, yyyy"
         
         return dateFormatter.string(from: self)
     }

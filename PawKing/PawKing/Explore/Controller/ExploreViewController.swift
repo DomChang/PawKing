@@ -370,7 +370,7 @@ extension ExploreViewController: UICollectionViewDataSource {
             fatalError("Cannot dequeue PhotoItemCell")
         }
         
-        cell.imageView.image = UIImage.asset(.Image_Placeholder)
+        cell.imageView.image = UIImage.asset(.Image_Placeholder_Paw)
         
         guard let posts = displayPosts else { return cell }
         

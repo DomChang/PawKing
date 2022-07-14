@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Icons_45px_Bell.png",
+      "filename" : "Image_Placeholder_Paw.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Icons_45px_Bell@2x.png",
+      "filename" : "Image_Placeholder_Paw@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Icons_45px_Bell@3x.png",
+      "filename" : "Image_Placeholder_Paw@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
