@@ -546,6 +546,19 @@ extension ProfileViewController: UICollectionViewDataSource {
 
 extension ProfileViewController: UICollectionViewDelegate {
     
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        
+        if indexPath.section == ProfileSections.choosePet.rawValue {
+            
+            guard let cell = collectionView.cellForItem(at: indexPath) as? PetItemCell else {
+                return
+            }
+                
+            cell.imageView.layer.borderWidth = 0
+            cell.backBorderView.isHidden = true
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         if indexPath.section == ProfileSections.choosePet.rawValue {
@@ -559,9 +572,9 @@ extension ProfileViewController: UICollectionViewDelegate {
             
             collectionView.visibleCells.forEach { cell in
                 guard let petCell = cell as? PetItemCell else { return }
-                
+
                 petCell.imageView.layer.borderWidth = 0
-                
+
                 petCell.backBorderView.isHidden = true
             }
             
@@ -579,9 +592,6 @@ extension ProfileViewController: UICollectionViewDelegate {
                 
             } else {
                 
-                cell.imageView.layer.borderWidth = 0
-                cell.backBorderView.isHidden = true
-
                 displayPosts = posts
                 
                 displayTrackInfos = trackInfos

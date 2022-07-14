@@ -167,6 +167,7 @@ class PetConfigViewController: UIViewController {
                 case .success:
                     
                     self.lottie.stopLoading()
+                    NotificationCenter.default.post(name: .updateCurrentPet, object: .none)
                     self.navigationController?.popViewController(animated: true)
                     
                 case .failure(let error):
@@ -176,8 +177,8 @@ class PetConfigViewController: UIViewController {
                 }
             }
         }
-        deleteActionController.addAction(deleteAction)
         deleteActionController.addAction(cancelAction)
+        deleteActionController.addAction(deleteAction)
     }
 }
 
