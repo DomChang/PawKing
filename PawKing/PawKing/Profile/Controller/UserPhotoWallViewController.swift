@@ -669,6 +669,19 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
 
 extension UserPhotoWallViewController: UICollectionViewDelegate {
     
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        
+        if indexPath.section == ProfileSections.choosePet.rawValue {
+            
+            guard let cell = collectionView.cellForItem(at: indexPath) as? PetItemCell else {
+                return
+            }
+            cell.selectState = false
+//            cell.imageView.layer.borderWidth = 0
+//            cell.backBorderView.isHidden = true
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         if indexPath.section == UserPhotoWallSections.choosePet.rawValue {
@@ -679,37 +692,40 @@ extension UserPhotoWallViewController: UICollectionViewDelegate {
                 return
             }
             
-            collectionView.visibleCells.forEach { cell in
-                guard let petCell = cell as? PetItemCell else { return }
+//            collectionView.visibleCells.forEach { cell in
+//                guard let petCell = cell as? PetItemCell else { return }
                 
-                petCell.imageView.layer.borderWidth = 0
+//                petCell.imageView.layer.borderWidth = 0
+//
+//                petCell.backBorderView.isHidden = true
                 
-                petCell.backBorderView.isHidden = true
-            }
+//                petCell.selectState = false
+//            }
+            cell.selectState = !cell.selectState
             
-            if selectedPetIndex != indexPath.item {
+            if cell.selectState {
                 
                 displayPosts = posts.filter { $0.petId == userPets[indexPath.item].id }
                 
-                selectedPetIndex = indexPath.item
+//                selectedPetIndex = indexPath.item
                 
-                cell.imageView.layer.borderWidth = 2
-                cell.imageView.layer.borderColor = UIColor.BattleGrey?.cgColor
-                cell.backBorderView.isHidden = false
+//                cell.imageView.layer.borderWidth = 2
+//                cell.imageView.layer.borderColor = UIColor.BattleGrey?.cgColor
+//                cell.backBorderView.isHidden = false
                 
             } else {
                 
-                cell.imageView.layer.borderWidth = 0
-                cell.backBorderView.isHidden = true
+//                cell.imageView.layer.borderWidth = 0
+//                cell.backBorderView.isHidden = true
 
                 displayPosts = posts
                 
-                selectedPetIndex = -1
+//                selectedPetIndex = -1
             }
         } else if indexPath.section == UserPhotoWallSections.postsPhoto.rawValue {
          
             guard  let user = user,
-                   let post = posts?[indexPath.item] else { return }
+                   let post = displayPosts?[indexPath.item] else { return }
             
             let photoPostVC = PhotoPostViewController(user: user, post: post)
             

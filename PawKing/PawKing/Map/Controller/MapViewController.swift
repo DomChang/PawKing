@@ -460,24 +460,28 @@ class MapViewController: UIViewController {
         mapView.setRegion(region, animated: false)
     }
     
-    private func fetchStoredUserLocation(user: User) {
+    private func fetchCurrentPet(user: User) {
         
         userManager.fetchUserLocation(userId: user.id) { [weak self] result in
-            
             switch result {
                 
             case .success(let userLocation):
                 
                 guard let self = self else { return }
+                
+                if self.userPets.contains(where: {$0.id == userLocation.currentPetId}) {
                     
-                self.userPets.forEach({ pet in
-                    
-                    if pet.id == userLocation.currentPetId {
+                    self.userPets.forEach({ pet in
                         
-                        self.userCurrentPet = pet
-                    }
-                })
-
+                        if pet.id == userLocation.currentPetId {
+                            
+                            self.userCurrentPet = pet
+                        }
+                    })
+                } else {
+                    
+                    self.userCurrentPet = nil
+                }
             case .failure:
                 
                 self?.userCurrentPet = nil
@@ -496,7 +500,7 @@ class MapViewController: UIViewController {
             case .success(let pets):
                 
                 self?.userPets = pets
-                self?.fetchStoredUserLocation(user: user)
+                self?.fetchCurrentPet(user: user)
                 self?.lottie.stopLoading()
                 
             case .failure:
@@ -751,16 +755,10 @@ class MapViewController: UIViewController {
     @objc private func updateCurrentPet() {
         
         resetTrack()
-        fetchStoredUserLocation(user: user)
+        fetchCurrentPet(user: user)
     }
     
     @objc private func didTapChoosePet() {
-        
-        guard Auth.auth().currentUser != nil else {
-            
-            NotificationCenter.default.post(name: .showSignInView, object: .none)
-            return
-        }
         
         guard !user.petsId.isEmpty else {
             

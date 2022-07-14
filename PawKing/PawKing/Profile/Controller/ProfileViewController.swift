@@ -180,9 +180,7 @@ class ProfileViewController: UIViewController {
                 self?.collectionView.visibleCells.forEach { cell in
                     guard let petCell = cell as? PetItemCell else { return }
                     
-                    petCell.imageView.layer.borderWidth = 0
-                    
-                    petCell.backBorderView.isHidden = true
+                    petCell.selectState = false
                 }
                 
                 self?.lottie.stopLoading()
@@ -553,9 +551,9 @@ extension ProfileViewController: UICollectionViewDelegate {
             guard let cell = collectionView.cellForItem(at: indexPath) as? PetItemCell else {
                 return
             }
-                
-            cell.imageView.layer.borderWidth = 0
-            cell.backBorderView.isHidden = true
+            cell.selectState = false
+//            cell.imageView.layer.borderWidth = 0
+//            cell.backBorderView.isHidden = true
         }
     }
     
@@ -570,25 +568,27 @@ extension ProfileViewController: UICollectionViewDelegate {
                 return
             }
             
-            collectionView.visibleCells.forEach { cell in
-                guard let petCell = cell as? PetItemCell else { return }
+//            collectionView.visibleCells.forEach { cell in
+//                guard let petCell = cell as? PetItemCell else { return }
 
-                petCell.imageView.layer.borderWidth = 0
-
-                petCell.backBorderView.isHidden = true
-            }
+//                petCell.imageView.layer.borderWidth = 0
+//
+//                petCell.backBorderView.isHidden = true
+                
+            cell.selectState = !cell.selectState
+//            }
             
-            if selectedPetIndex != indexPath.item {
+            if cell.selectState {
                 
                 displayPosts = posts.filter { $0.petId == userPets[indexPath.item].id }
                 
                 displayTrackInfos = trackInfos.filter { $0.petId == userPets[indexPath.item].id }
                 
-                selectedPetIndex = indexPath.item
+//                selectedPetIndex = indexPath.item
                 
-                cell.imageView.layer.borderWidth = 2
-                cell.imageView.layer.borderColor = UIColor.BattleGrey?.cgColor
-                cell.backBorderView.isHidden = false
+//                cell.imageView.layer.borderWidth = 2
+//                cell.imageView.layer.borderColor = UIColor.BattleGrey?.cgColor
+//                cell.backBorderView.isHidden = false
                 
             } else {
                 
@@ -596,14 +596,14 @@ extension ProfileViewController: UICollectionViewDelegate {
                 
                 displayTrackInfos = trackInfos
                 
-                selectedPetIndex = -1
+//                selectedPetIndex = -1
             }
         } else if indexPath.section == ProfileSections.postsPhoto.rawValue {
             
             if isPhoto {
                 
                 guard let user = user,
-                      let post = posts?[indexPath.item]
+                      let post = displayPosts?[indexPath.item]
                 else { return }
                 
                 let photoPostVC = PhotoPostViewController(user: user, post: post)
@@ -612,7 +612,7 @@ extension ProfileViewController: UICollectionViewDelegate {
                 
             } else {
                 
-                guard let trackInfos = trackInfos,
+                guard let trackInfos = displayTrackInfos,
                         let userPets = userPets else {
                     return
                 }

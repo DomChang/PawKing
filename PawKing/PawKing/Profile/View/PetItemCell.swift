@@ -11,9 +11,26 @@ class PetItemCell: UICollectionViewCell {
     
     static let identifier = "\(PetItemCell.self)"
     
-    let imageView = UIImageView()
+    private let imageView = UIImageView()
     
-    let backBorderView = UIView()
+    private let backBorderView = UIView()
+    
+    var selectState = false {
+        
+        didSet {
+            
+            if selectState {
+                
+                imageView.layer.borderWidth = 2
+                imageView.layer.borderColor = UIColor.BattleGrey?.cgColor
+                backBorderView.isHidden = false
+            } else {
+                
+                imageView.layer.borderWidth = 0
+                backBorderView.isHidden = true
+            }
+        }
+    }
 
     var photoURL: URL? {
         
