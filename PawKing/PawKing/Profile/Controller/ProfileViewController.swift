@@ -60,7 +60,7 @@ class ProfileViewController: UIViewController {
         }
     }
     
-    var selectedPetIndex: Int?
+    private var selectedPetIndex: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -475,11 +475,9 @@ extension ProfileViewController: UICollectionViewDataSource {
             
             guard let userPets = userPets else { return petCell }
 
-            let imageUrl = URL(string: userPets[indexPath.item].petImage)
+            let userPet = userPets[indexPath.item]
             
-            petCell.photoURL = imageUrl
-            
-            petCell.configureCell()
+            petCell.configureCell(pet: userPet)
             
             return petCell
             
@@ -544,19 +542,6 @@ extension ProfileViewController: UICollectionViewDataSource {
 
 extension ProfileViewController: UICollectionViewDelegate {
     
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        
-        if indexPath.section == ProfileSections.choosePet.rawValue {
-            
-            guard let cell = collectionView.cellForItem(at: indexPath) as? PetItemCell else {
-                return
-            }
-            cell.selectState = false
-//            cell.imageView.layer.borderWidth = 0
-//            cell.backBorderView.isHidden = true
-        }
-    }
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         if indexPath.section == ProfileSections.choosePet.rawValue {
@@ -564,19 +549,30 @@ extension ProfileViewController: UICollectionViewDelegate {
             guard let posts = posts,
                     let trackInfos = trackInfos,
                     let userPets = userPets,
-                    let cell = collectionView.cellForItem(at: indexPath) as? PetItemCell else {
+                    let cell = collectionView.cellForItem(at: indexPath) as? PetItemCell
+            else {
                 return
             }
             
-//            collectionView.visibleCells.forEach { cell in
-//                guard let petCell = cell as? PetItemCell else { return }
-
-//                petCell.imageView.layer.borderWidth = 0
-//
-//                petCell.backBorderView.isHidden = true
+            if let selectedPetIndex = selectedPetIndex {
                 
-            cell.selectState = !cell.selectState
-//            }
+                guard let selectedCell = collectionView.cellForItem(at: selectedPetIndex) as? PetItemCell
+                else {
+                    return
+                }
+                
+                if selectedPetIndex == indexPath {
+                    
+                    selectedCell.selectState = !selectedCell.selectState
+                } else {
+                    
+                    selectedCell.selectState = false
+                    cell.selectState = !cell.selectState
+                }
+            } else {
+                
+                cell.selectState = !cell.selectState
+            }
             
             if cell.selectState {
                 
@@ -584,11 +580,7 @@ extension ProfileViewController: UICollectionViewDelegate {
                 
                 displayTrackInfos = trackInfos.filter { $0.petId == userPets[indexPath.item].id }
                 
-//                selectedPetIndex = indexPath.item
-                
-//                cell.imageView.layer.borderWidth = 2
-//                cell.imageView.layer.borderColor = UIColor.BattleGrey?.cgColor
-//                cell.backBorderView.isHidden = false
+                selectedPetIndex = indexPath
                 
             } else {
                 
@@ -596,7 +588,8 @@ extension ProfileViewController: UICollectionViewDelegate {
                 
                 displayTrackInfos = trackInfos
                 
-//                selectedPetIndex = -1
+                selectedPetIndex = nil
+                
             }
         } else if indexPath.section == ProfileSections.postsPhoto.rawValue {
             
@@ -605,6 +598,16 @@ extension ProfileViewController: UICollectionViewDelegate {
                 guard let user = user,
                       let post = displayPosts?[indexPath.item]
                 else { return }
+                
+                if let selectedIndex = selectedPetIndex {
+                    
+                    guard let cell = collectionView.cellForItem(at: selectedIndex) as? PetItemCell
+                    else {
+                        return
+                    }
+                    cell.selectState = true
+                    cell.isSelected = true
+                }
                 
                 let photoPostVC = PhotoPostViewController(user: user, post: post)
                 
@@ -617,11 +620,19 @@ extension ProfileViewController: UICollectionViewDelegate {
                     return
                 }
                 
+                if let selectedIndex = selectedPetIndex {
+                    
+                    guard let cell = collectionView.cellForItem(at: selectedIndex) as? PetItemCell
+                    else {
+                        return
+                    }
+                    cell.selectState = true
+                    cell.isSelected = false
+                }
+
                 let trackInfo = trackInfos[indexPath.item]
                 
                 for userPet in userPets where userPet.id == trackInfo.petId {
-                    
-//                    guard let imageUrl = URL(string: userPet.petImage) else { return }
                     
                     let trackHistoryVC = TrackHistoryViewController(pet: userPet,
                                                                     trackInfo: trackInfo,

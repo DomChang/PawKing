@@ -46,7 +46,7 @@ class UserPhotoWallViewController: UIViewController {
         }
     }
     
-    private var selectedPetIndex: Int?
+    private var selectedPetIndex: IndexPath?
     
     private var isFriend = false {
         didSet {
@@ -83,17 +83,6 @@ class UserPhotoWallViewController: UIViewController {
         style()
         layout()
     }
-    
-//    override func viewWillAppear(_ animated: Bool) {
-//
-//        if let user = UserManager.shared.currentUser,
-//            let otherUser = otherUser {
-//
-//            self.user = user
-//
-//            setActionSheet(user: user)
-//        }
-//    }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -635,11 +624,9 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
             
             guard let otherUserPets = otherUserPets else { return petCell }
 
-            let imageUrl = URL(string: otherUserPets[indexPath.item].petImage)
+            let otherUserPet = otherUserPets[indexPath.item]
             
-            petCell.photoURL = imageUrl
-            
-            petCell.configureCell()
+            petCell.configureCell(pet: otherUserPet)
             
             return petCell
             
@@ -669,19 +656,6 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
 
 extension UserPhotoWallViewController: UICollectionViewDelegate {
     
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        
-        if indexPath.section == ProfileSections.choosePet.rawValue {
-            
-            guard let cell = collectionView.cellForItem(at: indexPath) as? PetItemCell else {
-                return
-            }
-            cell.selectState = false
-//            cell.imageView.layer.borderWidth = 0
-//            cell.backBorderView.isHidden = true
-        }
-    }
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         if indexPath.section == UserPhotoWallSections.choosePet.rawValue {
@@ -692,36 +666,39 @@ extension UserPhotoWallViewController: UICollectionViewDelegate {
                 return
             }
             
-//            collectionView.visibleCells.forEach { cell in
-//                guard let petCell = cell as? PetItemCell else { return }
+            if let selectedPetIndex = selectedPetIndex {
                 
-//                petCell.imageView.layer.borderWidth = 0
-//
-//                petCell.backBorderView.isHidden = true
+                guard let selectedCell = collectionView.cellForItem(at: selectedPetIndex) as? PetItemCell
+                else {
+                    return
+                }
                 
-//                petCell.selectState = false
-//            }
-            cell.selectState = !cell.selectState
+                if selectedPetIndex == indexPath {
+                    
+                    selectedCell.selectState = !selectedCell.selectState
+                } else {
+                    
+                    selectedCell.selectState = false
+                    cell.selectState = !cell.selectState
+                }
+            } else {
+                
+                cell.selectState = !cell.selectState
+            }
             
             if cell.selectState {
                 
                 displayPosts = posts.filter { $0.petId == userPets[indexPath.item].id }
                 
-//                selectedPetIndex = indexPath.item
-                
-//                cell.imageView.layer.borderWidth = 2
-//                cell.imageView.layer.borderColor = UIColor.BattleGrey?.cgColor
-//                cell.backBorderView.isHidden = false
+                selectedPetIndex = indexPath
                 
             } else {
-                
-//                cell.imageView.layer.borderWidth = 0
-//                cell.backBorderView.isHidden = true
 
                 displayPosts = posts
                 
-//                selectedPetIndex = -1
+                selectedPetIndex = nil
             }
+            
         } else if indexPath.section == UserPhotoWallSections.postsPhoto.rawValue {
          
             guard  let user = user,
