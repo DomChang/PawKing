@@ -43,6 +43,14 @@ class UserPhotoWallViewController: UIViewController {
     private var displayPosts: [Post]? {
         didSet {
             collectionView.reloadSections(IndexSet(integer: 2))
+            
+            if displayPosts?.count == 0 {
+                
+                emptyLabel.isHidden = false
+            } else {
+                
+                emptyLabel.isHidden = true
+            }
         }
     }
     
@@ -59,6 +67,8 @@ class UserPhotoWallViewController: UIViewController {
     private let disconnectActionController = UIAlertController(title: "Are you sure you want to disconnect?",
                                                      message: nil,
                                                      preferredStyle: .alert)
+    
+    private let emptyLabel = UILabel()
     
     init(otherUserId: String) {
 
@@ -124,11 +134,18 @@ class UserPhotoWallViewController: UIViewController {
         
         collectionView.register(PhotoItemCell.self,
                                 forCellWithReuseIdentifier: PhotoItemCell.identifier)
+        
+        emptyLabel.isHidden = true
     }
     
     private func style() {
         
         view.backgroundColor = .systemBackground
+        
+        emptyLabel.textColor = .BattleGreyLight
+        emptyLabel.textAlignment = .center
+        emptyLabel.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
+        emptyLabel.text = "No Post"
     }
     
     private func layout() {
@@ -136,6 +153,7 @@ class UserPhotoWallViewController: UIViewController {
         view.addSubview(collectionView)
         
         collectionView.fillSafeLayout()
+        collectionView.addSubview(emptyLabel)
         
         // Change top bounce area backgroud color
         collectionView.layoutIfNeeded()
@@ -143,6 +161,10 @@ class UserPhotoWallViewController: UIViewController {
                 width: collectionView.bounds.width, height: collectionView.bounds.height))
         topView.backgroundColor = .BattleGrey
         collectionView.addSubview(topView)
+        
+        emptyLabel.anchor(top: collectionView.centerYAnchor,
+                          centerX: collectionView.centerXAnchor,
+                          padding: UIEdgeInsets(top: 120, left: 0, bottom: 0, right: 0))
     }
     
     func listenOtherUser() {
