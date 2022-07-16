@@ -11,6 +11,12 @@ class ChatManager {
     
     static let shared = ChatManager()
     
+    var chatRooms: [Conversation]? {
+        didSet {
+            NotificationCenter.default.post(name: .updateChatRooms, object: .none)
+        }
+    }
+    
     lazy var dataBase = Firestore.firestore()
     
     private let userManager = UserManager.shared
@@ -73,12 +79,14 @@ class ChatManager {
         }
     }
     
-    func listenChatRooms(userId: String, blockIds: [String], completion: @escaping (Result<[Conversation], Error>) -> Void) {
+    func listenChatRooms(userId: String,
+                         blockIds: [String],
+                         completion: @escaping (Result<[Conversation], Error>) -> Void) -> ListenerRegistration {
 
         let document = dataBase.collection(FirebaseCollection.chats.rawValue).document(userId)
             .collection(FirebaseCollection.recentMessages.rawValue)
 
-        document.addSnapshotListener { [weak self] snapshots, _ in
+        let listener = document.addSnapshotListener { [weak self] snapshots, _ in
 
             var chatRooms: [Conversation] = []
             
@@ -134,6 +142,7 @@ class ChatManager {
                 }
             }
         }
+        return listener
     }
     
     func fetchMessageHistory(user: User, otherUser: User, otherUserId: String, completion: @escaping (Result<[Message], Error>) -> Void) {
@@ -172,12 +181,12 @@ class ChatManager {
         }
     }
     
-    func listenNewMessage(user: User, otherUser: User, completion: @escaping (Result<[Message], Error>) -> Void) {
+    func listenNewMessage(user: User, otherUser: User, completion: @escaping (Result<[Message], Error>) -> Void) -> ListenerRegistration {
         
         let document = dataBase.collection(FirebaseCollection.chats.rawValue).document(user.id)
             .collection(otherUser.id).order(by: "createdTime", descending: false)
         
-        document.addSnapshotListener { snapshots, _ in
+        let listener = document.addSnapshotListener { snapshots, _ in
             
             var messages: [Message] = []
             
@@ -195,10 +204,10 @@ class ChatManager {
                         
                     let message = try diff.document.data(as: Message.self)
                     
-                    if message.senderId != user.id {
+//                    if message.senderId != user.id {
                         
                         messages.append(message)
-                    }
+//                    }
                 }
                 
                 completion(.success(messages))
@@ -208,6 +217,35 @@ class ChatManager {
                 completion(.failure(FirebaseError.decodeMessageError))
             }
         }
+        return listener
+    }
+    
+    func updateMessageStatus(user: User, otherUser: User) {
+        
+        // for other user read
+        let otherUserDoc = dataBase.collection(FirebaseCollection.chats.rawValue).document(otherUser.id)
+            .collection(user.id).whereField("isRead", isEqualTo: MessageStatus.notRead.rawValue)
+        
+        otherUserDoc.getDocuments { snapshots, _ in
+            
+            snapshots?.documents.forEach({ document in
+                
+                document.reference.updateData([
+                
+                    "isRead": MessageStatus.isRead.rawValue
+                    
+                ])
+            })
+        }
+        
+        // for user self chatroom indicator badge
+        let userDoc = dataBase.collection(FirebaseCollection.chats.rawValue).document(user.id)
+            .collection(FirebaseCollection.recentMessages.rawValue).document(otherUser.id)
+        
+        userDoc.updateData([
+            
+            "isRead": MessageStatus.isRead.rawValue
+        ])
     }
     
     func removeChat(userId: String, otherUserId: String, completion: @escaping (Result<Void, Error>) -> Void) {

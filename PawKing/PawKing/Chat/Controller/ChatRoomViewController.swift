@@ -37,12 +37,21 @@ class ChatRoomViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tabBarItem.setBadgeTextAttributes([.font: UIFont.systemFont(ofSize: 6), .foregroundColor: UIColor.red], for: .normal)
+        tabBarItem.badgeValue = "⬤"
+        tabBarItem.badgeColor = UIColor.clear
+        
         setup()
         style()
         layout()
     }
     
     private func setup() {
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(getChatRooms),
+                                               name: .updateChatRooms,
+                                               object: nil)
         
         getChatRooms()
         
@@ -82,26 +91,30 @@ class ChatRoomViewController: UIViewController {
                            centerX: tableView.centerXAnchor)
     }
     
-    func getChatRooms() {
+    @objc private func getChatRooms() {
         
         guard let user = UserManager.shared.currentUser else {
             return
         }
-        
+
         self.user = user
+
+//        chatManager.listenChatRooms(userId: user.id, blockIds: user.blockUsersId) { [weak self] result in
+//
+//            switch result {
+//
+//            case .success(let chatRooms):
+//
+//                self?.chatRoooms = chatRooms
+//
+//            case .failure(let error):
+//
+//                print(error)
+//            }
+//        }
         
-        chatManager.listenChatRooms(userId: user.id, blockIds: user.blockUsersId) { [weak self] result in
-            
-            switch result {
-                
-            case .success(let chatRooms):
-                
-                self?.chatRoooms = chatRooms
-                
-            case .failure(let error):
-                
-                print(error)
-            }
+        if let chatRooms = ChatManager.shared.chatRooms {
+            chatRoooms = chatRooms
         }
     }
 }
