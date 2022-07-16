@@ -13,13 +13,17 @@ class StrangerCardViewCell: UICollectionViewCell {
     
     static let identifier = "\(StrangerCardViewCell.self)"
     
-    let petImageView = UIImageView()
+    private let petImageView = UIImageView()
     
-    let nameLabel = UILabel()
+    private let nameLabel = UILabel()
     
-    let genderLabel = UILabel()
+    private let genderIconView = UIImageView()
     
-    let ageLabel = UILabel()
+    private let ageIconView = UIImageView()
+    
+    private let genderLabel = UILabel()
+    
+    private let ageLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -45,18 +49,43 @@ class StrangerCardViewCell: UICollectionViewCell {
         nameLabel.textColor = .LightBlack
         nameLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         
+        genderIconView.image = UIImage.asset(.Icons_24px_Gender)
+        
         genderLabel.textColor = .white
         genderLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         
+        ageIconView.image = UIImage.asset(.Icons_24px_Age)
+        
         ageLabel.textColor = .white
         ageLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        ageLabel.adjustsFontSizeToFitWidth = true
     }
     
     func layout() {
         
         contentView.addSubview(petImageView)
+        
+        let hGenderStack = UIStackView(arrangedSubviews: [genderIconView, genderLabel])
+        
+        genderIconView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        genderIconView.constrainWidth(constant: 20)
+        genderIconView.constrainHeight(constant: 20)
+        
+        hGenderStack.distribution = .fill
+        hGenderStack.spacing = 8
+        hGenderStack.axis = .horizontal
+        
+        let hAgeStack = UIStackView(arrangedSubviews: [ageIconView, ageLabel])
+        
+        ageIconView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        ageIconView.constrainWidth(constant: 20)
+        ageIconView.constrainHeight(constant: 20)
+        
+        hAgeStack.distribution = .fill
+        hAgeStack.spacing = 8
+        hAgeStack.axis = .horizontal
 
-        let vStack = UIStackView(arrangedSubviews: [nameLabel, genderLabel, ageLabel])
+        let vStack = UIStackView(arrangedSubviews: [nameLabel, hGenderStack, hAgeStack])
         
         contentView.addSubview(vStack)
         
@@ -70,11 +99,10 @@ class StrangerCardViewCell: UICollectionViewCell {
                             height: contentView.frame.height * 0.6,
                             padding: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
         
-        vStack.anchor(top: contentView.topAnchor,
+        vStack.anchor(top: petImageView.topAnchor,
                       leading: petImageView.trailingAnchor,
-                      bottom: contentView.bottomAnchor,
                       trailing: contentView.trailingAnchor,
-                      padding: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
+                      padding: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20))
         
         contentView.layoutIfNeeded()
         
@@ -91,12 +119,12 @@ class StrangerCardViewCell: UICollectionViewCell {
         
         nameLabel.text = pet.name
         
-        genderLabel.text = "Gender: \(pet.gender)"
+        genderLabel.text = "\(pet.gender)"
         
         let date = pet.birthday.dateValue()
-        let timeInterval = date.timeIntervalSinceNow
-        let age = abs(Int(timeInterval / 31556926.0))
+
+        let age = date.displayTimeInAgeStyle()
         
-        ageLabel.text = "Age: \(age)"
+        ageLabel.text = "\(age)"
     }
 }

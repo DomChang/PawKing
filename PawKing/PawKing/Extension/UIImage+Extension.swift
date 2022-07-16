@@ -29,8 +29,11 @@ enum ImageAsset: String {
     case Icons_36px_UserLocate_Normal
     case Icons_36px_UserLocate_Selected
     case Icons_60px_UserLocate
-    
+
     case Icons_60px_Stranger
+    
+    case Icons_24px_Gender
+    case Icons_24px_Age
     
     case Icons_45px_Bell
     case Icons_45px_Bell_Notified
