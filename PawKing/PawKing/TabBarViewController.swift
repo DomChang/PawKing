@@ -33,7 +33,7 @@ private enum Tab {
             
         case .publish: controller =
             UINavigationController(rootViewController:
-                                    PublishViewController(image: UIImage.asset(.Image_Placeholder)!))
+                                    PublishViewController(image: UIImage.asset(.Image_Placeholder_Paw)!))
             
         case .chat: controller = UINavigationController(rootViewController: ChatRoomViewController())
 
@@ -134,8 +134,9 @@ class TabBarViewController: UITabBarController {
             
             self.selectedIndex = 4
         })
-        
         alertController.addAction(cancelAction)
+        
+        alertController.view.tintColor = .BattleGrey
         
         if let userId = Auth.auth().currentUser?.uid {
 

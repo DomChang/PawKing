@@ -63,6 +63,18 @@ class PetConfigViewController: UIViewController {
         layout()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        tabBarController?.tabBar.isHidden = false
+    }
+    
     private func setup() {
         
         if isEdit {
@@ -96,6 +108,8 @@ class PetConfigViewController: UIViewController {
                 deleteActionController.title = "Are you sure you want to delete \(editPet.name)?"
                 
                 deleteActionController.message = "All Data according to \(editPet.name) will be delete"
+                
+                deleteActionController.view.tintColor = .BattleGrey
                 
                 setActionAlert(pet: editPet)
             }
@@ -165,6 +179,7 @@ class PetConfigViewController: UIViewController {
                 case .success:
                     
                     self.lottie.stopLoading()
+                    NotificationCenter.default.post(name: .updateCurrentPet, object: .none)
                     self.navigationController?.popViewController(animated: true)
                     
                 case .failure(let error):
@@ -174,8 +189,8 @@ class PetConfigViewController: UIViewController {
                 }
             }
         }
-        deleteActionController.addAction(deleteAction)
         deleteActionController.addAction(cancelAction)
+        deleteActionController.addAction(deleteAction)
     }
 }
 
@@ -228,7 +243,8 @@ extension PetConfigViewController: PetConfigCellDelegate {
         else {
             
             lottie.stopLoading()
-            lottie.showError(error: nil)
+            lottie.showError(errorMessage: "Form not completed!")
+            cell.finishButtonEnable()
             
             return
         }
@@ -265,15 +281,6 @@ extension PetConfigViewController: PetConfigCellDelegate {
             }
             
         } else {
-            
-//            guard let petName = cell.petNameTextfield.text,
-//                  let gender = cell.genderTextfield.text,
-//                  let petImage = cell.petImageView.image
-//            else {
-//                return
-//            }
-//
-//            let birthday = Timestamp(date: cell.birthdayPicker.date)
 
             var pet = Pet(id: "",
                           ownerId: owner.id,

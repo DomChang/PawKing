@@ -54,15 +54,13 @@ class MapManager {
         }
     }
     
-    func changeUserStatus(userId: String, status: Status, completion: @escaping (Result<Void, Error>) -> Void) {
+    func changeUserStatus(userId: String, status: Status) {
         
         let document = dataBase.collection(FirebaseCollection.userLocations.rawValue).document(userId)
             
         document.updateData([
             "status": status.rawValue
-        ]) { error in
-            print(error ?? "")
-        }
+        ])
     }
     
     func listenFriendsLocation(friend: String, completion: @escaping (Result<UserLocation, Error>) -> Void) -> ListenerRegistration {

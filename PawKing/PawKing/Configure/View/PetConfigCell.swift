@@ -10,8 +10,6 @@ import FirebaseFirestore
 
 protocol PetConfigCellDelegate {
     
-//    func textFieldDidChange(From textField: UITextField)
-    
     func didTapPhoto()
     
     func didTapFinish(From cell: PetConfigCell)
@@ -25,25 +23,21 @@ class PetConfigCell: UITableViewCell {
     
     let petImageView = UIImageView()
     
-    let nameTitleLabel = UILabel()
+    private let nameTitleLabel = UILabel()
     
     let petNameTextfield = InputTextField()
     
-    let genderTitleLabel = UILabel()
+    private let genderTitleLabel = UILabel()
     
     private let genderPicker = UIPickerView()
     
     let genderTextfield = InputTextField()
     
-    let birthdayTitleLabel = UILabel()
+    private let birthdayTitleLabel = UILabel()
     
-    let birthdayPicker = UIDatePicker()
+    private let birthdayPicker = UIDatePicker()
     
     let birthdayTextfield = InputTextField()
-    
-//    let descriptionTitleLabel = UILabel()
-    
-//    let descriptionTextView = UITextView()
     
     private let finishButton = UIButton()
     
@@ -61,7 +55,7 @@ class PetConfigCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setup() {
+    private func setup() {
         
         selectionStyle = .none
         
@@ -70,17 +64,14 @@ class PetConfigCell: UITableViewCell {
         petImageView.addGestureRecognizer(
             UITapGestureRecognizer(target: self, action: #selector(didTapPetImage)))
         
-//        photoButton.addTarget(self, action: #selector(didTapPhotoButton),
-//                                  for: .touchUpInside)
-        
         birthdayPicker.addTarget(self, action: #selector(handleDatePicker(sender:)), for: .valueChanged)
         
         finishButton.addTarget(self, action: #selector(didTapFinish), for: .touchUpInside)
     }
     
-    func styleObject() {
+    private func styleObject() {
         
-        petImageView.image = UIImage.asset(.Image_Placeholder)
+        petImageView.image = UIImage.asset(.Image_Placeholder_Paw)
         petImageView.contentMode = .scaleAspectFill
         
         nameTitleLabel.text = "Pet Name"
@@ -103,6 +94,7 @@ class PetConfigCell: UITableViewCell {
         birthdayPicker.locale = .current
         birthdayPicker.datePickerMode = .date
         birthdayPicker.preferredDatePickerStyle = .inline
+        birthdayPicker.maximumDate = Date()
 
         birthdayTextfield.inputView = birthdayPicker
 
@@ -112,18 +104,16 @@ class PetConfigCell: UITableViewCell {
         finishButton.layer.cornerRadius = 4
     }
     
-    func layout() {
+    private func layout() {
         
         contentView.addSubview(petImageView)
         contentView.addSubview(nameTitleLabel)
         contentView.addSubview(genderTitleLabel)
         contentView.addSubview(birthdayTitleLabel)
-//        contentView.addSubview(descriptionTitleLabel)
         
         contentView.addSubview(petNameTextfield)
         contentView.addSubview(genderTextfield)
         contentView.addSubview(birthdayTextfield)
-//        contentView.addSubview(descriptionTextView)
         
         contentView.addSubview(finishButton)
         
@@ -206,15 +196,8 @@ class PetConfigCell: UITableViewCell {
         
         self.delegate?.didTapFinish(From: self)
     }
-    
-//    @objc func textFieldDidChange(_ textField: UITextField) {
-//
-//        guard textField == petNameTextfield else { return }
-//
-//        self.delegate?.textFieldDidChange(From: textField)
-//    }
-    
-    @objc func handleDatePicker(sender: UIDatePicker) {
+
+    @objc private func handleDatePicker(sender: UIDatePicker) {
 
         birthdayTextfield.text = sender.date.displayTimeInNormalStyle()
         

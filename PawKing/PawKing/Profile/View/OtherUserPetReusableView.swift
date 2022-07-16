@@ -16,7 +16,7 @@ class OtherUserPetReusableView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
     
-        backgroundColor = .BattleGrey
+        backgroundColor = .white
         layout()
     }
     
@@ -26,26 +26,13 @@ class OtherUserPetReusableView: UICollectionReusableView {
     
     private func layout() {
         
-        backView.backgroundColor = .white
-        
-        backView.layer.cornerRadius = 20
-        
-        backView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        backView.backgroundColor = .BattleGrey
         
         addSubview(backView)
-//        addSubview(gridIconImageView)
         
-//        gridIconImageView.image = UIImage.asset(.Icons_30px_Grid_fill)
-        
-//        backView.anchor(top: bottomAnchor,
-//                        leading: leadingAnchor,
-//                        bottom: bottomAnchor,
-//                        trailing: trailingAnchor,
-//                        padding: UIEdgeInsets(top: -40, left: 0, bottom: 0, right: 0))
-        
-//        gridIconImageView.anchor(centerY: backView.centerYAnchor,
-//                                 centerX: centerXAnchor,
-//                                 width: 30,
-//                                 height: 30)
+        backView.anchor(top: topAnchor,
+                        leading: leadingAnchor,
+                        bottom: bottomAnchor,
+                        trailing: trailingAnchor)
     }
 }

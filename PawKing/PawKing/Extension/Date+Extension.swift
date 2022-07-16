@@ -96,8 +96,22 @@ extension Date {
         
         let dateFormatter = DateFormatter()
         
-        dateFormatter.dateFormat = "yyyy / MM / dd"
+        dateFormatter.dateFormat = "MMM dd, yyyy"
         
         return dateFormatter.string(from: self)
+    }
+    
+    func displayTimeInAgeStyle() -> String {
+        
+        let delta = self.distance(to: Date())
+        
+        let dateFormatter = DateComponentsFormatter()
+        
+        dateFormatter.allowedUnits = [.year, .month]
+        
+        dateFormatter.zeroFormattingBehavior = .dropLeading
+        dateFormatter.unitsStyle = .short
+        
+        return dateFormatter.string(from: delta) ?? ""
     }
 }

@@ -32,18 +32,16 @@ class ChoosePetTableViewCell: UITableViewCell {
         
         contentView.backgroundColor = .white
         
-        petImageView.layer.borderColor = UIColor.white.cgColor
-        petImageView.layer.borderWidth = 2
         petImageView.contentMode = .scaleAspectFill
         
-        petNameLabel.textColor = .LightBlack
+        petNameLabel.textColor = .BattleGreyDark
         petNameLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
     }
     
     private func layout() {
         
-        petImageView.constrainWidth(constant: 80)
-        petImageView.constrainHeight(constant: 80)
+        petImageView.constrainWidth(constant: 60)
+        petImageView.constrainHeight(constant: 60)
         
         let hStack = UIStackView(arrangedSubviews: [petImageView, petNameLabel])
         

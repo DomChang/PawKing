@@ -258,7 +258,11 @@ class PetManager {
                 
                     snapshots?.documents.forEach({ snapshot in
                         
-                        batch.deleteDocument(snapshot.reference)
+                        batch.updateData([
+                            
+                            "currentPetId": ""
+                        
+                        ], forDocument: snapshot.reference)
                         
                     })
                 semaphore.signal()

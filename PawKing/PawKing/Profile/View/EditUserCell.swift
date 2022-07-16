@@ -47,7 +47,7 @@ class EditUserCell: UITableViewCell {
     
     private func styleObject() {
         
-        userNameTextField.placeholder = "UserName"
+        userNameTextField.placeholder = "Username"
         userNameTextField.layer.borderWidth = 0
         
         confirmButton.setTitle("Confirm", for: .normal)

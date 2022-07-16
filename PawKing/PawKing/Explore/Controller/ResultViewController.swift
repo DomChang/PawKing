@@ -20,16 +20,24 @@ class ResultViewController: UISearchController {
     var resultVCDelegate: ResultViewControllerDelegate?
     
     private let userManager = UserManager.shared
-//    
-//    var user: User
     
     var allUsers: [User]?
     
     var resultUsers: [User]? {
         didSet {
             tableView.reloadData()
+            
+            if resultUsers?.count == 0 {
+                
+                emptyLabel.isHidden = false
+            } else {
+                
+                emptyLabel.isHidden = true
+            }
         }
     }
+    
+    private let emptyLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,6 +72,9 @@ class ResultViewController: UISearchController {
         tableView.allowsSelection = true
         
         tableView.register(SearchResultCell.self, forCellReuseIdentifier: SearchResultCell.identifier)
+        
+        emptyLabel.text = "No Result"
+        emptyLabel.isHidden = true
     }
     
     private func style() {
@@ -72,16 +83,25 @@ class ResultViewController: UISearchController {
         
         view.backgroundColor = .BattleGrey
         
-        tableView.backgroundColor = .LightGray
+        tableView.backgroundColor = .BattleGreyUL
         tableView.layer.cornerRadius = 20
         tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        
+        emptyLabel.textColor = .BattleGreyLight
+        emptyLabel.textAlignment = .center
+        emptyLabel.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
     }
     
     private func layout() {
         
         view.addSubview(tableView)
+        tableView.addSubview(emptyLabel)
         
         tableView.fillSafeLayout()
+        
+        emptyLabel.anchor(bottom: tableView.centerYAnchor,
+                          centerX: tableView.centerXAnchor,
+                          padding: UIEdgeInsets(top: 0, left: 0, bottom: 80, right: 0))
     }
     
     private func getAllUser() {

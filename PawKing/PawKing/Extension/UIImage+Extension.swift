@@ -29,36 +29,34 @@ enum ImageAsset: String {
     case Icons_36px_UserLocate_Normal
     case Icons_36px_UserLocate_Selected
     case Icons_60px_UserLocate
-    
-    case Icons_36px_RecordTrack_Normal
-    case Icons_36px_RecordTrack_Selected
-    
+
     case Icons_60px_Stranger
     
-    case Icons_45px_Bell
+    case Icons_24px_Gender
+    case Icons_24px_Age
     
-    case Icons_30px_Grid
-    case Icons_30px_Grid_fill
+    case Icons_45px_Bell
+    case Icons_45px_Bell_Notified
     
     case Icons_24px_Setting
     
     case Icons_24px_Clock
     case Icons_24px_Distance
-    
+
     case Icons_60px_Policy
     case Icons_60px_Block
     case Icons_60px_SignOut
     case Icons_60px_DeleteAccount
     
     case Icons_90px_Start
-    
     case Icons_90px_Stop
     
     case pawking_logo
     
     case signUp
     
-    case Image_Placeholder
+    case Image_Placeholder_Human
+    case Image_Placeholder_Paw
 }
 // swiftlint:enable identifier_name
 

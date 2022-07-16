@@ -25,8 +25,6 @@ class UserConfigViewController: UIViewController {
     
     private var userImageUrl: String?
     
-//    private var userDescription: String?
-    
     private var user: User? {
         didSet {
             tableView.reloadData()
@@ -178,16 +176,6 @@ extension UserConfigViewController: UserConfigCellDelegate {
         
         user.name = userName
         user.description = cell.descriptionTextView.text
-//        let user = User(id: userId,
-//                        name: userName,
-//                        petsId: [],
-//                        currentPetId: "",
-//                        userImage: "",
-//                        description: ,
-//                        friendPetsId: [],
-//                        friends: [],
-//                        recieveRequestsId: [],
-//                        sendRequestsId: [])
         
         userManager.setupUser(user: user) { [weak self] result in
             

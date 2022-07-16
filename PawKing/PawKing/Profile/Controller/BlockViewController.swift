@@ -17,7 +17,24 @@ class BlockViewController: UIViewController {
     
     private let lottie = LottieWrapper.shared
     
-    private var blockedUsers: [User]?
+    private var blockedUsers: [User]? {
+        
+        didSet {
+            
+            DispatchQueue.main.async {
+                
+                if self.blockedUsers?.count == 0 {
+                    
+                    self.noBlockUserLabel.isHidden = false
+                } else {
+                    
+                    self.noBlockUserLabel.isHidden = true
+                }
+            }
+        }
+    }
+    
+    private let noBlockUserLabel = UILabel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,12 +52,22 @@ class BlockViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
+        noBlockUserLabel.text = "No Blocked User"
+        noBlockUserLabel.isHidden = true
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        tabBarController?.tabBar.isHidden = true
+        
         fetchBlockedUsers()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        tabBarController?.tabBar.isHidden = false
     }
     
     private func style() {
@@ -51,18 +78,26 @@ class BlockViewController: UIViewController {
         
         view.backgroundColor = .BattleGrey
         
-        tableView.backgroundColor = .LightGray
+        tableView.backgroundColor = .BattleGreyUL
         tableView.layer.cornerRadius = 20
+        
+        noBlockUserLabel.textColor = .BattleGreyLight
+        noBlockUserLabel.textAlignment = .center
+        noBlockUserLabel.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
     }
     
     private func layout() {
         
         view.addSubview(tableView)
+        tableView.addSubview(noBlockUserLabel)
         
         tableView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                          leading: view.leadingAnchor,
                          bottom: view.bottomAnchor,
                          trailing: view.trailingAnchor)
+        
+        noBlockUserLabel.anchor(centerY: tableView.centerYAnchor,
+                           centerX: tableView.centerXAnchor)
     }
     
     private func fetchBlockedUsers() {
