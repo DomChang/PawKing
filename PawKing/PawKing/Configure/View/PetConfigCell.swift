@@ -94,6 +94,7 @@ class PetConfigCell: UITableViewCell {
         birthdayPicker.locale = .current
         birthdayPicker.datePickerMode = .date
         birthdayPicker.preferredDatePickerStyle = .inline
+        birthdayPicker.maximumDate = Date()
 
         birthdayTextfield.inputView = birthdayPicker
 
