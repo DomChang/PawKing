@@ -291,6 +291,11 @@ class MapViewController: UIViewController {
         collectionView.isHidden = true
         
         setupTrackButton()
+        
+        if !isTracking {
+            
+            
+        }
     }
     
     private func style() {
