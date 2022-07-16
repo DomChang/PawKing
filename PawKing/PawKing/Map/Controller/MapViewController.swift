@@ -148,6 +148,16 @@ class MapViewController: UIViewController {
             
             listenFriendsLocation()
             notificationButton.isHidden = false
+            
+            if user.recieveRequestsId.isEmpty {
+                
+                notificationButton.setImage(UIImage.asset(.Icons_45px_Bell),
+                                            for: .normal)
+            } else {
+                
+                notificationButton.setImage(UIImage.asset(.Icons_45px_Bell_Notified),
+                                            for: .normal)
+            }
         } else {
             userCurrentPet = nil
             userPets = []
@@ -209,6 +219,16 @@ class MapViewController: UIViewController {
             }
             
             notificationButton.isHidden = false
+            
+            if user.recieveRequestsId.isEmpty {
+                
+                notificationButton.setImage(UIImage.asset(.Icons_45px_Bell),
+                                            for: .normal)
+            } else {
+                
+                notificationButton.setImage(UIImage.asset(.Icons_45px_Bell_Notified),
+                                            for: .normal)
+            }
 
         } else {
             userCurrentPet = nil
@@ -284,8 +304,6 @@ class MapViewController: UIViewController {
         stopTrackButton.image = UIImage.asset(.Icons_90px_Stop)
         
         strangerButton.setImage(UIImage.asset(.Icons_60px_Stranger), for: .normal)
-        
-        notificationButton.setImage(UIImage.asset(.Icons_45px_Bell), for: .normal)
         
         if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             flowLayout.scrollDirection = .horizontal
@@ -486,8 +504,6 @@ class MapViewController: UIViewController {
     
     private func fetchUserPets(user: User) {
         
-        lottie.startLoading()
-        
         userManager.fetchPets(userId: user.id) { [weak self] result in
             
             switch result {
@@ -496,11 +512,10 @@ class MapViewController: UIViewController {
                 
                 self?.userPets = pets
                 self?.fetchCurrentPet(user: user)
-                self?.lottie.stopLoading()
                 
             case .failure:
                 
-                self?.lottie.stopLoading()
+                self?.lottie.showError(errorMessage: "Network Unstable")
             }
         }
     }
