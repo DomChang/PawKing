@@ -43,7 +43,7 @@ class StrangerCardViewCell: UICollectionViewCell {
         petImageView.layer.borderColor = UIColor.white.cgColor
         
         nameLabel.textColor = .LightBlack
-        nameLabel.font = UIFont.systemFont(ofSize: 25, weight: .semibold)
+        nameLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         
         genderLabel.textColor = .white
         genderLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)

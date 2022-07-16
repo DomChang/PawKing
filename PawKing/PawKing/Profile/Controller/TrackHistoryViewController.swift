@@ -434,8 +434,8 @@ class TrackHistoryViewController: UIViewController {
             self?.navigationController?.popViewController(animated: true)
         }
         abortActionController.view.tintColor = .BattleGrey
-        abortActionController.addAction(abortAction)
         abortActionController.addAction(cancelAction)
+        abortActionController.addAction(abortAction)
     }
     
     private func setDeleteActionSheet() {

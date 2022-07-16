@@ -33,8 +33,8 @@ class NoStrangerCell: UICollectionViewCell {
         
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
-        label.textColor = .LightBlack
-        label.text = "No new friends nearby."
+        label.textColor = .BattleGreyDark
+        label.text = "No new pets nearby."
     }
     
     func layout() {

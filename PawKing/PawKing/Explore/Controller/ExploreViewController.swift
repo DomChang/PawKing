@@ -308,7 +308,7 @@ extension ExploreViewController: UICollectionViewDataSource {
                                                          trailing: contentInset)
 
         let fullGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                   heightDimension: .fractionalWidth(2/3))
+                                                   heightDimension: .fractionalWidth(1))
 
         let fullGroup = NSCollectionLayoutGroup.vertical(layoutSize: fullGroupSize,
                                                              subitem: fullItem, count: 1)
@@ -339,7 +339,7 @@ extension ExploreViewController: UICollectionViewDataSource {
                                                              count: 2)
 
         let mainWithPairGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                           heightDimension: .fractionalWidth(4/9))
+                                                           heightDimension: .fractionalWidth(2/3))
 
         let mainWithPairGroup = NSCollectionLayoutGroup.horizontal(layoutSize: mainWithPairGroupSize,
                                                                  subitems: [mainItem, trailingGroup])
@@ -355,7 +355,7 @@ extension ExploreViewController: UICollectionViewDataSource {
                                                             trailing: contentInset)
 
         let tripletGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                           heightDimension: .fractionalWidth(2/9))
+                                                           heightDimension: .fractionalWidth(1/3))
 
         let tripletGroup = NSCollectionLayoutGroup.horizontal(layoutSize: tripletGroupSize,
                                                               subitems: [tripletItem, tripletItem, tripletItem])
@@ -365,7 +365,7 @@ extension ExploreViewController: UICollectionViewDataSource {
                                                                 subitems: [trailingGroup, mainItem])
 
         let nestedGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                           heightDimension: .fractionalWidth(16/9))
+                                                           heightDimension: .fractionalWidth(8/3))
 
         let nestedGroup = NSCollectionLayoutGroup.vertical(layoutSize: nestedGroupSize,
                                                              subitems: [fullGroup,
