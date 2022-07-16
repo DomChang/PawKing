@@ -215,6 +215,8 @@ class MapViewController: UIViewController {
                 
                 beTracking()
             } else {
+                mapManager.changeUserStatus(userId: user.id,
+                                            status: .unTrack)
                 notTracking()
             }
             
@@ -291,11 +293,6 @@ class MapViewController: UIViewController {
         collectionView.isHidden = true
         
         setupTrackButton()
-        
-        if !isTracking {
-            
-            
-        }
     }
     
     private func style() {
@@ -735,18 +732,7 @@ class MapViewController: UIViewController {
         
         userStoredLocations = []
         
-        mapManager.changeUserStatus(userId: user.id, status: .unTrack) { [weak self] result in
-            switch result {
-                
-            case .success:
-                
-                print("===renew status success")
-                
-            case .failure(let error):
-                print(error)
-                self?.lottie.showError(error: error)
-            }
-        }
+        mapManager.changeUserStatus(userId: user.id, status: .unTrack)
     }
     
     private func resetTrack() {
