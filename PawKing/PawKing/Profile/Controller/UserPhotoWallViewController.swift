@@ -288,8 +288,9 @@ class UserPhotoWallViewController: UIViewController {
         guard let otherUser = otherUser else {
             return
         }
-        
-        actionController.view.tintColor = .BattleGrey
+        DispatchQueue.main.async {
+            self.actionController.view.tintColor = .BattleGrey
+        }
         
         if user.blockUsersId.contains(otherUser.id) {
 
@@ -352,8 +353,9 @@ class UserPhotoWallViewController: UIViewController {
               let otherUser = otherUser else {
             return
         }
-        
-        disconnectActionController.view.tintColor = .BattleGrey
+        DispatchQueue.main.async {
+            self.disconnectActionController.view.tintColor = .BattleGrey
+        }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
         

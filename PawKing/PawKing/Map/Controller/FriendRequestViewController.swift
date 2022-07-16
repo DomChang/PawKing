@@ -20,21 +20,20 @@ class FriendRequestViewController: UIViewController {
         didSet {
             DispatchQueue.main.async {
                 self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
+                
+                if self.senders.isEmpty {
+                    
+                    self.noRequestLabel.isHidden = false
+                } else {
+                    
+                    self.noRequestLabel.isHidden = true
+                }
             }
         }
     }
-
-//    init(user: User) {
-//
-//        self.user = user
-//
-//        super.init(nibName: nil, bundle: nil)
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-
+    
+    private let noRequestLabel = UILabel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -45,6 +44,18 @@ class FriendRequestViewController: UIViewController {
         setup()
         style()
         layout()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        tabBarController?.tabBar.isHidden = false
     }
 
     private func setup() {
@@ -63,6 +74,9 @@ class FriendRequestViewController: UIViewController {
         tableView.delegate = self
 
         tableView.register(FriendRequestCell.self, forCellReuseIdentifier: FriendRequestCell.identifier)
+        
+        noRequestLabel.text = "No Request"
+        noRequestLabel.isHidden = true
     }
 
     private func style() {
@@ -72,32 +86,31 @@ class FriendRequestViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.layer.cornerRadius = 20
         tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        
+        noRequestLabel.textColor = .BattleGreyLight
+        noRequestLabel.textAlignment = .center
+        noRequestLabel.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
     }
 
     private func layout() {
 
         view.addSubview(tableView)
+        tableView.addSubview(noRequestLabel)
 
-        tableView.fillSafeLayout()
+        tableView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                         leading: view.leadingAnchor,
+                         bottom: view.bottomAnchor,
+                         trailing: view.trailingAnchor)
+        
+        noRequestLabel.anchor(centerY: tableView.centerYAnchor,
+                              centerX: tableView.centerXAnchor)
     }
     
     @objc private func updateUser() {
+                
+        user = UserManager.shared.currentUser
         
-//        userManager.listenUserInfo(userId: user.id) { [weak self] result in
-//
-//            switch result {
-//
-//            case .success(let user):
-                
-                user = UserManager.shared.currentUser
-                
-                getSenderInfo()
-                
-//            case .failure(let error):
-//
-//                print(error)
-//            }
-//        }
+        getSenderInfo()
     }
     
     private func getSenderInfo() {

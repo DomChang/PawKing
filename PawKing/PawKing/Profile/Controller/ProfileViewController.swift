@@ -24,6 +24,7 @@ class ProfileViewController: UIViewController {
     var isPhoto = true {
         didSet {
             collectionView.reloadSections(IndexSet(integer: 3))
+            checkIsEmpty()
         }
     }
     
@@ -45,6 +46,7 @@ class ProfileViewController: UIViewController {
     var displayPosts: [Post]? {
         didSet {
             collectionView.reloadSections(IndexSet(integer: 3))
+            checkIsEmpty()
         }
     }
     
@@ -57,10 +59,13 @@ class ProfileViewController: UIViewController {
     var displayTrackInfos: [TrackInfo]? {
         didSet {
             collectionView.reloadSections(IndexSet(integer: 3))
+            checkIsEmpty()
         }
     }
     
     private var selectedPetIndex: IndexPath?
+    
+    private let emptyLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,6 +73,7 @@ class ProfileViewController: UIViewController {
         setup()
         style()
         layout()
+        
     }
 
     private func setup() {
@@ -128,11 +134,16 @@ class ProfileViewController: UIViewController {
         collectionView.backgroundColor = .white
         collectionView.layer.cornerRadius = 20
         collectionView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        
+        emptyLabel.textColor = .BattleGreyLight
+        emptyLabel.textAlignment = .center
+        emptyLabel.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
     }
     
     private func layout() {
         
         view.addSubview(collectionView)
+        collectionView.addSubview(emptyLabel)
         
         collectionView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                                leading: view.leadingAnchor,
@@ -145,6 +156,10 @@ class ProfileViewController: UIViewController {
                 width: collectionView.bounds.width, height: collectionView.bounds.height))
         topView.backgroundColor = .BattleGrey
         collectionView.addSubview(topView)
+        
+        emptyLabel.anchor(top: collectionView.centerYAnchor,
+                          centerX: collectionView.centerXAnchor,
+                          padding: UIEdgeInsets(top: 120, left: 0, bottom: 0, right: 0))
         
     }
     
@@ -177,11 +192,11 @@ class ProfileViewController: UIViewController {
                 
                 self?.fetchTrack(by: user)
                 
-                self?.collectionView.visibleCells.forEach { cell in
-                    guard let petCell = cell as? PetItemCell else { return }
-                    
-                    petCell.selectState = false
-                }
+//                self?.collectionView.visibleCells.forEach { cell in
+//                    guard let petCell = cell as? PetItemCell else { return }
+//
+//                    petCell.selectState = false
+//                }
                 
                 self?.lottie.stopLoading()
                 
@@ -242,6 +257,24 @@ class ProfileViewController: UIViewController {
                 
                 print(error)
             }
+        }
+    }
+    
+    func checkIsEmpty() {
+        
+        if isPhoto && displayPosts?.count == 0 {
+            
+            emptyLabel.text = "Click + to Post"
+            emptyLabel.isHidden = false
+            
+        } else if !isPhoto && displayTrackInfos?.count == 0 {
+            
+            emptyLabel.text = "No Track"
+            emptyLabel.isHidden = false
+            
+        } else {
+            
+            emptyLabel.isHidden = true
         }
     }
 }
@@ -580,6 +613,8 @@ extension ProfileViewController: UICollectionViewDelegate {
                 
                 displayTrackInfos = trackInfos.filter { $0.petId == userPets[indexPath.item].id }
                 
+//                checkIsEmpty()
+                
                 selectedPetIndex = indexPath
                 
             } else {
@@ -587,6 +622,8 @@ extension ProfileViewController: UICollectionViewDelegate {
                 displayPosts = posts
                 
                 displayTrackInfos = trackInfos
+                
+//                checkIsEmpty()
                 
                 selectedPetIndex = nil
                 

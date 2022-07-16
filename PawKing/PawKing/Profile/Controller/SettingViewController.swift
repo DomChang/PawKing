@@ -36,6 +36,18 @@ class SettingViewController: UIViewController {
         layout()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        tabBarController?.tabBar.isHidden = false
+    }
+    
     private func setup() {
         
         tableView.register(SettingCell.self,
@@ -57,7 +69,7 @@ class SettingViewController: UIViewController {
         
         view.backgroundColor = .BattleGrey
         
-        tableView.backgroundColor = .LightGray
+        tableView.backgroundColor = .BattleGreyUL
         tableView.layer.cornerRadius = 20
         
         signOutActionController.view.tintColor = .BattleGrey

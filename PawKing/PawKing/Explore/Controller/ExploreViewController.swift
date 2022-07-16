@@ -43,6 +43,8 @@ class ExploreViewController: UIViewController {
     
     private let buttonBackView = UIView()
     
+    private let noPostLabel = UILabel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -93,6 +95,9 @@ class ExploreViewController: UIViewController {
         
         allModeButton.addTarget(self, action: #selector(didTapAll), for: .touchUpInside)
         friendModeButton.addTarget(self, action: #selector(didTapFriend), for: .touchUpInside)
+        
+        noPostLabel.text = "No Post"
+        noPostLabel.isHidden = true
     }
     
     private func style() {
@@ -114,6 +119,10 @@ class ExploreViewController: UIViewController {
         buttonBackView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
         refreshControl.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
+        
+        noPostLabel.textColor = .BattleGreyLight
+        noPostLabel.textAlignment = .center
+        noPostLabel.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
     }
     
     private func layout() {
@@ -145,11 +154,16 @@ class ExploreViewController: UIViewController {
         
         collectionView.anchor(top: hStackView.bottomAnchor,
                               leading: view.leadingAnchor,
-                              bottom: view.bottomAnchor,
+                              bottom: view.safeAreaLayoutGuide.bottomAnchor,
                               trailing: view.trailingAnchor,
                               padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0))
         
         buttonIndicatorView.layer.cornerRadius = 5
+        
+        collectionView.addSubview(noPostLabel)
+        
+        noPostLabel.anchor(centerY: collectionView.centerYAnchor,
+                           centerX: collectionView.centerXAnchor)
     }
     
     @objc private func getAllPosts() {
@@ -237,6 +251,8 @@ class ExploreViewController: UIViewController {
         allModeButton.isSelected = true
         friendModeButton.isSelected = false
         
+        self.noPostLabel.isHidden = true
+        
         UIView.animate(withDuration: 0.1, animations: {
             
             self.buttonIndicatorView.center.x = self.allModeButton.center.x
@@ -249,6 +265,14 @@ class ExploreViewController: UIViewController {
         
         allModeButton.isSelected = false
         friendModeButton.isSelected = true
+        
+        if self.friendPosts?.count == 0 {
+            
+            self.noPostLabel.isHidden = false
+        } else {
+            
+            self.noPostLabel.isHidden = true
+        }
         
         UIView.animate(withDuration: 0.1, animations: {
             

@@ -17,11 +17,22 @@ class ChatRoomViewController: UIViewController {
     
     private var chatRoooms: [Conversation] = [] {
         didSet {
+            
             DispatchQueue.main.async {
                 self.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+                
+                if self.chatRoooms.isEmpty {
+                    
+                    self.noChatLabel.isHidden = false
+                } else {
+                    
+                    self.noChatLabel.isHidden = true
+                }
             }
         }
     }
+    
+    private let noChatLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +55,9 @@ class ChatRoomViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(ChatRoomCell.self, forCellReuseIdentifier: ChatRoomCell.identifier)
+        
+        noChatLabel.text = "No Chat"
+        noChatLabel.isHidden = true
     }
     
     private func style() {
@@ -51,13 +65,21 @@ class ChatRoomViewController: UIViewController {
         tableView.layer.cornerRadius = 20
         
         tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        
+        noChatLabel.textColor = .BattleGreyLight
+        noChatLabel.textAlignment = .center
+        noChatLabel.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
     }
     
     private func layout() {
         
         view.addSubview(tableView)
+        tableView.addSubview(noChatLabel)
         
         tableView.fillSafeLayout()
+        
+        noChatLabel.anchor(centerY: tableView.centerYAnchor,
+                           centerX: tableView.centerXAnchor)
     }
     
     func getChatRooms() {

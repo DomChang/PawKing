@@ -63,6 +63,18 @@ class PetConfigViewController: UIViewController {
         layout()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        tabBarController?.tabBar.isHidden = false
+    }
+    
     private func setup() {
         
         if isEdit {
@@ -231,7 +243,8 @@ extension PetConfigViewController: PetConfigCellDelegate {
         else {
             
             lottie.stopLoading()
-            lottie.showError(error: nil)
+            lottie.showError(errorMessage: "Form not completed!")
+            cell.finishButtonEnable()
             
             return
         }
@@ -268,15 +281,6 @@ extension PetConfigViewController: PetConfigCellDelegate {
             }
             
         } else {
-            
-//            guard let petName = cell.petNameTextfield.text,
-//                  let gender = cell.genderTextfield.text,
-//                  let petImage = cell.petImageView.image
-//            else {
-//                return
-//            }
-//
-//            let birthday = Timestamp(date: cell.birthdayPicker.date)
 
             var pet = Pet(id: "",
                           ownerId: owner.id,

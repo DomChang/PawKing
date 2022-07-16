@@ -85,15 +85,12 @@ class MapViewController: UIViewController {
     private var userPets: [Pet] = [] {
         didSet {
             if userPets.count == 0 {
-                
-//                choosePetImageView.isHidden = true
             }
         }
     }
     
     private var userCurrentPet: Pet? {
         didSet {
-//            choosePetImageView.isHidden = false
             styleCurrentPetButton()
         }
     }
@@ -235,8 +232,6 @@ class MapViewController: UIViewController {
                                                selector: #selector(updateCurrentPet),
                                                name: .updateCurrentPet,
                                                object: nil)
-        
-//        choosePetImageView.isHidden = true
         
         locationManager = CLLocationManager()
         locationManager?.delegate = self
@@ -963,6 +958,12 @@ class MapViewController: UIViewController {
     private func setNoPetAlert() {
         
         let noPetCancelAction = UIAlertAction(title: "Ok", style: .cancel, handler: { _ in
+            
+            guard Auth.auth().currentUser != nil else {
+                
+                NotificationCenter.default.post(name: .showSignInView, object: .none)
+                return
+            }
             
             self.tabBarController?.selectedIndex = 4
         })
