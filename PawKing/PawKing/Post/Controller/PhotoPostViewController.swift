@@ -473,7 +473,7 @@ class PhotoPostViewController: UIViewController {
     }
 }
 
-extension PhotoPostViewController: PhotoItemCellDelegate {
+extension PhotoPostViewController: PhotoPostCellDelegate {
     
     func didTapAction() {
         
@@ -501,6 +501,29 @@ extension PhotoPostViewController: PhotoItemCellDelegate {
         }
         
         isLike = like
+    }
+    
+    func didTapUser() {
+        
+        guard let postUser = postUser else {
+            return
+        }
+        
+        if self.user.id != postUser.id {
+            
+            let postUserVC = UserPhotoWallViewController(otherUserId: postUser.id)
+            
+            navigationController?.pushViewController(postUserVC, animated: true)
+        }
+    }
+    
+    func didTapLikeUsers() {
+        
+        let likeUserVC = UserListViewController(usersId: post.likesId,
+                                                listType: .like,
+                                                postId: post.id)
+        
+        navigationController?.pushViewController(likeUserVC, animated: true)
     }
 }
 

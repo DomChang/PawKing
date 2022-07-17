@@ -121,7 +121,7 @@ class FriendRequestViewController: UIViewController {
             
             switch result {
                 
-            case .success(let senders):
+            case .success((let senders, _)):
                 
                 self?.senders = senders
                 
