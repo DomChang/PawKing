@@ -14,6 +14,8 @@ import UIKit
     func didTapLeftButton(from cell: ProfileInfoCell)
     
     func didTapRightButton()
+    
+    func didTapFriend()
 }
 
 class ProfileInfoCell: UICollectionViewCell {
@@ -108,6 +110,9 @@ class ProfileInfoCell: UICollectionViewCell {
         vFriendStack.axis = .vertical
         vFriendStack.distribution = .fillProportionally
         vFriendStack.spacing = 3
+        vFriendStack.isUserInteractionEnabled = true
+        vFriendStack.addGestureRecognizer(UITapGestureRecognizer(target: self,
+                                                                 action: #selector(didTapFriend)))
         
         let vPostStack = UIStackView(arrangedSubviews: [postNumTitleLabel, postNumLabel])
         
@@ -188,5 +193,10 @@ class ProfileInfoCell: UICollectionViewCell {
     @objc func didTapRightButton() {
         
         self.delegate?.didTapRightButton()
+    }
+    
+    @objc func didTapFriend() {
+        
+        self.delegate?.didTapFriend()
     }
 }

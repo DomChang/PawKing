@@ -437,6 +437,15 @@ class UserPhotoWallViewController: UIViewController {
 
 extension UserPhotoWallViewController: ProfileInfoCellDelegate {
     
+    func didTapFriend() {
+        
+        guard let friendsId = otherUser?.friends else { return }
+        
+        let friendListVC = UserListViewController(usersId: friendsId, listType: .friend, postId: nil)
+        
+        navigationController?.pushViewController(friendListVC, animated: true)
+    }
+    
     func didTapLeftButton(from cell: ProfileInfoCell) {
         
         guard let user = user,

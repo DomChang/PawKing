@@ -281,6 +281,15 @@ class ProfileViewController: UIViewController {
 
 extension ProfileViewController: ProfileInfoCellDelegate {
     
+    func didTapFriend() {
+        
+        guard let friendsId = user?.friends else { return }
+        
+        let friendListVC = UserListViewController(usersId: friendsId, listType: .friend, postId: nil)
+        
+        navigationController?.pushViewController(friendListVC, animated: true)
+    }
+    
     func didTapUserImage() {
         
         photoHelper.presentActionSheet(from: self)
