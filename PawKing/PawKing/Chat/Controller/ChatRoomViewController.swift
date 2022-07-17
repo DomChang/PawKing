@@ -44,6 +44,11 @@ class ChatRoomViewController: UIViewController {
     
     private func setup() {
         
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(getChatRooms),
+                                               name: .updateChatRooms,
+                                               object: nil)
+        
         getChatRooms()
         
         navigationItem.title = "Chatroom"
@@ -82,26 +87,30 @@ class ChatRoomViewController: UIViewController {
                            centerX: tableView.centerXAnchor)
     }
     
-    func getChatRooms() {
+    @objc private func getChatRooms() {
         
         guard let user = UserManager.shared.currentUser else {
             return
         }
-        
+
         self.user = user
+
+//        chatManager.listenChatRooms(userId: user.id, blockIds: user.blockUsersId) { [weak self] result in
+//
+//            switch result {
+//
+//            case .success(let chatRooms):
+//
+//                self?.chatRoooms = chatRooms
+//
+//            case .failure(let error):
+//
+//                print(error)
+//            }
+//        }
         
-        chatManager.listenChatRooms(userId: user.id, blockIds: user.blockUsersId) { [weak self] result in
-            
-            switch result {
-                
-            case .success(let chatRooms):
-                
-                self?.chatRoooms = chatRooms
-                
-            case .failure(let error):
-                
-                print(error)
-            }
+        if let chatRooms = ChatManager.shared.chatRooms {
+            chatRoooms = chatRooms
         }
     }
 }

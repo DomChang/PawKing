@@ -98,13 +98,17 @@ class TabBarViewController: UITabBarController {
     
     private let userManager = UserManager.shared
     
+    private let chatManager = ChatManager.shared
+    
     private let photoHelper = PKPhotoHelper()
     
     private let alertController = UIAlertController(title: "No Pet",
                                                     message: "Cannot post with no pet, please add pet first!",
                                                     preferredStyle: .alert)
     
-    private var listener: ListenerRegistration?
+    private var userListener: ListenerRegistration?
+    
+    private var newMessageLisener: ListenerRegistration?
 
     override func viewDidLoad() {
         
@@ -155,7 +159,7 @@ class TabBarViewController: UITabBarController {
         tabBarAppearance.shadowColor = .clear
         tabBar.scrollEdgeAppearance = tabBarAppearance
         tabBar.standardAppearance = tabBarAppearance
-        
+                
         let navBarAppearance =  UINavigationBarAppearance()
         navBarAppearance.backgroundColor = .BattleGrey
         navBarAppearance.shadowColor = .clear
@@ -186,20 +190,20 @@ class TabBarViewController: UITabBarController {
     
     @objc func listenUser(userId: String) {
         
-        if listener != nil {
+        if userListener != nil {
             
-            listener?.remove()
+            userListener?.remove()
         }
         
-        listener = userManager.listenUserInfo(userId: userId) { result in
+        userListener = userManager.listenUserInfo(userId: userId) { [weak self] result in
             
             switch result {
                 
             case .success(let user):
                 
-                print("===22222")
-                
                 UserManager.shared.currentUser = user
+                
+                self?.listenNewMessage(user: user)
                 
             case .failure(let error):
                 
@@ -224,6 +228,48 @@ class TabBarViewController: UITabBarController {
 
             self?.present(navPublishVC, animated: true)
         }
+    }
+    
+    private func listenNewMessage(user: User) {
+        
+        if newMessageLisener != nil {
+            
+            newMessageLisener?.remove()
+        }
+        
+        newMessageLisener = chatManager.listenChatRooms(userId: user.id,
+                                                        blockIds: user.blockUsersId) { result in
+            
+            switch result {
+                
+            case .success(let chatRooms):
+                
+                ChatManager.shared.chatRooms = chatRooms
+                
+                if chatRooms.contains(where: {
+                    $0.message.senderId != user.id &&
+                    $0.message.isRead == MessageStatus.notRead.rawValue
+                }) {
+                    
+                    DispatchQueue.main.async {
+                        
+                        self.tabBar.addItemBadge(atIndex: 3)
+
+                    }
+                } else {
+                    
+                    DispatchQueue.main.async {
+                        
+                        self.tabBar.removeItemBadge(atIndex: 3)
+                    }
+                }
+                
+            case .failure(let error):
+                
+                print(error)
+            }
+        }
+        
     }
     
     @objc func resetTab() {
