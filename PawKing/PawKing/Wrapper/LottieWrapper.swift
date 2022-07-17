@@ -13,6 +13,8 @@ enum LottieName: String {
     case loading
     
     case error
+    
+    case like
 }
 
 class LottieWrapper {
@@ -52,6 +54,8 @@ class LottieWrapper {
         
         loadingView.contentMode = .scaleAspectFill
         
+        loadingView.backgroundBehavior = .pauseAndRestore
+        
         currentWindow?.addSubview(loadingView)
         
         DispatchQueue.main.async {
@@ -88,6 +92,9 @@ class LottieWrapper {
         
         let vStack = UIStackView(arrangedSubviews: [errorView, errorLabel])
         
+        errorView.constrainWidth(constant: 150)
+        errorView.constrainHeight(constant: 150)
+        
         vStack.axis = .vertical
         vStack.alignment = .center
         vStack.backgroundColor = .LightGray?.withAlphaComponent(0.8)
@@ -105,17 +112,18 @@ class LottieWrapper {
         }
         
         errorLabel.textColor = .Orange1
-        
-        errorLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        errorLabel.numberOfLines = 0
+        errorLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         
         errorView.contentMode = .scaleAspectFill
+        errorView.backgroundBehavior = .forceFinish
         
         currentWindow?.addSubview(vStack)
         
         vStack.center = currentWindow?.center ?? CGPoint(x: width / 2, y: height / 2)
         
         errorView.play()
-        
+        errorView.animationSpeed = 1
         errorView.loopMode = .loop
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
@@ -134,6 +142,9 @@ class LottieWrapper {
         
         let vStack = UIStackView(arrangedSubviews: [errorView, errorLabel])
         
+        errorView.constrainWidth(constant: 150)
+        errorView.constrainHeight(constant: 150)
+        
         vStack.axis = .vertical
         vStack.alignment = .center
         vStack.backgroundColor = .LightGray?.withAlphaComponent(0.8)
@@ -151,17 +162,18 @@ class LottieWrapper {
         }
         
         errorLabel.textColor = .Orange1
-        
-        errorLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        errorLabel.numberOfLines = 0
+        errorLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         
         errorView.contentMode = .scaleAspectFill
+        errorView.backgroundBehavior = .forceFinish
         
         currentWindow?.addSubview(vStack)
         
         vStack.center = currentWindow?.center ?? CGPoint(x: width / 2, y: height / 2)
         
         errorView.play()
-        
+        errorView.animationSpeed = 1
         errorView.loopMode = .loop
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {

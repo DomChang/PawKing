@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseFirestore
+import Lottie
 
 class PhotoPostViewController: UIViewController {
     
@@ -49,7 +50,8 @@ class PhotoPostViewController: UIViewController {
     private var isLike = false {
         
         didSet {
-            tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+//            tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+            
         }
     }
     
@@ -66,6 +68,8 @@ class PhotoPostViewController: UIViewController {
     
     private let userImageView = UIImageView()
     
+    private var likingView: AnimationView?
+    
     private let userInputTextView = InputTextView()
     
     private let sendButton = UIButton()
@@ -74,7 +78,9 @@ class PhotoPostViewController: UIViewController {
     
     private let inputSeperatorLine = UIView()
     
-    private let actionController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+    private let actionController = UIAlertController(title: nil,
+                                                     message: nil,
+                                                     preferredStyle: .actionSheet)
     
     init(user: User, post: Post) {
         
@@ -189,15 +195,15 @@ class PhotoPostViewController: UIViewController {
                                   trailing: sendButton.leadingAnchor,
                                  padding: UIEdgeInsets(top: 8, left: 10, bottom: 10, right: 10))
         
+        inputBackView.anchor(leading: view.leadingAnchor,
+                             bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                             trailing: view.trailingAnchor)
+        
         sendButton.anchor(trailing: inputBackView.trailingAnchor,
                           centerY: inputBackView.centerYAnchor,
                           width: 60,
                           height: 35,
                           padding: UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 20))
-        
-        inputBackView.anchor(leading: view.leadingAnchor,
-                             bottom: view.safeAreaLayoutGuide.bottomAnchor,
-                             trailing: view.trailingAnchor)
         
         inputSeperatorLine.anchor(leading: inputBackView.leadingAnchor,
                                   bottom: inputBackView.topAnchor,
@@ -368,6 +374,7 @@ class PhotoPostViewController: UIViewController {
             
             isLike = false
         }
+        tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
     }
     
 //    @objc func textFieldDidChange(_ textField: UITextField) {
@@ -499,8 +506,40 @@ extension PhotoPostViewController: PhotoPostCellDelegate {
             
             postManager.removePostLike(postId: post.id, userId: user.id)
         }
-        
         isLike = like
+        
+        tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+        
+        if isLike {
+            
+            likingView = AnimationView(name: LottieName.like.rawValue)
+            likingView?.contentMode = .scaleAspectFill
+            likingView?.animationSpeed = 1.25
+            likingView?.backgroundBehavior = .forceFinish
+            likingView?.loopMode = .playOnce
+            likingView?.setRadiusWithShadow()
+            
+            guard let likingView = likingView else {
+                return
+            }
+            
+            tableView.addSubview(likingView)
+            
+            likingView.anchor(centerY: cell.photoImageView.centerYAnchor,
+                              centerX: cell.photoImageView.centerXAnchor,
+                              width: 250,
+                              height: 250,
+                              padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
+            
+            DispatchQueue.main.async {
+            
+                likingView.play { _ in
+                    likingView.stop()
+                    likingView.removeFromSuperview()
+                    self.likingView = nil
+                }
+            }
+        }
     }
     
     func didTapUser() {

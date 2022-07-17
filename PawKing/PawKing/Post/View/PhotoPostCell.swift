@@ -9,8 +9,6 @@ import UIKit
 
 @objc protocol PhotoPostCellDelegate: AnyObject {
     
-//    func didTapPetImage()
-    
     func didTapLike(for cell: PhotoPostCell, like: Bool)
     
     func didTapAction()

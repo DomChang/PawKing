@@ -176,9 +176,7 @@ class MapViewController: UIViewController {
                 locationManager?.authorizationStatus != .notDetermined else {
             
             return
-        }
-        focusUserLocation()
-        
+        }        
         mapView.userTrackingMode = .follow
     }
     
@@ -264,6 +262,7 @@ class MapViewController: UIViewController {
         
         mapView.showsUserLocation = true
         mapView.delegate = self
+        mapView.mapType = .mutedStandard
         mapView.register(MKAnnotationView.self, forAnnotationViewWithReuseIdentifier: "UserAnnotationView")
         
         choosePetImageView.addGestureRecognizer(
