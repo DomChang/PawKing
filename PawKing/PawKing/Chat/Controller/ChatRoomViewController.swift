@@ -37,10 +37,6 @@ class ChatRoomViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tabBarItem.setBadgeTextAttributes([.font: UIFont.systemFont(ofSize: 6), .foregroundColor: UIColor.red], for: .normal)
-        tabBarItem.badgeValue = "⬤"
-        tabBarItem.badgeColor = UIColor.clear
-        
         setup()
         style()
         layout()

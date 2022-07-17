@@ -200,14 +200,14 @@ class ChatManager {
             
             do {
 
-                for diff in snapshots.documentChanges where diff.type == .added {
+                for diff in snapshots.documentChanges {
                         
-                    let message = try diff.document.data(as: Message.self)
-                    
-//                    if message.senderId != user.id {
+                    if diff.type == .added {
                         
+                        let message = try diff.document.data(as: Message.self)
+                            
                         messages.append(message)
-//                    }
+                    }
                 }
                 
                 completion(.success(messages))

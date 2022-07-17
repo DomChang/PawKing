@@ -157,12 +157,9 @@ class TabBarViewController: UITabBarController {
         tabBarAppearance.configureWithDefaultBackground()
         tabBarAppearance.backgroundColor = .white
         tabBarAppearance.shadowColor = .clear
-        tabBarAppearance.stackedLayoutAppearance.normal.badgeBackgroundColor = .BattleGrey
         tabBar.scrollEdgeAppearance = tabBarAppearance
         tabBar.standardAppearance = tabBarAppearance
-        
-//        tabBarAppearance.stackedLayoutAppearance.normal.badgeTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.red]
-        
+                
         let navBarAppearance =  UINavigationBarAppearance()
         navBarAppearance.backgroundColor = .BattleGrey
         navBarAppearance.shadowColor = .clear
@@ -255,17 +252,15 @@ class TabBarViewController: UITabBarController {
                 }) {
                     
                     DispatchQueue.main.async {
-//                        self.tabBar.items?[3].badgeValue = "●"
                         
                         self.tabBar.addItemBadge(atIndex: 3)
-//                        self.tabBar.items?[3].setBadgeTextAttributes([.font: UIFont.systemFont(ofSize: 2), .foregroundColor: UIColor.red], for: .normal)
+
                     }
                 } else {
                     
                     DispatchQueue.main.async {
                         
                         self.tabBar.removeItemBadge(atIndex: 3)
-//                        self.tabBar.items?[3].badgeValue = nil
                     }
                 }
                 
