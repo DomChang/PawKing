@@ -527,6 +527,22 @@ extension PhotoPostViewController: PhotoPostCellDelegate {
     }
 }
 
+extension PhotoPostViewController: CommentCellDelegate {
+    
+    func didTapCommentUser(from cell: CommentCell) {
+        
+        guard let otherUserId = cell.userId,
+                cell.userId != user.id
+        else {
+            return
+        }
+        
+        let commentUserVC = UserPhotoWallViewController(otherUserId: otherUserId)
+        
+        navigationController?.pushViewController(commentUserVC, animated: true)
+    }
+}
+
 extension PhotoPostViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -585,9 +601,10 @@ extension PhotoPostViewController: UITableViewDataSource, UITableViewDelegate {
             
             let userComment = userComments[indexPath.row]
             
-            commentCell.configureCell(userPhoto: userComment.user.userImage,
-                                      userName: userComment.user.name,
+            commentCell.configureCell(user: userComment.user,
                                       comment: userComment.comment)
+            
+            commentCell.delegate = self
             
             return commentCell
             

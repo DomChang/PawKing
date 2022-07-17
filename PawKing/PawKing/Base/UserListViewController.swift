@@ -171,7 +171,10 @@ extension UserListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        guard let users = users else { return }
+        guard let users = users,
+              let userSelf = userManager.currentUser else { return }
+        
+        guard users[indexPath.row].id != userSelf.id else { return }
         
         let userVC = UserPhotoWallViewController(otherUserId: users[indexPath.row].id)
         

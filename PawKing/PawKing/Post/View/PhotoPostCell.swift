@@ -68,6 +68,9 @@ class PhotoPostCell: UITableViewCell {
         petNameLabel.isUserInteractionEnabled = true
         petNameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapUser)))
         
+        nameContentLabel.isUserInteractionEnabled = true
+        nameContentLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapUser)))
+        
         likeNumLabel.isUserInteractionEnabled = true
         likeNumLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapLikeLabel)))
         
