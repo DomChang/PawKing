@@ -1,40 +1,66 @@
 //
-//  BlockViewController.swift
+//  UserListViewController.swift
 //  PawKing
 //
-//  Created by ChunKai Chang on 2022/7/6.
+//  Created by ChunKai Chang on 2022/7/17.
 //
 
 import UIKit
 
-class BlockViewController: UIViewController {
+enum UserListType: String {
     
+    case like = "Likes"
+    
+    case friend = "Friends"
+}
+
+class UserListViewController: UIViewController {
+
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     
     private let userManager = UserManager.shared
     
-    private var user = UserManager.shared.currentUser
+    private let postManager = PostManager.shared
     
     private let lottie = LottieWrapper.shared
     
-    private var blockedUsers: [User]? {
+    private var users: [User]? {
         
         didSet {
             
             DispatchQueue.main.async {
                 
-                if self.blockedUsers?.count == 0 {
+                if self.users?.count == 0 {
                     
-                    self.noBlockUserLabel.isHidden = false
+                    self.emptyLabel.isHidden = false
                 } else {
                     
-                    self.noBlockUserLabel.isHidden = true
+                    self.emptyLabel.isHidden = true
                 }
             }
         }
     }
     
-    private let noBlockUserLabel = UILabel()
+    private var usersId: [String]
+    
+    private var listType: UserListType
+    
+    private var postId: String?
+    
+    init(usersId: [String], listType: UserListType, postId: String?) {
+        
+        self.usersId = usersId
+        self.listType = listType
+        self.postId = postId
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private let emptyLabel = UILabel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,8 +78,8 @@ class BlockViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
-        noBlockUserLabel.text = "No Blocked User"
-        noBlockUserLabel.isHidden = true
+        emptyLabel.text = "No \(listType.rawValue)"
+        emptyLabel.isHidden = true
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -61,7 +87,7 @@ class BlockViewController: UIViewController {
         
         tabBarController?.tabBar.isHidden = true
         
-        fetchBlockedUsers()
+        fetchUsers()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -72,7 +98,7 @@ class BlockViewController: UIViewController {
     
     private func style() {
         
-        navigationItem.title = "Block Users"
+        navigationItem.title = listType.rawValue
         
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
         
@@ -81,46 +107,55 @@ class BlockViewController: UIViewController {
         tableView.backgroundColor = .BattleGreyUL
         tableView.layer.cornerRadius = 20
         
-        noBlockUserLabel.textColor = .BattleGreyLight
-        noBlockUserLabel.textAlignment = .center
-        noBlockUserLabel.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
+        emptyLabel.textColor = .BattleGreyLight
+        emptyLabel.textAlignment = .center
+        emptyLabel.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
     }
     
     private func layout() {
         
         view.addSubview(tableView)
-        tableView.addSubview(noBlockUserLabel)
+        tableView.addSubview(emptyLabel)
         
         tableView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                          leading: view.leadingAnchor,
                          bottom: view.bottomAnchor,
                          trailing: view.trailingAnchor)
         
-        noBlockUserLabel.anchor(centerY: tableView.centerYAnchor,
+        emptyLabel.anchor(centerY: tableView.centerYAnchor,
                            centerX: tableView.centerXAnchor)
     }
     
-    private func fetchBlockedUsers() {
-        
-        guard let user = user else {
-            
-            lottie.stopLoading()
-            return
-        }
+    private func fetchUsers() {
         
         lottie.startLoading()
         
-        userManager.fetchUsers(userIds: user.blockUsersId) { [weak self] result in
+        userManager.fetchUsers(userIds: usersId) { [weak self] result in
             
             switch result {
                 
-            case .success((let blockedUsers, _)):
+            case .success((let users,
+                           let deletedUsersId)):
+                
+                self?.users = users
                 
                 self?.lottie.stopLoading()
-                self?.blockedUsers = blockedUsers
                 
                 DispatchQueue.main.async {
                     self?.tableView.reloadData()
+                }
+                
+                if self?.listType == UserListType.like {
+                    
+                    deletedUsersId.forEach({
+                            
+                        guard let postId = self?.postId else {
+                            return
+                        }
+
+                        self?.postManager.removePostLike(postId: postId,
+                                                         userId: $0)
+                    })
                 }
                 
             case .failure(let error):
@@ -132,10 +167,22 @@ class BlockViewController: UIViewController {
     }
 }
 
-extension BlockViewController: UITableViewDataSource, UITableViewDelegate {
+extension UserListViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        guard let users = users,
+              let userSelf = userManager.currentUser else { return }
+        
+        guard users[indexPath.row].id != userSelf.id else { return }
+        
+        let userVC = UserPhotoWallViewController(otherUserId: users[indexPath.row].id)
+        
+        navigationController?.pushViewController(userVC, animated: true)
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        blockedUsers?.count ?? 0
+        users?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -145,42 +192,11 @@ extension BlockViewController: UITableViewDataSource, UITableViewDelegate {
             fatalError("Cannot dequeue SearchResultCell")
         }
         
-        if let blockedUsers = blockedUsers {
+        if let users = users {
             
-            cell.configureCell(user: blockedUsers[indexPath.row])
+            cell.configureCell(user: users[indexPath.row])
         }
         
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView,
-                   commit editingStyle: UITableViewCell.EditingStyle,
-                   forRowAt indexPath: IndexPath) {
-        
-        if editingStyle == .delete {
-            
-            guard let user = user,
-                    blockedUsers != nil else { return }
-            
-            guard let blockId = blockedUsers?[indexPath.row].id else { return }
-
-            blockedUsers?.remove(at: indexPath.row)
-            
-            userManager.removeBlockUser(userId: user.id, blockId: blockId) { [weak self] result in
-                
-                switch result {
-                    
-                case .success:
-                    
-                    print("remove block user success")
-                    
-                case .failure:
-                    
-                    self?.lottie.showError(error: nil)
-                }
-            }
-
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        }
     }
 }

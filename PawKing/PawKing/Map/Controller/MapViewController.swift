@@ -176,9 +176,7 @@ class MapViewController: UIViewController {
                 locationManager?.authorizationStatus != .notDetermined else {
             
             return
-        }
-        focusUserLocation()
-        
+        }        
         mapView.userTrackingMode = .follow
     }
     

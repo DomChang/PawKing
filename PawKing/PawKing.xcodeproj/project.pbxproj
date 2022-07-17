@@ -50,6 +50,8 @@
 		B69C5630287C657B004DD552 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B69C562F287C657B004DD552 /* LaunchScreen.storyboard */; };
 		B69C5632287CFE18004DD552 /* pawking_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = B69C5631287CFE18004DD552 /* pawking_icon.png */; };
 		B69C563628830DB6004DD552 /* UITabBar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69C563528830DB6004DD552 /* UITabBar+Extension.swift */; };
+		B69C56392883A61B004DD552 /* UserListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69C56382883A61B004DD552 /* UserListViewController.swift */; };
+		B69C563F2883FBA1004DD552 /* like.json in Resources */ = {isa = PBXBuildFile; fileRef = B69C563E2883FBA1004DD552 /* like.json */; };
 		B6A91D692868372B0049253A /* NoStrangerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D682868372B0049253A /* NoStrangerCell.swift */; };
 		B6A91D6B2868909F0049253A /* PetItemBackReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D6A2868909F0049253A /* PetItemBackReusableView.swift */; };
 		B6A91D6D28697CCC0049253A /* ProfileInfoReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D6C28697CCC0049253A /* ProfileInfoReusableView.swift */; };
@@ -147,6 +149,8 @@
 		B69C562F287C657B004DD552 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B69C5631287CFE18004DD552 /* pawking_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pawking_icon.png; sourceTree = "<group>"; };
 		B69C563528830DB6004DD552 /* UITabBar+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITabBar+Extension.swift"; sourceTree = "<group>"; };
+		B69C56382883A61B004DD552 /* UserListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListViewController.swift; sourceTree = "<group>"; };
+		B69C563E2883FBA1004DD552 /* like.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = like.json; sourceTree = "<group>"; };
 		B6A91D682868372B0049253A /* NoStrangerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoStrangerCell.swift; sourceTree = "<group>"; };
 		B6A91D6A2868909F0049253A /* PetItemBackReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetItemBackReusableView.swift; sourceTree = "<group>"; };
 		B6A91D6C28697CCC0049253A /* ProfileInfoReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoReusableView.swift; sourceTree = "<group>"; };
@@ -406,6 +410,7 @@
 				B6DD66DB2875355F00523197 /* AnimationJson */,
 				B6A91D6E286A9AB90049253A /* Resource */,
 				B698DDBE2858B98A0009077E /* Extension */,
+				B69C56372883A601004DD552 /* Base */,
 				B6ABE8E3285A0B8500B1A977 /* Model */,
 				B6A91D78286BE5760049253A /* SignIn */,
 				B6D4F6AC285D7EB70045DDB2 /* Configure */,
@@ -441,6 +446,14 @@
 				B69C563528830DB6004DD552 /* UITabBar+Extension.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		B69C56372883A601004DD552 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				B69C56382883A61B004DD552 /* UserListViewController.swift */,
+			);
+			path = Base;
 			sourceTree = "<group>";
 		};
 		B6A91D6E286A9AB90049253A /* Resource */ = {
@@ -540,6 +553,7 @@
 			isa = PBXGroup;
 			children = (
 				B69C562B287A7C47004DD552 /* loading.json */,
+				B69C563E2883FBA1004DD552 /* like.json */,
 				B6DD66E22875538B00523197 /* error.json */,
 			);
 			path = AnimationJson;
@@ -652,6 +666,7 @@
 				B698DDA6285881FD0009077E /* Assets.xcassets in Resources */,
 				B60008002876AB7B0087717F /* signIn.mp4 in Resources */,
 				B698DDA4285881FB0009077E /* Main.storyboard in Resources */,
+				B69C563F2883FBA1004DD552 /* like.json in Resources */,
 				B6E157342876C5EF00D05796 /* signUp.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -793,6 +808,7 @@
 				B63484E5285E1E5300DB7CE7 /* ChoosePetViewController.swift in Sources */,
 				B6BF96142861EABC003627C1 /* TrackHistoryViewController.swift in Sources */,
 				B6ABE8F4285B87AB00B1A977 /* UserAnnotation.swift in Sources */,
+				B69C56392883A61B004DD552 /* UserListViewController.swift in Sources */,
 				B698DDC02858B99F0009077E /* UIImage+Extension.swift in Sources */,
 				B6A91D6B2868909F0049253A /* PetItemBackReusableView.swift in Sources */,
 				B698DDBB2858B8BA0009077E /* ChatRoomViewController.swift in Sources */,

@@ -219,6 +219,7 @@ class RegisterViewController: UIViewController {
         guard password == comfirmPassword else {
             
             signUpButtonEnable()
+            lottie.showError(errorMessage: "Wrong password")
             return
         }
         
@@ -230,7 +231,7 @@ class RegisterViewController: UIViewController {
 
                 print(error.localizedDescription)
                 self?.signUpButtonEnable()
-                
+                self?.lottie.showError(errorMessage: "Wrong acount or password")
                 self?.lottie.stopLoading()
 
             } else {
@@ -244,8 +245,8 @@ class RegisterViewController: UIViewController {
                 self?.userManager.checkUserExist(uid: uid, completion: { isExit in
                     
                     if isExit {
-                        
-                        print("This account already exist")
+
+                        self?.lottie.showError(errorMessage: "This account already exist")
                         self?.signUpButtonEnable()
                         self?.lottie.stopLoading()
                         return

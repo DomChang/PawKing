@@ -7,8 +7,8 @@
 
 import UIKit
 import MapKit
-import SwiftUI
 
+// swiftlint:disable function_body_length
 class TrackHistoryViewController: UIViewController {
     
     private let mapManager = MapManager.shared
@@ -119,7 +119,7 @@ class TrackHistoryViewController: UIViewController {
             
             if trackInfo.note == "" {
                 
-                noteTextView.placeholder = "None"
+                noteTextView.placeholder = "Tap to update note"
             } else {
                 
                 noteTextView.text = trackInfo.note
@@ -505,30 +505,41 @@ class TrackHistoryViewController: UIViewController {
         guard let startPoint = trackInfo.track.first,
                 let endPoint = trackInfo.track.last else { return }
         
-        let startAnnotation = TrackAnnotation(title: "Start", coordinate: startPoint.transferToCoordinate2D())
+        let startTime = trackInfo.startTime.dateValue().displayTimeInHourMinuteStyle()
         
-        let endAnnotation = TrackAnnotation(title: "End", coordinate: endPoint.transferToCoordinate2D())
+        let endTime = trackInfo.endTime.dateValue().displayTimeInHourMinuteStyle()
+        
+        let startAnnotation = TrackAnnotation(title: "Start",
+                                              subtitle: startTime,
+                                              coordinate: startPoint.transferToCoordinate2D())
+        
+        let endAnnotation = TrackAnnotation(title: "End",
+                                            subtitle: endTime,
+                                            coordinate: endPoint.transferToCoordinate2D())
         
         mapView.addAnnotations([startAnnotation, endAnnotation])
     }
 }
 
 extension TrackHistoryViewController: MKMapViewDelegate, CLLocationManagerDelegate {
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        // do not alter user location marker
+        guard !annotation.isKind(of: MKUserLocation.self) else { return nil }
 
-//    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-//
-//         guard let view = mapView.dequeueReusableAnnotationView(
-//            withIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier,
-//            for: annotation
-//         ) as? MKMarkerAnnotationView else {
-//
-//             return MKMarkerAnnotationView()
-//         }
-//
-//        view.markerTintColor = .BattleGrey
-//
-//        return view
-//    }
+        // get existing marker
+        var view = mapView.dequeueReusableAnnotationView(withIdentifier: "reuseIdentifier") as? TrackAnnotationView
+
+        // is this a new marker (i.e. nil)?
+        if view == nil {
+            view = TrackAnnotationView(annotation: nil, reuseIdentifier: "reuseIdentifier")
+        }
+
+        view?.subtitleVisibility = .visible
+
+        return view
+    }
 
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
 
@@ -561,3 +572,4 @@ extension TrackHistoryViewController: UITextViewDelegate {
         updateButton.isHidden = false
     }
 }
+// swiftlint:enable function_body_length

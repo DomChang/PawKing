@@ -462,9 +462,11 @@ class UserManager {
         }
     }
     
-    func fetchUsers(userIds: [String], completion: @escaping (Result<[User], Error>) -> Void) {
+    func fetchUsers(userIds: [String], completion: @escaping (Result<([User], [String]), Error>) -> Void) {
         
         var users: [User] = []
+        
+        var deletedUsersId: [String] = []
         
         let semaphore = DispatchSemaphore(value: 0)
         
@@ -491,8 +493,13 @@ class UserManager {
                         
                         let user = try snapshot.data(as: User.self)
                         
-                        users.append(user)
-                        
+                        if user.id != UserStatus.unknown.rawValue {
+                            
+                            users.append(user)
+                        } else {
+                            
+                            deletedUsersId.append(userId)
+                        }
                         semaphore.signal()
                         
                     } catch {
@@ -502,7 +509,7 @@ class UserManager {
                 }
                 semaphore.wait()
             }
-            completion(.success(users))
+            completion(.success((users, deletedUsersId)))
         }
     }
     

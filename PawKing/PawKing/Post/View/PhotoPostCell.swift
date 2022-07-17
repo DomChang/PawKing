@@ -7,20 +7,22 @@
 
 import UIKit
 
-protocol PhotoItemCellDelegate {
-    
-//    func didTapPetImage()
+@objc protocol PhotoPostCellDelegate: AnyObject {
     
     func didTapLike(for cell: PhotoPostCell, like: Bool)
     
     func didTapAction()
+    
+    @objc optional func didTapUser()
+    
+    func didTapLikeUsers()
 }
 
 class PhotoPostCell: UITableViewCell {
     
     static let identifier = "\(PhotoItemCell.self)"
     
-    var delegate: PhotoItemCellDelegate?
+    var delegate: PhotoPostCellDelegate?
     
     let petImageView = UIImageView()
     
@@ -58,7 +60,17 @@ class PhotoPostCell: UITableViewCell {
     
     private func setup() {
         
-//        petImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapPetImage)))
+        petImageView.isUserInteractionEnabled = true
+        petImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapUser)))
+        
+        petNameLabel.isUserInteractionEnabled = true
+        petNameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapUser)))
+        
+        nameContentLabel.isUserInteractionEnabled = true
+        nameContentLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapUser)))
+        
+        likeNumLabel.isUserInteractionEnabled = true
+        likeNumLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapLikeLabel)))
         
         photoImageView.isUserInteractionEnabled = true
         let tap = UITapGestureRecognizer(target: self, action: #selector(didTapLikeButton))
@@ -270,8 +282,18 @@ class PhotoPostCell: UITableViewCell {
         likeButton.isSelected = false
     }
     
+    @objc func didTapUser() {
+        
+        self.delegate?.didTapUser?()
+    }
+    
     @objc func didTapAction() {
         
         self.delegate?.didTapAction()
+    }
+    
+    @objc func didTapLikeLabel() {
+        
+        self.delegate?.didTapLikeUsers()
     }
 }

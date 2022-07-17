@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseFirestore
+import SwiftUI
 
 class UserPhotoWallViewController: UIViewController {
 
@@ -94,6 +95,18 @@ class UserPhotoWallViewController: UIViewController {
         layout()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        tabBarController?.tabBar.isHidden = false
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
@@ -152,7 +165,11 @@ class UserPhotoWallViewController: UIViewController {
         
         view.addSubview(collectionView)
         
-        collectionView.fillSafeLayout()
+        collectionView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                              leading: view.leadingAnchor,
+                              bottom: view.bottomAnchor,
+                              trailing: view.trailingAnchor)
+        
         collectionView.addSubview(emptyLabel)
         
         // Change top bounce area backgroud color
@@ -419,6 +436,15 @@ class UserPhotoWallViewController: UIViewController {
 }
 
 extension UserPhotoWallViewController: ProfileInfoCellDelegate {
+    
+    func didTapFriend() {
+        
+        guard let friendsId = otherUser?.friends else { return }
+        
+        let friendListVC = UserListViewController(usersId: friendsId, listType: .friend, postId: nil)
+        
+        navigationController?.pushViewController(friendListVC, animated: true)
+    }
     
     func didTapLeftButton(from cell: ProfileInfoCell) {
         
