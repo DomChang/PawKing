@@ -7,17 +7,26 @@
 
 import UIKit
 
+protocol CommentCellDelegate {
+    
+    func didTapCommentUser(from cell: CommentCell)
+}
+
 class CommentCell: UITableViewCell {
     
     static let identifier = "\(CommentCell.self)"
     
-    let userImageView = UIImageView()
+    var delegate: CommentCellDelegate?
     
-    let userNameLabel = UILabel()
+    private let userImageView = UIImageView()
     
-    let commentLabel = UILabel()
+    private let userNameLabel = UILabel()
     
-    let timeLabel = UILabel()
+    private let commentLabel = UILabel()
+    
+    private let timeLabel = UILabel()
+    
+    var userId: String?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -34,6 +43,14 @@ class CommentCell: UITableViewCell {
     private func setup() {
         
         selectionStyle = .none
+        
+        userImageView.isUserInteractionEnabled = true
+        userImageView.addGestureRecognizer(UITapGestureRecognizer(target: self,
+                                                                  action: #selector(didTapCommentUser)))
+        
+        userNameLabel.isUserInteractionEnabled = true
+        userNameLabel.addGestureRecognizer(UITapGestureRecognizer(target: self,
+                                                                  action: #selector(didTapCommentUser)))
     }
     
     private func styleObject() {
@@ -88,17 +105,24 @@ class CommentCell: UITableViewCell {
         userImageView.clipsToBounds = true
     }
     
-    func configureCell(userPhoto: String, userName: String, comment: Comment) {
+    func configureCell(user: User, comment: Comment) {
         
-        let imageUrl = URL(string: userPhoto)
+        let imageUrl = URL(string: user.userImage)
         
         userImageView.kf.setImage(with: imageUrl)
         
-        userNameLabel.text = userName
+        userNameLabel.text = user.name
         
         commentLabel.text = comment.text
         
         timeLabel.text = comment.createdTime.dateValue()
             .displayTimeInSocialMediaStyle()
+        
+        self.userId = user.id
+    }
+    
+    @objc private func didTapCommentUser() {
+        
+        self.delegate?.didTapCommentUser(from: self)
     }
 }

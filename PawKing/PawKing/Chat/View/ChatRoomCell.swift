@@ -18,6 +18,8 @@ class ChatRoomCell: UITableViewCell {
     private let recentMessageLabel = UILabel()
     
     private let messageTimeLabel = UILabel()
+    
+    private let newIndicatorView = UIView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -51,6 +53,11 @@ class ChatRoomCell: UITableViewCell {
         messageTimeLabel.textColor = .Gray1
         messageTimeLabel.font = UIFont.systemFont(ofSize: 14)
         messageTimeLabel.textAlignment = .right
+        
+        newIndicatorView.backgroundColor = .Orange1
+        newIndicatorView.layer.borderWidth = 3
+        newIndicatorView.layer.borderColor = UIColor.white.cgColor
+        newIndicatorView.isHidden = true
     }
     
     func layout() {
@@ -82,6 +89,7 @@ class ChatRoomCell: UITableViewCell {
         hStack.spacing = 8
         
         contentView.addSubview(hStack)
+        contentView.addSubview(newIndicatorView)
         
         hStack.anchor(top: contentView.topAnchor,
                       leading: contentView.leadingAnchor,
@@ -89,9 +97,18 @@ class ChatRoomCell: UITableViewCell {
                       trailing: contentView.trailingAnchor,
                       padding: UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16))
         
+        newIndicatorView.anchor(top: recieverImgeView.topAnchor,
+                                leading: recieverImgeView.leadingAnchor,
+                                width: 16,
+                                height: 16,
+                                padding: UIEdgeInsets(top: -2, left: -2, bottom: 0, right: 0))
+        
         recieverImgeView.layoutIfNeeded()
         recieverImgeView.makeRound()
         recieverImgeView.clipsToBounds = true
+        
+        newIndicatorView.layoutIfNeeded()
+        newIndicatorView.makeRound()
     }
     
     func configureCell(user: User, recentMessage: Message) {
@@ -105,5 +122,13 @@ class ChatRoomCell: UITableViewCell {
         recentMessageLabel.text = recentMessage.content
         
         messageTimeLabel.text = recentMessage.createdTime.dateValue().displayTimeInSocialMediaStyle()
+        
+        if recentMessage.isRead == MessageStatus.isRead.rawValue {
+            
+            newIndicatorView.isHidden = true
+        } else {
+            
+            newIndicatorView.isHidden = false
+        }
     }
 }

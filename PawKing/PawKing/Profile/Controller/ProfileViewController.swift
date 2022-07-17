@@ -24,6 +24,7 @@ class ProfileViewController: UIViewController {
     var isPhoto = true {
         didSet {
             collectionView.reloadSections(IndexSet(integer: 3))
+            checkIsEmpty()
         }
     }
     
@@ -45,6 +46,7 @@ class ProfileViewController: UIViewController {
     var displayPosts: [Post]? {
         didSet {
             collectionView.reloadSections(IndexSet(integer: 3))
+            checkIsEmpty()
         }
     }
     
@@ -57,10 +59,13 @@ class ProfileViewController: UIViewController {
     var displayTrackInfos: [TrackInfo]? {
         didSet {
             collectionView.reloadSections(IndexSet(integer: 3))
+            checkIsEmpty()
         }
     }
     
-    var selectedPetIndex: Int?
+    private var selectedPetIndex: IndexPath?
+    
+    private let emptyLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,6 +73,7 @@ class ProfileViewController: UIViewController {
         setup()
         style()
         layout()
+        
     }
 
     private func setup() {
@@ -128,11 +134,16 @@ class ProfileViewController: UIViewController {
         collectionView.backgroundColor = .white
         collectionView.layer.cornerRadius = 20
         collectionView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        
+        emptyLabel.textColor = .BattleGreyLight
+        emptyLabel.textAlignment = .center
+        emptyLabel.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
     }
     
     private func layout() {
         
         view.addSubview(collectionView)
+        collectionView.addSubview(emptyLabel)
         
         collectionView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                                leading: view.leadingAnchor,
@@ -145,6 +156,10 @@ class ProfileViewController: UIViewController {
                 width: collectionView.bounds.width, height: collectionView.bounds.height))
         topView.backgroundColor = .BattleGrey
         collectionView.addSubview(topView)
+        
+        emptyLabel.anchor(top: collectionView.centerYAnchor,
+                          centerX: collectionView.centerXAnchor,
+                          padding: UIEdgeInsets(top: 120, left: 0, bottom: 0, right: 0))
         
     }
     
@@ -177,13 +192,11 @@ class ProfileViewController: UIViewController {
                 
                 self?.fetchTrack(by: user)
                 
-                self?.collectionView.visibleCells.forEach { cell in
-                    guard let petCell = cell as? PetItemCell else { return }
-                    
-                    petCell.imageView.layer.borderWidth = 0
-                    
-                    petCell.backBorderView.isHidden = true
-                }
+//                self?.collectionView.visibleCells.forEach { cell in
+//                    guard let petCell = cell as? PetItemCell else { return }
+//
+//                    petCell.selectState = false
+//                }
                 
                 self?.lottie.stopLoading()
                 
@@ -246,9 +259,36 @@ class ProfileViewController: UIViewController {
             }
         }
     }
+    
+    func checkIsEmpty() {
+        
+        if isPhoto && displayPosts?.count == 0 {
+            
+            emptyLabel.text = "Click + to Post"
+            emptyLabel.isHidden = false
+            
+        } else if !isPhoto && displayTrackInfos?.count == 0 {
+            
+            emptyLabel.text = "No Track"
+            emptyLabel.isHidden = false
+            
+        } else {
+            
+            emptyLabel.isHidden = true
+        }
+    }
 }
 
 extension ProfileViewController: ProfileInfoCellDelegate {
+    
+    func didTapFriend() {
+        
+        guard let friendsId = user?.friends else { return }
+        
+        let friendListVC = UserListViewController(usersId: friendsId, listType: .friend, postId: nil)
+        
+        navigationController?.pushViewController(friendListVC, animated: true)
+    }
     
     func didTapUserImage() {
         
@@ -477,11 +517,9 @@ extension ProfileViewController: UICollectionViewDataSource {
             
             guard let userPets = userPets else { return petCell }
 
-            let imageUrl = URL(string: userPets[indexPath.item].petImage)
+            let userPet = userPets[indexPath.item]
             
-            petCell.photoURL = imageUrl
-            
-            petCell.configureCell()
+            petCell.configureCell(pet: userPet)
             
             return petCell
             
@@ -506,7 +544,7 @@ extension ProfileViewController: UICollectionViewDataSource {
                     fatalError("Cannot dequeue PhotoItemCell")
                 }
                 
-                photoCell.imageView.image = UIImage.asset(.Image_Placeholder)
+                photoCell.imageView.image = UIImage.asset(.Image_Placeholder_Paw)
                 
                 guard let posts = displayPosts else { return photoCell }
                 
@@ -553,48 +591,69 @@ extension ProfileViewController: UICollectionViewDelegate {
             guard let posts = posts,
                     let trackInfos = trackInfos,
                     let userPets = userPets,
-                    let cell = collectionView.cellForItem(at: indexPath) as? PetItemCell else {
+                    let cell = collectionView.cellForItem(at: indexPath) as? PetItemCell
+            else {
                 return
             }
             
-            collectionView.visibleCells.forEach { cell in
-                guard let petCell = cell as? PetItemCell else { return }
+            if let selectedPetIndex = selectedPetIndex {
                 
-                petCell.imageView.layer.borderWidth = 0
+                guard let selectedCell = collectionView.cellForItem(at: selectedPetIndex) as? PetItemCell
+                else {
+                    return
+                }
                 
-                petCell.backBorderView.isHidden = true
+                if selectedPetIndex == indexPath {
+                    
+                    selectedCell.selectState = !selectedCell.selectState
+                } else {
+                    
+                    selectedCell.selectState = false
+                    cell.selectState = !cell.selectState
+                }
+            } else {
+                
+                cell.selectState = !cell.selectState
             }
             
-            if selectedPetIndex != indexPath.item {
+            if cell.selectState {
                 
                 displayPosts = posts.filter { $0.petId == userPets[indexPath.item].id }
                 
                 displayTrackInfos = trackInfos.filter { $0.petId == userPets[indexPath.item].id }
                 
-                selectedPetIndex = indexPath.item
+//                checkIsEmpty()
                 
-                cell.imageView.layer.borderWidth = 2
-                cell.imageView.layer.borderColor = UIColor.BattleGrey?.cgColor
-                cell.backBorderView.isHidden = false
+                selectedPetIndex = indexPath
                 
             } else {
                 
-                cell.imageView.layer.borderWidth = 0
-                cell.backBorderView.isHidden = true
-
                 displayPosts = posts
                 
                 displayTrackInfos = trackInfos
                 
-                selectedPetIndex = -1
+//                checkIsEmpty()
+                
+                selectedPetIndex = nil
+                
             }
         } else if indexPath.section == ProfileSections.postsPhoto.rawValue {
             
             if isPhoto {
                 
                 guard let user = user,
-                      let post = posts?[indexPath.item]
+                      let post = displayPosts?[indexPath.item]
                 else { return }
+                
+                if let selectedIndex = selectedPetIndex {
+                    
+                    guard let cell = collectionView.cellForItem(at: selectedIndex) as? PetItemCell
+                    else {
+                        return
+                    }
+                    cell.selectState = true
+                    cell.isSelected = true
+                }
                 
                 let photoPostVC = PhotoPostViewController(user: user, post: post)
                 
@@ -602,20 +661,28 @@ extension ProfileViewController: UICollectionViewDelegate {
                 
             } else {
                 
-                guard let trackInfos = trackInfos,
+                guard let trackInfos = displayTrackInfos,
                         let userPets = userPets else {
                     return
                 }
                 
+                if let selectedIndex = selectedPetIndex {
+                    
+                    guard let cell = collectionView.cellForItem(at: selectedIndex) as? PetItemCell
+                    else {
+                        return
+                    }
+                    cell.selectState = true
+                    cell.isSelected = false
+                }
+
                 let trackInfo = trackInfos[indexPath.item]
                 
                 for userPet in userPets where userPet.id == trackInfo.petId {
                     
-//                    guard let imageUrl = URL(string: userPet.petImage) else { return }
-                    
                     let trackHistoryVC = TrackHistoryViewController(pet: userPet,
                                                                     trackInfo: trackInfo,
-                                                                    shouldEdit: false)
+                                                                    isNew: false)
                     
                     navigationController?.pushViewController(trackHistoryVC, animated: true)
                 }

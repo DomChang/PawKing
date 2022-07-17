@@ -35,6 +35,8 @@ class MessageViewController: UIViewController {
     
     private var userInputTopAnchor: NSLayoutConstraint!
     
+    private var messageLisener: ListenerRegistration?
+    
     var messages: [Message] = [] {
         didSet {
             tableView.reloadData()
@@ -58,7 +60,6 @@ class MessageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        listenMessage()
         setup()
         style()
         layout()
@@ -66,7 +67,9 @@ class MessageViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         
-        getMessageHistory()
+//        getMessageHistory()
+        
+        listenMessage()
         
         tabBarController?.tabBar.isHidden = true
         
@@ -78,6 +81,8 @@ class MessageViewController: UIViewController {
         tabBarController?.tabBar.isHidden = false
         
         IQKeyboardManager.shared.enable = true
+        
+        messageLisener?.remove()
     }
     
     func setup() {
@@ -209,37 +214,47 @@ class MessageViewController: UIViewController {
         userImageView.clipsToBounds = true
     }
     
-    func getMessageHistory() {
-        
-        chatManager.fetchMessageHistory(user: user,
-                                        otherUser: otherUser,
-                                        otherUserId: otherUserId) { [weak self] result in
-            
-            switch result {
-                
-            case .success(let messages):
-                
-                self?.messages = messages
-                
-            case .failure(let error):
-                
-                print(error)
-            }
-        }
-    }
+//    func getMessageHistory() {
+//
+//        chatManager.fetchMessageHistory(user: user,
+//                                        otherUser: otherUser,
+//                                        otherUserId: otherUserId) { [weak self] result in
+//
+//            switch result {
+//
+//            case .success(let messages):
+//
+//                self?.messages = messages
+//
+//            case .failure(let error):
+//
+//                print(error)
+//            }
+//        }
+//    }
     
     func listenMessage() {
         
-        chatManager.listenNewMessage(user: user, otherUser: otherUser) { [weak self] result in
-                
+        if messageLisener != nil {
+            
+            messageLisener?.remove()
+        }
+
+        messageLisener = chatManager.listenNewMessage(user: user, otherUser: otherUser) { [weak self] result in
+
             switch result {
-                
+
             case .success(let messages):
                 
-                self?.messages.append(contentsOf: messages)
+                guard let self = self else { return }
+
+                self.messages.append(contentsOf: messages)
+                
+                self.chatManager.updateMessageStatus(user: self.user,
+                                                     otherUser: self.otherUser)
                 
             case .failure(let error):
-                
+
                 print(error)
             }
         }
@@ -255,7 +270,8 @@ class MessageViewController: UIViewController {
                               senderId: user.id,
                               recieverId: otherUser.id,
                               content: messageContent,
-                              createdTime: Timestamp(date: Date()))
+                              createdTime: Timestamp(date: Date()),
+                              isRead: MessageStatus.notRead.rawValue)
         
         chatManager.sendMessage(message: message) { [weak self] result in
             
@@ -263,7 +279,7 @@ class MessageViewController: UIViewController {
                 
             case .success:
                 
-                self?.messages.append(message)
+//                self?.messages.append(message)
                 
                 self?.userInputTextView.text = ""
                 

@@ -167,7 +167,7 @@ class PostManager {
         }
     }
     
-    func listenComments(postId: String, blockIds:[String], completion: @escaping (Result<[Comment], Error>) -> Void) {
+    func listenComments(postId: String, blockIds: [String], completion: @escaping (Result<[Comment], Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.posts.rawValue)
             .document(postId).collection(FirebaseCollection.comments.rawValue)

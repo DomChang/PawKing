@@ -37,7 +37,6 @@
 		B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDA0285881FB0009077E /* TabBarViewController.swift */; };
 		B698DDA4285881FB0009077E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B698DDA2285881FB0009077E /* Main.storyboard */; };
 		B698DDA6285881FD0009077E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B698DDA5285881FD0009077E /* Assets.xcassets */; };
-		B698DDA9285881FD0009077E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B698DDA7285881FD0009077E /* LaunchScreen.storyboard */; };
 		B698DDB328588D280009077E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B698DDB228588D280009077E /* GoogleService-Info.plist */; };
 		B698DDB52858B8540009077E /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDB42858B8540009077E /* MapViewController.swift */; };
 		B698DDB72858B8850009077E /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDB62858B8850009077E /* ExploreViewController.swift */; };
@@ -48,6 +47,11 @@
 		B698DDC22858CE9D0009077E /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDC12858CE9D0009077E /* UIView+Extension.swift */; };
 		B69C562A287A71A7004DD552 /* UIRefreshControl+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69C5629287A71A7004DD552 /* UIRefreshControl+Extension.swift */; };
 		B69C562C287A7C47004DD552 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = B69C562B287A7C47004DD552 /* loading.json */; };
+		B69C5630287C657B004DD552 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B69C562F287C657B004DD552 /* LaunchScreen.storyboard */; };
+		B69C5632287CFE18004DD552 /* pawking_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = B69C5631287CFE18004DD552 /* pawking_icon.png */; };
+		B69C563628830DB6004DD552 /* UITabBar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69C563528830DB6004DD552 /* UITabBar+Extension.swift */; };
+		B69C56392883A61B004DD552 /* UserListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69C56382883A61B004DD552 /* UserListViewController.swift */; };
+		B69C563F2883FBA1004DD552 /* like.json in Resources */ = {isa = PBXBuildFile; fileRef = B69C563E2883FBA1004DD552 /* like.json */; };
 		B6A91D692868372B0049253A /* NoStrangerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D682868372B0049253A /* NoStrangerCell.swift */; };
 		B6A91D6B2868909F0049253A /* PetItemBackReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D6A2868909F0049253A /* PetItemBackReusableView.swift */; };
 		B6A91D6D28697CCC0049253A /* ProfileInfoReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A91D6C28697CCC0049253A /* ProfileInfoReusableView.swift */; };
@@ -131,7 +135,6 @@
 		B698DDA0285881FB0009077E /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		B698DDA3285881FB0009077E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B698DDA5285881FD0009077E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		B698DDA8285881FD0009077E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B698DDAA285881FD0009077E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B698DDB228588D280009077E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B698DDB42858B8540009077E /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -143,6 +146,11 @@
 		B698DDC12858CE9D0009077E /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		B69C5629287A71A7004DD552 /* UIRefreshControl+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIRefreshControl+Extension.swift"; sourceTree = "<group>"; };
 		B69C562B287A7C47004DD552 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
+		B69C562F287C657B004DD552 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		B69C5631287CFE18004DD552 /* pawking_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pawking_icon.png; sourceTree = "<group>"; };
+		B69C563528830DB6004DD552 /* UITabBar+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITabBar+Extension.swift"; sourceTree = "<group>"; };
+		B69C56382883A61B004DD552 /* UserListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListViewController.swift; sourceTree = "<group>"; };
+		B69C563E2883FBA1004DD552 /* like.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = like.json; sourceTree = "<group>"; };
 		B6A91D682868372B0049253A /* NoStrangerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoStrangerCell.swift; sourceTree = "<group>"; };
 		B6A91D6A2868909F0049253A /* PetItemBackReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetItemBackReusableView.swift; sourceTree = "<group>"; };
 		B6A91D6C28697CCC0049253A /* ProfileInfoReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoReusableView.swift; sourceTree = "<group>"; };
@@ -402,6 +410,7 @@
 				B6DD66DB2875355F00523197 /* AnimationJson */,
 				B6A91D6E286A9AB90049253A /* Resource */,
 				B698DDBE2858B98A0009077E /* Extension */,
+				B69C56372883A601004DD552 /* Base */,
 				B6ABE8E3285A0B8500B1A977 /* Model */,
 				B6A91D78286BE5760049253A /* SignIn */,
 				B6D4F6AC285D7EB70045DDB2 /* Configure */,
@@ -414,10 +423,11 @@
 				B698DDA2285881FB0009077E /* Main.storyboard */,
 				B60007FF2876AB770087717F /* signIn.mp4 */,
 				B6E157332876C5E600D05796 /* signUp.mp4 */,
+				B69C5631287CFE18004DD552 /* pawking_icon.png */,
 				B698DDA5285881FD0009077E /* Assets.xcassets */,
-				B698DDA7285881FD0009077E /* LaunchScreen.storyboard */,
 				B698DDAA285881FD0009077E /* Info.plist */,
 				B698DDB228588D280009077E /* GoogleService-Info.plist */,
+				B69C562F287C657B004DD552 /* LaunchScreen.storyboard */,
 			);
 			path = PawKing;
 			sourceTree = "<group>";
@@ -433,8 +443,17 @@
 				B6A91D71286ACFDE0049253A /* Date+Extension.swift */,
 				B6A91D7C286C827B0049253A /* Notification+Extension.swift */,
 				B69C5629287A71A7004DD552 /* UIRefreshControl+Extension.swift */,
+				B69C563528830DB6004DD552 /* UITabBar+Extension.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		B69C56372883A601004DD552 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				B69C56382883A61B004DD552 /* UserListViewController.swift */,
+			);
+			path = Base;
 			sourceTree = "<group>";
 		};
 		B6A91D6E286A9AB90049253A /* Resource */ = {
@@ -534,6 +553,7 @@
 			isa = PBXGroup;
 			children = (
 				B69C562B287A7C47004DD552 /* loading.json */,
+				B69C563E2883FBA1004DD552 /* like.json */,
 				B6DD66E22875538B00523197 /* error.json */,
 			);
 			path = AnimationJson;
@@ -639,12 +659,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				B6DD66E32875538B00523197 /* error.json in Resources */,
-				B698DDA9285881FD0009077E /* LaunchScreen.storyboard in Resources */,
 				B69C562C287A7C47004DD552 /* loading.json in Resources */,
+				B69C5630287C657B004DD552 /* LaunchScreen.storyboard in Resources */,
+				B69C5632287CFE18004DD552 /* pawking_icon.png in Resources */,
 				B698DDB328588D280009077E /* GoogleService-Info.plist in Resources */,
 				B698DDA6285881FD0009077E /* Assets.xcassets in Resources */,
 				B60008002876AB7B0087717F /* signIn.mp4 in Resources */,
 				B698DDA4285881FB0009077E /* Main.storyboard in Resources */,
+				B69C563F2883FBA1004DD552 /* like.json in Resources */,
 				B6E157342876C5EF00D05796 /* signUp.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -741,6 +763,7 @@
 				B66A15D32867421900DF2663 /* UIImageView+Extension.swift in Sources */,
 				B6E86AA6285F0B85002B8C9A /* TrackHostoryCell.swift in Sources */,
 				B6ABE8E7285A19C400B1A977 /* FirebaseError.swift in Sources */,
+				B69C563628830DB6004DD552 /* UITabBar+Extension.swift in Sources */,
 				B6BF961C28630C4E003627C1 /* CommentCell.swift in Sources */,
 				B6A91D74286AE9070049253A /* InputTextView.swift in Sources */,
 				B6E86AAC2860309F002B8C9A /* EditProfileViewController.swift in Sources */,
@@ -785,6 +808,7 @@
 				B63484E5285E1E5300DB7CE7 /* ChoosePetViewController.swift in Sources */,
 				B6BF96142861EABC003627C1 /* TrackHistoryViewController.swift in Sources */,
 				B6ABE8F4285B87AB00B1A977 /* UserAnnotation.swift in Sources */,
+				B69C56392883A61B004DD552 /* UserListViewController.swift in Sources */,
 				B698DDC02858B99F0009077E /* UIImage+Extension.swift in Sources */,
 				B6A91D6B2868909F0049253A /* PetItemBackReusableView.swift in Sources */,
 				B698DDBB2858B8BA0009077E /* ChatRoomViewController.swift in Sources */,
@@ -827,14 +851,6 @@
 				B698DDA3285881FB0009077E /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		B698DDA7285881FD0009077E /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B698DDA8285881FD0009077E /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -962,19 +978,19 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = PawKing/PawKing.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 9;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = RUXNPB6ZP3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PawKing/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "是否同意使用相機";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "是否同意使用您的位置資訊";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "是否同意讀取相片";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Please allows PawKing to access your camera that you could take your pet's photo and share to others.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "PawKing requires your precise location to track your pet walks which you could check out later and provide you feature of showing the pets near by you. We will not disclose any location of you to others.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Please allows PawKing to access your photos that you could share your pet's photo to others.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -985,7 +1001,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -997,18 +1013,18 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = PawKing/PawKing.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = RUXNPB6ZP3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PawKing/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "是否同意使用相機";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "是否同意使用您的位置資訊";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "是否同意讀取相片";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Please allows PawKing to access your camera that you could take your pet's photo and share to others.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "PawKing requires your precise location to track your pet walks which you could check out later and provide you feature of showing the pets near by you. We will not disclose any location of you to others.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Please allows PawKing to access your photos that you could share your pet's photo to others.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1019,7 +1035,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

@@ -44,8 +44,17 @@ class EditProfileViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tabBarController?.tabBar.isHidden = true
         
         getPets(by: user.id)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        tabBarController?.tabBar.isHidden = false
     }
     
     func setup() {
@@ -66,7 +75,7 @@ class EditProfileViewController: UIViewController {
         tableView.layer.cornerRadius = 20
         tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
-        tableView.backgroundColor = .LightGray
+        tableView.backgroundColor = .BattleGreyUL
         tableView.separatorStyle = .singleLine
     }
     
@@ -74,7 +83,10 @@ class EditProfileViewController: UIViewController {
         
         view.addSubview(tableView)
         
-        tableView.fillSafeLayout()
+        tableView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                         leading: view.leadingAnchor,
+                         bottom: view.bottomAnchor,
+                         trailing: view.trailingAnchor)
     }
     
     func getPets(by userId: String) {

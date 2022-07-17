@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseFirestore
+import SwiftUI
 
 class UserPhotoWallViewController: UIViewController {
 
@@ -43,10 +44,18 @@ class UserPhotoWallViewController: UIViewController {
     private var displayPosts: [Post]? {
         didSet {
             collectionView.reloadSections(IndexSet(integer: 2))
+            
+            if displayPosts?.count == 0 {
+                
+                emptyLabel.isHidden = false
+            } else {
+                
+                emptyLabel.isHidden = true
+            }
         }
     }
     
-    private var selectedPetIndex: Int?
+    private var selectedPetIndex: IndexPath?
     
     private var isFriend = false {
         didSet {
@@ -59,6 +68,8 @@ class UserPhotoWallViewController: UIViewController {
     private let disconnectActionController = UIAlertController(title: "Are you sure you want to disconnect?",
                                                      message: nil,
                                                      preferredStyle: .alert)
+    
+    private let emptyLabel = UILabel()
     
     init(otherUserId: String) {
 
@@ -84,16 +95,17 @@ class UserPhotoWallViewController: UIViewController {
         layout()
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//
-//        if let user = UserManager.shared.currentUser,
-//            let otherUser = otherUser {
-//
-//            self.user = user
-//
-//            setActionSheet(user: user)
-//        }
-//    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        tabBarController?.tabBar.isHidden = false
+    }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -135,18 +147,30 @@ class UserPhotoWallViewController: UIViewController {
         
         collectionView.register(PhotoItemCell.self,
                                 forCellWithReuseIdentifier: PhotoItemCell.identifier)
+        
+        emptyLabel.isHidden = true
     }
     
     private func style() {
         
         view.backgroundColor = .systemBackground
+        
+        emptyLabel.textColor = .BattleGreyLight
+        emptyLabel.textAlignment = .center
+        emptyLabel.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
+        emptyLabel.text = "No Post"
     }
     
     private func layout() {
         
         view.addSubview(collectionView)
         
-        collectionView.fillSafeLayout()
+        collectionView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                              leading: view.leadingAnchor,
+                              bottom: view.bottomAnchor,
+                              trailing: view.trailingAnchor)
+        
+        collectionView.addSubview(emptyLabel)
         
         // Change top bounce area backgroud color
         collectionView.layoutIfNeeded()
@@ -154,6 +178,10 @@ class UserPhotoWallViewController: UIViewController {
                 width: collectionView.bounds.width, height: collectionView.bounds.height))
         topView.backgroundColor = .BattleGrey
         collectionView.addSubview(topView)
+        
+        emptyLabel.anchor(top: collectionView.centerYAnchor,
+                          centerX: collectionView.centerXAnchor,
+                          padding: UIEdgeInsets(top: 120, left: 0, bottom: 0, right: 0))
     }
     
     func listenOtherUser() {
@@ -299,6 +327,9 @@ class UserPhotoWallViewController: UIViewController {
         guard let otherUser = otherUser else {
             return
         }
+        DispatchQueue.main.async {
+            self.actionController.view.tintColor = .BattleGrey
+        }
         
         if user.blockUsersId.contains(otherUser.id) {
 
@@ -361,6 +392,9 @@ class UserPhotoWallViewController: UIViewController {
               let otherUser = otherUser else {
             return
         }
+        DispatchQueue.main.async {
+            self.disconnectActionController.view.tintColor = .BattleGrey
+        }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
         
@@ -402,6 +436,15 @@ class UserPhotoWallViewController: UIViewController {
 }
 
 extension UserPhotoWallViewController: ProfileInfoCellDelegate {
+    
+    func didTapFriend() {
+        
+        guard let friendsId = otherUser?.friends else { return }
+        
+        let friendListVC = UserListViewController(usersId: friendsId, listType: .friend, postId: nil)
+        
+        navigationController?.pushViewController(friendListVC, animated: true)
+    }
     
     func didTapLeftButton(from cell: ProfileInfoCell) {
         
@@ -631,11 +674,9 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
             
             guard let otherUserPets = otherUserPets else { return petCell }
 
-            let imageUrl = URL(string: otherUserPets[indexPath.item].petImage)
+            let otherUserPet = otherUserPets[indexPath.item]
             
-            petCell.photoURL = imageUrl
-            
-            petCell.configureCell()
+            petCell.configureCell(pet: otherUserPet)
             
             return petCell
             
@@ -647,7 +688,7 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
                 fatalError("Cannot dequeue PhotoItemCell")
             }
             
-            photoCell.imageView.image = UIImage.asset(.Image_Placeholder)
+            photoCell.imageView.image = UIImage.asset(.Image_Placeholder_Paw)
             
             guard let posts = displayPosts else { return photoCell }
             
@@ -675,37 +716,43 @@ extension UserPhotoWallViewController: UICollectionViewDelegate {
                 return
             }
             
-            collectionView.visibleCells.forEach { cell in
-                guard let petCell = cell as? PetItemCell else { return }
+            if let selectedPetIndex = selectedPetIndex {
                 
-                petCell.imageView.layer.borderWidth = 0
+                guard let selectedCell = collectionView.cellForItem(at: selectedPetIndex) as? PetItemCell
+                else {
+                    return
+                }
                 
-                petCell.backBorderView.isHidden = true
+                if selectedPetIndex == indexPath {
+                    
+                    selectedCell.selectState = !selectedCell.selectState
+                } else {
+                    
+                    selectedCell.selectState = false
+                    cell.selectState = !cell.selectState
+                }
+            } else {
+                
+                cell.selectState = !cell.selectState
             }
             
-            if selectedPetIndex != indexPath.item {
+            if cell.selectState {
                 
                 displayPosts = posts.filter { $0.petId == userPets[indexPath.item].id }
                 
-                selectedPetIndex = indexPath.item
-                
-                cell.imageView.layer.borderWidth = 2
-                cell.imageView.layer.borderColor = UIColor.BattleGrey?.cgColor
-                cell.backBorderView.isHidden = false
+                selectedPetIndex = indexPath
                 
             } else {
-                
-                cell.imageView.layer.borderWidth = 0
-                cell.backBorderView.isHidden = true
 
                 displayPosts = posts
                 
-                selectedPetIndex = -1
+                selectedPetIndex = nil
             }
+            
         } else if indexPath.section == UserPhotoWallSections.postsPhoto.rawValue {
          
             guard  let user = user,
-                   let post = posts?[indexPath.item] else { return }
+                   let post = displayPosts?[indexPath.item] else { return }
             
             let photoPostVC = PhotoPostViewController(user: user, post: post)
             

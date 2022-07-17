@@ -284,7 +284,7 @@ class SignInViewController: UIViewController {
             if let error = error {
                 
                 self?.signInButtonEnable()
-                self?.lottie.showError(error: error)
+                self?.lottie.showError(errorMessage: "Wrong acount or password")
                 self?.lottie.stopLoading()
                 
             } else {
@@ -309,8 +309,7 @@ class SignInViewController: UIViewController {
                         
                         self?.lottie.stopLoading()
                         
-                        self?.lottie.showError(error: nil)
-                        print("Please Sign Up First!")
+                        self?.lottie.showError(errorMessage: "Please sign up first")
                     }
                 })
             }
@@ -475,10 +474,10 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
 
               } else {
 
-                  guard let userName = appleIDCredential.fullName?.givenName else { return }
+                  let userName = appleIDCredential.fullName?.givenName
 
                   let user = User(id: uid,
-                                  name: userName,
+                                  name: userName ?? "",
                                   petsId: [],
                                   currentPetId: "",
                                   userImage: "",

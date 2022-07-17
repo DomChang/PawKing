@@ -39,10 +39,10 @@ class OtherUserMessageCell: UITableViewCell {
         otherUserTextView.isUserInteractionEnabled = false
         otherUserTextView.font = UIFont.systemFont(ofSize: 18)
         otherUserTextView.textColor = .LightBlack
-        otherUserTextView.backgroundColor = .LightGray
+        otherUserTextView.backgroundColor = .BattleGreyUL
         otherUserTextView.isScrollEnabled = false
         otherUserTextView.layer.borderWidth = 0.2
-        otherUserTextView.layer.borderColor = UIColor.Blue1?.cgColor
+        otherUserTextView.layer.borderColor = UIColor.BattleGrey?.cgColor
         otherUserTextView.layer.cornerRadius = 10
         otherUserTextView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         

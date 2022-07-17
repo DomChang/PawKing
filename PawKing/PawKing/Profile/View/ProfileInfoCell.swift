@@ -14,6 +14,8 @@ import UIKit
     func didTapLeftButton(from cell: ProfileInfoCell)
     
     func didTapRightButton()
+    
+    func didTapFriend()
 }
 
 class ProfileInfoCell: UICollectionViewCell {
@@ -25,9 +27,7 @@ class ProfileInfoCell: UICollectionViewCell {
     let userImageView = UIImageView()
     
     let userNameLabel = UILabel()
-    
-//    let userDescriptionLabel = UILabel()
-    
+
     let postNumLabel = UILabel()
 
     let postNumTitleLabel = UILabel()
@@ -110,6 +110,9 @@ class ProfileInfoCell: UICollectionViewCell {
         vFriendStack.axis = .vertical
         vFriendStack.distribution = .fillProportionally
         vFriendStack.spacing = 3
+        vFriendStack.isUserInteractionEnabled = true
+        vFriendStack.addGestureRecognizer(UITapGestureRecognizer(target: self,
+                                                                 action: #selector(didTapFriend)))
         
         let vPostStack = UIStackView(arrangedSubviews: [postNumTitleLabel, postNumLabel])
         
@@ -129,11 +132,6 @@ class ProfileInfoCell: UICollectionViewCell {
         
         contentView.addSubview(userImageView)
         contentView.addSubview(userNameLabel)
-//        contentView.addSubview(userDescriptionLabel)
-//        contentView.addSubview(postNumLabel)
-//        contentView.addSubview(postNumTitleLabel)
-//        contentView.addSubview(friendNumLabel)
-//        contentView.addSubview(friendNumTitleLabel)
         contentView.addSubview(hStack)
         contentView.addSubview(buttonStackView)
         
@@ -141,7 +139,7 @@ class ProfileInfoCell: UICollectionViewCell {
                              leading: contentView.leadingAnchor,
                              width: 60,
                              height: 60,
-                             padding: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 0))
+                             padding: UIEdgeInsets(top: 20, left: 25, bottom: 0, right: 0))
         
         userNameLabel.anchor(leading: userImageView.trailingAnchor,
                              centerY: userImageView.centerYAnchor,
@@ -154,35 +152,6 @@ class ProfileInfoCell: UICollectionViewCell {
                       bottom: userImageView.bottomAnchor,
                       trailing: contentView.trailingAnchor,
                       padding: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 25))
-        
-//        userDescriptionLabel.anchor(top: userNameLabel.bottomAnchor,
-//                                    leading: userNameLabel.leadingAnchor,
-//                                    bottom: contentView.bottomAnchor,
-//                                    trailing: userNameLabel.trailingAnchor,
-//                                    padding: UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0))
-        
-//        friendNumTitleLabel.anchor(top: userImageView.topAnchor,
-//                                   trailing: contentView.trailingAnchor,
-//                                   width: 60,
-//                                   height: 20,
-//                                   padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 100))
-//
-//        friendNumLabel.anchor(top: friendNumTitleLabel.bottomAnchor,
-//                              centerX: friendNumTitleLabel.centerXAnchor,
-//                              width: 60,
-//                              height: 30,
-//                              padding: UIEdgeInsets(top: 5, left: 0, bottom: 0, right: 0))
-//
-//        postNumTitleLabel.anchor(trailing: friendNumTitleLabel.leadingAnchor,
-//                                 centerY: friendNumTitleLabel.centerYAnchor,
-//                                 width: 40,
-//                                 height: 20,
-//                                 padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20))
-//
-//        postNumLabel.anchor(centerY: friendNumLabel.centerYAnchor,
-//                            centerX: postNumTitleLabel.centerXAnchor,
-//                            width: 50,
-//                            height: 30)
         
         buttonStackView.anchor(top: userImageView.bottomAnchor,
                                leading: contentView.leadingAnchor,
@@ -224,5 +193,10 @@ class ProfileInfoCell: UICollectionViewCell {
     @objc func didTapRightButton() {
         
         self.delegate?.didTapRightButton()
+    }
+    
+    @objc func didTapFriend() {
+        
+        self.delegate?.didTapFriend()
     }
 }

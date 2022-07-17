@@ -16,4 +16,8 @@ extension Notification.Name {
     static let updateUser = Notification.Name("updateUser")
     
     static let updateTrackHistory = Notification.Name("updateTrackHistory")
+    
+    static let updateCurrentPet = Notification.Name("updateCurrentPet")
+    
+    static let updateChatRooms = Notification.Name("updateChatRooms")
 }

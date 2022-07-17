@@ -12,11 +12,15 @@ class TrackHostoryCell: UICollectionViewCell {
     
     static let identifier = "\(TrackHostoryCell.self)"
     
-    let petNameLabel = UILabel()
+    private let petImageView = UIImageView()
     
-    let dateLabel = UILabel()
+    private let kmLabel = UILabel()
+
+    private let distanceLabel = UILabel()
     
-    let distanceLabel = UILabel()
+    private let dateLabel = UILabel()
+    
+    private let backView = UIView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,69 +35,75 @@ class TrackHostoryCell: UICollectionViewCell {
     
     private func styleObject() {
         
-        contentView.backgroundColor = .Blue2
+        contentView.backgroundColor = .white
+        
+        backView.backgroundColor = .BattleGreyUL
+        backView.layer.cornerRadius = 5
+        
+        petImageView.contentMode = .scaleAspectFill
+        petImageView.clipsToBounds = true
+        
+        dateLabel.textColor = .BattleGrey
+        dateLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
+        dateLabel.textAlignment = .center
+        
+        kmLabel.textColor = .BattleGrey
+        kmLabel.font = UIFont.systemFont(ofSize: 10, weight: .bold)
+        kmLabel.textAlignment = .right
+        kmLabel.text = "KM"
+        
+        distanceLabel.textColor = .BattleGrey
+        distanceLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        distanceLabel.textAlignment = .center
     }
     
     private func layout() {
         
-        let vStack = UIStackView(arrangedSubviews: [dateLabel, distanceLabel, petNameLabel])
+        contentView.addSubview(backView)
+        contentView.addSubview(petImageView)
+        backView.addSubview(distanceLabel)
+        backView.addSubview(kmLabel)
+        backView.addSubview(dateLabel)
         
-        vStack.axis = .vertical
-        vStack.distribution = .fillEqually
+        petImageView.anchor(top: contentView.topAnchor,
+                            centerX: backView.centerXAnchor,
+                            width: 40,
+                            height: 40,
+                            padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0))
         
-        contentView.addSubview(vStack)
+        backView.anchor(top: petImageView.centerYAnchor,
+                            leading: contentView.leadingAnchor,
+                            bottom: contentView.bottomAnchor,
+                            trailing: contentView.trailingAnchor,
+                            padding: UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5))
         
-        vStack.anchor(top: contentView.topAnchor,
-                      leading: contentView.leadingAnchor,
-                      bottom: contentView.bottomAnchor,
-                      trailing: contentView.trailingAnchor,
-                      padding: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
-        
-        contentView.layer.cornerRadius = 5
+        dateLabel.anchor(leading: backView.leadingAnchor,
+                         bottom: backView.bottomAnchor,
+                         trailing: backView.trailingAnchor,
+                         padding: UIEdgeInsets(top: 0, left: 5, bottom: 5, right: 5))
 
-        dateLabel.textColor = .BattleGrey
-        dateLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        dateLabel.textAlignment = .center
+        distanceLabel.anchor(leading: backView.leadingAnchor,
+                          trailing: backView.trailingAnchor,
+                          centerY: backView.centerYAnchor,
+                          padding: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         
-        distanceLabel.textColor = .BattleGrey
-        distanceLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
-        distanceLabel.textAlignment = .center
-
-        petNameLabel.textColor = .white
-        petNameLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
-        petNameLabel.textAlignment = .center
-        petNameLabel.backgroundColor = .Blue1
-        petNameLabel.layer.cornerRadius = 5
-        petNameLabel.layer.masksToBounds = true
+        kmLabel.anchor(top: distanceLabel.bottomAnchor,
+                       leading: backView.leadingAnchor,
+                       trailing: backView.trailingAnchor,
+                       padding: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         
+        contentView.layoutIfNeeded()
+        petImageView.makeRound()
     }
     
     func configureCell(pet: Pet, trackInfo: TrackInfo) {
         
-        petNameLabel.text = pet.name
+        let imageUrl = URL(string: pet.petImage)
+        
+        petImageView.kf.setImage(with: imageUrl)
+        
+        distanceLabel.text = "\(String(format: "%.2f", trackInfo.distanceMeter / 1000))"
         
         dateLabel.text = trackInfo.startTime.dateValue().displayTimeInNormalStyle()
-        
-        let distance = computeDistance(from: trackInfo.track.map { $0.transferToCoordinate2D() })
-        
-        distanceLabel.text = "\(String(format: "%.2f", distance / 1000)) km"
-    }
-    
-    func computeDistance(from points: [CLLocationCoordinate2D]) -> Double {
-        
-        guard let first = points.first else { return 0.0 }
-        
-        var prevPoint = first
-        
-        return points.reduce(0.0) { (count, point) -> Double in
-            
-            let newCount = count + CLLocation(latitude: prevPoint.latitude, longitude: prevPoint.longitude).distance(
-                
-                from: CLLocation(latitude: point.latitude, longitude: point.longitude))
-            
-            prevPoint = point
-            
-            return newCount
-        }
     }
 }

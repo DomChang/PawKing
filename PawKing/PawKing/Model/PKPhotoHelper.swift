@@ -20,6 +20,8 @@ class PKPhotoHelper: NSObject {
         let alertController = UIAlertController(title: nil,
                                                 message: nil,
                                                 preferredStyle: .actionSheet)
+        
+        alertController.view.tintColor = .BattleGrey
 
         // 2
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
@@ -72,7 +74,7 @@ extension PKPhotoHelper: UINavigationControllerDelegate, UIImagePickerController
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
-        guard let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage  else {
+        guard let selectedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage  else {
             
             picker.dismiss(animated: true)
             

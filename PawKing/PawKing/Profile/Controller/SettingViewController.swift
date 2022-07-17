@@ -36,6 +36,18 @@ class SettingViewController: UIViewController {
         layout()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        tabBarController?.tabBar.isHidden = false
+    }
+    
     private func setup() {
         
         tableView.register(SettingCell.self,
@@ -57,8 +69,12 @@ class SettingViewController: UIViewController {
         
         view.backgroundColor = .BattleGrey
         
-        tableView.backgroundColor = .LightGray
+        tableView.backgroundColor = .BattleGreyUL
         tableView.layer.cornerRadius = 20
+        
+        signOutActionController.view.tintColor = .BattleGrey
+        resignInActionController.view.tintColor = .BattleGrey
+        deleteActionController.view.tintColor = .BattleGrey
     }
     
     private func layout() {
@@ -92,20 +108,19 @@ class SettingViewController: UIViewController {
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
         
-        signOutActionController.addAction(cancelAction)
-        
-        let signOutAction  = UIAlertAction(title: "Confirm", style: .destructive) { [weak self] _ in
+        let signOutAction  = UIAlertAction(title: "Sign Out", style: .destructive) { [weak self] _ in
             
             self?.signOut()
         }
         signOutActionController.addAction(signOutAction)
+        signOutActionController.addAction(cancelAction)
     }
     
     private func setDeleteActionSheet() {
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
         
-        let deleteAction  = UIAlertAction(title: "Confirm", style: .destructive) { [weak self] _ in
+        let deleteAction  = UIAlertAction(title: "Delete Account", style: .destructive) { [weak self] _ in
             
             guard let user = self?.userManager.currentUser else { return }
             

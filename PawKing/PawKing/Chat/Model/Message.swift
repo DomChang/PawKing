@@ -7,6 +7,13 @@
 
 import FirebaseFirestore
 
+enum MessageStatus: Int {
+    
+    case notRead
+    
+    case isRead
+}
+
 struct Message: Codable {
     
     var otherUserId: String
@@ -14,6 +21,7 @@ struct Message: Codable {
     let recieverId: String
     let content: String
     let createdTime: Timestamp
+    let isRead: Int
 }
 
 struct Conversation: Codable {

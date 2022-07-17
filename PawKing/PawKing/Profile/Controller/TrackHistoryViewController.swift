@@ -7,8 +7,8 @@
 
 import UIKit
 import MapKit
-import SwiftUI
 
+// swiftlint:disable function_body_length
 class TrackHistoryViewController: UIViewController {
     
     private let mapManager = MapManager.shared
@@ -17,11 +17,11 @@ class TrackHistoryViewController: UIViewController {
     
     private let pet: Pet
     
-    private let trackInfo: TrackInfo
+    private var trackInfo: TrackInfo
     
     private let scrollView = UIScrollView()
     
-    private var shouldEdit: Bool
+    private var isNew: Bool
     
     private let petNameLabel = UILabel()
     
@@ -45,15 +45,23 @@ class TrackHistoryViewController: UIViewController {
     
     private let updateButton = UIButton()
     
-    private let actionController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+    private let abortButton = UIButton()
     
-    init(pet: Pet, trackInfo: TrackInfo, shouldEdit: Bool) {
+    private let deleteActionController = UIAlertController(title: nil,
+                                                           message: nil,
+                                                           preferredStyle: .actionSheet)
+    
+    private let abortActionController = UIAlertController(title: "Abort Track",
+                                                          message: "Are you sure you want to abort track?",
+                                                          preferredStyle: .alert)
+    
+    init(pet: Pet, trackInfo: TrackInfo, isNew: Bool) {
         
         self.pet = pet
         
         self.trackInfo = trackInfo
         
-        self.shouldEdit = shouldEdit
+        self.isNew = isNew
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -97,11 +105,13 @@ class TrackHistoryViewController: UIViewController {
         noteTextView.delegate = self
         noteTextView.isScrollEnabled = false
         
-        if shouldEdit {
+        if isNew {
+            
+            navigationItem.setHidesBackButton(true, animated: true)
             
             noteTextView.placeholder = "Write anything worthwhile..."
             
-            updateButton.setTitle("Add Note", for: .normal)
+            updateButton.setTitle("Save", for: .normal)
             updateButton.isHidden = false
             settingButton.isHidden = true
             
@@ -109,7 +119,7 @@ class TrackHistoryViewController: UIViewController {
             
             if trackInfo.note == "" {
                 
-                noteTextView.placeholder = "None"
+                noteTextView.placeholder = "Tap to update note"
             } else {
                 
                 noteTextView.text = trackInfo.note
@@ -118,7 +128,49 @@ class TrackHistoryViewController: UIViewController {
             updateButton.isHidden = true
             updateButton.setTitle("Update Note", for: .normal)
         }
+        
+        abortButton.setTitle("Abort", for: .normal)
+        
         updateButton.addTarget(self, action: #selector(didTapUpdateNote), for: .touchUpInside)
+        abortButton.addTarget(self, action: #selector(didTapAbort), for: .touchUpInside)
+        
+        mapView.register(TrackAnnotationView.self,
+                         forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
+        mapView.delegate = self
+        
+        drawTrack()
+        setAnnotation()
+        
+        setDeleteActionSheet()
+        setAbortAlert()
+    }
+    
+    private func style() {
+        
+        view.backgroundColor = .white
+        
+        petImageView.contentMode = .scaleAspectFill
+        
+        petNameLabel.textColor = .white
+        petNameLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        
+        settingButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
+        settingButton.tintColor = .white
+        
+        noteTextView.textColor = .BattleGrey
+        noteTextView.font = UIFont.systemFont(ofSize: 16)
+        
+        updateButton.setTitleColor(.white, for: .normal)
+        updateButton.backgroundColor = .Orange1
+        updateButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        updateButton.layer.cornerRadius = 4
+        
+        abortButton.setTitleColor(.Orange1, for: .normal)
+        abortButton.backgroundColor = .white
+        abortButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        abortButton.layer.cornerRadius = 4
+        abortButton.layer.borderColor = UIColor.Orange1?.cgColor
+        abortButton.layer.borderWidth = 1
         
         timeTitleLabel.text = "Time"
         timeTitleLabel.textColor = .BattleGrey
@@ -142,55 +194,6 @@ class TrackHistoryViewController: UIViewController {
         noteTitleLabel.text = "Note:"
         noteTitleLabel.textColor = .BattleGrey
         noteTitleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        
-//        if let startLocation = trackInfo.track.first?.transferToCoordinate2D(),
-//           let endLocation = trackInfo.track.last?.transferToCoordinate2D() {
-//
-//            let centerLatitude = (startLocation.latitude + endLocation.latitude) / 2
-//            let centerLongitude = (startLocation.longitude + endLocation.longitude) / 2
-//
-//            let center = CLLocationCoordinate2D(latitude: centerLatitude, longitude: centerLongitude)
-//
-//            let distance = startLocation.distanceTo(coordinate: endLocation)
-//
-//            let region = MKCoordinateRegion(center: center,
-//                                            latitudinalMeters: 2 * distance,
-//                                            longitudinalMeters: 2 * distance)
-//
-//            let adjustRegion = mapView.regionThatFits(region)
-//
-//            mapView.setRegion(adjustRegion, animated: false)
-//        }
-        
-        mapView.register(TrackAnnotationView.self,
-                         forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
-        mapView.delegate = self
-        
-        drawTrack()
-        setAnnotation()
-        
-        setActionSheet()
-    }
-    
-    private func style() {
-        
-        view.backgroundColor = .white
-        
-        petImageView.contentMode = .scaleAspectFill
-        
-        petNameLabel.textColor = .white
-        petNameLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        
-        settingButton.setImage(UIImage(systemName: "ellipsis"), for: .normal)
-        settingButton.tintColor = .white
-        
-        noteTextView.textColor = .BattleGrey
-        noteTextView.font = UIFont.systemFont(ofSize: 16)
-        
-        updateButton.setTitleColor(.white, for: .normal)
-        updateButton.backgroundColor = .Orange1
-        updateButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        updateButton.layer.cornerRadius = 4
     }
     
     private func layout() {
@@ -239,7 +242,6 @@ class TrackHistoryViewController: UIViewController {
         scrollView.addSubview(infoHStack)
         scrollView.addSubview(noteTitleLabel)
         scrollView.addSubview(noteTextView)
-        scrollView.addSubview(updateButton)
         
         scrollView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                           leading: view.leadingAnchor,
@@ -284,15 +286,39 @@ class TrackHistoryViewController: UIViewController {
                          trailing: scrollView.trailingAnchor,
                             padding: UIEdgeInsets(top: 5, left: 20, bottom: 0, right: 20))
         
-        updateButton.anchor(top: noteTextView.bottomAnchor,
-                            leading: scrollView.leadingAnchor,
-                            trailing: scrollView.trailingAnchor,
-                            height: 40,
-                            padding: UIEdgeInsets(top: 20, left: 40, bottom: 0, right: 40))
-        
-        updateButton.bottomAnchor.constraint(
-            lessThanOrEqualTo: scrollView.bottomAnchor, constant: -50
-        ).isActive = true
+        if isNew {
+            
+            let buttonHStack = UIStackView(arrangedSubviews: [abortButton, updateButton])
+            buttonHStack.axis = .horizontal
+            buttonHStack.distribution = .fillEqually
+            buttonHStack.spacing = 40
+            
+            scrollView.addSubview(buttonHStack)
+            
+            buttonHStack.anchor(top: noteTextView.bottomAnchor,
+                                leading: scrollView.leadingAnchor,
+                                trailing: scrollView.trailingAnchor,
+                                height: 40,
+                                padding: UIEdgeInsets(top: 20, left: 40, bottom: 0, right: 40))
+            
+            buttonHStack.bottomAnchor.constraint(
+                lessThanOrEqualTo: scrollView.bottomAnchor, constant: -50
+            ).isActive = true
+            
+        } else {
+            
+            scrollView.addSubview(updateButton)
+            
+            updateButton.anchor(top: noteTextView.bottomAnchor,
+                                leading: scrollView.leadingAnchor,
+                                trailing: scrollView.trailingAnchor,
+                                height: 40,
+                                padding: UIEdgeInsets(top: 20, left: 40, bottom: 0, right: 40))
+            
+            updateButton.bottomAnchor.constraint(
+                lessThanOrEqualTo: scrollView.bottomAnchor, constant: -50
+            ).isActive = true
+        }
         
         scrollView.layoutIfNeeded()
         petImageView.makeRound()
@@ -308,18 +334,33 @@ class TrackHistoryViewController: UIViewController {
         
         lottie.startLoading()
         
-        guard let trackNote = noteTextView.text else { return }
+        if isNew {
+            
+            addTrack()
+            
+        } else {
+            
+            updateNote()
+        }
+    }
+    
+    private func addTrack() {
         
-        updateButton.isEnabled = false
-        updateButton.backgroundColor = .Gray1
+        guard let user = UserManager.shared.currentUser else {
+            
+            lottie.stopLoading()
+            return
+        }
         
-        mapManager.updateTrackNote(userId: pet.ownerId, trackInfo: trackInfo, trackNote: trackNote) { [weak self] result in
+        mapManager.uploadTrack(userId: user.id, trackInfo: &trackInfo) { [weak self] result in
             
             switch result {
                 
             case .success:
                 
                 self?.lottie.stopLoading()
+                
+                NotificationCenter.default.post(name: .updateTrackHistory, object: .none)
                 
                 self?.navigationController?.popViewController(animated: true)
                 
@@ -331,22 +372,73 @@ class TrackHistoryViewController: UIViewController {
         }
     }
     
+    private func updateNote() {
+        
+        guard let trackNote = noteTextView.text else {
+            
+            lottie.stopLoading()
+            return
+        }
+        
+        updateButton.isEnabled = false
+        updateButton.backgroundColor = .Gray1
+        
+        mapManager.updateTrackNote(userId: pet.ownerId,
+                                   trackInfo: trackInfo,
+                                   trackNote: trackNote) { [weak self] result in
+            
+            switch result {
+                
+            case .success:
+                
+                self?.lottie.stopLoading()
+                
+                self?.navigationController?.popViewController(animated: true)
+                
+                NotificationCenter.default.post(name: .updateUser, object: .none)
+                
+            case .failure(let error):
+                
+                self?.lottie.stopLoading()
+                self?.lottie.showError(error: error)
+            }
+        }
+    }
+    
+    @objc private func didTapAbort() {
+        
+        present(abortActionController, animated: true)
+    }
+    
     @objc private func didTapSetting() {
         
-        present(actionController, animated: true) {
+        present(deleteActionController, animated: true) {
             
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissAlertController))
             
-            self.actionController.view.superview?.subviews[0].addGestureRecognizer(tapGesture)
+            self.deleteActionController.view.superview?.subviews[0].addGestureRecognizer(tapGesture)
         }
     }
     
     @objc private func dismissAlertController() {
         
-        actionController.dismiss(animated: true)
+        deleteActionController.dismiss(animated: true)
     }
     
-    private func setActionSheet() {
+    private func setAbortAlert() {
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        
+        let abortAction  = UIAlertAction(title: "Abort", style: .destructive) { [weak self] _ in
+            
+            self?.navigationController?.popViewController(animated: true)
+        }
+        abortActionController.view.tintColor = .BattleGrey
+        abortActionController.addAction(cancelAction)
+        abortActionController.addAction(abortAction)
+    }
+    
+    private func setDeleteActionSheet() {
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
         
@@ -379,9 +471,9 @@ class TrackHistoryViewController: UIViewController {
                 }
             }
         }
-        
-        actionController.addAction(deleteAlert)
-        actionController.addAction(cancelAction)
+        deleteActionController.view.tintColor = .BattleGrey
+        deleteActionController.addAction(deleteAlert)
+        deleteActionController.addAction(cancelAction)
     }
     
     private func drawTrack() {
@@ -413,30 +505,41 @@ class TrackHistoryViewController: UIViewController {
         guard let startPoint = trackInfo.track.first,
                 let endPoint = trackInfo.track.last else { return }
         
-        let startAnnotation = TrackAnnotation(title: "Start", coordinate: startPoint.transferToCoordinate2D())
+        let startTime = trackInfo.startTime.dateValue().displayTimeInHourMinuteStyle()
         
-        let endAnnotation = TrackAnnotation(title: "End", coordinate: endPoint.transferToCoordinate2D())
+        let endTime = trackInfo.endTime.dateValue().displayTimeInHourMinuteStyle()
+        
+        let startAnnotation = TrackAnnotation(title: "Start",
+                                              subtitle: startTime,
+                                              coordinate: startPoint.transferToCoordinate2D())
+        
+        let endAnnotation = TrackAnnotation(title: "End",
+                                            subtitle: endTime,
+                                            coordinate: endPoint.transferToCoordinate2D())
         
         mapView.addAnnotations([startAnnotation, endAnnotation])
     }
 }
 
 extension TrackHistoryViewController: MKMapViewDelegate, CLLocationManagerDelegate {
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        // do not alter user location marker
+        guard !annotation.isKind(of: MKUserLocation.self) else { return nil }
 
-//    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-//
-//         guard let view = mapView.dequeueReusableAnnotationView(
-//            withIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier,
-//            for: annotation
-//         ) as? MKMarkerAnnotationView else {
-//
-//             return MKMarkerAnnotationView()
-//         }
-//
-//        view.markerTintColor = .BattleGrey
-//
-//        return view
-//    }
+        // get existing marker
+        var view = mapView.dequeueReusableAnnotationView(withIdentifier: "reuseIdentifier") as? TrackAnnotationView
+
+        // is this a new marker (i.e. nil)?
+        if view == nil {
+            view = TrackAnnotationView(annotation: nil, reuseIdentifier: "reuseIdentifier")
+        }
+
+        view?.subtitleVisibility = .visible
+
+        return view
+    }
 
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
 
@@ -469,3 +572,4 @@ extension TrackHistoryViewController: UITextViewDelegate {
         updateButton.isHidden = false
     }
 }
+// swiftlint:enable function_body_length
