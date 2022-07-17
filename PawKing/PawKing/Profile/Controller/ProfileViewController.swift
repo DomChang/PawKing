@@ -232,6 +232,7 @@ class ProfileViewController: UIViewController {
                 
             case .success(let posts):
                 
+                self?.selectedPetIndex = nil
                 self?.posts = posts
                 self?.displayPosts = posts
                 
@@ -250,6 +251,7 @@ class ProfileViewController: UIViewController {
                 
             case .success(let trackInfos):
                 
+                self?.selectedPetIndex = nil
                 self?.trackInfos = trackInfos
                 self?.displayTrackInfos = trackInfos
                 
@@ -519,6 +521,9 @@ extension ProfileViewController: UICollectionViewDataSource {
 
             let userPet = userPets[indexPath.item]
             
+            if selectedPetIndex == nil {
+                petCell.selectState = false
+            }
             petCell.configureCell(pet: userPet)
             
             return petCell
@@ -622,8 +627,6 @@ extension ProfileViewController: UICollectionViewDelegate {
                 
                 displayTrackInfos = trackInfos.filter { $0.petId == userPets[indexPath.item].id }
                 
-//                checkIsEmpty()
-                
                 selectedPetIndex = indexPath
                 
             } else {
@@ -631,8 +634,6 @@ extension ProfileViewController: UICollectionViewDelegate {
                 displayPosts = posts
                 
                 displayTrackInfos = trackInfos
-                
-//                checkIsEmpty()
                 
                 selectedPetIndex = nil
                 
