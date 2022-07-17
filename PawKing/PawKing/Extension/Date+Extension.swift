@@ -101,6 +101,15 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
+    func displayTimeInHourMinuteStyle() -> String {
+        
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.dateFormat = "HH:mm"
+        
+        return dateFormatter.string(from: self)
+    }
+    
     func displayTimeInAgeStyle() -> String {
         
         let delta = self.distance(to: Date())

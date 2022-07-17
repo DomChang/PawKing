@@ -264,7 +264,6 @@ class MapViewController: UIViewController {
         
         mapView.showsUserLocation = true
         mapView.delegate = self
-        mapView.mapType = .mutedStandard
         mapView.register(MKAnnotationView.self, forAnnotationViewWithReuseIdentifier: "UserAnnotationView")
         
         choosePetImageView.addGestureRecognizer(
