@@ -48,6 +48,7 @@ class StrangerCardViewCell: UICollectionViewCell {
         
         nameLabel.textColor = .LightBlack
         nameLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        nameLabel.adjustsFontSizeToFitWidth = true
         
         genderIconView.image = UIImage.asset(.Icons_24px_Gender)
         

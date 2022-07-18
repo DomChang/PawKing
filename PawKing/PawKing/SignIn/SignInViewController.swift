@@ -281,6 +281,7 @@ class SignInViewController: UIViewController {
         }
         
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
+            
             if let error = error {
                 
                 self?.signInButtonEnable()
