@@ -82,12 +82,7 @@ class MapViewController: UIViewController {
     
     private var user: User
     
-    private var userPets: [Pet] = [] {
-        didSet {
-            if userPets.count == 0 {
-            }
-        }
-    }
+    private var userPets: [Pet] = []
     
     private var userCurrentPet: Pet? {
         didSet {
@@ -229,6 +224,8 @@ class MapViewController: UIViewController {
                 notificationButton.setImage(UIImage.asset(.Icons_45px_Bell_Notified),
                                             for: .normal)
             }
+            
+            getStrangerLocations()
 
         } else {
             userCurrentPet = nil
@@ -766,6 +763,8 @@ class MapViewController: UIViewController {
             return
         }
         
+        guard !isTracking else { return }
+        
         let choosePetVC = ChoosePetViewController(pets: userPets, isPost: false)
         
         choosePetVC.delegate = self
@@ -776,7 +775,6 @@ class MapViewController: UIViewController {
             sheet.detents = [.medium()]
             sheet.preferredCornerRadius = 20
         }
-        
         present(navChoosePetVC, animated: true, completion: nil)
     }
     
@@ -786,6 +784,11 @@ class MapViewController: UIViewController {
         
         collectionView.isHidden = !strangerButton.isSelected
 
+        getStrangerLocations()
+    }
+    
+    private func getStrangerLocations() {
+        
         mapManager.fetchStrangerLocations(friend: user.friends, blockIds: user.blockUsersId) { [weak self] result in
             
             switch result {

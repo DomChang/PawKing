@@ -190,7 +190,7 @@ class MessageViewController: UIViewController {
                           centerY: inputBackView.centerYAnchor,
                           width: 60,
                           height: 35,
-                          padding: UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 20))
+                          padding: UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 16))
         
         inputBackView.anchor(leading: view.leadingAnchor,
                              trailing: view.trailingAnchor)
