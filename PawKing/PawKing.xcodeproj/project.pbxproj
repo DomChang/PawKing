@@ -32,6 +32,10 @@
 		B66A15CE2866AE5400DF2663 /* UserPhotoWallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15CD2866AE5400DF2663 /* UserPhotoWallViewController.swift */; };
 		B66A15D32867421900DF2663 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15D22867421800DF2663 /* UIImageView+Extension.swift */; };
 		B66A15D52867500C00DF2663 /* UserAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66A15D42867500C00DF2663 /* UserAnnotationView.swift */; };
+		B68B9DB32886965A00156B4D /* StrangerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68B9DB22886965A00156B4D /* StrangerViewController.swift */; };
+		B68B9DB52886980B00156B4D /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68B9DB42886980B00156B4D /* UIViewController+Extension.swift */; };
+		B68B9DB72886AC8700156B4D /* LocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68B9DB62886AC8700156B4D /* LocationHelper.swift */; };
+		B68B9DB92886B0B300156B4D /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68B9DB82886B0B300156B4D /* TimeInterval+Extension.swift */; };
 		B698DD9D285881FB0009077E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DD9C285881FB0009077E /* AppDelegate.swift */; };
 		B698DD9F285881FB0009077E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DD9E285881FB0009077E /* SceneDelegate.swift */; };
 		B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDA0285881FB0009077E /* TabBarViewController.swift */; };
@@ -45,7 +49,6 @@
 		B698DDBD2858B8CC0009077E /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDBC2858B8CC0009077E /* ProfileViewController.swift */; };
 		B698DDC02858B99F0009077E /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDBF2858B99F0009077E /* UIImage+Extension.swift */; };
 		B698DDC22858CE9D0009077E /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDC12858CE9D0009077E /* UIView+Extension.swift */; };
-		B69C562A287A71A7004DD552 /* UIRefreshControl+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69C5629287A71A7004DD552 /* UIRefreshControl+Extension.swift */; };
 		B69C562C287A7C47004DD552 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = B69C562B287A7C47004DD552 /* loading.json */; };
 		B69C5630287C657B004DD552 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B69C562F287C657B004DD552 /* LaunchScreen.storyboard */; };
 		B69C5632287CFE18004DD552 /* pawking_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = B69C5631287CFE18004DD552 /* pawking_icon.png */; };
@@ -129,6 +132,10 @@
 		B66A15CD2866AE5400DF2663 /* UserPhotoWallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPhotoWallViewController.swift; sourceTree = "<group>"; };
 		B66A15D22867421800DF2663 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		B66A15D42867500C00DF2663 /* UserAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnnotationView.swift; sourceTree = "<group>"; };
+		B68B9DB22886965A00156B4D /* StrangerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrangerViewController.swift; sourceTree = "<group>"; };
+		B68B9DB42886980B00156B4D /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		B68B9DB62886AC8700156B4D /* LocationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHelper.swift; sourceTree = "<group>"; };
+		B68B9DB82886B0B300156B4D /* TimeInterval+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Extension.swift"; sourceTree = "<group>"; };
 		B698DD99285881FB0009077E /* PawKing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PawKing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B698DD9C285881FB0009077E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B698DD9E285881FB0009077E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -144,7 +151,6 @@
 		B698DDBC2858B8CC0009077E /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		B698DDBF2858B99F0009077E /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		B698DDC12858CE9D0009077E /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
-		B69C5629287A71A7004DD552 /* UIRefreshControl+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIRefreshControl+Extension.swift"; sourceTree = "<group>"; };
 		B69C562B287A7C47004DD552 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		B69C562F287C657B004DD552 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B69C5631287CFE18004DD552 /* pawking_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pawking_icon.png; sourceTree = "<group>"; };
@@ -442,8 +448,9 @@
 				B66A15D22867421800DF2663 /* UIImageView+Extension.swift */,
 				B6A91D71286ACFDE0049253A /* Date+Extension.swift */,
 				B6A91D7C286C827B0049253A /* Notification+Extension.swift */,
-				B69C5629287A71A7004DD552 /* UIRefreshControl+Extension.swift */,
 				B69C563528830DB6004DD552 /* UITabBar+Extension.swift */,
+				B68B9DB42886980B00156B4D /* UIViewController+Extension.swift */,
+				B68B9DB82886B0B300156B4D /* TimeInterval+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -486,6 +493,7 @@
 				B6D4F6A8285C62F10045DDB2 /* Pet.swift */,
 				B63484E2285DC8D000DB7CE7 /* PetManager.swift */,
 				B6D4F6AA285CDB150045DDB2 /* PKPhotoHelper.swift */,
+				B68B9DB62886AC8700156B4D /* LocationHelper.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -525,6 +533,7 @@
 			isa = PBXGroup;
 			children = (
 				B698DDB42858B8540009077E /* MapViewController.swift */,
+				B68B9DB22886965A00156B4D /* StrangerViewController.swift */,
 				B63484E4285E1E5300DB7CE7 /* ChoosePetViewController.swift */,
 				B6E94317286DC83100B3157F /* FriendRequestViewController.swift */,
 			);
@@ -770,6 +779,7 @@
 				B63484DF285DC62D00DB7CE7 /* PetConfigViewController.swift in Sources */,
 				B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */,
 				B63484E7285E36F700DB7CE7 /* ChoosePetTableViewCell.swift in Sources */,
+				B68B9DB72886AC8700156B4D /* LocationHelper.swift in Sources */,
 				B6E157382877310700D05796 /* TrackAnnotationView.swift in Sources */,
 				B66A15B92864606700DF2663 /* ResultViewController.swift in Sources */,
 				B6E86AA4285F0B6B002B8C9A /* ContentButtonCell.swift in Sources */,
@@ -787,6 +797,7 @@
 				B6ABE8E0285A06E300B1A977 /* UIColor+Extension.swift in Sources */,
 				B66A15CE2866AE5400DF2663 /* UserPhotoWallViewController.swift in Sources */,
 				B6DD66D52872EAE700523197 /* ContentButtonReusableView.swift in Sources */,
+				B68B9DB52886980B00156B4D /* UIViewController+Extension.swift in Sources */,
 				B6DD66E7287579F800523197 /* SettingCell.swift in Sources */,
 				B6DD66DA28752DAB00523197 /* LottieWrapper.swift in Sources */,
 				B6ABE8E9285AC08200B1A977 /* UserLocation.swift in Sources */,
@@ -796,7 +807,6 @@
 				B66A15BB28648B4900DF2663 /* SearchResultCell.swift in Sources */,
 				B651EDD428717AAC003A5F2B /* EditUserCell.swift in Sources */,
 				B6E86AA0285F016A002B8C9A /* Profile.swift in Sources */,
-				B69C562A287A71A7004DD552 /* UIRefreshControl+Extension.swift in Sources */,
 				B6A91D7A286BE5A60049253A /* SignInViewController.swift in Sources */,
 				B6ABE8E2285A0B7400B1A977 /* MapManager.swift in Sources */,
 				B6A91D7D286C827B0049253A /* Notification+Extension.swift in Sources */,
@@ -828,6 +838,8 @@
 				B6BF96182862A467003627C1 /* PhotoPostViewController.swift in Sources */,
 				B698DDB52858B8540009077E /* MapViewController.swift in Sources */,
 				B6E94318286DC83100B3157F /* FriendRequestViewController.swift in Sources */,
+				B68B9DB92886B0B300156B4D /* TimeInterval+Extension.swift in Sources */,
+				B68B9DB32886965A00156B4D /* StrangerViewController.swift in Sources */,
 				B6D4F6A3285C526A0045DDB2 /* FirebaseCollection.swift in Sources */,
 				B6D4F6A7285C5F9B0045DDB2 /* StrangerCardViewCell.swift in Sources */,
 				B6E86AAA285F7DAA002B8C9A /* PetItemCell.swift in Sources */,

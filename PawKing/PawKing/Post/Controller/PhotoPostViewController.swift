@@ -500,6 +500,8 @@ extension PhotoPostViewController: PhotoPostCellDelegate {
             
             postManager.addPostLike(postId: post.id, userId: user.id)
             
+            UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+            
         } else {
             
             likeCount -= 1
