@@ -78,7 +78,7 @@ class HomeViewController: UIViewController {
     
     private var userCurrentPet: Pet? {
         didSet {
-            styleCurrentPetButton()
+            setCurrentPetButton()
         }
     }
     
@@ -162,30 +162,6 @@ class HomeViewController: UIViewController {
         locationAlertController = nil
     }
     
-    deinit {
-        
-        mapVC.mapView.delegate = nil
-    }
-    
-    @objc private func updateData() {
-        
-        if let user = UserManager.shared.currentUser {
-            
-            self.user = user
-        }
-        checkAuth()
-        
-        if Auth.auth().currentUser != nil {
-            
-            checkTrackStatus()
-            
-            getStrangerLocations()
-        } else {
-            
-            notTracking()
-        }
-    }
-    
     private func setup() {
         
         NotificationCenter.default.addObserver(self,
@@ -254,7 +230,6 @@ class HomeViewController: UIViewController {
         view.addSubview(infoBackView)
         view.addSubview(strangerButton)
         view.addSubview(notificationButton)
-//        view.addSubview(collectionView)
         view.addSubview(choosePetImageView)
         
         mapVC.view.anchor(top: view.topAnchor,
@@ -300,22 +275,10 @@ class HomeViewController: UIViewController {
         stopWidthAnchor?.isActive = true
         stopHeightAnchor?.isActive = true
         
-        strangerButton.setRadiusWithShadow()
-        
-        notificationButton.setRadiusWithShadow()
-        
-        userLocationButton.setRadiusWithShadow()
-        
-        startTrackButton.setRadiusWithShadow()
-        
-        stopTrackButton.setRadiusWithShadow()
-        
         infoBackView.anchor(leading: view.leadingAnchor,
                             trailing: view.trailingAnchor,
                             height: view.safeAreaInsets.top + 90,
                             padding: UIEdgeInsets(top: 0, left: 116, bottom: 0, right: 116))
-        
-        infoBackView.setRadiusWithShadow(20)
         
         infoBottomAnchor = infoBackView.bottomAnchor.constraint(equalTo: view.topAnchor, constant: 0)
         infoBottomAnchor.isActive = true
@@ -353,15 +316,47 @@ class HomeViewController: UIViewController {
                               trailing: timeHStack.trailingAnchor,
                             padding: UIEdgeInsets(top: 5, left: 0, bottom: 10, right: 0))
         
-        view.layoutIfNeeded()
-        styleCurrentPetButton()
+        strangerButton.setRadiusWithShadow()
+        
+        notificationButton.setRadiusWithShadow()
+        
+        userLocationButton.setRadiusWithShadow()
+        
+        startTrackButton.setRadiusWithShadow()
+        
+        stopTrackButton.setRadiusWithShadow()
+        
+        infoBackView.setRadiusWithShadow(20)
+        
+        choosePetImageView.layoutIfNeeded()
+        setCurrentPetButton()
+    }
+    
+    @objc private func updateData() {
+        
+        if let user = UserManager.shared.currentUser {
+            
+            self.user = user
+            checkAuth()
+        }
+        if Auth.auth().currentUser != nil {
+            
+            checkTrackStatus()
+            
+            getStrangerLocations()
+        } else {
+            
+            notTracking()
+        }
     }
     
     private func checkAuth() {
         
         if Auth.auth().currentUser != nil {
             
-            fetchUserPets(user: user)
+            print(user)
+            
+            getUserPets(user: user)
             
             listenFriendsLocation()
             
@@ -423,7 +418,31 @@ class HomeViewController: UIViewController {
         notTracking()
     }
     
-    private func fetchCurrentPet(user: User) {
+    private func getUserPets(user: User) {
+        
+        guard user.id != UserStatus.guest.rawValue else {
+            return
+        }
+        
+        userManager.fetchPets(userId: user.id) { [weak self] result in
+            
+            switch result {
+                
+            case .success(let pets):
+                
+                self?.userPets = pets
+                self?.getCurrentPet(user: user)
+                
+                print(pets)
+                
+            case .failure:
+                
+                self?.lottie.showError(errorMessage: "Network Unstable")
+            }
+        }
+    }
+    
+    private func getCurrentPet(user: User) {
         
         userManager.fetchUserLocation(userId: user.id) { [weak self] result in
             switch result {
@@ -452,27 +471,9 @@ class HomeViewController: UIViewController {
         }
     }
     
-    private func fetchUserPets(user: User) {
+    private func setCurrentPetButton() {
         
-        userManager.fetchPets(userId: user.id) { [weak self] result in
-            
-            switch result {
-                
-            case .success(let pets):
-                
-                self?.userPets = pets
-                self?.fetchCurrentPet(user: user)
-                
-            case .failure:
-                
-                self?.lottie.showError(errorMessage: "Network Unstable")
-            }
-        }
-    }
-    
-    private func styleCurrentPetButton() {
-        
-    if let userCurrentPet = userCurrentPet {
+        if let userCurrentPet = userCurrentPet {
             
             let imageUrlSting = userCurrentPet.petImage
             
@@ -591,45 +592,9 @@ class HomeViewController: UIViewController {
                 }
 
                 if count >= 1 {
-
-                    self.mapVC.focusUserLocation()
-
-                    let coordinate = self.userStoredLocations.map { $0.coordinate }
-                    let track = coordinate.map { $0.transferToGeopoint() }
-
-                    guard let userCurrentPet = self.userCurrentPet,
-                          !coordinate.isEmpty else {
-
-                        return
-                    }
-
-                    let distance = self.locationHelper.computeDistance(from: track.map {
-                        $0.transferToCoordinate2D()
-                    })
-
-                    let trackInfo = TrackInfo(id: "",
-                                              petId: userCurrentPet.id,
-                                              distanceMeter: distance,
-                                              startTime: self.trackStartTime,
-                                              endTime: Timestamp(),
-                                              track: track,
-                                              note: "")
-
-                    let trackHistoryVC = TrackHistoryViewController(pet: userCurrentPet,
-                                                                    trackInfo: trackInfo,
-                                                                    isNew: true)
                     
-                    self.resetTrack()
-                    
-                    self.stopTimer?.invalidate()
-                    self.stopTimer = nil
+                    self.didFinishTrack()
                     count = 0
-                    self.stopWidthAnchor.constant = 80
-                    self.stopHeightAnchor.constant = 80
-                    
-                    UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-                    
-                    self.navigationController?.pushViewController(trackHistoryVC, animated: true)
                 }
             })
         } else if sender.state == .ended {
@@ -646,7 +611,48 @@ class HomeViewController: UIViewController {
         }
     }
     
-    private func didFinishTrackButtons() {
+    private func didFinishTrack() {
+        
+        mapVC.focusUserLocation()
+
+        let coordinate = userStoredLocations.map { $0.coordinate }
+        let track = coordinate.map { $0.transferToGeopoint() }
+
+        guard let userCurrentPet = userCurrentPet,
+              !coordinate.isEmpty else {
+
+            return
+        }
+
+        let distance = locationHelper.computeDistance(from: track.map {
+            $0.transferToCoordinate2D()
+        })
+
+        let trackInfo = TrackInfo(id: "",
+                                  petId: userCurrentPet.id,
+                                  distanceMeter: distance,
+                                  startTime: trackStartTime,
+                                  endTime: Timestamp(),
+                                  track: track,
+                                  note: "")
+
+        let trackHistoryVC = TrackHistoryViewController(pet: userCurrentPet,
+                                                        trackInfo: trackInfo,
+                                                        isNew: true)
+        resetTrack()
+        
+        stopTimer?.invalidate()
+        stopTimer = nil
+        stopWidthAnchor.constant = 80
+        stopHeightAnchor.constant = 80
+        
+        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+        
+        navigationController?.pushViewController(trackHistoryVC, animated: true)
+        
+    }
+    
+    private func stopUpdateLocation() {
         
         locationManager?.stopUpdatingLocation()
         locationManager?.stopUpdatingHeading()
@@ -668,16 +674,16 @@ class HomeViewController: UIViewController {
         
         notTracking()
 
-        didFinishTrackButtons()
+        stopUpdateLocation()
         mapVC.mapView.removeOverlays(self.mapVC.mapView.overlays)
         
         infoBottomAnchor.constant = 0
     }
     
     @objc private func updateCurrentPet() {
-        
+
         resetTrack()
-        fetchCurrentPet(user: user)
+        getCurrentPet(user: user)
     }
     
     @objc private func didTapChoosePet() {
@@ -710,7 +716,7 @@ class HomeViewController: UIViewController {
         
         if strangerButton.isSelected {
             
-            addStrangerCollectionView()
+            showStrangerCollectionView()
         } else {
             
             strangerVC.remove()
@@ -719,7 +725,7 @@ class HomeViewController: UIViewController {
         getStrangerLocations()
     }
     
-    private func addStrangerCollectionView() {
+    private func showStrangerCollectionView() {
      
         add(strangerVC)
         
@@ -873,7 +879,6 @@ class HomeViewController: UIViewController {
                 friendAnnotationsInfo.removeValue(forKey: friend.userId)
             }
         }
-        
         for friendAnnotationInfo in friendAnnotationsInfo {
                 
             mapVC.mapView.addAnnotation(friendAnnotationInfo.value)
@@ -915,7 +920,6 @@ class HomeViewController: UIViewController {
                 NotificationCenter.default.post(name: .showSignInView, object: .none)
                 return
             }
-            
             self.tabBarController?.selectedIndex = 4
         })
         noPetAlertController.view.tintColor = .BattleGrey

@@ -297,14 +297,14 @@ class MessageViewController: UIViewController {
         }
     }
     
-    @objc func keyboardDidChangeFrame(_ notification: Notification) {
-      guard let kbSize = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey]
-          as? CGRect else {
-        return
-      }
-        
-        userInputTopAnchor.constant = -kbSize.height
-    }
+//    @objc func keyboardDidChangeFrame(_ notification: Notification) {
+//      guard let kbSize = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey]
+//          as? CGRect else {
+//        return
+//      }
+//
+//        userInputTopAnchor.constant = -kbSize.height
+//    }
     
     func sendButtonEnable() {
         

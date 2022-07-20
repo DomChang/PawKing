@@ -22,7 +22,7 @@ class UserManager {
         }
     }
     
-    var guestUser = User(id: "Guest",
+    var guestUser = User(id: UserStatus.guest.rawValue,
                          name: "Guest",
                          petsId: [],
                          currentPetId: "",
