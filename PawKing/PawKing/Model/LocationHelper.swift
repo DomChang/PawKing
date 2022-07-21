@@ -15,16 +15,16 @@ class LocationHelper {
         
         var prevPoint = first
         
-        return points.reduce(0.0) { (count, point) -> Double in
+        let distance = points.reduce(0.0) { (count, point) -> Double in
             
-            let newCount = count + CLLocation(latitude: prevPoint.latitude, longitude: prevPoint.longitude).distance(
-                
+            let newCount = count +
+            CLLocation(latitude: prevPoint.latitude, longitude: prevPoint.longitude).distance(
                 from: CLLocation(latitude: point.latitude, longitude: point.longitude))
             
             prevPoint = point
             
             return newCount
         }
+        return distance
     }
-    
 }
