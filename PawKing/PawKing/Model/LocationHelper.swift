@@ -27,4 +27,28 @@ class LocationHelper {
         }
         return distance
     }
+    
+    func getNearUsersId(myLocation: CLLocation,
+                            userLocations: [UserLocation],
+                            distanceKM: Double) -> [String] {
+
+        var nearbyUserLocations: [UserLocation] = []
+
+        for userLocation in userLocations {
+
+            let latitude = userLocation.location.latitude
+
+            let longitude = userLocation.location.longitude
+            
+            let userCordLocation = CLLocation(latitude: latitude, longitude: longitude)
+
+            let distance = myLocation.distance(from: userCordLocation) / 1000
+            
+            if distance <= distanceKM {
+                
+                nearbyUserLocations.append(userLocation)
+            }
+        }
+        return nearbyUserLocations.map { $0.userId }
+    }
 }

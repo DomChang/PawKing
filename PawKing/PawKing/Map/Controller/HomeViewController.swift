@@ -746,11 +746,15 @@ class HomeViewController: UIViewController {
                 
             case .success(let strangerLocations):
                 
-                guard var nearStrangersId = self?.getNearStrangersId(strangerLocations: strangerLocations) else {
+                guard let myLocation = self?.mapVC.mapView.userLocation.location else { return }
+                
+                guard var nearStrangersId = self?.locationHelper.getNearUsersId(myLocation: myLocation,
+                                                                                userLocations: strangerLocations,
+                                                                                distanceKM: 5.0)
+                else {
                     print(FirebaseError.fetchStangerError.errorMessage)
                     return
                 }
-                
                 nearStrangersId.removeAll(where: { $0 == self?.user.id })
                 
                 self?.fetchPets(from: nearStrangersId) { pets in
@@ -763,31 +767,6 @@ class HomeViewController: UIViewController {
                 print(error)
             }
         }
-    }
-
-    private func getNearStrangersId(strangerLocations: [UserLocation]) -> [String] {
-
-        var nearbyStrangeLocations: [UserLocation] = []
-
-        guard let myLocation = mapVC.mapView.userLocation.location else { return [] }
-
-        for strangerLocation in strangerLocations {
-
-            let latitude = strangerLocation.location.latitude
-
-            let longitude = strangerLocation.location.longitude
-            
-            let strangerCordLocation = CLLocation(latitude: latitude, longitude: longitude)
-
-            let distance = myLocation.distance(from: strangerCordLocation) / 1000
-            
-            if distance < 6 {
-                
-                nearbyStrangeLocations.append(strangerLocation)
-            }
-        }
-        
-        return nearbyStrangeLocations.map { $0.userId }
     }
     
     @objc private func didTapNotificationButton() {
