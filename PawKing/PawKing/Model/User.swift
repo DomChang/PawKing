@@ -10,6 +10,8 @@ import Foundation
 enum UserStatus: String {
     
     case unknown
+    
+    case guest
 }
 
 struct User: Codable {

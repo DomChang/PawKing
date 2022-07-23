@@ -7,7 +7,7 @@
 
 import MapKit
 
-class UserAnnotationView : MKAnnotationView {
+class UserAnnotationView: MKAnnotationView {
     
     private let annotationFrame = CGRect(x: 0, y: 0, width: 40, height: 40)
     

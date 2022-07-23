@@ -27,7 +27,7 @@ private enum Tab {
 
         switch self {
 
-        case .map: controller = UINavigationController(rootViewController: MapViewController())
+        case .map: controller = UINavigationController(rootViewController: HomeViewController())
 
         case .explore: controller = UINavigationController(rootViewController: ExploreViewController())
             

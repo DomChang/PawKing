@@ -192,12 +192,6 @@ class ProfileViewController: UIViewController {
                 
                 self?.fetchTrack(by: user)
                 
-//                self?.collectionView.visibleCells.forEach { cell in
-//                    guard let petCell = cell as? PetItemCell else { return }
-//
-//                    petCell.selectState = false
-//                }
-                
                 self?.lottie.stopLoading()
                 
             case .failure:
