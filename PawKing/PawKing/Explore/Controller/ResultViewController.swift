@@ -130,15 +130,20 @@ extension ResultViewController: UISearchResultsUpdating {
         
         if let allUsers = allUsers,
            let searchText = searchController.searchBar.text {
-              
-            let resultUsers = allUsers.filter({ $0.name.lowercased().hasPrefix(searchText.lowercased()) })
             
-            self.resultUsers = resultUsers
+            self.resultUsers = filterUsersWithPrefixText(users: allUsers, text: searchText)
             
             if let user = UserManager.shared.currentUser {
                 self.resultUsers = self.resultUsers?.filter { $0.id != user.id }
             }
         }
+    }
+    
+    func filterUsersWithPrefixText(users: [User], text: String) -> [User] {
+        
+        let resultUsers = users.filter({ $0.name.lowercased().hasPrefix(text.lowercased()) })
+        
+        return resultUsers
     }
 }
 

@@ -62,6 +62,7 @@ class PetItemCell: UICollectionViewCell {
         petNameLabel.textColor = .white
         petNameLabel.textAlignment = .center
         petNameLabel.font = UIFont.systemFont(ofSize: 14, weight: .heavy)
+        petNameLabel.adjustsFontSizeToFitWidth = true
     }
     
     private func layout() {

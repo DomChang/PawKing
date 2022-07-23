@@ -67,8 +67,6 @@ class MessageViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         
-//        getMessageHistory()
-        
         listenMessage()
         
         tabBarController?.tabBar.isHidden = true
@@ -190,7 +188,7 @@ class MessageViewController: UIViewController {
                           centerY: inputBackView.centerYAnchor,
                           width: 60,
                           height: 35,
-                          padding: UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 20))
+                          padding: UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 16))
         
         inputBackView.anchor(leading: view.leadingAnchor,
                              trailing: view.trailingAnchor)
@@ -213,25 +211,6 @@ class MessageViewController: UIViewController {
         userImageView.makeRound()
         userImageView.clipsToBounds = true
     }
-    
-//    func getMessageHistory() {
-//
-//        chatManager.fetchMessageHistory(user: user,
-//                                        otherUser: otherUser,
-//                                        otherUserId: otherUserId) { [weak self] result in
-//
-//            switch result {
-//
-//            case .success(let messages):
-//
-//                self?.messages = messages
-//
-//            case .failure(let error):
-//
-//                print(error)
-//            }
-//        }
-//    }
     
     func listenMessage() {
         
@@ -279,8 +258,6 @@ class MessageViewController: UIViewController {
                 
             case .success:
                 
-//                self?.messages.append(message)
-                
                 self?.userInputTextView.text = ""
                 
             case .failure(let error):
@@ -295,15 +272,6 @@ class MessageViewController: UIViewController {
             
             scrollToBottom()
         }
-    }
-    
-    @objc func keyboardDidChangeFrame(_ notification: Notification) {
-      guard let kbSize = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey]
-          as? CGRect else {
-        return
-      }
-        
-        userInputTopAnchor.constant = -kbSize.height
     }
     
     func sendButtonEnable() {
