@@ -67,8 +67,6 @@ class MessageViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         
-//        getMessageHistory()
-        
         listenMessage()
         
         tabBarController?.tabBar.isHidden = true
@@ -214,25 +212,6 @@ class MessageViewController: UIViewController {
         userImageView.clipsToBounds = true
     }
     
-//    func getMessageHistory() {
-//
-//        chatManager.fetchMessageHistory(user: user,
-//                                        otherUser: otherUser,
-//                                        otherUserId: otherUserId) { [weak self] result in
-//
-//            switch result {
-//
-//            case .success(let messages):
-//
-//                self?.messages = messages
-//
-//            case .failure(let error):
-//
-//                print(error)
-//            }
-//        }
-//    }
-    
     func listenMessage() {
         
         if messageLisener != nil {
@@ -279,8 +258,6 @@ class MessageViewController: UIViewController {
                 
             case .success:
                 
-//                self?.messages.append(message)
-                
                 self?.userInputTextView.text = ""
                 
             case .failure(let error):
@@ -296,15 +273,6 @@ class MessageViewController: UIViewController {
             scrollToBottom()
         }
     }
-    
-//    @objc func keyboardDidChangeFrame(_ notification: Notification) {
-//      guard let kbSize = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey]
-//          as? CGRect else {
-//        return
-//      }
-//
-//        userInputTopAnchor.constant = -kbSize.height
-//    }
     
     func sendButtonEnable() {
         
