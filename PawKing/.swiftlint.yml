@@ -1,20 +1,24 @@
 excluded:
-  - Pods
+    - Pods
   
 disabled_rules:
-  - trailing_whitespace
+    - trailing_whitespace
   
 identifier_name:
-  excluded: # excluded via string array
-    - id
-    - URL
-    - url
-    - app
+    excluded: # excluded via string array
+        - id
+        - URL
+        - url
+        - app
     
+function_body_length:
+    warning: 80
+    error: 120
+
 file_length:
-  warning: 500
-  error: 800
+    warning: 500
+    error: 800
   
 type_body_length:
-  - 500 # warning
-  - 700 # error
+    warning: 500
+    error: 700
