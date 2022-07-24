@@ -188,7 +188,12 @@ extension SettingViewController: UITableViewDataSource, UITableViewDelegate {
             
         case SettingSections.blockedUser.rawValue:
             
-            let blockVC = BlockViewController()
+            guard let blockedUsersId = UserManager.shared.currentUser?.blockUsersId
+            else {
+                return
+            }
+            
+            let blockVC = BlockListViewController(usersId: blockedUsersId)
             
             navigationController?.pushViewController(blockVC, animated: true)
             

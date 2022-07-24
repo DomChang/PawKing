@@ -12,19 +12,19 @@ enum UserListType: String {
     case like = "Likes"
     
     case friend = "Friends"
+    
+    case blockedUser = "Blocked Users"
 }
 
 class UserListViewController: UIViewController {
 
-    private let tableView = UITableView(frame: .zero, style: .insetGrouped)
+    let tableView = UITableView(frame: .zero, style: .insetGrouped)
     
-    private let userManager = UserManager.shared
+    let userManager = UserManager.shared
     
-    private let postManager = PostManager.shared
+    let lottie = LottieWrapper.shared
     
-    private let lottie = LottieWrapper.shared
-    
-    private var users: [User]? {
+    var users: [User]? {
         
         didSet {
             
@@ -41,26 +41,20 @@ class UserListViewController: UIViewController {
         }
     }
     
-    private var usersId: [String]
+    var usersId: [String]
     
-    private var listType: UserListType
-    
-    private var postId: String?
-    
-    init(usersId: [String], listType: UserListType, postId: String?) {
-        
+    init(usersId: [String]) {
+
         self.usersId = usersId
-        self.listType = listType
-        self.postId = postId
-        
+
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    private let emptyLabel = UILabel()
+
+    let emptyLabel = UILabel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,13 +66,12 @@ class UserListViewController: UIViewController {
     
     private func setup() {
         
-        tableView.register(SearchResultCell.self,
-                           forCellReuseIdentifier: SearchResultCell.identifier)
+        tableView.register(UserListCell.self,
+                           forCellReuseIdentifier: UserListCell.identifier)
         
         tableView.dataSource = self
         tableView.delegate = self
         
-        emptyLabel.text = "No \(listType.rawValue)"
         emptyLabel.isHidden = true
     }
 
@@ -87,7 +80,7 @@ class UserListViewController: UIViewController {
         
         tabBarController?.tabBar.isHidden = true
         
-        fetchUsers()
+        getUsers()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -97,8 +90,6 @@ class UserListViewController: UIViewController {
     }
     
     private func style() {
-        
-        navigationItem.title = listType.rawValue
         
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
         
@@ -126,7 +117,7 @@ class UserListViewController: UIViewController {
                            centerX: tableView.centerXAnchor)
     }
     
-    private func fetchUsers() {
+    func getUsers() {
         
         lottie.startLoading()
         
@@ -134,8 +125,7 @@ class UserListViewController: UIViewController {
             
             switch result {
                 
-            case .success((let users,
-                           let deletedUsersId)):
+            case .success((let users, _)):
                 
                 self?.users = users
                 
@@ -143,19 +133,6 @@ class UserListViewController: UIViewController {
                 
                 DispatchQueue.main.async {
                     self?.tableView.reloadData()
-                }
-                
-                if self?.listType == UserListType.like {
-                    
-                    deletedUsersId.forEach({
-                            
-                        guard let postId = self?.postId else {
-                            return
-                        }
-
-                        self?.postManager.removePostLike(postId: postId,
-                                                         userId: $0)
-                    })
                 }
                 
             case .failure(let error):
@@ -187,8 +164,8 @@ extension UserListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultCell.identifier,
-                                                       for: indexPath) as? SearchResultCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: UserListCell.identifier,
+                                                       for: indexPath) as? UserListCell else {
             fatalError("Cannot dequeue SearchResultCell")
         }
         

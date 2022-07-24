@@ -281,7 +281,9 @@ extension ProfileViewController: ProfileInfoCellDelegate {
         
         guard let friendsId = user?.friends else { return }
         
-        let friendListVC = UserListViewController(usersId: friendsId, listType: .friend, postId: nil)
+        let friendListVC = FriendListViewController(usersId: friendsId)
+        
+//        let friendListVC = UserListViewController(usersId: friendsId, listType: .friend, postId: nil)
         
         navigationController?.pushViewController(friendListVC, animated: true)
     }

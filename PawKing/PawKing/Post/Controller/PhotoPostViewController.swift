@@ -560,9 +560,7 @@ extension PhotoPostViewController: PhotoPostCellDelegate {
     
     func didTapLikeUsers() {
         
-        let likeUserVC = UserListViewController(usersId: post.likesId,
-                                                listType: .like,
-                                                postId: post.id)
+        let likeUserVC = LikeUserListViewController(usersId: post.likesId, postId: post.id)
         
         navigationController?.pushViewController(likeUserVC, animated: true)
     }

@@ -441,7 +441,7 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
         
         guard let friendsId = otherUser?.friends else { return }
         
-        let friendListVC = UserListViewController(usersId: friendsId, listType: .friend, postId: nil)
+        let friendListVC = FriendListViewController(usersId: friendsId)
         
         navigationController?.pushViewController(friendListVC, animated: true)
     }
