@@ -102,13 +102,13 @@ class EditUserCell: UITableViewCell {
     
     func confirmButtonEnable() {
         
-        confirmButton.backgroundColor = .Orange1
+        confirmButton.backgroundColor = .CoralOrange
         confirmButton.isEnabled = true
     }
     
     func confirmButtonDisable() {
         
-        confirmButton.backgroundColor = .Gray1
+        confirmButton.backgroundColor = .MainGray
         confirmButton.isEnabled = false
     }
 }

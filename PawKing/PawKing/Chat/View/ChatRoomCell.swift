@@ -46,15 +46,15 @@ class ChatRoomCell: UITableViewCell {
         recieverNameLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         recieverNameLabel.textAlignment = .left
         
-        recentMessageLabel.textColor = .Gray1
+        recentMessageLabel.textColor = .MainGray
         recentMessageLabel.font = UIFont.systemFont(ofSize: 16)
         recentMessageLabel.textAlignment = .left
         
-        messageTimeLabel.textColor = .Gray1
+        messageTimeLabel.textColor = .MainGray
         messageTimeLabel.font = UIFont.systemFont(ofSize: 14)
         messageTimeLabel.textAlignment = .right
         
-        newIndicatorView.backgroundColor = .Orange1
+        newIndicatorView.backgroundColor = .CoralOrange
         newIndicatorView.layer.borderWidth = 3
         newIndicatorView.layer.borderColor = UIColor.white.cgColor
         newIndicatorView.isHidden = true

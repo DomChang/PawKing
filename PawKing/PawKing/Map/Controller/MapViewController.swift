@@ -60,7 +60,7 @@ extension MapViewController: MKMapViewDelegate {
             
             let polylineRenderer = MKPolylineRenderer(overlay: overlay)
             
-            polylineRenderer.strokeColor = .Orange1
+            polylineRenderer.strokeColor = .CoralOrange
             
             polylineRenderer.lineWidth = 4
                     
@@ -92,7 +92,7 @@ extension MapViewController: MKMapViewDelegate {
         petView.kf.setImage(with: imageUrl)
         petView.layer.cornerRadius = 30
         petView.layer.borderWidth = 2
-        petView.layer.borderColor = UIColor.Orange1?.cgColor
+        petView.layer.borderColor = UIColor.CoralOrange?.cgColor
         
         petView.contentMode = .scaleAspectFill
         petView.clipsToBounds = true
@@ -100,7 +100,7 @@ extension MapViewController: MKMapViewDelegate {
         
         petNameLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         petNameLabel.numberOfLines = 3
-        petNameLabel.textColor = .Orange1
+        petNameLabel.textColor = .CoralOrange
         petNameLabel.layer.cornerRadius = 10
         
         petNameLabel.text = annotation.title ?? ""

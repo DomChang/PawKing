@@ -103,16 +103,16 @@ class ExploreViewController: UIViewController {
     private func style() {
         
         allModeButton.setTitle("All", for: .normal)
-        allModeButton.setTitleColor(.Gray1, for: .normal)
+        allModeButton.setTitleColor(.MainGray, for: .normal)
         allModeButton.setTitleColor(.white, for: .selected)
         allModeButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
         friendModeButton.setTitle("Friends", for: .normal)
-        friendModeButton.setTitleColor(.Gray1, for: .normal)
+        friendModeButton.setTitleColor(.MainGray, for: .normal)
         friendModeButton.setTitleColor(.white, for: .selected)
         friendModeButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
-        buttonIndicatorView.backgroundColor = .Orange1
+        buttonIndicatorView.backgroundColor = .CoralOrange
         
         buttonBackView.backgroundColor = .white
         buttonBackView.layer.cornerRadius = 20

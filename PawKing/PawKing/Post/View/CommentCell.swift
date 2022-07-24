@@ -63,7 +63,7 @@ class CommentCell: UITableViewCell {
         commentLabel.textColor = .LightBlack
         commentLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         
-        timeLabel.textColor = .Gray1
+        timeLabel.textColor = .MainGray
         timeLabel.font = UIFont.systemFont(ofSize: 12, weight: .light)
         timeLabel.textAlignment = .left
     }

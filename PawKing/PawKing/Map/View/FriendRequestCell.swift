@@ -65,7 +65,7 @@ class FriendRequestCell: UITableViewCell {
         userImageView.contentMode = .scaleAspectFill
         
         acceptButton.setTitle("Accept", for: .normal)
-        acceptButton.backgroundColor = .Orange1
+        acceptButton.backgroundColor = .CoralOrange
         acceptButton.setTitleColor(.white, for: .normal)
         acceptButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         acceptButton.layer.cornerRadius =  5

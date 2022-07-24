@@ -24,7 +24,7 @@ extension UITabBar {
         let badgeView = UIView()
         badgeView.tag = tabBarItemTag + Int(index)
         badgeView.layer.cornerRadius = 8
-        badgeView.backgroundColor = UIColor.Orange1
+        badgeView.backgroundColor = UIColor.CoralOrange
         badgeView.layer.borderColor = UIColor.white.cgColor
         badgeView.layer.borderWidth = 4
         badgeView.layer.masksToBounds = true

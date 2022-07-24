@@ -316,7 +316,7 @@ class UserPhotoWallViewController: UIViewController {
             sender.layer.borderWidth = 1
             
         } else {
-            sender.backgroundColor = .Orange1
+            sender.backgroundColor = .CoralOrange
             
             sender.layer.borderWidth = 0
         }

@@ -465,13 +465,13 @@ class PhotoPostViewController: UIViewController {
     private func sendButtonEnable() {
         
         sendButton.isEnabled = true
-        sendButton.backgroundColor = .Orange1
+        sendButton.backgroundColor = .CoralOrange
     }
     
     private func sendButtonDisable() {
         
         sendButton.isEnabled = false
-        sendButton.backgroundColor = .Gray1
+        sendButton.backgroundColor = .MainGray
     }
     
     @objc private func dismissAlertController() {

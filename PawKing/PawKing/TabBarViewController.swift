@@ -128,7 +128,7 @@ class TabBarViewController: UITabBarController {
         
         tabBar.isHidden = true
         
-        tabBar.tintColor = .Orange1
+        tabBar.tintColor = .CoralOrange
         
         delegate = self
         

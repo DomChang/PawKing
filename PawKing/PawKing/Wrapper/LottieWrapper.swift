@@ -111,7 +111,7 @@ class LottieWrapper {
             errorLabel.text = "Failure"
         }
         
-        errorLabel.textColor = .Orange1
+        errorLabel.textColor = .CoralOrange
         errorLabel.numberOfLines = 0
         errorLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         
@@ -161,7 +161,7 @@ class LottieWrapper {
             errorLabel.text = "Failure"
         }
         
-        errorLabel.textColor = .Orange1
+        errorLabel.textColor = .CoralOrange
         errorLabel.numberOfLines = 0
         errorLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         

@@ -60,7 +60,7 @@ class SettingCell: UITableViewCell {
         
         if highlight {
             
-            titleLabel.textColor = .Orange1
+            titleLabel.textColor = .CoralOrange
         } else {
             
             titleLabel.textColor = .BattleGrey

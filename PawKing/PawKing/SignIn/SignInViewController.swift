@@ -120,7 +120,7 @@ class SignInViewController: UIViewController {
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.LightGray ?? .white]
         )
         
-        signInButton.backgroundColor = .Orange1?.withAlphaComponent(0.8)
+        signInButton.backgroundColor = .CoralOrange?.withAlphaComponent(0.8)
         signInButton.setTitle("Sign in", for: .normal)
         signInButton.setTitleColor(.white, for: .normal)
         signInButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
@@ -132,7 +132,7 @@ class SignInViewController: UIViewController {
         registerHintLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         
         registerButton.setTitle("Sign up", for: .normal)
-        registerButton.setTitleColor(.Orange1, for: .normal)
+        registerButton.setTitleColor(.CoralOrange, for: .normal)
         registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         
         speratorLeftLine.backgroundColor = .white
@@ -150,11 +150,11 @@ class SignInViewController: UIViewController {
         policyLabel.numberOfLines = 0
         
         privacyButton.setTitle("Privacy Policy", for: .normal)
-        privacyButton.setTitleColor(.Orange1, for: .normal)
+        privacyButton.setTitleColor(.CoralOrange, for: .normal)
         privacyButton.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .bold)
         
         eulaButton.setTitle("EULA", for: .normal)
-        eulaButton.setTitleColor(.Orange1, for: .normal)
+        eulaButton.setTitleColor(.CoralOrange, for: .normal)
         eulaButton.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .bold)
     }
     
@@ -407,13 +407,13 @@ class SignInViewController: UIViewController {
     func signInButtonEnable() {
         
         signInButton.isEnabled = true
-        signInButton.backgroundColor = .Orange1
+        signInButton.backgroundColor = .CoralOrange
     }
     
     func signInButtonDisable() {
         
         signInButton.isEnabled = false
-        signInButton.backgroundColor = .Gray1
+        signInButton.backgroundColor = .MainGray
     }
 }
 

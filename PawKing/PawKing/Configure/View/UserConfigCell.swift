@@ -66,15 +66,15 @@ class UserConfigCell: UITableViewCell {
         userImageView.image = UIImage.asset(.Image_Placeholder_Human)
         userImageView.contentMode = .scaleAspectFill
         
-        userNameTextfield.layer.borderColor = UIColor.Gray1?.cgColor
+        userNameTextfield.layer.borderColor = UIColor.MainGray?.cgColor
         userNameTextfield.layer.borderWidth = 1
         
-        descriptionTextView.layer.borderColor = UIColor.Gray1?.cgColor
+        descriptionTextView.layer.borderColor = UIColor.MainGray?.cgColor
         descriptionTextView.layer.borderWidth = 1
         
         nextButton.setTitle("Next", for: .normal)
         nextButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        nextButton.backgroundColor = .Orange1
+        nextButton.backgroundColor = .CoralOrange
         nextButton.layer.cornerRadius = 4
     }
     
@@ -134,12 +134,12 @@ class UserConfigCell: UITableViewCell {
     func nextButtonEnable() {
         
         nextButton.isEnabled = true
-        nextButton.backgroundColor = .Orange1
+        nextButton.backgroundColor = .CoralOrange
     }
     
     func nextButtonDisable() {
         
         nextButton.isEnabled = false
-        nextButton.backgroundColor = .Gray1
+        nextButton.backgroundColor = .MainGray
     }
 }

@@ -141,7 +141,7 @@ final class PublishViewController: UIViewController {
         
         submitButton.setTitle("Submit", for: .normal)
         submitButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        submitButton.backgroundColor = .Orange1
+        submitButton.backgroundColor = .CoralOrange
         submitButton.layer.cornerRadius = 4
     }
     
@@ -368,14 +368,14 @@ final class PublishViewController: UIViewController {
         
         submitButton.isEnabled = true
         
-        submitButton.backgroundColor = .Orange1
+        submitButton.backgroundColor = .CoralOrange
     }
     
     func submitButtonDisable() {
         
         submitButton.isEnabled = false
         
-        submitButton.backgroundColor = .Gray1
+        submitButton.backgroundColor = .MainGray
     }
 }
 
