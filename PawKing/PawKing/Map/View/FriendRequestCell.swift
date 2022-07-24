@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol FriendRequestCellDelegate {
+protocol FriendRequestCellDelegate: AnyObject {
     
     func didTapAccept(from cell: FriendRequestCell)
     

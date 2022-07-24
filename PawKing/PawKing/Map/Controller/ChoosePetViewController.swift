@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol ChoosePetViewDelegate {
+protocol ChoosePetViewDelegate: AnyObject {
     
     func didChoosePet(with selectedPet: Pet)
 }
@@ -46,7 +46,7 @@ class ChoosePetViewController: UIViewController {
             
             navigationItem.title = "Who do you want to post with?"
         } else {
-         
+            
             navigationItem.title = "Who do you want to walk with?"
         }
         
@@ -88,7 +88,9 @@ extension ChoosePetViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ChoosePetTableViewCell.identifier, for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: ChoosePetTableViewCell.identifier,
+            for: indexPath)
                 as? ChoosePetTableViewCell
         else {
             fatalError("Cannot dequeue ChoosePetTableViewCell")

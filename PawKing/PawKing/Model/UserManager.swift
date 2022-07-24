@@ -770,7 +770,8 @@ class UserManager {
         }
     }
     
-    func deleteUser(userId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func deleteUser(userId: String,
+                    completion: @escaping (Result<Void, Error>) -> Void) {
         
         guard let user = currentUser else { return }
         

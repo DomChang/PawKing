@@ -9,7 +9,7 @@ import UIKit
 import FirebaseAuth
 import AVFoundation
 
-protocol RegisterViewDelegate {
+protocol RegisterViewDelegate: AnyObject {
     
     func didFinishRegister(uid: String)
 }

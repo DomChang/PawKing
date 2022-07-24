@@ -47,13 +47,7 @@ class PhotoPostViewController: UIViewController {
         }
     }
     
-    private var isLike = false {
-        
-        didSet {
-//            tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
-            
-        }
-    }
+    private var isLike = false
     
     private var userComments: [UserComment] = [] {
         didSet {
@@ -376,16 +370,6 @@ class PhotoPostViewController: UIViewController {
         }
         tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
     }
-    
-//    @objc func textFieldDidChange(_ textField: UITextField) {
-//        guard textField == userInputTextfield else { return }
-//
-//        if textField.text != "" {
-//            sendButton.isEnabled = true
-//        } else {
-//            sendButton.isEnabled = false
-//        }
-//    }
     
     private func setActionSheet() {
         

@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseFirestore
 
-protocol PetConfigCellDelegate {
+protocol PetConfigCellDelegate: AnyObject {
     
     func didTapPhoto()
     

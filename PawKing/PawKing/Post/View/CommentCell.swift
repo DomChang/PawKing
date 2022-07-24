@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol CommentCellDelegate {
+protocol CommentCellDelegate: AnyObject {
     
     func didTapCommentUser(from cell: CommentCell)
 }

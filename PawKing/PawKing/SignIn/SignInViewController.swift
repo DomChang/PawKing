@@ -12,7 +12,7 @@ import FirebaseAuth
 import Lottie
 import AVFoundation
 
-protocol SignInViewDelegate {
+protocol SignInViewDelegate: AnyObject {
     
     func showNewUserConfigure()
     
@@ -159,7 +159,7 @@ class SignInViewController: UIViewController {
     }
     
     func layout() {
-
+        
         let signVStack = UIStackView(arrangedSubviews: [emailTextField, passwordTextField, signInButton])
         
         let registerHStack = UIStackView(arrangedSubviews: [registerHintLabel, registerButton])
@@ -193,12 +193,12 @@ class SignInViewController: UIViewController {
         videoView.fillSuperview()
         
         registerButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-//
-//        backView.anchor(leading: view.leadingAnchor,
-//                        bottom: view.bottomAnchor,
-//                        trailing: view.trailingAnchor,
-//                        height: 400,
-//                        padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
+        //
+        //        backView.anchor(leading: view.leadingAnchor,
+        //                        bottom: view.bottomAnchor,
+        //                        trailing: view.trailingAnchor,
+        //                        height: 400,
+        //                        padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
         
         logoImageView.anchor(top: view.topAnchor,
                              centerX: view.centerXAnchor,
@@ -235,10 +235,10 @@ class SignInViewController: UIViewController {
                                  trailing: registerHStack.trailingAnchor,
                                  centerY: speratorLeftLine.centerYAnchor,
                                  height: 0.5,
-                                padding: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 20))
+                                 padding: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 20))
         
-        policyLabel.anchor(top: appleButton.bottomAnchor
-                           ,leading: appleButton.leadingAnchor,
+        policyLabel.anchor(top: appleButton.bottomAnchor,
+                           leading: appleButton.leadingAnchor,
                            trailing: appleButton.trailingAnchor,
                            padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0))
         
@@ -282,7 +282,7 @@ class SignInViewController: UIViewController {
         
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
             
-            if let error = error {
+            if error != nil {
                 
                 self?.signInButtonEnable()
                 self?.lottie.showError(errorMessage: "Wrong acount or password")
@@ -516,50 +516,6 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
     // Handle error.
     print("Sign in with Apple errored: \(error)")
   }
-    
-//    func checkUserExist(uid: String, userName: String?) {
-//
-//        self.userManager.checkUserExist(uid: uid) { [weak self] isExist in
-//
-//            if isExist {
-//
-//                self?.delegate?.signInExistUser()
-//
-//                self?.dismiss(animated: true)
-//
-//            } else {
-//
-//                let user = User(id: uid,
-//                                name: userName ?? "",
-//                                petsId: [],
-//                                currentPetId: "",
-//                                userImage: "",
-//                                description: "",
-//                                friendPetsId: [],
-//                                friends: [],
-//                                recieveRequestsId: [],
-//                                sendRequestsId: [])
-//
-//                self?.userManager.setupUser(user: user) { [weak self] result in
-//
-//                    switch result {
-//
-//                    case .success:
-//
-//                        self?.dismiss(animated: true)
-//
-//                        self?.delegate?.showNewUserConfigure()
-//
-//                        UserManager.shared.currentUser = user
-//
-//                    case .failure(let error):
-//
-//                        print(error)
-//                    }
-//                }
-//            }
-//        }
-//    }
 }
 
 extension SignInViewController: RegisterViewDelegate {

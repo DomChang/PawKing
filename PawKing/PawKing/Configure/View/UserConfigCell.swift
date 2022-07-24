@@ -7,10 +7,8 @@
 
 import UIKit
 
-protocol UserConfigCellDelegate {
-    
-//    func textFieldDidChange(From textField: UITextField)
-    
+protocol UserConfigCellDelegate: AnyObject {
+
     func didTapPhoto()
     
     func didTapNext(from cell: UserConfigCell)
@@ -55,9 +53,6 @@ class UserConfigCell: UITableViewCell {
         nameTitleLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         nameTitleLabel.textColor = .BattleGrey
         
-//        userNameTextfield.addTarget(self, action: #selector(textFieldDidChange(_:)),
-//                                  for: .editingChanged)
-        
         nextButton.addTarget(self, action: #selector(didTapNext), for: .touchUpInside)
     }
     
@@ -83,7 +78,6 @@ class UserConfigCell: UITableViewCell {
         contentView.addSubview(userImageView)
         contentView.addSubview(nameTitleLabel)
         contentView.addSubview(userNameTextfield)
-//        contentView.addSubview(descriptionTextView)
         contentView.addSubview(nextButton)
         
         userImageView.anchor(top: contentView.topAnchor,
@@ -104,12 +98,6 @@ class UserConfigCell: UITableViewCell {
                                  height: 40,
                                  padding: UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 20))
        
-//        descriptionTextView.anchor(top: userNameTextfield.bottomAnchor,
-//                                   leading: userNameTextfield.leadingAnchor,
-//                                   trailing: userNameTextfield.trailingAnchor,
-//                                   height: 200,
-//                                   padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
-        
         nextButton.anchor(top: userNameTextfield.bottomAnchor,
                           leading: userNameTextfield.leadingAnchor,
                           trailing: userNameTextfield.trailingAnchor,

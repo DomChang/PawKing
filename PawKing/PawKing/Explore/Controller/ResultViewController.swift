@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseAuth
 
-protocol ResultViewControllerDelegate {
+protocol ResultViewControllerDelegate: AnyObject {
     
     func didSelectResultUser(theOtherUser: User)
 }

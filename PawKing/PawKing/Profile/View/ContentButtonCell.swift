@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol ContentButtonCellDelegate {
+protocol ContentButtonCellDelegate: AnyObject {
     
     func didTapPhoto()
     

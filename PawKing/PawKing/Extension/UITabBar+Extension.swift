@@ -39,12 +39,9 @@ extension UITabBar {
     
     public func removeItemBadge(atIndex index: Int) {
         
-        for subView in self.subviews {
-            
-            if subView.tag == (tabBarItemTag + index) {
+        for subView in self.subviews where subView.tag == (tabBarItemTag + index) {
                 
-                subView.removeFromSuperview()
-            }
+            subView.removeFromSuperview()
         }
     }
 }

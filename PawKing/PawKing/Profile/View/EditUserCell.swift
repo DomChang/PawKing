@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol EditUserCellDelegate {
+protocol EditUserCellDelegate: AnyObject {
     
     func didEditUserName(to userName: String)
 }

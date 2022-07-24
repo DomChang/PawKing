@@ -58,7 +58,6 @@ class LikeUserListViewController: UserListViewController {
                                                      userId: $0)
                 })
 
-                
             case .failure(let error):
                 
                 self?.lottie.stopLoading()
