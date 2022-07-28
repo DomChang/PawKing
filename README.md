@@ -16,7 +16,7 @@
 </p>
 
 <p align="left">
-PawKing is a social network devoted to the pets of its owners. Users can discover and connect with neighboring pets' owners, and locate friends who are walking their pets and consider joining them. <br>PawKing enables users to keep in touch with their furry pals to make their pets life joyful.
+PawKing is a social network devoted to the pets of its owners. Users can discover and connect with neighboring pets' owners, and locate friends who are walking their pets and consider joining them. <br> <b>PawKing enables users to keep in touch with their furry pals to make their pets life joyful.</b>
 </p>
 
 ## Features
