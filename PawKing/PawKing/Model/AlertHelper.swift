@@ -34,6 +34,25 @@ class AlertHelper {
         viewController.present(alerContorller, animated: true)
     }
     
+    func showAlertWithOK(title: String?,
+                   message: String?,
+                   action: @escaping Action,
+                   by viewController: UIViewController) {
+        
+        let alerContorller = UIAlertController(title: title,
+                                               message: message,
+                                               preferredStyle: .alert)
+        DispatchQueue.main.async {
+            alerContorller.view.tintColor = .BattleGrey
+        }
+        
+        alerContorller.addAction(UIAlertAction(title: "OK",
+                                               style: .default,
+                                               handler: { (_) in action() }))
+        
+        viewController.present(alerContorller, animated: true)
+    }
+    
     func showActionSheet(title: String?,
                          message: String?,
                          actionName: String,
