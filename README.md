@@ -15,8 +15,8 @@
     <img src="https://img.shields.io/badge/release-v1.0.1-orange">
 </p>
 
-<p align="center">
-PawKing is a social network devoted to the pets of its owners. Users can discover and connect with neighboring pet owners. <br>Additionally, users can locate friends who are walking their pets and consider joining them. <br>PawKing enables users to keep in touch with their furry pals to make their pets life joyful.
+<p align="left">
+PawKing is a social network devoted to the pets of its owners. Users can discover and connect with neighboring pets' owners, and locate friends who are walking their pets and consider joining them. <br>PawKing enables users to keep in touch with their furry pals to make their pets life joyful.
 </p>
 
 ## Features
