@@ -114,14 +114,11 @@ class PetManager {
     }
     
     func updatePetInfo(userId: String,
-                       petId: String,
+                       pet: Pet,
                        image: UIImage,
-                       name: String,
-                       gender: String,
-                       birthday: Timestamp,
                        completion: @escaping (Result<Void, Error>) -> Void) {
         
-        uploadPetPhoto(userId: userId, petId: petId, image: image) { [weak self] result in
+        uploadPetPhoto(userId: userId, petId: pet.id, image: image) { [weak self] result in
             switch result {
                 
             case .success(let url):
@@ -129,12 +126,12 @@ class PetManager {
                 guard let self = self else { return }
                 
                 let document = self.dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
-                    .collection(FirebaseCollection.pets.rawValue).document(petId)
+                    .collection(FirebaseCollection.pets.rawValue).document(pet.id)
                 
                 document.updateData([
-                    "name": name,
-                    "gender": gender,
-                    "birthday": birthday,
+                    "name": pet.name,
+                    "gender": pet.gender,
+                    "birthday": pet.birthday,
                     "petImage": url
                 ]) { error in
                     
@@ -239,7 +236,8 @@ class PetManager {
             }
             semaphore.wait()
             
-            let postDoc = self.dataBase.collection(FirebaseCollection.posts.rawValue).whereField("petId", isEqualTo: petId)
+            let postDoc = self.dataBase.collection(FirebaseCollection.posts.rawValue)
+                .whereField("petId", isEqualTo: petId)
             
             postDoc.getDocuments { snapshots, _ in
                 
@@ -252,7 +250,8 @@ class PetManager {
             }
             semaphore.wait()
             
-            let locationDoc = self.dataBase.collection(FirebaseCollection.userLocations.rawValue).whereField("currentPetId", isEqualTo: petId)
+            let locationDoc = self.dataBase.collection(FirebaseCollection.userLocations.rawValue)
+                .whereField("currentPetId", isEqualTo: petId)
             
             locationDoc.getDocuments { snapshots, _ in
                 

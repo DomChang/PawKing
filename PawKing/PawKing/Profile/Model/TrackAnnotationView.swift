@@ -34,7 +34,7 @@ class TrackAnnotationView: MKMarkerAnnotationView {
             markerTintColor = .systemGreen
         } else {
             
-            markerTintColor = .Orange1
+            markerTintColor = .CoralOrange
         }
     }
 }

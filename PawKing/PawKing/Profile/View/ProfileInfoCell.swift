@@ -2,201 +2,61 @@
 //  ProfileInfoCell.swift
 //  PawKing
 //
-//  Created by ChunKai Chang on 2022/6/19.
+//  Created by ChunKai Chang on 2022/7/24.
 //
 
 import UIKit
- 
-@objc protocol ProfileInfoCellDelegate: AnyObject {
-    
-    @objc optional func didTapUserImage()
-    
-    func didTapLeftButton(from cell: ProfileInfoCell)
-    
-    func didTapRightButton()
-    
-    func didTapFriend()
-}
 
-class ProfileInfoCell: UICollectionViewCell {
+class ProfileInfoCell: UserInfoCell {
     
     static let identifier = "\(ProfileInfoCell.self)"
     
-    var delegate: ProfileInfoCellDelegate?
+    private let photoHelper = PKPhotoHelper()
     
-    let userImageView = UIImageView()
+    private let user = UserManager.shared.currentUser
     
-    let userNameLabel = UILabel()
+    private let userManager = UserManager.shared
+    
+    private let lottie = LottieWrapper.shared
+    
+    override func setup() {
+        super.setup()
+        
+        photoHelper.completionHandler = { [weak self] image in
+            
+            guard let self = self,
+                  let user = self.user else { return }
+            
+            self.userImageView.image = image
+            
+            self.userManager.uploadUserPhoto(userId: user.id,
+                                        image: image) { result in
+                switch result {
 
-    let postNumLabel = UILabel()
-
-    let postNumTitleLabel = UILabel()
-    
-    let friendNumLabel = UILabel()
-    
-    let friendNumTitleLabel = UILabel()
-    
-    let leftButton = UIButton()
-    
-    let rightButton = UIButton()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        setup()
-        style()
-        layout()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func setup() {
-        
-        leftButton.addTarget(self, action: #selector(didTapLeftButton), for: .touchUpInside)
-        rightButton.addTarget(self, action: #selector(didTapRightButton), for: .touchUpInside)
-        
+                case .success:
+                    
+                    print("更新使用者照片成功")
+                    
+                case .failure(let error):
+                    
+                    self.lottie.showError(error: error)
+                }
+            }
+        }
         userImageView.addGestureRecognizer(UITapGestureRecognizer(target: self,
                                                                   action: #selector(didTapUserImage)))
         userImageView.isUserInteractionEnabled = true
-    }
-    
-    private func style() {
         
-        userImageView.contentMode = .scaleAspectFill
-        userImageView.layer.borderColor = UIColor.white.cgColor
-        userImageView.layer.borderWidth = 1
+        leftButton.setTitle("Edit Profile", for: .normal)
         
-        friendNumTitleLabel.text = "Friends"
-        friendNumTitleLabel.textAlignment = .center
-        friendNumTitleLabel.textColor = .white
-        friendNumTitleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        
-        friendNumLabel.textAlignment = .center
-        friendNumLabel.textColor = .white
-        friendNumLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
-        
-        postNumTitleLabel.text = "Posts"
-        postNumTitleLabel.textAlignment = .center
-        postNumTitleLabel.textColor = .white
-        postNumTitleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        
-        postNumLabel.textAlignment = .center
-        postNumLabel.textColor = .white
-        postNumLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
-        
-        userNameLabel.textColor = .white
-        userNameLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
-        userNameLabel.numberOfLines = 0
-        
-        leftButton.layer.borderWidth = 1
-        leftButton.layer.borderColor = UIColor.white.cgColor
-        leftButton.backgroundColor = .BattleGrey
-        leftButton.setTitleColor(.white, for: .normal)
-        leftButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        
-        rightButton.layer.borderWidth = 1
-        rightButton.layer.borderColor = UIColor.white.cgColor
-        rightButton.backgroundColor = .BattleGrey
-        rightButton.setTitleColor(.white, for: .normal)
-        rightButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-    }
-    
-    private func layout() {
-        
-        let vFriendStack = UIStackView(arrangedSubviews: [friendNumTitleLabel, friendNumLabel])
-        
-        vFriendStack.axis = .vertical
-        vFriendStack.distribution = .fillProportionally
-        vFriendStack.spacing = 3
-        vFriendStack.isUserInteractionEnabled = true
-        vFriendStack.addGestureRecognizer(UITapGestureRecognizer(target: self,
-                                                                 action: #selector(didTapFriend)))
-        
-        let vPostStack = UIStackView(arrangedSubviews: [postNumTitleLabel, postNumLabel])
-        
-        vPostStack.axis = .vertical
-        vPostStack.distribution = .fillProportionally
-        vPostStack.spacing = 3
-        
-        let hStack = UIStackView(arrangedSubviews: [vPostStack, vFriendStack])
-        hStack.axis = .horizontal
-        hStack.distribution = .fillEqually
-        
-        let buttonStackView = UIStackView(arrangedSubviews: [leftButton, rightButton])
-        
-        buttonStackView.axis = .horizontal
-        buttonStackView.distribution = .fillEqually
-        buttonStackView.spacing = 20
-        
-        contentView.addSubview(userImageView)
-        contentView.addSubview(userNameLabel)
-        contentView.addSubview(hStack)
-        contentView.addSubview(buttonStackView)
-        
-        userImageView.anchor(top: contentView.topAnchor,
-                             leading: contentView.leadingAnchor,
-                             width: 60,
-                             height: 60,
-                             padding: UIEdgeInsets(top: 20, left: 25, bottom: 0, right: 0))
-        
-        userNameLabel.anchor(leading: userImageView.trailingAnchor,
-                             centerY: userImageView.centerYAnchor,
-                             width: 120,
-                             height: 20,
-                             padding: UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0))
-        
-        hStack.anchor(top: userImageView.topAnchor,
-                      leading: userNameLabel.trailingAnchor,
-                      bottom: userImageView.bottomAnchor,
-                      trailing: contentView.trailingAnchor,
-                      padding: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 25))
-        
-        buttonStackView.anchor(top: userImageView.bottomAnchor,
-                               leading: contentView.leadingAnchor,
-                               trailing: contentView.trailingAnchor,
-                               height: 30,
-                               padding: UIEdgeInsets(top: 20, left: 30, bottom: 0, right: 30))
-        
-        contentView.layoutIfNeeded()
-        userImageView.makeRound()
-        userImageView.clipsToBounds = true
-        
-        leftButton.layer.cornerRadius = 5
-        rightButton.layer.cornerRadius = 5
-    }
-    
-    func configureCell(user: User, postCount: Int) {
-        
-        let imageUrl = URL(string: user.userImage)
-        
-        userImageView.kf.setImage(with: imageUrl)
-        
-        userNameLabel.text = user.name
-        
-        postNumLabel.text = "\(postCount)"
-        
-        friendNumLabel.text = "\(user.friends.count)"
+        rightButton.setTitle("Add Pet", for: .normal)
     }
     
     @objc func didTapUserImage() {
         
-        self.delegate?.didTapUserImage?()
+        guard let topMostViewController = topMostController() else { return }
+        
+        photoHelper.presentActionSheet(from: topMostViewController)
     }
     
-    @objc func didTapLeftButton() {
-        
-        self.delegate?.didTapLeftButton(from: self)
-    }
-    
-    @objc func didTapRightButton() {
-        
-        self.delegate?.didTapRightButton()
-    }
-    
-    @objc func didTapFriend() {
-        
-        self.delegate?.didTapFriend()
-    }
 }

@@ -12,8 +12,10 @@ class ExploreViewController: UIViewController {
     
     var searchController: UISearchController?
     
-    private let collectionView = UICollectionView(frame: .zero,
-                                                  collectionViewLayout: configureLayout())
+    private let collectionView = UICollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewCompositionalLayout.exploreViewCompositionalLayout()
+    )
 
     private let postManager = PostManager.shared
     
@@ -103,16 +105,16 @@ class ExploreViewController: UIViewController {
     private func style() {
         
         allModeButton.setTitle("All", for: .normal)
-        allModeButton.setTitleColor(.Gray1, for: .normal)
-        allModeButton.setTitleColor(.white, for: .selected)
+        allModeButton.setTitleColor(.MainGray, for: .normal)
+        allModeButton.setTitleColor(.CoralOrange, for: .selected)
         allModeButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
         friendModeButton.setTitle("Friends", for: .normal)
-        friendModeButton.setTitleColor(.Gray1, for: .normal)
-        friendModeButton.setTitleColor(.white, for: .selected)
+        friendModeButton.setTitleColor(.MainGray, for: .normal)
+        friendModeButton.setTitleColor(.CoralOrange, for: .selected)
         friendModeButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
-        buttonIndicatorView.backgroundColor = .Orange1
+        buttonIndicatorView.backgroundColor = .CoralOrange
         
         buttonBackView.backgroundColor = .white
         buttonBackView.layer.cornerRadius = 20
@@ -145,18 +147,19 @@ class ExploreViewController: UIViewController {
                           leading: view.leadingAnchor,
                           trailing: view.trailingAnchor,
                           height: 30,
-                          padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0))
+                          padding: UIEdgeInsets(top: 7, left: 0, bottom: 0, right: 0))
         
-        buttonIndicatorView.anchor(centerY: allModeButton.centerYAnchor,
-                          centerX: allModeButton.centerXAnchor,
-                          width: 100,
-                          height: 30)
+        buttonIndicatorView.anchor(top: allModeButton.bottomAnchor,
+                                   centerX: allModeButton.centerXAnchor,
+                                   width: 10,
+                                   height: 10,
+                                   padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
         
         collectionView.anchor(top: hStackView.bottomAnchor,
                               leading: view.leadingAnchor,
                               bottom: view.safeAreaLayoutGuide.bottomAnchor,
                               trailing: view.trailingAnchor,
-                              padding: UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0))
+                              padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
         
         buttonIndicatorView.layer.cornerRadius = 5
         
@@ -293,93 +296,6 @@ extension ExploreViewController: ResultViewControllerDelegate {
 
 extension ExploreViewController: UICollectionViewDataSource {
     
-    private static func configureLayout() -> UICollectionViewLayout {
-        
-        let contentInset: CGFloat = 1
-        
-        // Full
-        let fullItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                  heightDimension: .fractionalWidth(1))
-        let fullItem = NSCollectionLayoutItem(layoutSize: fullItemSize)
-
-        fullItem.contentInsets = NSDirectionalEdgeInsets(top: contentInset,
-                                                         leading: contentInset,
-                                                         bottom: contentInset,
-                                                         trailing: contentInset)
-
-        let fullGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                   heightDimension: .fractionalWidth(1))
-
-        let fullGroup = NSCollectionLayoutGroup.vertical(layoutSize: fullGroupSize,
-                                                             subitem: fullItem, count: 1)
-
-        // Main with pair
-        let mainItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(2/3),
-                                                  heightDimension: .fractionalHeight(1))
-        let mainItem = NSCollectionLayoutItem(layoutSize: mainItemSize)
-
-        mainItem.contentInsets = NSDirectionalEdgeInsets(top: contentInset,
-                                                         leading: contentInset,
-                                                         bottom: contentInset,
-                                                         trailing: contentInset)
-
-        let pairItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                  heightDimension: .fractionalHeight(1/2))
-        let pairItem = NSCollectionLayoutItem(layoutSize: pairItemSize)
-
-        pairItem.contentInsets = NSDirectionalEdgeInsets(top: contentInset,
-                                                         leading: contentInset,
-                                                         bottom: contentInset,
-                                                         trailing: contentInset)
-
-        let trailingGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3),
-                                                   heightDimension: .fractionalHeight(1))
-        let trailingGroup = NSCollectionLayoutGroup.vertical(layoutSize: trailingGroupSize,
-                                                             subitem: pairItem,
-                                                             count: 2)
-
-        let mainWithPairGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                           heightDimension: .fractionalWidth(2/3))
-
-        let mainWithPairGroup = NSCollectionLayoutGroup.horizontal(layoutSize: mainWithPairGroupSize,
-                                                                 subitems: [mainItem, trailingGroup])
-
-        // Triplet
-        let tripletItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3),
-                                                heightDimension: .fractionalHeight(1))
-        let tripletItem = NSCollectionLayoutItem(layoutSize: tripletItemSize)
-
-        tripletItem.contentInsets = NSDirectionalEdgeInsets(top: contentInset,
-                                                            leading: contentInset,
-                                                            bottom: contentInset,
-                                                            trailing: contentInset)
-
-        let tripletGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                           heightDimension: .fractionalWidth(1/3))
-
-        let tripletGroup = NSCollectionLayoutGroup.horizontal(layoutSize: tripletGroupSize,
-                                                              subitems: [tripletItem, tripletItem, tripletItem])
-
-        // Reversed main with pair
-        let mainWithRevGroup = NSCollectionLayoutGroup.horizontal(layoutSize: mainWithPairGroupSize,
-                                                                subitems: [trailingGroup, mainItem])
-
-        let nestedGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                           heightDimension: .fractionalWidth(8/3))
-
-        let nestedGroup = NSCollectionLayoutGroup.vertical(layoutSize: nestedGroupSize,
-                                                             subitems: [fullGroup,
-                                                                        mainWithPairGroup,
-                                                                        tripletGroup,
-                                                                        mainWithRevGroup])
-
-        let section = NSCollectionLayoutSection(group: nestedGroup)
-        
-        let layout = UICollectionViewCompositionalLayout(section: section)
-        
-        return layout
-    }
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         displayPosts?.count ?? 0
@@ -396,11 +312,13 @@ extension ExploreViewController: UICollectionViewDataSource {
         
         cell.imageView.image = UIImage.asset(.Image_Placeholder_Paw)
         
-        guard let posts = displayPosts else { return cell }
+        guard let posts = displayPosts,
+              let imageUrl = URL(string: posts[indexPath.item].photo)
+        else {
+            return cell
+        }
         
-        let imageUrl = URL(string: posts[indexPath.item].photo)
-        
-        cell.imageView.kf.setImage(with: imageUrl)
+        cell.configureCell(photoURL: imageUrl)
         
         return cell
     }

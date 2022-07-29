@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseAuth
 
-protocol ResultViewControllerDelegate {
+protocol ResultViewControllerDelegate: AnyObject {
     
     func didSelectResultUser(theOtherUser: User)
 }
@@ -71,7 +71,7 @@ class ResultViewController: UISearchController {
         
         tableView.allowsSelection = true
         
-        tableView.register(SearchResultCell.self, forCellReuseIdentifier: SearchResultCell.identifier)
+        tableView.register(UserListCell.self, forCellReuseIdentifier: UserListCell.identifier)
         
         emptyLabel.text = "No Result"
         emptyLabel.isHidden = true
@@ -170,8 +170,8 @@ extension ResultViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchResultCell.identifier,
-                                                       for: indexPath) as? SearchResultCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: UserListCell.identifier,
+                                                       for: indexPath) as? UserListCell else {
             fatalError("Cannot dequeue SearchResultCell")
         }
         

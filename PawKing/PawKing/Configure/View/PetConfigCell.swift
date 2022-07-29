@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseFirestore
 
-protocol PetConfigCellDelegate {
+protocol PetConfigCellDelegate: AnyObject {
     
     func didTapPhoto()
     
@@ -100,7 +100,7 @@ class PetConfigCell: UITableViewCell {
 
         finishButton.setTitle("Confirm", for: .normal)
         finishButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        finishButton.backgroundColor = .Orange1
+        finishButton.backgroundColor = .CoralOrange
         finishButton.layer.cornerRadius = 4
     }
     
@@ -206,13 +206,13 @@ class PetConfigCell: UITableViewCell {
     
     func finishButtonEnable() {
         
-        finishButton.backgroundColor = .Orange1
+        finishButton.backgroundColor = .CoralOrange
         finishButton.isEnabled = true
     }
     
     func finishButtonDisable() {
         
-        finishButton.backgroundColor = .Gray1
+        finishButton.backgroundColor = .MainGray
         finishButton.isEnabled = false
     }
 }

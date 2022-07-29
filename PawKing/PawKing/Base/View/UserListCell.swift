@@ -7,9 +7,9 @@
 
 import UIKit
 
-class SearchResultCell: UITableViewCell {
+class UserListCell: UITableViewCell {
     
-    static let identifier = "\(SearchResultCell.self)"
+    static let identifier = "\(UserListCell.self)"
     
     let userImageView = UIImageView()
     

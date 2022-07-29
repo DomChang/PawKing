@@ -161,15 +161,15 @@ class TrackHistoryViewController: UIViewController {
         noteTextView.font = UIFont.systemFont(ofSize: 16)
         
         updateButton.setTitleColor(.white, for: .normal)
-        updateButton.backgroundColor = .Orange1
+        updateButton.backgroundColor = .CoralOrange
         updateButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         updateButton.layer.cornerRadius = 4
         
-        abortButton.setTitleColor(.Orange1, for: .normal)
+        abortButton.setTitleColor(.CoralOrange, for: .normal)
         abortButton.backgroundColor = .white
         abortButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         abortButton.layer.cornerRadius = 4
-        abortButton.layer.borderColor = UIColor.Orange1?.cgColor
+        abortButton.layer.borderColor = UIColor.CoralOrange?.cgColor
         abortButton.layer.borderWidth = 1
         
         timeTitleLabel.text = "Time"
@@ -180,7 +180,7 @@ class TrackHistoryViewController: UIViewController {
         let endTime = trackInfo.endTime.dateValue()
         let durationString = endTime.displayTimeInCounterStyle(since: startTime)
         timeLabel.text = durationString
-        timeLabel.textColor = .Orange1
+        timeLabel.textColor = .CoralOrange
         timeLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         
         distanceTitleLabel.text = "Distance"
@@ -188,7 +188,7 @@ class TrackHistoryViewController: UIViewController {
         distanceTitleLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         
         distanceLabel.text = "\(String(format: "%.2f", trackInfo.distanceMeter / 1000)) km"
-        distanceLabel.textColor = .Orange1
+        distanceLabel.textColor = .CoralOrange
         distanceLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         
         noteTitleLabel.text = "Note:"
@@ -381,7 +381,7 @@ class TrackHistoryViewController: UIViewController {
         }
         
         updateButton.isEnabled = false
-        updateButton.backgroundColor = .Gray1
+        updateButton.backgroundColor = .MainGray
         
         mapManager.updateTrackNote(userId: pet.ownerId,
                                    trackInfo: trackInfo,
@@ -547,7 +547,7 @@ extension TrackHistoryViewController: MKMapViewDelegate, CLLocationManagerDelega
 
             let polylineRenderer = MKPolylineRenderer(overlay: overlay)
 
-            polylineRenderer.strokeColor = .Orange1
+            polylineRenderer.strokeColor = .CoralOrange
 
             polylineRenderer.lineWidth = 4
 

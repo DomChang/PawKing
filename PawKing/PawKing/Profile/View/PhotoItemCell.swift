@@ -13,24 +13,26 @@ class PhotoItemCell: UICollectionViewCell {
     
     let imageView = UIImageView()
 
-    var photoURL: URL? {
-        
-        didSet {
-            configureCell()
-        }
-    }
+//    var photoURL: URL? {
+//
+//        didSet {
+//            configureCell()
+//        }
+//    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        imageView.image = UIImage.asset(.Image_Placeholder_Paw)
 
-        configureCell()
+//        configureCell()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configureCell() {
+    func configureCell(photoURL: URL) {
         
         contentView.addSubview(imageView)
         
@@ -46,5 +48,7 @@ class PhotoItemCell: UICollectionViewCell {
         imageView.layer.cornerRadius = 5
 
         imageView.clipsToBounds = true
+        
+        imageView.kf.setImage(with: photoURL)
     }
 }

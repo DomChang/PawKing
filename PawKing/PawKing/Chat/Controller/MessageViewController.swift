@@ -277,13 +277,13 @@ class MessageViewController: UIViewController {
     func sendButtonEnable() {
         
         sendButton.isEnabled = true
-        sendButton.tintColor = .Orange1
+        sendButton.tintColor = .CoralOrange
     }
     
     func sendButtonDisable() {
         
         sendButton.isEnabled = false
-        sendButton.tintColor = .Gray1
+        sendButton.tintColor = .MainGray
     }
     
     @objc func keyboardWillAppear(notification: Notification) {

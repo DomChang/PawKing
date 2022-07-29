@@ -128,7 +128,7 @@ class PhotoPostCell: UITableViewCell {
         contentLabel.textColor = .LightBlack
         
         timeLabel.font = UIFont.systemFont(ofSize: 12, weight: .light)
-        timeLabel.textColor = .Gray1
+        timeLabel.textColor = .MainGray
         timeLabel.textAlignment = .left
     }
     
@@ -270,7 +270,7 @@ class PhotoPostCell: UITableViewCell {
     
     func didLikePost() {
         
-        likeButton.tintColor = .Orange1
+        likeButton.tintColor = .CoralOrange
         
         likeButton.isSelected = true
     }
