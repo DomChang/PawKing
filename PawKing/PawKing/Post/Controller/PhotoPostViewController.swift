@@ -11,14 +11,6 @@ import Lottie
 
 class PhotoPostViewController: UIViewController {
     
-    private let postManager = PostManager.shared
-    
-    private let userManager = UserManager.shared
-    
-    private let petManager = PetManager.shared
-    
-    private let lottie = LottieWrapper.shared
-    
     private let tableView = UITableView()
     
     private let user: User
@@ -26,10 +18,8 @@ class PhotoPostViewController: UIViewController {
     private var postUser: User?
     
     private var post: Post {
-        
         didSet {
             checkIsLike()
-            
             likeCount = post.likesId.count
         }
     }
@@ -41,7 +31,6 @@ class PhotoPostViewController: UIViewController {
     }
     
     private var likeCount: Int {
-        
         didSet {
             tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
         }
@@ -72,9 +61,7 @@ class PhotoPostViewController: UIViewController {
     
     private let inputSeperatorLine = UIView()
     
-    private let actionController = UIAlertController(title: nil,
-                                                     message: nil,
-                                                     preferredStyle: .actionSheet)
+    private let alertHelper = AlertHelper()
     
     init(user: User, post: Post) {
         
@@ -218,7 +205,7 @@ class PhotoPostViewController: UIViewController {
     
     private func listenPostUpdate() {
         
-        postManager.listenPost(postId: post.id) { [weak self] result in
+        PostManager.shared.listenPost(postId: post.id) { [weak self] result in
             
             switch result {
                 
@@ -235,7 +222,7 @@ class PhotoPostViewController: UIViewController {
     
     private func getPostUser() {
         
-        userManager.fetchUserInfo(userId: post.userId) { [weak self] result in
+        UserManager.shared.fetchUserInfo(userId: post.userId) { [weak self] result in
             
             switch result {
                 
@@ -247,8 +234,6 @@ class PhotoPostViewController: UIViewController {
                 
                 self?.getComments()
                 
-                self?.setActionSheet()
-                
             case .failure(let error):
                 
                 print(error)
@@ -258,7 +243,7 @@ class PhotoPostViewController: UIViewController {
     
     private func getPet(otherUserId: String) {
         
-        petManager.fetchPetInfo(userId: otherUserId, petId: post.petId) { [weak self] result in
+        PetManager.shared.fetchPetInfo(userId: otherUserId, petId: post.petId) { [weak self] result in
             
             switch result {
                 
@@ -275,7 +260,7 @@ class PhotoPostViewController: UIViewController {
     
     private func getComments() {
         
-        postManager.listenComments(postId: post.id, blockIds: user.blockUsersId) { [weak self] result in
+        PostManager.shared.listenComments(postId: post.id, blockIds: user.blockUsersId) { [weak self] result in
             
             switch result {
                 
@@ -297,7 +282,7 @@ class PhotoPostViewController: UIViewController {
     
     private func getUserInfo(userId: String, comment: Comment) {
         
-        userManager.fetchUserInfo(userId: userId) { [weak self] result in
+        UserManager.shared.fetchUserInfo(userId: userId) { [weak self] result in
             
             switch result {
                 
@@ -318,7 +303,7 @@ class PhotoPostViewController: UIViewController {
     
     @objc private func didTapSendButton() {
         
-        lottie.startLoading()
+        LottieWrapper.shared.startLoading()
         
         sendButtonDisable()
         
@@ -333,13 +318,13 @@ class PhotoPostViewController: UIViewController {
                               text: text,
                               createdTime: Timestamp(date: Date()))
         
-        postManager.setupComment(comment: &comment) { [weak self] result in
+        PostManager.shared.setupComment(comment: &comment) { [weak self] result in
             
             switch result {
                 
             case .success:
                 
-                self?.lottie.stopLoading()
+                LottieWrapper.shared.stopLoading()
                 
                 self?.userInputTextView.text = ""
                 
@@ -347,8 +332,8 @@ class PhotoPostViewController: UIViewController {
                 
             case .failure(let error):
                 
-                self?.lottie.stopLoading()
-                self?.lottie.showError(error: error)
+                LottieWrapper.shared.stopLoading()
+                LottieWrapper.shared.showError(error: error)
             }
         }
         
@@ -371,78 +356,71 @@ class PhotoPostViewController: UIViewController {
         tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
     }
     
-    private func setActionSheet() {
+    private func setDeleteAction() {
         
-        guard let postUser = postUser else {
-            return
-        }
+        LottieWrapper.shared.startLoading()
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
-        
-        let deleteAlert  = UIAlertAction(title: "Delete Post", style: .destructive) { [weak self] _ in
-            
-            guard let self = self else { return }
-            
-            self.lottie.startLoading()
-            
-            self.postManager.deletePost(post: self.post) { result in
-                switch result {
-                    
-                case .success:
-                    
-                    self.lottie.stopLoading()
-                    
-                    NotificationCenter.default.post(name: .updateUser, object: .none)
-                    
-                    self.navigationController?.popViewController(animated: true)
-                    
-                case .failure(let error):
-                    
-                    self.lottie.stopLoading()
-                    
-                    self.lottie.showError(error: error)
-                }
+        PostManager.shared.deletePost(post: post) { result in
+            switch result {
+                
+            case .success:
+                
+                LottieWrapper.shared.stopLoading()
+                
+                NotificationCenter.default.post(name: .updateUser, object: .none)
+                
+                self.navigationController?.popViewController(animated: true)
+                
+            case .failure(let error):
+                
+                LottieWrapper.shared.stopLoading()
+                
+                LottieWrapper.shared.showError(error: error)
             }
         }
+    }
+    
+    private func setBlockAction(postUser: User) {
         
-        let blockAlert = UIAlertAction(title: "Block and Report User", style: .destructive) { [weak self] _ in
+        LottieWrapper.shared.startLoading()
+        
+        UserManager.shared.addBlockUser(userId: user.id, blockId: postUser.id) { result in
             
-            guard let self = self else { return }
-            
-            self.lottie.startLoading()
-            
-            self.userManager.addBlockUser(userId: self.user.id, blockId: postUser.id) { result in
+            switch result {
                 
-                switch result {
-                    
-                case.success:
-                    
-                    self.lottie.stopLoading()
-                    
-                    self.navigationController?.popViewController(animated: true)
-                    
-                case .failure(let error):
-                    
-                    self.lottie.stopLoading()
-                    
-                    self.lottie.showError(error: error)
-                }
+            case.success:
+                
+                LottieWrapper.shared.stopLoading()
+                
+                self.navigationController?.popViewController(animated: true)
+                
+            case .failure(let error):
+                
+                LottieWrapper.shared.stopLoading()
+                
+                LottieWrapper.shared.showError(error: error)
             }
         }
+    }
+    
+    private func showActionSheet() {
         
-        actionController.view.tintColor = .BattleGrey
+        guard let postUser = postUser else { return }
         
-        DispatchQueue.main.async {
+        if self.user.id == postUser.id {
             
-            if self.user.id == postUser.id {
-                
-                self.actionController.addAction(deleteAlert)
-                
-            } else {
-                
-                self.actionController.addAction(blockAlert)
-            }
-            self.actionController.addAction(cancelAction)
+            alertHelper.showActionSheet(title: nil, message: nil,
+                                        actionName: "Delete Post",
+                                        actionStyle: .destructive,
+                                        action: { self.setDeleteAction() },
+                                        by: self)
+        } else {
+            
+            alertHelper.showActionSheet(title: nil, message: nil,
+                                        actionName: "Block and Report User",
+                                        actionStyle: .destructive,
+                                        action: { self.setBlockAction(postUser: postUser) },
+                                        by: self)
         }
     }
     
@@ -457,23 +435,13 @@ class PhotoPostViewController: UIViewController {
         sendButton.isEnabled = false
         sendButton.backgroundColor = .MainGray
     }
-    
-    @objc private func dismissAlertController() {
-        
-        actionController.dismiss(animated: true)
-    }
 }
 
 extension PhotoPostViewController: PhotoPostCellDelegate {
     
     func didTapAction() {
         
-        present(actionController, animated: true) {
-            
-            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissAlertController))
-            
-            self.actionController.view.superview?.subviews[0].addGestureRecognizer(tapGesture)
-        }
+        showActionSheet()
     }
     
     func didTapLike(for cell: PhotoPostCell, like: Bool) {
@@ -482,7 +450,7 @@ extension PhotoPostViewController: PhotoPostCellDelegate {
             
             likeCount += 1
             
-            postManager.addPostLike(postId: post.id, userId: user.id)
+            PostManager.shared.addPostLike(postId: post.id, userId: user.id)
             
             UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
             
@@ -490,7 +458,7 @@ extension PhotoPostViewController: PhotoPostCellDelegate {
             
             likeCount -= 1
             
-            postManager.removePostLike(postId: post.id, userId: user.id)
+            PostManager.shared.removePostLike(postId: post.id, userId: user.id)
         }
         isLike = like
         

@@ -7,6 +7,7 @@
 
 import UIKit
 
+// swiftlint:disable function_parameter_count
 class AlertHelper {
     
     typealias Action = () -> Void
@@ -35,9 +36,9 @@ class AlertHelper {
     }
     
     func showAlertWithOK(title: String?,
-                   message: String?,
-                   action: @escaping Action,
-                   by viewController: UIViewController) {
+                         message: String?,
+                         action: @escaping Action,
+                         by viewController: UIViewController) {
         
         let alerContorller = UIAlertController(title: title,
                                                message: message,
@@ -82,3 +83,4 @@ extension UIAlertAction {
         return UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
     }
 }
+// swiftlint:enable function_parameter_count
