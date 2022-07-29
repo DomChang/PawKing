@@ -12,21 +12,16 @@ import FirebaseFirestore
 import FirebaseAuth
 import Kingfisher
 
-// swiftlint:disable file_length
 class HomeViewController: UIViewController {
     
     private let mapVC = MapViewController()
-    
-    private var locationManager: CLLocationManager?
-    
-    private let userLocationButton = UIButton()
-    
+
     private let startTrackButton = UIImageView()
-    
+
     private let stopTrackButton = UIImageView()
-    
+
     private var stopWidthAnchor: NSLayoutConstraint!
-    
+
     private var stopHeightAnchor: NSLayoutConstraint!
     
     private let trackDashboardView = TrackDashboardView()
@@ -34,7 +29,7 @@ class HomeViewController: UIViewController {
     private var infoBottomAnchor: NSLayoutConstraint!
     
     private var trackTimer: Timer?
-    
+
     private var stopTimer: Timer?
     
     private var timerDuration: Int = 0
@@ -50,8 +45,6 @@ class HomeViewController: UIViewController {
     private let choosePetImageView = UIImageView()
     
     private let strangerVC = StrangerViewController()
-    
-    private var userStoredLocations: [CLLocation] = []
 
     private let alerHelper = AlertHelper()
     
@@ -66,16 +59,6 @@ class HomeViewController: UIViewController {
             setCurrentPetButton()
         }
     }
-    
-    private var friendAnnotationsInfo: [String: UserAnnotation] = [:]
-    
-    private var friendLocations: [String: UserLocation] = [:] {
-        didSet {
-            updateAnnotation()
-        }
-    }
-    
-    private var listeners: [ListenerRegistration] = []
     
     private let locationHelper = LocationHelper()
     
@@ -108,26 +91,10 @@ class HomeViewController: UIViewController {
         checkAuth()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        guard locationManager?.authorizationStatus != .denied &&
-                locationManager?.authorizationStatus != .restricted &&
-                locationManager?.authorizationStatus != .notDetermined else {
-            
-            return
-        }        
-        mapVC.mapView.userTrackingMode = .follow
-    }
-    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         navigationController?.navigationBar.isHidden = false
-        
-        listeners.forEach { $0.remove() }
-        
-        mapVC.mapView.removeAnnotations(mapVC.mapView.annotations)
     }
     
     private func setup() {
@@ -142,19 +109,12 @@ class HomeViewController: UIViewController {
                                                name: .updateCurrentPet,
                                                object: nil)
         
-        locationManager = CLLocationManager()
-        locationManager?.delegate = self
-        locationManager?.requestWhenInUseAuthorization()
-        locationManager?.allowsBackgroundLocationUpdates = true
-        locationManager?.distanceFilter = 20
-        locationManager?.checkLocationPermission()
+        mapVC.delegate = self
         
         choosePetImageView.addGestureRecognizer(
             UITapGestureRecognizer(target: self, action: #selector(didTapChoosePet)))
         
         choosePetImageView.isUserInteractionEnabled = true
-        
-        userLocationButton.addTarget(self, action: #selector(didSelectUserLocation), for: .touchUpInside)
 
         strangerButton.addTarget(self, action: #selector(didTapStrangerButton), for: .touchUpInside)
         
@@ -165,8 +125,6 @@ class HomeViewController: UIViewController {
     
     private func style() {
         
-        userLocationButton.setImage(UIImage.asset(.Icons_60px_UserLocate), for: .normal)
-        
         startTrackButton.image = UIImage.asset(.Icons_90px_Start)
         stopTrackButton.image = UIImage.asset(.Icons_90px_Stop)
         
@@ -176,7 +134,6 @@ class HomeViewController: UIViewController {
     private func layout() {
         
         add(mapVC)
-        view.addSubview(userLocationButton)
         view.addSubview(stopTrackButton)
         view.addSubview(startTrackButton)
         view.addSubview(trackDashboardView)
@@ -188,12 +145,6 @@ class HomeViewController: UIViewController {
                        leading: view.leadingAnchor,
                        bottom: view.safeAreaLayoutGuide.bottomAnchor,
                        trailing: view.trailingAnchor)
-        
-        userLocationButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,
-                                  trailing: view.trailingAnchor,
-                                  width: 36,
-                                  height: 36,
-                                  padding: UIEdgeInsets(top: 0, left: 0, bottom: 35, right: 35))
         
         choosePetImageView.anchor(leading: view.leadingAnchor,
                            bottom: view.safeAreaLayoutGuide.bottomAnchor,
@@ -244,8 +195,6 @@ class HomeViewController: UIViewController {
         
         notificationButton.setRadiusWithShadow()
         
-        userLocationButton.setRadiusWithShadow()
-        
         startTrackButton.setRadiusWithShadow()
         
         stopTrackButton.setRadiusWithShadow()
@@ -275,12 +224,10 @@ class HomeViewController: UIViewController {
     private func checkAuth() {
         
         if Auth.auth().currentUser != nil {
-            
-            print(user)
-            
+
             getUserPets(user: user)
             
-            listenFriendsLocation()
+            mapVC.listenFriendsLocation(user: user)
             
             notificationButton.isHidden = false
             
@@ -291,11 +238,7 @@ class HomeViewController: UIViewController {
             
             userPets = []
             
-            listeners.forEach { $0.remove() }
-            
-            friendAnnotationsInfo = [:]
-            
-            friendLocations = [:]
+            mapVC.removeFriendLocation()
             
             notificationButton.isHidden = true
         }
@@ -412,23 +355,6 @@ class HomeViewController: UIViewController {
         choosePetImageView.layer.masksToBounds = true
     }
     
-    @objc private func didSelectUserLocation() {
-        
-        guard locationManager?.authorizationStatus != .denied &&
-                locationManager?.authorizationStatus != .restricted &&
-                locationManager?.authorizationStatus != .notDetermined else {
-            
-            showLocationAlert()
-            return
-        }
-        
-        userLocationButton.isSelected = true
-        
-        mapVC.focusUserLocation()
-        
-        mapVC.mapView.userTrackingMode = .follow
-    }
-    
     @objc private func didTapStartTrack() {
         
         guard Auth.auth().currentUser != nil else {
@@ -449,9 +375,7 @@ class HomeViewController: UIViewController {
             return
         }
         
-        guard locationManager?.authorizationStatus != .denied &&
-                locationManager?.authorizationStatus != .restricted &&
-                locationManager?.authorizationStatus != .notDetermined else {
+        guard mapVC.isLocationAuth() else {
             
             showLocationAlert()
             return
@@ -470,8 +394,8 @@ class HomeViewController: UIViewController {
         
         beTracking()
         
-        locationManager?.startUpdatingLocation()
-        locationManager?.startUpdatingHeading()
+        mapVC.startUpdateLocation()
+
         trackStartTime = Timestamp(date: Date())
         
         self.infoBottomAnchor.constant = self.view.safeAreaInsets.top +
@@ -493,7 +417,6 @@ class HomeViewController: UIViewController {
                 guard let self = self else {
                     return
                 }
-
                 count += 0.03
                 self.stopWidthAnchor?.constant += 2
                 self.stopHeightAnchor?.constant += 2
@@ -526,7 +449,7 @@ class HomeViewController: UIViewController {
         
         mapVC.focusUserLocation()
 
-        let coordinate = userStoredLocations.map { $0.coordinate }
+        let coordinate = mapVC.userStoredLocations.map { $0.coordinate }
         let track = coordinate.map { $0.transferToGeopoint() }
 
         guard let userCurrentPet = userCurrentPet,
@@ -563,16 +486,6 @@ class HomeViewController: UIViewController {
         
     }
     
-    private func stopUpdateLocation() {
-        
-        locationManager?.stopUpdatingLocation()
-        locationManager?.stopUpdatingHeading()
-        
-        userStoredLocations = []
-        
-        MapManager.shared.changeUserStatus(userId: user.id, status: .unTrack)
-    }
-    
     private func resetTrack() {
         
         timerDuration = 0
@@ -585,7 +498,7 @@ class HomeViewController: UIViewController {
         
         notTracking()
 
-        stopUpdateLocation()
+        mapVC.stopUpdateLocation(user: user)
         mapVC.mapView.removeOverlays(self.mapVC.mapView.overlays)
         
         infoBottomAnchor.constant = 0
@@ -650,7 +563,8 @@ class HomeViewController: UIViewController {
     
     private func getStrangerLocations() {
         
-        MapManager.shared.fetchStrangerLocations(friend: user.friends, blockIds: user.blockUsersId) { [weak self] result in
+        MapManager.shared.fetchStrangerLocations(friend: user.friends,
+                                                 blockIds: user.blockUsersId) { [weak self] result in
             
             switch result {
                 
@@ -719,80 +633,12 @@ class HomeViewController: UIViewController {
             completion(fetchedPets)
         }
     }
-    
-    private func listenFriendsLocation() {
-        
-        if listeners.count != 0 {
-            
-            listeners.forEach { $0.remove() }
-        }
 
-        let friends = user.friends
-        
-        for friend in friends {
-            
-           let listener = MapManager.shared.listenFriendsLocation(friend: friend) { [weak self] result in
-                
-                switch result {
-                    
-                case .success(let friendlocation):
-                    
-                    self?.friendLocations[friendlocation.userId] = friendlocation
-                    
-                case .failure(let error):
-                    
-                    print(error)
-                }
-            }
-            listeners.append(listener)
-        }
-    }
-    
-    private func updateAnnotation() {
-        
-        mapVC.mapView.removeAnnotations(mapVC.mapView.annotations)
-        
-        for friend in friendLocations.values {
-            
-            if friend.status == Status.tracking.rawValue {
-            
-                let annotation = UserAnnotation(coordinate: friend.location.transferToCoordinate2D(),
-                                                title: friend.petName,
-                                                subtitle: friend.userName,
-                                                userId: friend.userId,
-                                                petPhoto: friend.petPhoto)
-                
-                friendAnnotationsInfo[friend.userId] = annotation
-            } else {
-                
-                friendAnnotationsInfo.removeValue(forKey: friend.userId)
-            }
-        }
-        for friendAnnotationInfo in friendAnnotationsInfo {
-                
-            mapVC.mapView.addAnnotation(friendAnnotationInfo.value)
-        }
-    }
-    
     private func openAppSettings() {
         if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
 
            UIApplication.shared.open(settingsUrl)
          }
-    }
-    
-    private func showLocationAlert() {
-        
-        alerHelper.showAlert(
-            title: "Allow \"PawKing\" To Access Your Location While You Use The App.",
-            message: "PawKing requires your precise location to track your pet walks which you could check out later " +
-            "and provide you feature of showing the pets near by you. " +
-            "We will not disclose any location of you to others.",
-            actionName: "Setting",
-            actionStyle: .default,
-            action: { self.openAppSettings() },
-            by: self
-        )
     }
     
     private func showNoPetAlert(message: String) {
@@ -839,60 +685,33 @@ class HomeViewController: UIViewController {
     }
 }
 
-extension HomeViewController: ChoosePetViewDelegate {
+extension HomeViewController: MapViewDelegate {
     
-    func didChoosePet(with selectedPet: Pet) {
+    func showLocationAlert() {
         
-        self.userCurrentPet = selectedPet
-        
-        UserManager.shared.updateCurrentPet(userId: user.id, pet: selectedPet)
+        alerHelper.showAlert(
+            title: "Allow \"PawKing\" To Access Your Location While You Use The App.",
+            message: "PawKing requires your precise location to track your pet walks which you could check out later " +
+            "and provide you feature of showing the pets near by you. " +
+            "We will not disclose any location of you to others.",
+            actionName: "Setting",
+            actionStyle: .default,
+            action: { self.openAppSettings() },
+            by: self
+        )
     }
-}
-
-extension HomeViewController: CLLocationManagerDelegate {
     
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        let locationStatus = manager.authorizationStatus
-
-        switch locationStatus {
-
-        case .restricted, .denied:
-
-            locationManager?.requestWhenInUseAuthorization()
-
-        default:
-
+    func didUpdateLocation(coordinates: [CLLocationCoordinate2D],
+                           lastLocation: CLLocationCoordinate2D) {
+        
+        guard let currentPet = userCurrentPet
+        else {
             return
         }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-
-        guard let currentLocation = locations.first(where: { $0.horizontalAccuracy >= 0 }) else {
-                return
-            }
-        
-        let previousCoordinate = userStoredLocations.last?.coordinate
-        
-        userStoredLocations.append(currentLocation)
-        
-        if previousCoordinate == nil { return }
-
-        var coordinates = [previousCoordinate!, currentLocation.coordinate]
         
         distance += locationHelper.computeDistance(from: coordinates) / 1000
         
         trackDashboardView.distanceLabel.text = "\(String(format: "%.2f", distance)) km"
-    
-        let polyline = MKPolyline(coordinates: &coordinates, count: coordinates.count)
-
-        mapVC.mapView.addOverlay(polyline, level: .aboveLabels)
-        
-        guard let location = locations.last?.coordinate,
-              let currentPet = userCurrentPet
-        else {
-            return
-        }
         
         let userLocation = UserLocation(userId: user.id,
                                         userName: user.name,
@@ -900,7 +719,7 @@ extension HomeViewController: CLLocationManagerDelegate {
                                         currentPetId: currentPet.id,
                                         petName: currentPet.name,
                                         petPhoto: currentPet.petImage,
-                                        location: location.transferToGeopoint(),
+                                        location: lastLocation.transferToGeopoint(),
                                         status: Status.tracking.rawValue)
         
         UserManager.shared.updateUserLocation(location: userLocation) { result in
@@ -918,4 +737,13 @@ extension HomeViewController: CLLocationManagerDelegate {
         }
     }
 }
-// swiftlint:enable file_length
+
+extension HomeViewController: ChoosePetViewDelegate {
+    
+    func didChoosePet(with selectedPet: Pet) {
+        
+        self.userCurrentPet = selectedPet
+        
+        UserManager.shared.updateCurrentPet(userId: user.id, pet: selectedPet)
+    }
+}

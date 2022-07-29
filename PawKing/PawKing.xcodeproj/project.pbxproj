@@ -598,10 +598,10 @@
 			isa = PBXGroup;
 			children = (
 				B698DDB42858B8540009077E /* HomeViewController.swift */,
+				B68B9DBC2887A8AF00156B4D /* MapViewController.swift */,
 				B68B9DB22886965A00156B4D /* StrangerViewController.swift */,
 				B63484E4285E1E5300DB7CE7 /* ChoosePetViewController.swift */,
 				B6E94317286DC83100B3157F /* FriendRequestViewController.swift */,
-				B68B9DBC2887A8AF00156B4D /* MapViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
