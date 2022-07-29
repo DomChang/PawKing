@@ -23,41 +23,11 @@ class SignInViewController: UIViewController {
     
     var delegate: SignInViewDelegate?
     
-    private let appleButton = ASAuthorizationAppleIDButton(type: .signIn, style: .black)
-    
-    private let userManager = UserManager.shared
-    
-    private let lottie = LottieWrapper.shared
-    
-    private let logoImageView = UIImageView()
-    
-    private let signInTitleLabel = UILabel()
-    
-    private let emailTextField = InputTextField()
-    
-    private let passwordTextField = InputTextField()
-    
-    private let signInButton = UIButton()
-    
-    private let registerHintLabel = UILabel()
-    
-    private let registerButton = UIButton()
-    
-    private let speratorLeftLine = UIView()
-    
-    private let orLabel = UILabel()
-    
-    private let speratorRightLine = UIView()
-    
     fileprivate var currentNonce: String?
     
-    private let policyLabel = UILabel()
-    
-    private let privacyButton = UIButton()
-    
-    private let eulaButton = UIButton()
-    
     private let videoView = UIView()
+    
+    private let signInView = SignInView()
     
     private var videoPlayer: AVPlayerLooper?
     
@@ -70,8 +40,6 @@ class SignInViewController: UIViewController {
         style()
         layout()
         playVideo()
-        
-        setupAppleButton()
     }
     
     deinit {
@@ -81,172 +49,35 @@ class SignInViewController: UIViewController {
     
     func setup() {
         
-        signInButton.addTarget(self, action: #selector(didTapSignIn), for: .touchUpInside)
+        signInView.appleButton.addTarget(self, action: #selector(startSignInWithAppleFlow), for: .touchUpInside)
         
-        registerButton.addTarget(self, action: #selector(didTapRegister), for: .touchUpInside)
+        signInView.signInButton.addTarget(self, action: #selector(didTapSignIn), for: .touchUpInside)
         
-        privacyButton.addTarget(self, action: #selector(didTapPrivacy), for: .touchUpInside)
+        signInView.registerButton.addTarget(self, action: #selector(didTapRegister), for: .touchUpInside)
         
-        eulaButton.addTarget(self, action: #selector(didTapEULA), for: .touchUpInside)
+        signInView.privacyButton.addTarget(self, action: #selector(didTapPrivacy), for: .touchUpInside)
+        
+        signInView.eulaButton.addTarget(self, action: #selector(didTapEULA), for: .touchUpInside)
     }
     
     func style() {
         
         view.backgroundColor = .white
-        
-        logoImageView.image = UIImage.asset(.pawking_logo)
-        logoImageView.contentMode = .scaleAspectFill
-        
-        signInTitleLabel.text = "Sign In"
-        signInTitleLabel.textColor = .white
-        signInTitleLabel.font = UIFont.systemFont(ofSize: 24, weight: .medium)
-        
-        emailTextField.autocapitalizationType = .none
-        emailTextField.layer.borderColor = UIColor.white.cgColor
-        emailTextField.backgroundColor = .black.withAlphaComponent(0.2)
-        emailTextField.textColor = .white
-        emailTextField.attributedPlaceholder = NSAttributedString(
-            string: "Email",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor.LightGray ?? .white]
-        )
-        
-        passwordTextField.autocapitalizationType = .none
-        passwordTextField.isSecureTextEntry = true
-        passwordTextField.layer.borderColor = UIColor.white.cgColor
-        passwordTextField.backgroundColor = .black.withAlphaComponent(0.2)
-        passwordTextField.textColor = .white
-        passwordTextField.attributedPlaceholder = NSAttributedString(
-            string: "Password",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor.LightGray ?? .white]
-        )
-        
-        signInButton.backgroundColor = .CoralOrange?.withAlphaComponent(0.8)
-        signInButton.setTitle("Sign in", for: .normal)
-        signInButton.setTitleColor(.white, for: .normal)
-        signInButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        signInButton.layer.cornerRadius = 4
-        
-        registerHintLabel.text = "Don't haven an account?"
-        registerHintLabel.textColor = .white
-        registerHintLabel.textAlignment = .right
-        registerHintLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-        
-        registerButton.setTitle("Sign up", for: .normal)
-        registerButton.setTitleColor(.CoralOrange, for: .normal)
-        registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        
-        speratorLeftLine.backgroundColor = .white
-        speratorRightLine.backgroundColor = .white
-        
-        orLabel.text = "OR"
-        orLabel.textColor = .white
-        orLabel.textAlignment = .center
-        orLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-        
-        policyLabel.text = "By signing in, you agree to our privacy policy and EULA as below."
-        policyLabel.textColor = .white
-        policyLabel.textAlignment = .center
-        policyLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-        policyLabel.numberOfLines = 0
-        
-        privacyButton.setTitle("Privacy Policy", for: .normal)
-        privacyButton.setTitleColor(.CoralOrange, for: .normal)
-        privacyButton.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .bold)
-        
-        eulaButton.setTitle("EULA", for: .normal)
-        eulaButton.setTitleColor(.CoralOrange, for: .normal)
-        eulaButton.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .bold)
     }
     
     func layout() {
         
-        let signVStack = UIStackView(arrangedSubviews: [emailTextField, passwordTextField, signInButton])
-        
-        let registerHStack = UIStackView(arrangedSubviews: [registerHintLabel, registerButton])
-        
-        let policyHStack = UIStackView(arrangedSubviews: [privacyButton, eulaButton])
-        
         view.addSubview(videoView)
-        view.addSubview(logoImageView)
-        view.addSubview(signInTitleLabel)
-        view.addSubview(signVStack)
-        view.addSubview(registerHStack)
-        view.addSubview(speratorLeftLine)
-        view.addSubview(speratorRightLine)
-        view.addSubview(orLabel)
-        view.addSubview(appleButton)
-        view.addSubview(policyLabel)
-        view.addSubview(policyHStack)
-        
-        signVStack.axis = .vertical
-        signVStack.distribution = .fillEqually
-        signVStack.spacing = 20
-        
-        registerHStack.axis = .horizontal
-        registerHStack.distribution = .fill
-        registerHStack.spacing = 10
-        
-        policyHStack.axis = .horizontal
-        policyHStack.distribution = .fillEqually
-        policyHStack.spacing = 0
+        view.addSubview(signInView)
         
         videoView.fillSuperview()
-        
-        registerButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        
-        logoImageView.anchor(top: view.topAnchor,
-                             centerX: view.centerXAnchor,
-                             width: 100,
-                             height: 100,
-                             padding: UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0))
-        
-        signInTitleLabel.anchor(leading: view.leadingAnchor,
-                                bottom: signVStack.topAnchor,
-                                trailing: view.trailingAnchor,
-                                padding: UIEdgeInsets(top: 0, left: 20, bottom: 24, right: 20))
-        
-        signVStack.anchor(leading: view.leadingAnchor,
-                          bottom: registerHStack.topAnchor,
-                          trailing: view.trailingAnchor,
-                          height: 160,
-                          padding: UIEdgeInsets(top: 0, left: 20, bottom: 20, right: 20))
-        
-        registerHStack.anchor(leading: signVStack.leadingAnchor,
-                              bottom: speratorLeftLine.topAnchor,
-                              trailing: signVStack.trailingAnchor,
-                              padding: UIEdgeInsets(top: 0, left: 0, bottom: 20, right: 0))
-        
-        speratorLeftLine.anchor(leading: registerHStack.leadingAnchor,
-                                bottom: appleButton.topAnchor,
-                                trailing: orLabel.leadingAnchor,
-                                height: 0.5,
-                                padding: UIEdgeInsets(top: 0, left: 20, bottom: 20, right: 10))
-        
-        orLabel.anchor(centerY: speratorLeftLine.centerYAnchor,
-                       centerX: view.centerXAnchor)
-        
-        speratorRightLine.anchor(leading: orLabel.trailingAnchor,
-                                 trailing: registerHStack.trailingAnchor,
-                                 centerY: speratorLeftLine.centerYAnchor,
-                                 height: 0.5,
-                                 padding: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 20))
-        
-        policyLabel.anchor(top: appleButton.bottomAnchor,
-                           leading: appleButton.leadingAnchor,
-                           trailing: appleButton.trailingAnchor,
-                           padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0))
-        
-        policyHStack.anchor(top: policyLabel.bottomAnchor,
-                            leading: policyLabel.leadingAnchor,
-                            trailing: policyLabel.trailingAnchor,
-                            height: 10,
-                            padding: UIEdgeInsets(top: 5, left: 20, bottom: 0, right: 20))
+        signInView.fillSuperview()
     }
     
     func playVideo() {
         
         guard let path = Bundle.main.path(forResource: "signIn", ofType: "mp4") else { return }
-       
+        
         let player = AVQueuePlayer()
         let item = AVPlayerItem(url: URL(fileURLWithPath: path))
         videoPlayer = AVPlayerLooper(player: player, templateItem: item)
@@ -262,15 +93,15 @@ class SignInViewController: UIViewController {
         
         signInButtonDisable()
         
-        lottie.startLoading()
+        LottieWrapper.shared.startLoading()
         
-        guard let email = emailTextField.text,
-              let password = passwordTextField.text
+        guard let email = signInView.emailTextField.text,
+              let password = signInView.passwordTextField.text
         else {
             
             signInButtonEnable()
-            lottie.stopLoading()
-            lottie.showError(error: nil)
+            LottieWrapper.shared.stopLoading()
+            LottieWrapper.shared.showError(error: nil)
             return
         }
         
@@ -279,14 +110,14 @@ class SignInViewController: UIViewController {
             if error != nil {
                 
                 self?.signInButtonEnable()
-                self?.lottie.showError(errorMessage: "Wrong acount or password")
-                self?.lottie.stopLoading()
+                LottieWrapper.shared.showError(errorMessage: "Wrong acount or password")
+                LottieWrapper.shared.stopLoading()
                 
             } else {
                 
                 guard let uid = authResult?.user.uid else { return }
                 
-                self?.userManager.checkUserExist(uid: uid, completion: { isExit in
+                UserManager.shared.checkUserExist(uid: uid, completion: { isExit in
                     
                     if isExit {
                         
@@ -294,17 +125,17 @@ class SignInViewController: UIViewController {
                         
                         self?.delegate?.signInExistUser()
                         
-                        self?.lottie.stopLoading()
-
+                        LottieWrapper.shared.stopLoading()
+                        
                         self?.dismiss(animated: true)
                         
                     } else {
                         
                         self?.signInButtonEnable()
                         
-                        self?.lottie.stopLoading()
+                        LottieWrapper.shared.stopLoading()
                         
-                        self?.lottie.showError(errorMessage: "Please sign up first")
+                        LottieWrapper.shared.showError(errorMessage: "Please sign up first")
                     }
                 })
             }
@@ -332,87 +163,76 @@ class SignInViewController: UIViewController {
         present(eulaVC, animated: true)
     }
     
-    func setupAppleButton() {
-        appleButton.layer.cornerRadius = 12
-        appleButton.addTarget(self, action: #selector(startSignInWithAppleFlow), for: .touchUpInside)
+    @objc func startSignInWithAppleFlow() {
+        let nonce = randomNonceString()
+        currentNonce = nonce
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.fullName, .email]
+        request.nonce = sha256(nonce)
         
-        appleButton.anchor(leading: signInButton.leadingAnchor,
-                           bottom: view.bottomAnchor,
-                           trailing: signInButton.trailingAnchor,
-                           height: 45,
-                           padding: UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0))
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
+        authorizationController.performRequests()
     }
     
-    @objc func startSignInWithAppleFlow() {
-      let nonce = randomNonceString()
-      currentNonce = nonce
-      let appleIDProvider = ASAuthorizationAppleIDProvider()
-      let request = appleIDProvider.createRequest()
-      request.requestedScopes = [.fullName, .email]
-      request.nonce = sha256(nonce)
-
-      let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-      authorizationController.delegate = self
-      authorizationController.presentationContextProvider = self
-      authorizationController.performRequests()
-    }
-
     private func randomNonceString(length: Int = 32) -> String {
-      precondition(length > 0)
-      let charset: [Character] =
+        precondition(length > 0)
+        let charset: [Character] =
         Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
-      var result = ""
-      var remainingLength = length
-
-      while remainingLength > 0 {
-        let randoms: [UInt8] = (0 ..< 16).map { _ in
-          var random: UInt8 = 0
-          let errorCode = SecRandomCopyBytes(kSecRandomDefault, 1, &random)
-          if errorCode != errSecSuccess {
-            fatalError(
-              "Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)"
-            )
-          }
-          return random
+        var result = ""
+        var remainingLength = length
+        
+        while remainingLength > 0 {
+            let randoms: [UInt8] = (0 ..< 16).map { _ in
+                var random: UInt8 = 0
+                let errorCode = SecRandomCopyBytes(kSecRandomDefault, 1, &random)
+                if errorCode != errSecSuccess {
+                    fatalError(
+                        "Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)"
+                    )
+                }
+                return random
+            }
+            randoms.forEach { random in
+                if remainingLength == 0 {
+                    return
+                }
+                if random < charset.count {
+                    result.append(charset[Int(random)])
+                    remainingLength -= 1
+                }
+            }
         }
-        randoms.forEach { random in
-          if remainingLength == 0 {
-            return
-          }
-          if random < charset.count {
-            result.append(charset[Int(random)])
-            remainingLength -= 1
-          }
-        }
-      }
-      return result
+        return result
     }
     
     private func sha256(_ input: String) -> String {
-      let inputData = Data(input.utf8)
-      let hashedData = SHA256.hash(data: inputData)
-      let hashString = hashedData.compactMap {
-        String(format: "%02x", $0)
-      }.joined()
-
-      return hashString
+        let inputData = Data(input.utf8)
+        let hashedData = SHA256.hash(data: inputData)
+        let hashString = hashedData.compactMap {
+            String(format: "%02x", $0)
+        }.joined()
+        
+        return hashString
     }
     
     func signInButtonEnable() {
         
-        signInButton.isEnabled = true
-        signInButton.backgroundColor = .CoralOrange
+        signInView.signInButton.isEnabled = true
+        signInView.signInButton.backgroundColor = .CoralOrange
     }
     
     func signInButtonDisable() {
         
-        signInButton.isEnabled = false
-        signInButton.backgroundColor = .MainGray
+        signInView.signInButton.isEnabled = false
+        signInView.signInButton.backgroundColor = .MainGray
     }
 }
 
 extension SignInViewController: ASAuthorizationControllerPresentationContextProviding {
-
+    
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         
         return self.view.window!
@@ -420,103 +240,101 @@ extension SignInViewController: ASAuthorizationControllerPresentationContextProv
 }
 
 extension SignInViewController: ASAuthorizationControllerDelegate {
-
-  func authorizationController(controller: ASAuthorizationController,
-                               didCompleteWithAuthorization authorization: ASAuthorization) {
-      
-    if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+    
+    func authorizationController(controller: ASAuthorizationController,
+                                 didCompleteWithAuthorization authorization: ASAuthorization) {
         
-      guard let nonce = currentNonce else {
-          
-        fatalError("Invalid state: A login callback was received, but no login request was sent.")
-      }
-      guard let appleIDToken = appleIDCredential.identityToken else {
-          
-        print("Unable to fetch identity token")
-          
-        return
-      }
-      guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-          
-        print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
-          
-        return
-      }
-      // Initialize a Firebase credential.
-      let credential = OAuthProvider.credential(withProviderID: "apple.com",
-                                                idToken: idTokenString,
-                                                rawNonce: nonce)
-      // Sign in with Firebase.
-      Auth.auth().signIn(with: credential) { (authResult, error) in
-          
-        if let error = error {
-          // Error. If error.code == .MissingOrInvalidNonce, make sure
-          // you're sending the SHA256-hashed nonce as a hex string with
-          // your request to Apple.
-          print(error.localizedDescription)
-          return
+        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+            
+            guard let nonce = currentNonce else {
+                
+                fatalError("Invalid state: A login callback was received, but no login request was sent.")
+            }
+            guard let appleIDToken = appleIDCredential.identityToken else {
+                
+                print("Unable to fetch identity token")
+                
+                return
+            }
+            guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+                
+                print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+                
+                return
+            }
+            // Initialize a Firebase credential.
+            let credential = OAuthProvider.credential(withProviderID: "apple.com",
+                                                      idToken: idTokenString,
+                                                      rawNonce: nonce)
+            // Sign in with Firebase.
+            Auth.auth().signIn(with: credential) { (authResult, error) in
+                
+                if let error = error {
+                    
+                    print(error.localizedDescription)
+                    return
+                }
+                
+                guard let uid = authResult?.user.uid else { return }
+                
+                UserManager.shared.checkUserExist(uid: uid) { [weak self] isExist in
+                    
+                    if isExist {
+                        
+                        self?.delegate?.signInExistUser()
+                        
+                        self?.dismiss(animated: true)
+                        
+                    } else {
+                        
+                        let userName = appleIDCredential.fullName?.givenName
+                        
+                        let user = User(id: uid,
+                                        name: userName ?? "",
+                                        petsId: [],
+                                        currentPetId: "",
+                                        userImage: "",
+                                        description: "",
+                                        friendPetsId: [],
+                                        friends: [],
+                                        recieveRequestsId: [],
+                                        sendRequestsId: [],
+                                        blockUsersId: [])
+                        
+                        UserManager.shared.setupUser(user: user) { [weak self] result in
+                            
+                            switch result {
+                                
+                            case .success:
+                                
+                                self?.dismiss(animated: true)
+                                
+                                self?.delegate?.showNewUserConfigure()
+                                
+                                UserManager.shared.currentUser = user
+                                
+                            case .failure(let error):
+                                
+                                print(error)
+                            }
+                        }
+                    }
+                }
+            }
         }
-        
-          guard let uid = authResult?.user.uid else { return }
-          
-          self.userManager.checkUserExist(uid: uid) { [weak self] isExist in
-
-              if isExist {
-
-                  self?.delegate?.signInExistUser()
-
-                  self?.dismiss(animated: true)
-
-              } else {
-
-                  let userName = appleIDCredential.fullName?.givenName
-
-                  let user = User(id: uid,
-                                  name: userName ?? "",
-                                  petsId: [],
-                                  currentPetId: "",
-                                  userImage: "",
-                                  description: "",
-                                  friendPetsId: [],
-                                  friends: [],
-                                  recieveRequestsId: [],
-                                  sendRequestsId: [],
-                                  blockUsersId: [])
-
-                  self?.userManager.setupUser(user: user) { [weak self] result in
-
-                      switch result {
-
-                      case .success:
-
-                          self?.dismiss(animated: true)
-
-                          self?.delegate?.showNewUserConfigure()
-
-                          UserManager.shared.currentUser = user
-
-                      case .failure(let error):
-
-                          print(error)
-                      }
-                  }
-              }
-          }
-      }
     }
-  }
-
-  func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-    // Handle error.
-    print("Sign in with Apple errored: \(error)")
-  }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        
+        print("Sign in with Apple errored: \(error)")
+    }
 }
 
 extension SignInViewController: RegisterViewDelegate {
     
     func didFinishRegister(uid: String) {
         
-        lottie.startLoading()
+        LottieWrapper.shared.startLoading()
         
         self.dismiss(animated: true) { [weak self] in
             
@@ -531,14 +349,14 @@ extension SignInViewController: RegisterViewDelegate {
                             recieveRequestsId: [],
                             sendRequestsId: [],
                             blockUsersId: [])
-
-            self?.userManager.setupUser(user: user) {  result in
-
+            
+            UserManager.shared.setupUser(user: user) {  result in
+                
                 switch result {
-
+                    
                 case .success:
                     
-                    self?.lottie.stopLoading()
+                    LottieWrapper.shared.stopLoading()
 
                     self?.dismiss(animated: true)
 
@@ -548,8 +366,8 @@ extension SignInViewController: RegisterViewDelegate {
 
                 case .failure(let error):
                     
-                    self?.lottie.stopLoading()
-                    self?.lottie.showError(error: error)
+                    LottieWrapper.shared.stopLoading()
+                    LottieWrapper.shared.showError(error: error)
                 }
             }
         }

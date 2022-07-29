@@ -441,9 +441,15 @@ class HomeViewController: UIViewController {
     
     @objc private func didTapChoosePet() {
         
+        guard Auth.auth().currentUser != nil else {
+            
+            showNoPetAlert(message: "Please Login.")
+            return
+        }
+        
         guard !user.petsId.isEmpty else {
             
-            showNoPetAlert(message: "Please login. ☹️")
+            showNoPetAlert(message: "Please Add Pet.")
             return
         }
         
@@ -572,7 +578,7 @@ class HomeViewController: UIViewController {
     
     private func showNoPetAlert(message: String) {
         
-        alerHelper.showAlertWithOK(title: "No Pet",
+        alerHelper.showAlertWithOK(title: "No Pet ☹️",
                                    message: message,
                                    action: { self.setNoPetAction() },
                                    by: self)
