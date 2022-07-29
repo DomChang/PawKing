@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol ContentButtonCellDelegate {
+protocol ContentButtonCellDelegate: AnyObject {
     
     func didTapPhoto()
     
@@ -24,7 +24,7 @@ class ContentButtonCell: UICollectionViewCell {
     
     let trackContentButton = UIButton()
     
-    let bottomView = UIView()
+    let buttonView = UIView()
     
     private let stackView = UIStackView()
     
@@ -50,34 +50,38 @@ class ContentButtonCell: UICollectionViewCell {
         stackView.spacing = 10
         
         photoContentButton.setTitle("Photo", for: .normal)
-        photoContentButton.setTitleColor(.Gray1, for: .normal)
-        photoContentButton.setTitleColor(.white, for: .selected)
+        photoContentButton.setTitleColor(.MainGray, for: .normal)
+        photoContentButton.setTitleColor(.CoralOrange, for: .selected)
         photoContentButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
         trackContentButton.setTitle("Track", for: .normal)
-        trackContentButton.setTitleColor(.Gray1, for: .normal)
-        trackContentButton.setTitleColor(.white, for: .selected)
+        trackContentButton.setTitleColor(.MainGray, for: .normal)
+        trackContentButton.setTitleColor(.CoralOrange, for: .selected)
         trackContentButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
-        bottomView.backgroundColor = .Orange1
+        buttonView.backgroundColor = .CoralOrange
     }
     
     private func layout() {
         
-        contentView.addSubview(bottomView)
+        contentView.addSubview(buttonView)
         contentView.addSubview(stackView)
         
         stackView.addArrangedSubview(photoContentButton)
         stackView.addArrangedSubview(trackContentButton)
         
-        stackView.fillSuperview()
+        stackView.anchor(top: contentView.topAnchor,
+                         leading: contentView.leadingAnchor,
+                         trailing: contentView.trailingAnchor,
+                         padding: UIEdgeInsets(top: -5, left: 0, bottom: 0, right: 0))
         
-        bottomView.anchor(centerY: photoContentButton.centerYAnchor,
+        buttonView.anchor(top: stackView.bottomAnchor,
                           centerX: photoContentButton.centerXAnchor,
-                          width: 100,
-                          height: 30)
+                          width: 10,
+                          height: 10,
+                          padding: UIEdgeInsets(top: -2, left: 0, bottom: 0, right: 0))
         
-        bottomView.layer.cornerRadius = 5
+        buttonView.layer.cornerRadius = 5
     }
     
     @objc func didTapPhotoButton() {
@@ -87,7 +91,7 @@ class ContentButtonCell: UICollectionViewCell {
         
         UIView.animate(withDuration: 0.1, animations: {
             
-            self.bottomView.center.x = self.photoContentButton.center.x
+            self.buttonView.center.x = self.photoContentButton.center.x
         })
         
         self.delegate?.didTapPhoto()
@@ -100,7 +104,7 @@ class ContentButtonCell: UICollectionViewCell {
         
         UIView.animate(withDuration: 0.1, animations: {
             
-            self.bottomView.center.x = self.trackContentButton.center.x
+            self.buttonView.center.x = self.trackContentButton.center.x
         })
         
         self.delegate?.didTapTrack()

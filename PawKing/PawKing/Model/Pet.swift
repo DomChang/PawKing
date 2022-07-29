@@ -21,11 +21,11 @@ struct Pet: Codable {
     
     var id: String
     let ownerId: String
-    let name: String
-    let gender: String
+    var name: String
+    var gender: String
     let breed: String
     let description: String
-    let birthday: Timestamp
+    var birthday: Timestamp
     let createdTime: Timestamp
     var petImage: String
     let postsId: [String]

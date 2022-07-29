@@ -9,7 +9,7 @@ import UIKit
 import FirebaseAuth
 import AVFoundation
 
-protocol RegisterViewDelegate {
+protocol RegisterViewDelegate: AnyObject {
     
     func didFinishRegister(uid: String)
 }
@@ -110,7 +110,7 @@ class RegisterViewController: UIViewController {
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.LightGray ?? .white]
         )
         
-        signUpButton.backgroundColor = .Orange1?.withAlphaComponent(0.8)
+        signUpButton.backgroundColor = .CoralOrange?.withAlphaComponent(0.8)
         signUpButton.setTitle("Sign Up", for: .normal)
         signUpButton.setTitleColor(.white, for: .normal)
         signUpButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
@@ -123,11 +123,11 @@ class RegisterViewController: UIViewController {
         policyLabel.numberOfLines = 0
         
         privacyButton.setTitle("Privacy Policy", for: .normal)
-        privacyButton.setTitleColor(.Orange1, for: .normal)
+        privacyButton.setTitleColor(.CoralOrange, for: .normal)
         privacyButton.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .bold)
         
         eulaButton.setTitle("EULA", for: .normal)
-        eulaButton.setTitleColor(.Orange1, for: .normal)
+        eulaButton.setTitleColor(.CoralOrange, for: .normal)
         eulaButton.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .bold)
     }
     
@@ -280,12 +280,12 @@ class RegisterViewController: UIViewController {
     private func signUpButtonEnable() {
         
         signUpButton.isEnabled = true
-        signUpButton.backgroundColor = .Orange1
+        signUpButton.backgroundColor = .CoralOrange
     }
     
     private func signUpButtonDisable() {
         
         signUpButton.isEnabled = false
-        signUpButton.backgroundColor = .Gray1
+        signUpButton.backgroundColor = .MainGray
     }
 }

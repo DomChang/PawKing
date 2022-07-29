@@ -251,14 +251,15 @@ extension PetConfigViewController: PetConfigCellDelegate {
         
         if isEdit {
             
-            guard let editPet = editPet else { return }
+            guard var editPet = editPet else { return }
+            
+            editPet.name = petName
+            editPet.gender = gender
+            editPet.birthday = birthday
             
             petManager.updatePetInfo(userId: owner.id,
-                                     petId: editPet.id,
-                                     image: petImage,
-                                     name: petName,
-                                     gender: gender,
-                                     birthday: birthday) { [weak self] result in
+                                     pet: editPet,
+                                     image: petImage) { [weak self] result in
                 switch result {
                     
                 case .success:

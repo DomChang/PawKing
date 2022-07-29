@@ -65,99 +65,99 @@ enum FirebaseError: Error {
             
         case .setupUserError:
             
-            return "建立使用者資料失敗"
+            return "Failed to create user profile"
             
         case .setupPetError:
             
-            return "建立寵物資料失敗"
+            return "Failed to create pet profile"
             
         case .setupPostError:
             
-            return "建立貼文失敗"
+            return "Failed to create post"
             
         case .setupCommentError:
             
-            return "建立評論失敗"
+            return "Failed to comment"
             
         case .sendMessageError:
             
-            return "訊息傳送失敗"
+            return "Failed to send message"
             
         case .fetchUserError:
             
-            return "讀取使用者資料失敗"
+            return "Failed to read user data"
             
         case .fetchPetError:
             
-            return "讀取寵物資料失敗"
+            return "Failed to read pet data"
             
         case .fetchPostError:
             
-            return "讀取貼文失敗"
+            return "Failed to read data"
             
         case .fetchCommentError:
             
-            return "讀取留言失敗"
+            return "Failed to read data"
             
         case .fetchUserLocationError:
             
-            return "讀取使用者已儲存位置失敗"
+            return "Failed to get user location"
             
         case .fetchTrackError:
             
-            return "讀取軌跡失敗"
+            return "Failed to get track data"
             
         case .fetchFriendError:
             
-            return "無法讀取朋友位置"
+            return "Failed to get friend data"
             
         case .fetchStangerError:
             
-            return "無法讀取陌生人位置"
+            return "Failed to get stranger data"
             
         case .fetchMessageError:
             
-            return "無法讀取訊息"
+            return "Unable to get message"
             
         case .uploadUserPhotoError:
             
-            return "上傳使用者照片失敗"
+            return "Failed to upload user photo"
             
         case.uploadTrackError:
             
-            return "上傳軌跡失敗"
+            return "Failed to upload track"
             
         case .updateLocationError:
             
-            return "更新位置狀態失敗"
+            return "Failed to update location"
             
         case .updateUserInfoError:
             
-            return "更新使用者資料失敗"
+            return "Failed to update user data"
             
         case .decodeUserError:
             
-            return "無法解析使用者資料"
+            return "Failed to decode user data"
             
         case .decodePetError:
             
-            return "無法解析寵物資料"
+            return "Failed to decode pet data"
             
         case .decodePostError:
             
-            return "無法解析貼文資料"
+            return "Failed to decode post data"
             
         case .decodeTrackError:
             
-            return "無法解析軌跡"
+            return "Failed to decode track data"
             
         case .decodeCommentError:
             
-            return "無法解析留言"
+            return "Failed to decode comment data"
             
         case .decodeMessageError:
             
-            return "無法解析訊息"
+            return "Failed to decode message"
             
         case .deleteUserError:
             

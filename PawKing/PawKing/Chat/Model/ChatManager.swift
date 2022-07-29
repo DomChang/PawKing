@@ -145,7 +145,10 @@ class ChatManager {
         return listener
     }
     
-    func fetchMessageHistory(user: User, otherUser: User, otherUserId: String, completion: @escaping (Result<[Message], Error>) -> Void) {
+    func fetchMessageHistory(user: User,
+                             otherUser: User,
+                             otherUserId: String,
+                             completion: @escaping (Result<[Message], Error>) -> Void) {
         
         let document = dataBase.collection(FirebaseCollection.chats.rawValue).document(user.id)
             .collection(otherUserId).order(by: "createdTime", descending: false)
@@ -181,7 +184,9 @@ class ChatManager {
         }
     }
     
-    func listenNewMessage(user: User, otherUser: User, completion: @escaping (Result<[Message], Error>) -> Void) -> ListenerRegistration {
+    func listenNewMessage(user: User,
+                          otherUser: User,
+                          completion: @escaping (Result<[Message], Error>) -> Void) -> ListenerRegistration {
         
         let document = dataBase.collection(FirebaseCollection.chats.rawValue).document(user.id)
             .collection(otherUser.id).order(by: "createdTime", descending: false)
@@ -200,14 +205,11 @@ class ChatManager {
             
             do {
 
-                for diff in snapshots.documentChanges {
+                for diff in snapshots.documentChanges where diff.type == .added {
                         
-                    if diff.type == .added {
+                    let message = try diff.document.data(as: Message.self)
                         
-                        let message = try diff.document.data(as: Message.self)
-                            
-                        messages.append(message)
-                    }
+                    messages.append(message)
                 }
                 
                 completion(.success(messages))

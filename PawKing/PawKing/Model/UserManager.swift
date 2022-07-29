@@ -100,7 +100,6 @@ class UserManager {
                 
                 completion(.success(()))
                 
-//                UserManager.shared.currentUser?.name = userName
             }
         }
     }
@@ -119,53 +118,61 @@ class UserManager {
                 completion(.failure(error))
                 
             } else {
-                
-//                UserManager.shared.currentUser?.petsId.append(petId)
-//                UserManager.shared.currentUser?.currentPetId = petId
-                
+
                 completion(.success(()))
             }
         }
     }
     
     func updateCurrentPet(userId: String,
-                          pet: Pet,
-                          completion: @escaping (Result<Void, Error>) -> Void) {
+                          pet: Pet) {
+        
+        let batch = dataBase.batch()
         
         let locationDoc = dataBase.collection(FirebaseCollection.userLocations.rawValue).document(userId)
         
-        locationDoc.updateData([
-            
+        batch.updateData([
             "currentPetId": pet.id,
             "petPhoto": pet.petImage
-        ]) { [weak self] error in
-            
-            if let error = error {
-                
-                completion(.failure(error))
-                
-            } else {
-                
-                let userDoc = self?.dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
-                
-                userDoc?.updateData([
-                    
-                    "currentPetId": pet.id
-                ]) { error in
-                    
-                    if let error = error {
-                        
-                        completion(.failure(error))
-                        
-                    } else {
-                        
-//                        UserManager.shared.currentUser?.currentPetId = pet.id
-                        
-                        completion(.success(()))
-                    }
-                }
-            }
-        }
+        ], forDocument: locationDoc)
+        
+        let userDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+        
+        batch.updateData([
+            "currentPetId": pet.id
+        ], forDocument: userDoc)
+        
+        batch.commit()
+//        locationDoc.updateData([
+//
+//            "currentPetId": pet.id,
+//            "petPhoto": pet.petImage
+//        ]) { [weak self] error in
+//
+//            if let error = error {
+//
+//                completion(.failure(error))
+//
+//            } else {
+//
+//                let userDoc = self?.dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+//
+//                userDoc?.updateData([
+//
+//                    "currentPetId": pet.id
+//                ]) { error in
+//
+//                    if let error = error {
+//
+//                        completion(.failure(error))
+//
+//                    } else {
+//
+//                        completion(.success(()))
+//                    }
+//                }
+//            }
+//        }
     }
     
     func fetchUserInfo(userId: String, completion: @escaping (Result<User, Error>) -> Void) {
@@ -409,8 +416,6 @@ class UserManager {
                                     
                                 } else {
                                     
-//                                    UserManager.shared.currentUser?.userImage = userImageUrlString
-                                    
                                     completion(.success(()))
                                 }
                             }
@@ -542,8 +547,7 @@ class UserManager {
                 print("Error writing batch \(err)")
                 
             } else {
-                
-//                UserManager.shared.currentUser?.sendRequestsId.append(recieverId)
+
                 print("Batch write succeeded.")
             }
         })
@@ -575,8 +579,6 @@ class UserManager {
                 
             } else {
                 
-//                UserManager.shared.currentUser?.sendRequestsId.removeAll(where: { $0 == recieverId })
-                
                 completion(.success(()))
             }
         }
@@ -599,8 +601,6 @@ class UserManager {
                 completion(.failure(err))
                 
             } else {
-                
-//                UserManager.shared.currentUser?.recieveRequestsId.removeAll(where: { $0 == senderId })
                 
                 completion(.success(()))
             }
@@ -641,9 +641,6 @@ class UserManager {
                 
             } else {
                 
-//                UserManager.shared.currentUser?.recieveRequestsId.removeAll(where: { $0 == senderId })
-//                UserManager.shared.currentUser?.friends.append(senderId)
-                
                 completion(.success(()))
             }
         }
@@ -674,8 +671,6 @@ class UserManager {
                 completion(.failure(err))
                 
             } else {
-                
-//                UserManager.shared.currentUser?.friends.removeAll(where: { $0 == friendId })
                 
                 completion(.success(()))
             }
@@ -735,8 +730,6 @@ class UserManager {
                 
             } else {
                 
-//                UserManager.shared.currentUser?.blockUsersId.removeAll(where: {$0 == blockId})
-                
                 completion(.success(()))
             }
         }
@@ -770,7 +763,8 @@ class UserManager {
         }
     }
     
-    func deleteUser(userId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func deleteUser(userId: String,
+                    completion: @escaping (Result<Void, Error>) -> Void) {
         
         guard let user = currentUser else { return }
         

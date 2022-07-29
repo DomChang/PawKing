@@ -8,75 +8,9 @@
 import UIKit
 import FirebaseAuth
 
-class ProfileViewController: UIViewController {
-    
-    private let collectionView = UICollectionView(frame: .zero,
-                                                  collectionViewLayout: configureLayout())
-    
-    private let userManager = UserManager.shared
-    
-    private let postManager = PostManager.shared
-    
-    private let photoHelper = PKPhotoHelper()
-    
-    private let lottie = LottieWrapper.shared
-    
-    var isPhoto = true {
-        didSet {
-            collectionView.reloadSections(IndexSet(integer: 3))
-            checkIsEmpty()
-        }
-    }
-    
-    var user: User?
-    
-    var userPets: [Pet]? {
-        didSet {
-            collectionView.reloadSections(IndexSet(integer: 1))
-        }
-    }
-    
-    var posts: [Post]? {
-        didSet {
-            collectionView.reloadSections(IndexSet(integer: 3))
-            collectionView.reloadItems(at: [IndexPath(item: 0, section: 0)])
-        }
-    }
-    
-    var displayPosts: [Post]? {
-        didSet {
-            collectionView.reloadSections(IndexSet(integer: 3))
-            checkIsEmpty()
-        }
-    }
-    
-    var trackInfos: [TrackInfo]? {
-        didSet {
-            collectionView.reloadSections(IndexSet(integer: 3))
-        }
-    }
-    
-    var displayTrackInfos: [TrackInfo]? {
-        didSet {
-            collectionView.reloadSections(IndexSet(integer: 3))
-            checkIsEmpty()
-        }
-    }
-    
-    private var selectedPetIndex: IndexPath?
-    
-    private let emptyLabel = UILabel()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        setup()
-        style()
-        layout()
-        
-    }
+class ProfileViewController: UserProfileBaseViewController {
 
-    private func setup() {
+    override func setup() {
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(fetchUser),
@@ -88,79 +22,22 @@ class ProfileViewController: UIViewController {
                                                name: .updateTrackHistory,
                                                object: nil)
         
-        fetchUser()
-        
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.asset(.Icons_24px_Setting),
                                                             style: .plain,
                                                             target: self,
                                                             action: #selector(didTapSetting))
         
+        collectionView = UICollectionView(
+            frame: .zero,
+            collectionViewLayout: UICollectionViewCompositionalLayout.profileViewCompositionalLayout()
+        )
+        
+        super.setup()
+        
         collectionView.dataSource = self
         collectionView.delegate = self
         
-        collectionView.allowsSelection = true
-        collectionView.isUserInteractionEnabled = true
-        
-        collectionView.register(ProfileInfoCell.self,
-                                forCellWithReuseIdentifier: ProfileInfoCell.identifier)
-        
-        collectionView.collectionViewLayout.register(ProfileInfoReusableView.self,
-                                                     forDecorationViewOfKind: "\(ProfileInfoReusableView.self)")
-        
-        collectionView.register(PetItemCell.self,
-                                forCellWithReuseIdentifier: PetItemCell.identifier)
-        
-        collectionView.collectionViewLayout.register(PetItemBackReusableView.self,
-                                                     forDecorationViewOfKind: "\(PetItemBackReusableView.self)")
-        
-        collectionView.register(ContentButtonCell.self,
-                                forCellWithReuseIdentifier: ContentButtonCell.identifier)
-        
-        collectionView.collectionViewLayout.register(ContentButtonReusableView.self,
-                                                     forDecorationViewOfKind: "\(ContentButtonReusableView.self)")
-        
-        collectionView.register(PhotoItemCell.self,
-                                forCellWithReuseIdentifier: PhotoItemCell.identifier)
-        
-        collectionView.register(TrackHostoryCell.self,
-                                forCellWithReuseIdentifier: TrackHostoryCell.identifier)
-    }
-    
-    private func style() {
-        
-        navigationController?.navigationBar.tintColor = .white
-        
-        view.backgroundColor = .BattleGrey
-        collectionView.backgroundColor = .white
-        collectionView.layer.cornerRadius = 20
-        collectionView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        
-        emptyLabel.textColor = .BattleGreyLight
-        emptyLabel.textAlignment = .center
-        emptyLabel.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
-    }
-    
-    private func layout() {
-        
-        view.addSubview(collectionView)
-        collectionView.addSubview(emptyLabel)
-        
-        collectionView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
-                               leading: view.leadingAnchor,
-                               bottom: view.safeAreaLayoutGuide.bottomAnchor,
-                               trailing: view.trailingAnchor)
-        
-        // Change top bounce area backgroud color
-        collectionView.layoutIfNeeded()
-        let topView = UIView(frame: CGRect(x: 0, y: -collectionView.bounds.height,
-                width: collectionView.bounds.width, height: collectionView.bounds.height))
-        topView.backgroundColor = .BattleGrey
-        collectionView.addSubview(topView)
-        
-        emptyLabel.anchor(top: collectionView.centerYAnchor,
-                          centerX: collectionView.centerXAnchor,
-                          padding: UIEdgeInsets(top: 120, left: 0, bottom: 0, right: 0))
-        
+        fetchUser()
     }
     
     @objc func didTapSetting() {
@@ -200,98 +77,20 @@ class ProfileViewController: UIViewController {
             }
         }
     }
-    
-    func fetchPet(by user: User) {
-        
-        userManager.fetchPets(userId: user.id) { [weak self] result in
-            
-            switch result {
-                
-            case .success(let pets):
-                
-                self?.userPets = pets
-                
-            case .failure(let error):
-                
-                print(error)
-            }
-        }
-    }
-    
-    func fetchPost(by user: User) {
-        
-        postManager.fetchPosts(userId: user.id) { [weak self] result in
-            
-            switch result {
-                
-            case .success(let posts):
-                
-                self?.selectedPetIndex = nil
-                self?.posts = posts
-                self?.displayPosts = posts
-                
-            case .failure(let error):
-                
-                print(error)
-            }
-        }
-    }
-    
-    func fetchTrack(by user: User) {
-        
-        userManager.fetchTracks(userId: user.id) { [weak self] result in
-            
-            switch result {
-                
-            case .success(let trackInfos):
-                
-                self?.selectedPetIndex = nil
-                self?.trackInfos = trackInfos
-                self?.displayTrackInfos = trackInfos
-                
-            case .failure(let error):
-                
-                print(error)
-            }
-        }
-    }
-    
-    func checkIsEmpty() {
-        
-        if isPhoto && displayPosts?.count == 0 {
-            
-            emptyLabel.text = "Click + to Post"
-            emptyLabel.isHidden = false
-            
-        } else if !isPhoto && displayTrackInfos?.count == 0 {
-            
-            emptyLabel.text = "No Track"
-            emptyLabel.isHidden = false
-            
-        } else {
-            
-            emptyLabel.isHidden = true
-        }
-    }
 }
 
-extension ProfileViewController: ProfileInfoCellDelegate {
+extension ProfileViewController: UserInfoCellDelegate {
     
     func didTapFriend() {
         
         guard let friendsId = user?.friends else { return }
         
-        let friendListVC = UserListViewController(usersId: friendsId, listType: .friend, postId: nil)
+        let friendListVC = FriendListViewController(usersId: friendsId)
         
         navigationController?.pushViewController(friendListVC, animated: true)
     }
     
-    func didTapUserImage() {
-        
-        photoHelper.presentActionSheet(from: self)
-    }
-    
-    func didTapLeftButton(from cell: ProfileInfoCell) {
+    func didTapLeftButton() {
         
         guard let user = user else { return }
         
@@ -328,102 +127,6 @@ extension ProfileViewController: ContentButtonCellDelegate {
 
 extension ProfileViewController: UICollectionViewDataSource {
     
-    private static func configureLayout() -> UICollectionViewCompositionalLayout {
-        
-        UICollectionViewCompositionalLayout { sectionIndex, _ in
-            
-            let section = ProfileSections.allCases[sectionIndex]
-            
-            switch section {
-                
-            case .userInfo:
-                
-                let infoItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                          heightDimension: .fractionalHeight(1))
-                let infoItem = NSCollectionLayoutItem(layoutSize: infoItemSize)
-                
-                let infoGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                           heightDimension: .absolute(150))
-                let infoGroup = NSCollectionLayoutGroup.vertical(layoutSize: infoGroupSize, subitems: [infoItem])
-                
-                let infoSection = NSCollectionLayoutSection(group: infoGroup)
-                
-                let infoBackView = NSCollectionLayoutDecorationItem.background(
-                    elementKind: "\(ProfileInfoReusableView.self)")
-
-                infoSection.decorationItems = [infoBackView]
-                
-                return infoSection
-                
-            case .choosePet:
-                
-                let petItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                         heightDimension: .fractionalHeight(1))
-                let petItem = NSCollectionLayoutItem(layoutSize: petItemSize)
-                
-                let petGroupSize = NSCollectionLayoutSize(widthDimension: .absolute(80),
-                                                          heightDimension: .absolute(80))
-                
-                let petGroup = NSCollectionLayoutGroup.horizontal(layoutSize: petGroupSize, subitems: [petItem])
-                
-                let petSection = NSCollectionLayoutSection(group: petGroup)
-                
-                petSection.orthogonalScrollingBehavior = .continuous
-                petSection.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20)
-                
-                petSection.interGroupSpacing = 10
-                
-                let petItemBackView = NSCollectionLayoutDecorationItem.background(
-                    elementKind: "\(PetItemBackReusableView.self)")
-
-                petSection.decorationItems = [petItemBackView]
-                
-                return petSection
-                
-            case .chooseContent:
-                
-                let chooseItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                            heightDimension: .fractionalHeight(1))
-                let chooseItem = NSCollectionLayoutItem(layoutSize: chooseItemSize)
-                
-                let chooseGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                             heightDimension: .absolute(40))
-                let chooseGroup = NSCollectionLayoutGroup.horizontal(layoutSize: chooseGroupSize,
-                                                                     subitems: [chooseItem])
-                
-                let chooseSection = NSCollectionLayoutSection(group: chooseGroup)
-                
-                chooseSection.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0)
-                
-                let chooseBackView = NSCollectionLayoutDecorationItem.background(
-                    elementKind: "\(ContentButtonReusableView.self)")
-
-                chooseSection.decorationItems = [chooseBackView]
-                
-                return chooseSection
-                
-            case .postsPhoto:
-                    
-                let postItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1 / 3),
-                                                          heightDimension: .fractionalHeight(1))
-                let postItem = NSCollectionLayoutItem(layoutSize: postItemSize)
-                
-                postItem.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 1, bottom: 2, trailing: 1)
-                
-                let postGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                           heightDimension: .fractionalWidth(1 / 3))
-                let postGroup = NSCollectionLayoutGroup.horizontal(layoutSize: postGroupSize, subitems: [postItem])
-                
-                let postSection = NSCollectionLayoutSection(group: postGroup)
-                
-                postSection.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 2, bottom: 0, trailing: 2)
-                
-                return postSection
-
-            }
-        }
-    }
-    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         
         ProfileSections.allCases.count
@@ -440,7 +143,7 @@ extension ProfileViewController: UICollectionViewDataSource {
             
         case ProfileSections.choosePet.rawValue:
             
-            return userPets?.count ?? 0
+            return pets?.count ?? 0
 
         case ProfileSections.chooseContent.rawValue:
             
@@ -472,35 +175,12 @@ extension ProfileViewController: UICollectionViewDataSource {
                 fatalError("Cannot dequeue ProfileInfoCell")
             }
             
-            guard let user = user else { return infoCell }
-            
-            photoHelper.completionHandler = { [weak self] image in
+            if let user = user {
                 
-                infoCell.userImageView.image = image
+                infoCell.configureCell(user: user, postCount: posts?.count ?? 0)
                 
-                self?.userManager.uploadUserPhoto(userId: user.id,
-                                            image: image) { result in
-                    switch result {
-
-                    case .success:
-                        
-                        print("更新使用者照片成功")
-                        
-                    case .failure(let error):
-                        
-                        self?.lottie.showError(error: error)
-                    }
-                }
+                infoCell.delegate = self
             }
-            
-            infoCell.leftButton.setTitle("Edit Profile", for: .normal)
-            
-            infoCell.rightButton.setTitle("Add Pet", for: .normal)
-            
-            infoCell.configureCell(user: user, postCount: posts?.count ?? 0)
-            
-            infoCell.delegate = self
-            
             return infoCell
             
         case ProfileSections.choosePet.rawValue:
@@ -511,7 +191,7 @@ extension ProfileViewController: UICollectionViewDataSource {
                 fatalError("Cannot dequeue PhotoItemCell")
             }
             
-            guard let userPets = userPets else { return petCell }
+            guard let userPets = pets else { return petCell }
 
             let userPet = userPets[indexPath.item]
             
@@ -543,13 +223,11 @@ extension ProfileViewController: UICollectionViewDataSource {
                     fatalError("Cannot dequeue PhotoItemCell")
                 }
                 
-                photoCell.imageView.image = UIImage.asset(.Image_Placeholder_Paw)
-                
-                guard let posts = displayPosts else { return photoCell }
-                
-                let imageUrl = URL(string: posts[indexPath.item].photo)
-                
-                photoCell.imageView.kf.setImage(with: imageUrl)
+                if let posts = displayPosts,
+                        let imageUrl = URL(string: posts[indexPath.item].photo) {
+                    
+                    photoCell.configureCell(photoURL: imageUrl)
+                }
                 
                 return photoCell
                 
@@ -564,14 +242,15 @@ extension ProfileViewController: UICollectionViewDataSource {
                     fatalError("Cannot dequeue TrackHostoryCell")
                 }
                 
-                guard let trackInfos = displayTrackInfos,
-                        let userPets = userPets else { return trackCell }
+                if let trackInfos = displayTrackInfos,
+                        let userPets = pets {
                 
-                let trackInfo = trackInfos[indexPath.item]
-                
-                for userPet in userPets where userPet.id == trackInfo.petId {
+                    let trackInfo = trackInfos[indexPath.item]
                     
-                    trackCell.configureCell(pet: userPet, trackInfo: trackInfo)
+                    for userPet in userPets where userPet.id == trackInfo.petId {
+                        
+                        trackCell.configureCell(pet: userPet, trackInfo: trackInfo)
+                    }
                 }
                 return trackCell
             }
@@ -583,55 +262,74 @@ extension ProfileViewController: UICollectionViewDataSource {
 
 extension ProfileViewController: UICollectionViewDelegate {
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    private func updateDisplayContent(isFilter: Bool, filterIndex: IndexPath) {
         
-        if indexPath.section == ProfileSections.choosePet.rawValue {
+        guard let userPets = pets,
+              let posts = posts,
+              let trackInfos = trackInfos
+        else {
+            return
+        }
+        
+        if isFilter {
             
-            guard let posts = posts,
-                    let trackInfos = trackInfos,
-                    let userPets = userPets,
-                    let cell = collectionView.cellForItem(at: indexPath) as? PetItemCell
+            displayPosts = posts.filter { $0.petId == userPets[filterIndex.item].id }
+            
+            displayTrackInfos = trackInfos.filter { $0.petId == userPets[filterIndex.item].id }
+            
+            selectedPetIndex = filterIndex
+            
+        } else {
+            
+            displayPosts = posts
+            
+            displayTrackInfos = trackInfos
+            
+            selectedPetIndex = nil
+        }
+    }
+    
+    private func updateCellSelectState(cell: PetItemCell,
+                                       collectionView: UICollectionView,
+                                       indexPath: IndexPath,
+                                       selectedPetIndex: IndexPath?) {
+        
+        if let selectedPetIndex = selectedPetIndex {
+            
+            guard let selectedCell = collectionView.cellForItem(at: selectedPetIndex) as? PetItemCell
             else {
                 return
             }
             
-            if let selectedPetIndex = selectedPetIndex {
+            if selectedPetIndex == indexPath {
                 
-                guard let selectedCell = collectionView.cellForItem(at: selectedPetIndex) as? PetItemCell
-                else {
-                    return
-                }
-                
-                if selectedPetIndex == indexPath {
-                    
-                    selectedCell.selectState = !selectedCell.selectState
-                } else {
-                    
-                    selectedCell.selectState = false
-                    cell.selectState = !cell.selectState
-                }
+                selectedCell.selectState = !selectedCell.selectState
             } else {
                 
+                selectedCell.selectState = false
                 cell.selectState = !cell.selectState
             }
+        } else {
             
-            if cell.selectState {
-                
-                displayPosts = posts.filter { $0.petId == userPets[indexPath.item].id }
-                
-                displayTrackInfos = trackInfos.filter { $0.petId == userPets[indexPath.item].id }
-                
-                selectedPetIndex = indexPath
-                
-            } else {
-                
-                displayPosts = posts
-                
-                displayTrackInfos = trackInfos
-                
-                selectedPetIndex = nil
-                
+            cell.selectState = !cell.selectState
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        if indexPath.section == ProfileSections.choosePet.rawValue {
+            
+            guard let cell = collectionView.cellForItem(at: indexPath) as? PetItemCell
+            else {
+                return
             }
+            updateCellSelectState(cell: cell,
+                                  collectionView: collectionView,
+                                  indexPath: indexPath,
+                                  selectedPetIndex: selectedPetIndex)
+            
+            updateDisplayContent(isFilter: cell.selectState, filterIndex: indexPath)
+            
         } else if indexPath.section == ProfileSections.postsPhoto.rawValue {
             
             if isPhoto {
@@ -640,16 +338,6 @@ extension ProfileViewController: UICollectionViewDelegate {
                       let post = displayPosts?[indexPath.item]
                 else { return }
                 
-                if let selectedIndex = selectedPetIndex {
-                    
-                    guard let cell = collectionView.cellForItem(at: selectedIndex) as? PetItemCell
-                    else {
-                        return
-                    }
-                    cell.selectState = true
-                    cell.isSelected = true
-                }
-                
                 let photoPostVC = PhotoPostViewController(user: user, post: post)
                 
                 navigationController?.pushViewController(photoPostVC, animated: true)
@@ -657,18 +345,8 @@ extension ProfileViewController: UICollectionViewDelegate {
             } else {
                 
                 guard let trackInfos = displayTrackInfos,
-                        let userPets = userPets else {
+                        let userPets = pets else {
                     return
-                }
-                
-                if let selectedIndex = selectedPetIndex {
-                    
-                    guard let cell = collectionView.cellForItem(at: selectedIndex) as? PetItemCell
-                    else {
-                        return
-                    }
-                    cell.selectState = true
-                    cell.isSelected = false
                 }
 
                 let trackInfo = trackInfos[indexPath.item]

@@ -29,8 +29,8 @@ class LocationHelper {
     }
     
     func getNearUsersId(myLocation: CLLocation,
-                            userLocations: [UserLocation],
-                            distanceKM: Double) -> [String] {
+                        userLocations: [UserLocation],
+                        distanceKM: Double) -> [String] {
 
         var nearbyUserLocations: [UserLocation] = []
 

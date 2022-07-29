@@ -50,7 +50,7 @@ class OtherUserMessageCell: UITableViewCell {
         
         timeLabel.font = UIFont.systemFont(ofSize: 10)
         timeLabel.textAlignment = .left
-        timeLabel.textColor = .Blue1
+        timeLabel.textColor = .BattleGreyLight
     }
     
     func layout() {

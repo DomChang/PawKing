@@ -7,20 +7,8 @@
 
 import UIKit
 import FirebaseFirestore
-import SwiftUI
 
-class UserPhotoWallViewController: UIViewController {
-
-    private let collectionView = UICollectionView(frame: .zero,
-                                                  collectionViewLayout: configureLayout())
-    
-    private let userManager = UserManager.shared
-    
-    private let postManager = PostManager.shared
-    
-    private let lottie = LottieWrapper.shared
-    
-    private var user = UserManager.shared.currentUser
+class UserPhotoWallViewController: UserProfileBaseViewController {
     
     private var otherUserId: String
     
@@ -28,49 +16,14 @@ class UserPhotoWallViewController: UIViewController {
     
     private var otherUserListener: ListenerRegistration?
     
-    private var otherUserPets: [Pet]? {
-        didSet {
-            collectionView.reloadSections(IndexSet(integer: 1))
-        }
-    }
-    
-    private var posts: [Post]? {
-        didSet {
-            collectionView.reloadSections(IndexSet(integer: 2))
-            collectionView.reloadItems(at: [IndexPath(item: 0, section: 0)])
-        }
-    }
-    
-    private var displayPosts: [Post]? {
-        didSet {
-            collectionView.reloadSections(IndexSet(integer: 2))
-            
-            if displayPosts?.count == 0 {
-                
-                emptyLabel.isHidden = false
-            } else {
-                
-                emptyLabel.isHidden = true
-            }
-        }
-    }
-    
-    private var selectedPetIndex: IndexPath?
-    
-    private var isFriend = false {
+    private var connectStatus = UserConnectStatus.connect {
         didSet {
             collectionView.reloadSections(IndexSet(integer: 0))
         }
     }
     
-    private let actionController = UIAlertController(title: "Actions", message: nil, preferredStyle: .actionSheet)
-    
-    private let disconnectActionController = UIAlertController(title: "Are you sure you want to disconnect?",
-                                                     message: nil,
-                                                     preferredStyle: .alert)
-    
-    private let emptyLabel = UILabel()
-    
+    private let alertHelper = AlertHelper()
+ 
     init(otherUserId: String) {
 
         self.otherUserId = otherUserId
@@ -80,19 +33,6 @@ class UserPhotoWallViewController: UIViewController {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        if let user = user {
-            
-            setActionSheet(user: user)
-        }
-        
-        setup()
-        style()
-        layout()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -113,75 +53,28 @@ class UserPhotoWallViewController: UIViewController {
         otherUserListener?.remove()
     }
     
-    private func setup() {
+    override func setup() {
         
-        listenOtherUser()
+        collectionView = UICollectionView(
+            frame: .zero,
+            collectionViewLayout:
+                UICollectionViewCompositionalLayout.userPhotoWallCompositionalLayout()
+        )
+        
+        collectionView.collectionViewLayout.register(OtherUserPetReusableView.self,
+                                                     forDecorationViewOfKind: "\(OtherUserPetReusableView.self)")
+        
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        
+        super.setup()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"),
                                                             style: .plain,
                                                             target: self,
                                                             action: #selector(didTapAction))
         
-        navigationController?.navigationBar.tintColor = .white
-        navigationController?.navigationBar.topItem?.backButtonTitle = ""
-        
-        collectionView.dataSource = self
-        
-        collectionView.delegate = self
-        
-        collectionView.allowsSelection = true
-        
-        collectionView.isUserInteractionEnabled = true
-        
-        collectionView.register(ProfileInfoCell.self,
-                                forCellWithReuseIdentifier: ProfileInfoCell.identifier)
-        
-        collectionView.collectionViewLayout.register(ProfileInfoReusableView.self,
-                                                     forDecorationViewOfKind: "\(ProfileInfoReusableView.self)")
-        
-        collectionView.register(PetItemCell.self,
-                                forCellWithReuseIdentifier: PetItemCell.identifier)
-        
-        collectionView.collectionViewLayout.register(OtherUserPetReusableView.self,
-                                                     forDecorationViewOfKind: "\(OtherUserPetReusableView.self)")
-        
-        collectionView.register(PhotoItemCell.self,
-                                forCellWithReuseIdentifier: PhotoItemCell.identifier)
-        
-        emptyLabel.isHidden = true
-    }
-    
-    private func style() {
-        
-        view.backgroundColor = .systemBackground
-        
-        emptyLabel.textColor = .BattleGreyLight
-        emptyLabel.textAlignment = .center
-        emptyLabel.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
-        emptyLabel.text = "No Post"
-    }
-    
-    private func layout() {
-        
-        view.addSubview(collectionView)
-        
-        collectionView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
-                              leading: view.leadingAnchor,
-                              bottom: view.bottomAnchor,
-                              trailing: view.trailingAnchor)
-        
-        collectionView.addSubview(emptyLabel)
-        
-        // Change top bounce area backgroud color
-        collectionView.layoutIfNeeded()
-        let topView = UIView(frame: CGRect(x: 0, y: -collectionView.bounds.height,
-                width: collectionView.bounds.width, height: collectionView.bounds.height))
-        topView.backgroundColor = .BattleGrey
-        collectionView.addSubview(topView)
-        
-        emptyLabel.anchor(top: collectionView.centerYAnchor,
-                          centerX: collectionView.centerXAnchor,
-                          padding: UIEdgeInsets(top: 120, left: 0, bottom: 0, right: 0))
+        listenOtherUser()
     }
     
     func listenOtherUser() {
@@ -220,6 +113,8 @@ class UserPhotoWallViewController: UIViewController {
                     
                     self?.fetchPost(by: otherUser)
                     
+                    self?.lottie.stopLoading()
+                    
                 case .failure(let error):
                     
                     self?.lottie.stopLoading()
@@ -229,58 +124,23 @@ class UserPhotoWallViewController: UIViewController {
                     semaphore.signal()
                 }
             })
-            
             semaphore.wait()
-            
-            guard let user = self?.user else {
-                return
-            }
-            
-            self?.setActionSheet(user: user)
-            self?.setDisconnectAlert()
         }
     }
     
-    func fetchPet(by otherUser: User) {
+    override func checkIsEmpty() {
         
-        userManager.fetchPets(userId: otherUser.id) { [weak self] result in
+        if displayPosts?.count == 0 {
             
-            switch result {
-                
-            case .success(let pets):
-                
-                self?.otherUserPets = pets
-                
-            case .failure(let error):
-                
-                print(error)
-            }
+            emptyLabel.text = "No Post"
+            emptyLabel.isHidden = false
+            
+        } else {
+            
+            emptyLabel.isHidden = true
         }
     }
-    
-    func fetchPost(by otherUser: User) {
-        
-        postManager.fetchPosts(userId: otherUser.id) { [weak self] result in
-            
-            switch result {
-                
-            case .success(let posts):
-                
-                self?.lottie.stopLoading()
-                
-                self?.posts = posts
-                self?.displayPosts = posts
-                
-            case .failure(let error):
-                
-                self?.lottie.stopLoading()
-                
-                print(error)
-            }
-        }
-    }
-    
-    func setConnectState(sender: UIButton) {
+    func setConnectState() {
         
         guard let user = user,
               let otherUser = otherUser else {
@@ -289,164 +149,117 @@ class UserPhotoWallViewController: UIViewController {
         
         if otherUser.friends.contains(user.id) {
             
-            isFriend = true
-            
-            sender.isSelected = true
+            connectStatus = .disconnect
             
         } else if otherUser.recieveRequestsId.contains(user.id) {
             
-            isFriend = false
-            
-            sender.isSelected = true
+            connectStatus = .requested
             
         } else {
             
-            isFriend = false
-            
-            sender.isSelected = false
+            connectStatus = .connect
         }
     }
     
-    func setConnectButtonColor(sender: UIButton) {
+    private func setBlockAction(user: User) {
         
-        if sender.isSelected {
+        userManager.removeBlockUser(userId: user.id,
+                                    blockId: otherUserId) { result in
             
-            sender.backgroundColor = .BattleGrey
-            
-            sender.layer.borderWidth = 1
-            
-        } else {
-            sender.backgroundColor = .Orange1
-            
-            sender.layer.borderWidth = 0
+            switch result {
+                
+            case.success:
+                
+                print("Unblock user success!")
+                
+            case .failure(let error):
+                
+                print(error)
+            }
         }
     }
     
-    func setActionSheet(user: User) {
-        
-        guard let otherUser = otherUser else {
-            return
-        }
-        DispatchQueue.main.async {
-            self.actionController.view.tintColor = .BattleGrey
-        }
-        
-        if user.blockUsersId.contains(otherUser.id) {
+    private func setUnblockAction(user: User) {
 
-            let unBlockAction = UIAlertAction(title: "Unblock User", style: .destructive) { [weak self] _ in
-                
-                guard let self = self else { return }
-                
-                self.userManager.removeBlockUser(userId: user.id, blockId: self.otherUserId) { result in
-                    
-                    switch result {
-                        
-                    case.success:
-                        
-                        print("Unblock user success!")
-                        
-                    case .failure(let error):
-                        
-                        print(error)
-                    }
-                }
-            }
-            DispatchQueue.main.async {
-                self.actionController.addAction(unBlockAction)
-            }
-        } else {
+        userManager.addBlockUser(userId: user.id,
+                                      blockId: otherUserId) { result in
             
-            let blockAction = UIAlertAction(title: "Block User", style: .destructive) { [weak self] _ in
+            switch result {
                 
-                guard let self = self else { return }
+            case.success:
                 
-                self.userManager.addBlockUser(userId: user.id, blockId: self.otherUserId) { result in
-                    
-                    switch result {
-                        
-                    case.success:
-                        
-                        print("Block user success!")
-                        
-                    case .failure(let error):
-                        
-                        print(error)
-                    }
-                }
+                print("Block user success!")
+                
+            case .failure(let error):
+                
+                print(error)
             }
-            DispatchQueue.main.async {
-                self.actionController.addAction(blockAction)
-            }
-        }
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        
-        DispatchQueue.main.async {
-            self.actionController.addAction(cancelAction)
         }
     }
     
-    func setDisconnectAlert() {
+    private func setDisconnectAction() {
         
-        guard let user = user,
+        guard let user = UserManager.shared.currentUser,
               let otherUser = otherUser else {
             return
         }
-        DispatchQueue.main.async {
-            self.disconnectActionController.view.tintColor = .BattleGrey
-        }
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
-        
-        let disconnectAlert  = UIAlertAction(title: "Disconnect", style: .destructive) { [weak self] _ in
-            
-            self?.userManager.removeFriend(userId: user.id, friendId: otherUser.id) { result in
-                switch result {
-                    
-                case .success:
-                    
-                    print("disconnected")
-                    
-                case .failure(let error):
-                    
-                    print(error)
-                }
+        userManager.removeFriend(userId: user.id,
+                                 friendId: otherUser.id) { [weak self] result in
+            switch result {
+                
+            case .success:
+                
+                self?.connectStatus = .connect
+                
+            case .failure(let error):
+                
+                print(error)
             }
-        }
-        DispatchQueue.main.async {
-            self.disconnectActionController.addAction(cancelAction)
-            self.disconnectActionController.addAction(disconnectAlert)
         }
     }
     
     @objc func didTapAction() {
         
-        present(actionController, animated: true) {
-            
-            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissAlertController))
-            
-            self.actionController.view.superview?.subviews[0].addGestureRecognizer(tapGesture)
+        guard let user = UserManager.shared.currentUser,
+                let otherUser = otherUser
+        else {
+            return
         }
-    }
-    
-    @objc private func dismissAlertController() {
         
-        actionController.dismiss(animated: true)
+        if user.blockUsersId.contains(otherUser.id) {
+        
+            alertHelper.showActionSheet(title: nil,
+                                  message: nil,
+                                  actionName: "Unblock",
+                                  actionStyle: .default,
+                                  action: { self.setBlockAction(user: user) },
+                                  by: self)
+            
+        } else {
+            
+            alertHelper.showActionSheet(title: nil,
+                                        message: nil,
+                                        actionName: "Block",
+                                        actionStyle: .destructive,
+                                        action: { self.setUnblockAction(user: user) },
+                                        by: self)
+        }
     }
 }
 
-extension UserPhotoWallViewController: ProfileInfoCellDelegate {
+extension UserPhotoWallViewController: UserInfoCellDelegate {
     
     func didTapFriend() {
         
         guard let friendsId = otherUser?.friends else { return }
         
-        let friendListVC = UserListViewController(usersId: friendsId, listType: .friend, postId: nil)
+        let friendListVC = FriendListViewController(usersId: friendsId)
         
         navigationController?.pushViewController(friendListVC, animated: true)
     }
     
-    func didTapLeftButton(from cell: ProfileInfoCell) {
+    func didTapLeftButton() {
         
         guard let user = user,
               let otherUser = otherUser else {
@@ -455,68 +268,57 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
             
             return
         }
-        
-        let friendRequestButton = cell.leftButton
-        
-        // state: requested or friend
-        if friendRequestButton.isSelected {
+        switch connectStatus {
             
-            if isFriend {
-                // show disConnect alert
-                
-                present(disconnectActionController, animated: true)
-                
-            } else {
-                // requested
-                
-                friendRequestButton.isSelected = !friendRequestButton.isSelected
-                
-                userManager.removeFriendRequest(senderId: user.id, recieverId: otherUser.id) { [weak self] result in
-                    
-                    switch result {
-                        
-                    case .success:
-                        
-                        print("remove request success!")
-                        
-                    case .failure(let error):
-                        
-                        self?.lottie.showError(error: error)
-                    }
-                }
-            }
-            
-        } else {
-            // send request
-            
-            friendRequestButton.isSelected = !friendRequestButton.isSelected
+        case .connect:
             
             userManager.sendFriendRequest(senderId: user.id,
                                           recieverId: otherUser.id,
                                           recieverBlockIds: otherUser.blockUsersId) { [weak self] result in
-                
                 switch result {
                     
                 case .success:
                     
-                    print("send request success!")
+                    self?.connectStatus = .requested
                     
                 case .failure(let error):
                     
                     self?.lottie.showError(error: error)
                 }
             }
+            
+        case .requested:
+            
+            userManager.removeFriendRequest(senderId: user.id, recieverId: otherUser.id) { [weak self] result in
+                
+                switch result {
+                    
+                case .success:
+                    
+                    self?.connectStatus = .connect
+                    
+                case .failure(let error):
+                    
+                    self?.lottie.showError(error: error)
+                }
+            }
+            
+        case .disconnect:
+            
+            alertHelper.showAlert(title: "Are you sure you want to disconnect?",
+                                  message: nil,
+                                  actionName: "Disconnect",
+                                  actionStyle: .destructive,
+                                  action: { self.setDisconnectAction() },
+                                  by: self)
         }
-        
-        setConnectButtonColor(sender: friendRequestButton)
+        selectedPetIndex = nil
     }
     
     func didTapRightButton() {
         
         guard let user = user,
-              let otherUser = otherUser else {
-            return
-        }
+              let otherUser = otherUser else { return }
 
        let messageVC = MessageViewController(user: user,
                                              otherUser: otherUser, otherUserId: otherUser.id)
@@ -526,81 +328,7 @@ extension UserPhotoWallViewController: ProfileInfoCellDelegate {
 }
 
 extension UserPhotoWallViewController: UICollectionViewDataSource {
-    
-    private static func configureLayout() -> UICollectionViewCompositionalLayout {
-        
-        UICollectionViewCompositionalLayout { sectionIndex, _ in
-            
-            let section = UserPhotoWallSections.allCases[sectionIndex]
-            
-            switch section {
-                
-            case .userInfo:
-                
-                let infoItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                          heightDimension: .fractionalHeight(1))
-                let infoItem = NSCollectionLayoutItem(layoutSize: infoItemSize)
-                
-                let infoGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                           heightDimension: .absolute(150))
-                let infoGroup = NSCollectionLayoutGroup.vertical(layoutSize: infoGroupSize, subitems: [infoItem])
-                
-                let infoSection = NSCollectionLayoutSection(group: infoGroup)
-                
-                let infoBackView = NSCollectionLayoutDecorationItem.background(
-                    elementKind: "\(ProfileInfoReusableView.self)")
 
-                infoSection.decorationItems = [infoBackView]
-                
-                return infoSection
-                
-            case .choosePet:
-                
-                let petItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                         heightDimension: .fractionalHeight(1))
-                let petItem = NSCollectionLayoutItem(layoutSize: petItemSize)
-                
-                let petGroupSize = NSCollectionLayoutSize(widthDimension: .absolute(80),
-                                                          heightDimension: .absolute(80))
-                
-                let petGroup = NSCollectionLayoutGroup.horizontal(layoutSize: petGroupSize, subitems: [petItem])
-                
-                let petSection = NSCollectionLayoutSection(group: petGroup)
-                
-                petSection.orthogonalScrollingBehavior = .continuous
-                petSection.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20)
-                
-                petSection.interGroupSpacing = 10
-                
-                let petItemBackView = NSCollectionLayoutDecorationItem.background(
-                    elementKind: "\(OtherUserPetReusableView.self)")
-
-                petSection.decorationItems = [petItemBackView]
-                
-                return petSection
-                
-            case .postsPhoto:
-                    
-                let postItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1 / 3),
-                                                          heightDimension: .fractionalHeight(1))
-                let postItem = NSCollectionLayoutItem(layoutSize: postItemSize)
-                
-                postItem.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 1, bottom: 2, trailing: 1)
-                
-                let postGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                           heightDimension: .fractionalWidth(1 / 3))
-                let postGroup = NSCollectionLayoutGroup.horizontal(layoutSize: postGroupSize, subitems: [postItem])
-                
-                let postSection = NSCollectionLayoutSection(group: postGroup)
-                
-                postSection.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 2, bottom: 0, trailing: 2)
-                
-                return postSection
-
-            }
-        }
-    }
-    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         
         UserPhotoWallSections.allCases.count
@@ -617,7 +345,7 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
             
         case UserPhotoWallSections.choosePet.rawValue:
             
-            return otherUserPets?.count ?? 0
+            return pets?.count ?? 0
             
         case UserPhotoWallSections.postsPhoto.rawValue:
             
@@ -635,29 +363,17 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
             
         case UserPhotoWallSections.userInfo.rawValue:
             
-            guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileInfoCell.identifier,
-                                                                    for: indexPath) as? ProfileInfoCell
+            guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: OtherUserInfoCell.identifier,
+                                                                    for: indexPath) as? OtherUserInfoCell
             else {
                 fatalError("Cannot dequeue ProfileInfoCell")
             }
             
-            infoCell.leftButton.setTitle("Connect", for: .normal)
-            infoCell.leftButton.setTitleColor(.white, for: .normal)
-            
-            setConnectState(sender: infoCell.leftButton)
-            
-            if isFriend {
-                infoCell.leftButton.setTitle("Disconnect", for: .selected)
-            } else {
-                infoCell.leftButton.setTitle("Requested", for: .selected)
-            }
-            
-            setConnectButtonColor(sender: infoCell.leftButton)
-            
-            infoCell.rightButton.setTitle("Send Message", for: .normal)
-            
+            setConnectState()
+
             if let otherUser = otherUser {
-                infoCell.configureCell(user: otherUser, postCount: posts?.count ?? 0)
+
+                infoCell.configureCell(user: otherUser, postCount: posts?.count ?? 0, connectStatus: connectStatus)
             }
             
             infoCell.delegate = self
@@ -672,10 +388,13 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
                 fatalError("Cannot dequeue PhotoItemCell")
             }
             
-            guard let otherUserPets = otherUserPets else { return petCell }
+            guard let otherUserPets = pets else { return petCell }
 
             let otherUserPet = otherUserPets[indexPath.item]
             
+            if selectedPetIndex == nil {
+                petCell.selectState = false
+            }
             petCell.configureCell(pet: otherUserPet)
             
             return petCell
@@ -688,13 +407,13 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
                 fatalError("Cannot dequeue PhotoItemCell")
             }
             
-            photoCell.imageView.image = UIImage.asset(.Image_Placeholder_Paw)
+            guard let posts = displayPosts,
+                    let imageUrl = URL(string: posts[indexPath.item].photo)
+            else {
+                return photoCell
+            }
             
-            guard let posts = displayPosts else { return photoCell }
-            
-            let imageUrl = URL(string: posts[indexPath.item].photo)
-            
-            photoCell.imageView.kf.setImage(with: imageUrl)
+            photoCell.configureCell(photoURL: imageUrl)
             
             return photoCell
                 
@@ -706,19 +425,41 @@ extension UserPhotoWallViewController: UICollectionViewDataSource {
 
 extension UserPhotoWallViewController: UICollectionViewDelegate {
     
+    private func updateDisplayContent(isFilter: Bool, filterIndex: IndexPath) {
+        
+        guard let userPets = pets,
+              let posts = posts
+        else {
+            return
+        }
+        
+        if isFilter {
+            
+            displayPosts = posts.filter { $0.petId == userPets[filterIndex.item].id }
+            
+            selectedPetIndex = filterIndex
+            
+        } else {
+            
+            displayPosts = posts
+            
+            selectedPetIndex = nil
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         if indexPath.section == UserPhotoWallSections.choosePet.rawValue {
             
-            guard let posts = posts,
-                    let userPets = otherUserPets,
-                    let cell = collectionView.cellForItem(at: indexPath) as? PetItemCell else {
+            guard let cell = collectionView.cellForItem(at: indexPath)
+                    as? PetItemCell
+            else {
                 return
             }
-            
             if let selectedPetIndex = selectedPetIndex {
                 
-                guard let selectedCell = collectionView.cellForItem(at: selectedPetIndex) as? PetItemCell
+                guard let selectedCell = collectionView.cellForItem(at: selectedPetIndex)
+                        as? PetItemCell
                 else {
                     return
                 }
@@ -735,19 +476,7 @@ extension UserPhotoWallViewController: UICollectionViewDelegate {
                 
                 cell.selectState = !cell.selectState
             }
-            
-            if cell.selectState {
-                
-                displayPosts = posts.filter { $0.petId == userPets[indexPath.item].id }
-                
-                selectedPetIndex = indexPath
-                
-            } else {
-
-                displayPosts = posts
-                
-                selectedPetIndex = nil
-            }
+            updateDisplayContent(isFilter: cell.selectState, filterIndex: indexPath)
             
         } else if indexPath.section == UserPhotoWallSections.postsPhoto.rawValue {
          
@@ -757,7 +486,6 @@ extension UserPhotoWallViewController: UICollectionViewDelegate {
             let photoPostVC = PhotoPostViewController(user: user, post: post)
             
             navigationController?.pushViewController(photoPostVC, animated: true)
-            
         }
     }
 }

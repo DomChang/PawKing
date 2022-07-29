@@ -47,7 +47,7 @@ class UserMessageCell: UITableViewCell {
         
         timeLabel.font = UIFont.systemFont(ofSize: 10)
         timeLabel.textAlignment = .right
-        timeLabel.textColor = .Blue1
+        timeLabel.textColor = .BattleGreyLight
     }
     
     private func layout() {
