@@ -24,17 +24,11 @@ class HomeViewController: UIViewController {
 
     private var stopHeightAnchor: NSLayoutConstraint!
     
-    private let trackDashboardView = TrackDashboardView()
-    
-    private var infoBottomAnchor: NSLayoutConstraint!
-    
     private var trackTimer: Timer?
 
     private var stopTimer: Timer?
     
     private var timerDuration: Int = 0
-    
-    private var distance: Double = 0
     
     private var isTracking = false
     
@@ -53,12 +47,6 @@ class HomeViewController: UIViewController {
     private var user: User
     
     private var userPets: [Pet] = []
-    
-    private var userCurrentPet: Pet? {
-        didSet {
-            setCurrentPetButton()
-        }
-    }
     
     private let locationHelper = LocationHelper()
     
@@ -136,7 +124,6 @@ class HomeViewController: UIViewController {
         add(mapVC)
         view.addSubview(stopTrackButton)
         view.addSubview(startTrackButton)
-        view.addSubview(trackDashboardView)
         view.addSubview(strangerButton)
         view.addSubview(notificationButton)
         view.addSubview(choosePetImageView)
@@ -177,14 +164,6 @@ class HomeViewController: UIViewController {
         stopHeightAnchor = stopTrackButton.heightAnchor.constraint(equalToConstant: 80)
         stopWidthAnchor?.isActive = true
         stopHeightAnchor?.isActive = true
-        
-        trackDashboardView.anchor(leading: view.leadingAnchor,
-                            trailing: view.trailingAnchor,
-                            height: view.safeAreaInsets.top + 90,
-                            padding: UIEdgeInsets(top: 0, left: 116, bottom: 0, right: 116))
-        
-        infoBottomAnchor = trackDashboardView.bottomAnchor.constraint(equalTo: view.topAnchor, constant: 0)
-        infoBottomAnchor.isActive = true
 
         setButtonStyle()
     }
@@ -234,7 +213,7 @@ class HomeViewController: UIViewController {
             checkFriendRequest()
 
         } else {
-            userCurrentPet = nil
+            mapVC.userCurrentPet = nil
             
             userPets = []
             
@@ -296,63 +275,13 @@ class HomeViewController: UIViewController {
             case .success(let pets):
                 
                 self?.userPets = pets
-                self?.getCurrentPet(user: user)
+                self?.mapVC.getCurrentPet(user: user, userPets: pets)
                 
             case .failure:
                 
                 LottieWrapper.shared.showError(errorMessage: "Network Unstable")
             }
         }
-    }
-    
-    private func getCurrentPet(user: User) {
-        
-        UserManager.shared.fetchUserLocation(userId: user.id) { [weak self] result in
-            switch result {
-                
-            case .success(let userLocation):
-                
-                guard let self = self else { return }
-                
-                if self.userPets.contains(where: {$0.id == userLocation.currentPetId}) {
-                    
-                    self.userPets.forEach({ pet in
-                        
-                        if pet.id == userLocation.currentPetId {
-                            
-                            self.userCurrentPet = pet
-                        }
-                    })
-                } else {
-                    
-                    self.userCurrentPet = nil
-                }
-            case .failure:
-                
-                self?.userCurrentPet = nil
-            }
-        }
-    }
-    
-    private func setCurrentPetButton() {
-        
-        if let userCurrentPet = userCurrentPet {
-            
-            let imageUrlSting = userCurrentPet.petImage
-            
-            choosePetImageView.kf.setImage(with: URL(string: imageUrlSting))
-        } else {
-            
-            choosePetImageView.image = UIImage.asset(.Image_Placeholder_Paw)
-        }
-        
-        choosePetImageView.makeRoundDoubleBorder(borderWidth: 2,
-                                                 outterColor: .BattleGrey,
-                                                 innerColor: .white)
-        
-        choosePetImageView.contentMode = .scaleAspectFill
-        choosePetImageView.clipsToBounds = true
-        choosePetImageView.layer.masksToBounds = true
     }
     
     @objc private func didTapStartTrack() {
@@ -369,7 +298,7 @@ class HomeViewController: UIViewController {
             return
         }
         
-        guard userCurrentPet != nil else {
+        guard mapVC.userCurrentPet != nil else {
             
             showNoSelectPetAlert()
             return
@@ -389,7 +318,7 @@ class HomeViewController: UIViewController {
             
             self.timerDuration += 1
             
-            self.trackDashboardView.timeLabel.text = TimeInterval(self.timerDuration).timeString()
+            self.mapVC.trackDashboardView.timeLabel.text = TimeInterval(self.timerDuration).timeString()
         })
         
         beTracking()
@@ -398,8 +327,8 @@ class HomeViewController: UIViewController {
 
         trackStartTime = Timestamp(date: Date())
         
-        self.infoBottomAnchor.constant = self.view.safeAreaInsets.top +
-                                              self.trackDashboardView.frame.height
+        self.mapVC.infoBottomAnchor.constant = self.view.safeAreaInsets.top +
+        self.mapVC.trackDashboardView.frame.height
         
         UIView.animate(withDuration: 1) {
             self.view.layoutIfNeeded()
@@ -452,7 +381,7 @@ class HomeViewController: UIViewController {
         let coordinate = mapVC.userStoredLocations.map { $0.coordinate }
         let track = coordinate.map { $0.transferToGeopoint() }
 
-        guard let userCurrentPet = userCurrentPet,
+        guard let userCurrentPet = mapVC.userCurrentPet,
               !coordinate.isEmpty else {
 
             return
@@ -489,11 +418,11 @@ class HomeViewController: UIViewController {
     private func resetTrack() {
         
         timerDuration = 0
-        trackDashboardView.timeLabel.text = "00:00:00"
+        mapVC.trackDashboardView.timeLabel.text = "00:00:00"
         trackTimer?.invalidate()
         trackTimer = nil
-        distance = 0
-        trackDashboardView.distanceLabel.text = "0.00 km"
+        mapVC.distance = 0
+        mapVC.trackDashboardView.distanceLabel.text = "0.00 km"
         isTracking = false
         
         notTracking()
@@ -501,13 +430,13 @@ class HomeViewController: UIViewController {
         mapVC.stopUpdateLocation(user: user)
         mapVC.mapView.removeOverlays(self.mapVC.mapView.overlays)
         
-        infoBottomAnchor.constant = 0
+        mapVC.infoBottomAnchor.constant = 0
     }
     
     @objc private func updateCurrentPet() {
 
         resetTrack()
-        getCurrentPet(user: user)
+        mapVC.getCurrentPet(user: user, userPets: userPets)
     }
     
     @objc private func didTapChoosePet() {
@@ -687,6 +616,27 @@ class HomeViewController: UIViewController {
 
 extension HomeViewController: MapViewDelegate {
     
+    func setCurrentPetButton() {
+        
+        if let userCurrentPet = mapVC.userCurrentPet {
+            
+            let imageUrlSting = userCurrentPet.petImage
+            
+            choosePetImageView.kf.setImage(with: URL(string: imageUrlSting))
+        } else {
+            
+            choosePetImageView.image = UIImage.asset(.Image_Placeholder_Paw)
+        }
+        
+        choosePetImageView.makeRoundDoubleBorder(borderWidth: 2,
+                                                 outterColor: .BattleGrey,
+                                                 innerColor: .white)
+        
+        choosePetImageView.contentMode = .scaleAspectFill
+        choosePetImageView.clipsToBounds = true
+        choosePetImageView.layer.masksToBounds = true
+    }
+    
     func showLocationAlert() {
         
         alerHelper.showAlert(
@@ -700,49 +650,13 @@ extension HomeViewController: MapViewDelegate {
             by: self
         )
     }
-    
-    func didUpdateLocation(coordinates: [CLLocationCoordinate2D],
-                           lastLocation: CLLocationCoordinate2D) {
-        
-        guard let currentPet = userCurrentPet
-        else {
-            return
-        }
-        
-        distance += locationHelper.computeDistance(from: coordinates) / 1000
-        
-        trackDashboardView.distanceLabel.text = "\(String(format: "%.2f", distance)) km"
-        
-        let userLocation = UserLocation(userId: user.id,
-                                        userName: user.name,
-                                        userPhoto: user.userImage,
-                                        currentPetId: currentPet.id,
-                                        petName: currentPet.name,
-                                        petPhoto: currentPet.petImage,
-                                        location: lastLocation.transferToGeopoint(),
-                                        status: Status.tracking.rawValue)
-        
-        UserManager.shared.updateUserLocation(location: userLocation) { result in
-            
-            switch result {
-                
-            case .success:
-                
-                print("===renew success")
-                
-            case.failure(let error):
-                
-                print(error)
-            }
-        }
-    }
 }
 
 extension HomeViewController: ChoosePetViewDelegate {
     
     func didChoosePet(with selectedPet: Pet) {
         
-        self.userCurrentPet = selectedPet
+        self.mapVC.userCurrentPet = selectedPet
         
         UserManager.shared.updateCurrentPet(userId: user.id, pet: selectedPet)
     }

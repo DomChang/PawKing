@@ -11,10 +11,9 @@ import FirebaseFirestore
 
 protocol MapViewDelegate: AnyObject {
     
-    func didUpdateLocation(coordinates: [CLLocationCoordinate2D],
-                           lastLocation: CLLocationCoordinate2D)
-    
     func showLocationAlert()
+    
+    func setCurrentPetButton()
 }
 
 class MapViewController: UIViewController {
@@ -24,6 +23,12 @@ class MapViewController: UIViewController {
     var locationManager: CLLocationManager?
     
     let mapView = MKMapView()
+    
+    let trackDashboardView = TrackDashboardView()
+    
+    var infoBottomAnchor: NSLayoutConstraint!
+    
+    var distance: Double = 0
     
     var userStoredLocations: [CLLocation] = []
     
@@ -37,7 +42,15 @@ class MapViewController: UIViewController {
         }
     }
     
+    var userCurrentPet: Pet? {
+        didSet {
+            self.delegate?.setCurrentPetButton()
+        }
+    }
+    
     private var listeners: [ListenerRegistration] = []
+    
+    private let locationHelper = LocationHelper()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,6 +108,7 @@ class MapViewController: UIViewController {
     private func layout() {
         
         view.addSubview(mapView)
+        view.addSubview(trackDashboardView)
         view.addSubview(userLocationButton)
         
         mapView.fillSuperview()
@@ -104,6 +118,14 @@ class MapViewController: UIViewController {
                                   width: 36,
                                   height: 36,
                                   padding: UIEdgeInsets(top: 0, left: 0, bottom: 35, right: 35))
+        
+        trackDashboardView.anchor(leading: view.leadingAnchor,
+                            trailing: view.trailingAnchor,
+                            height: view.safeAreaInsets.top + 90,
+                            padding: UIEdgeInsets(top: 0, left: 116, bottom: 0, right: 116))
+        
+        infoBottomAnchor = trackDashboardView.bottomAnchor.constraint(equalTo: view.topAnchor, constant: 0)
+        infoBottomAnchor.isActive = true
         
         userLocationButton.setRadiusWithShadow()
     }
@@ -160,6 +182,35 @@ class MapViewController: UIViewController {
                                         span: .init(latitudeDelta: 0.01,
                                                     longitudeDelta: 0.01))
         mapView.setRegion(region, animated: false)
+    }
+    
+    func getCurrentPet(user: User, userPets: [Pet]) {
+        
+        UserManager.shared.fetchUserLocation(userId: user.id) { [weak self] result in
+            switch result {
+                
+            case .success(let userLocation):
+                
+                guard let self = self else { return }
+                
+                if userPets.contains(where: {$0.id == userLocation.currentPetId}) {
+                    
+                    userPets.forEach({ pet in
+                        
+                        if pet.id == userLocation.currentPetId {
+                            
+                            self.userCurrentPet = pet
+                        }
+                    })
+                } else {
+                    
+                    self.userCurrentPet = nil
+                }
+            case .failure:
+                
+                self?.userCurrentPet = nil
+            }
+        }
     }
     
     func listenFriendsLocation(user: User) {
@@ -261,10 +312,39 @@ extension MapViewController: CLLocationManagerDelegate {
 
         mapView.addOverlay(polyline, level: .aboveLabels)
         
-        guard let location = locations.last?.coordinate else { return }
+        guard let location = locations.last?.coordinate,
+              let currentPet = userCurrentPet,
+              let user = UserManager.shared.currentUser
+        else {
+            return
+        }
         
-        self.delegate?.didUpdateLocation(coordinates: coordinates,
-                                         lastLocation: location)
+        distance += locationHelper.computeDistance(from: coordinates) / 1000
+        
+        trackDashboardView.distanceLabel.text = "\(String(format: "%.2f", distance)) km"
+        
+        let userLocation = UserLocation(userId: user.id,
+                                        userName: user.name,
+                                        userPhoto: user.userImage,
+                                        currentPetId: currentPet.id,
+                                        petName: currentPet.name,
+                                        petPhoto: currentPet.petImage,
+                                        location: location.transferToGeopoint(),
+                                        status: Status.tracking.rawValue)
+        
+        UserManager.shared.updateUserLocation(location: userLocation) { result in
+            
+            switch result {
+                
+            case .success:
+                
+                print("===renew success")
+                
+            case.failure(let error):
+                
+                print(error)
+            }
+        }
     }
 }
 

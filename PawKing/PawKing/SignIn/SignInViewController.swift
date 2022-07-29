@@ -193,12 +193,6 @@ class SignInViewController: UIViewController {
         videoView.fillSuperview()
         
         registerButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        //
-        //        backView.anchor(leading: view.leadingAnchor,
-        //                        bottom: view.bottomAnchor,
-        //                        trailing: view.trailingAnchor,
-        //                        height: 400,
-        //                        padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
         
         logoImageView.anchor(top: view.topAnchor,
                              centerX: view.centerXAnchor,
