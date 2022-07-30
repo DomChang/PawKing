@@ -16,12 +16,6 @@ class ExploreViewController: UIViewController {
         frame: .zero,
         collectionViewLayout: UICollectionViewCompositionalLayout.exploreViewCompositionalLayout()
     )
-
-    private let postManager = PostManager.shared
-    
-    private let userManager = UserManager.shared
-    
-    private let lottie = LottieWrapper.shared
     
     private var user: User?
     
@@ -71,7 +65,7 @@ class ExploreViewController: UIViewController {
         
         navigationController?.navigationBar.tintColor = .white
         
-        lottie.startLoading()
+        LottieWrapper.shared.startLoading()
         
         getAllPosts()
         
@@ -175,7 +169,7 @@ class ExploreViewController: UIViewController {
         
         guard let blockIds = user?.blockUsersId else { return }
         
-        postManager.fetchAllPosts(blockIds: blockIds) { [weak self] result in
+        PostManager.shared.fetchAllPosts(blockIds: blockIds) { [weak self] result in
             
             switch result {
                 
@@ -196,15 +190,15 @@ class ExploreViewController: UIViewController {
                 
                 self?.getFriendPosts()
                 
-                self?.lottie.stopLoading()
+                LottieWrapper.shared.stopLoading()
                 
             case .failure(let error):
                 
                 self?.refreshControl.endRefreshing()
                 
-                self?.lottie.stopLoading()
+                LottieWrapper.shared.stopLoading()
                 
-                self?.lottie.showError(error: error)
+                LottieWrapper.shared.showError(error: error)
             }
         }
     }

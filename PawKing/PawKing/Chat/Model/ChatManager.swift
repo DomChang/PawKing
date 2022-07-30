@@ -19,8 +19,6 @@ class ChatManager {
     
     lazy var dataBase = Firestore.firestore()
     
-    private let userManager = UserManager.shared
-    
     func sendMessage(message: Message,
                      completion: @escaping (Result<Void, Error>) -> Void) {
             
@@ -86,7 +84,7 @@ class ChatManager {
         let document = dataBase.collection(FirebaseCollection.chats.rawValue).document(userId)
             .collection(FirebaseCollection.recentMessages.rawValue)
 
-        let listener = document.addSnapshotListener { [weak self] snapshots, _ in
+        let listener = document.addSnapshotListener { snapshots, _ in
 
             var chatRooms: [Conversation] = []
             
@@ -102,8 +100,7 @@ class ChatManager {
             
             let dispatchQueue = DispatchQueue.global()
             
-            dispatchQueue.async { [weak self] in
-                
+            dispatchQueue.async {
                 do {
 
                     for document in snapshots.documents {
@@ -114,7 +111,7 @@ class ChatManager {
                         
                         if !blockIds.contains(otherUserId) {
                             
-                            self?.userManager.fetchUserInfo(userId: otherUserId) { result in
+                            UserManager.shared.fetchUserInfo(userId: otherUserId) { result in
                                 
                                 switch result {
                                     

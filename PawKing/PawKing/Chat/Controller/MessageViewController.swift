@@ -11,8 +11,6 @@ import IQKeyboardManagerSwift
 
 class MessageViewController: UIViewController {
     
-    private let chatManager = ChatManager.shared
-    
     private let user: User
     
     private let otherUser: User
@@ -219,7 +217,7 @@ class MessageViewController: UIViewController {
             messageLisener?.remove()
         }
 
-        messageLisener = chatManager.listenNewMessage(user: user, otherUser: otherUser) { [weak self] result in
+        messageLisener = ChatManager.shared.listenNewMessage(user: user, otherUser: otherUser) { [weak self] result in
 
             switch result {
 
@@ -229,7 +227,7 @@ class MessageViewController: UIViewController {
 
                 self.messages.append(contentsOf: messages)
                 
-                self.chatManager.updateMessageStatus(user: self.user,
+                ChatManager.shared.updateMessageStatus(user: self.user,
                                                      otherUser: self.otherUser)
                 
             case .failure(let error):
@@ -252,7 +250,7 @@ class MessageViewController: UIViewController {
                               createdTime: Timestamp(date: Date()),
                               isRead: MessageStatus.notRead.rawValue)
         
-        chatManager.sendMessage(message: message) { [weak self] result in
+        ChatManager.shared.sendMessage(message: message) { [weak self] result in
             
             switch result {
                 

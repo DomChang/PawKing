@@ -14,6 +14,41 @@ class MapManager {
     
     lazy var dataBase = Firestore.firestore()
     
+    func fetchTracks(userId: String, completion: @escaping (Result<[TrackInfo], Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+            .collection(FirebaseCollection.tracks.rawValue).order(by: "startTime", descending: true)
+            
+        document.getDocuments { snapshots, _ in
+            
+            var trackInfos: [TrackInfo] = []
+            
+            guard let snapshots = snapshots
+            
+            else {
+                    completion(.failure(FirebaseError.fetchTrackError))
+                    
+                    return
+            }
+            
+            do {
+                
+                for document in snapshots.documents {
+                    
+                    let trackInfo = try document.data(as: TrackInfo.self)
+                    
+                    trackInfos.append(trackInfo)
+                }
+                
+                completion(.success(trackInfos))
+                
+            } catch {
+                
+                completion(.failure(FirebaseError.decodeTrackError))
+            }
+        }
+    }
+    
     func uploadTrack(userId: String,
                      trackInfo: inout TrackInfo,
                      completion: @escaping (Result<TrackInfo, Error>) -> Void) {
@@ -65,6 +100,48 @@ class MapManager {
         ])
     }
     
+    func fetchUserLocation(userId: String, completion: @escaping (Result<UserLocation, Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.userLocations.rawValue).document(userId)
+            
+        document.getDocument { snapshot, _ in
+            
+            guard let snapshot = snapshot
+            
+            else {
+                    completion(.failure(FirebaseError.fetchUserError))
+                    
+                    return
+            }
+            
+            do {
+                
+                let userLocation = try snapshot.data(as: UserLocation.self)
+                
+                completion(.success(userLocation))
+                
+            } catch {
+                
+                completion(.failure(FirebaseError.decodeUserError))
+            }
+            
+        }
+    }
+    
+    func updateUserLocation(location: UserLocation, completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.userLocations.rawValue).document(location.userId)
+        
+        do {
+            try document.setData(from: location)
+            
+            completion(.success(()))
+            
+        } catch {
+            completion(.failure(FirebaseError.uploadTrackError))
+        }
+    }
+
     func listenFriendsLocation(friend: String,
                                completion: @escaping (Result<UserLocation, Error>) -> Void) -> ListenerRegistration {
     

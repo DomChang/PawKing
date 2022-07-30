@@ -19,11 +19,7 @@ enum UserListType: String {
 class UserListViewController: UIViewController {
 
     let tableView = UITableView(frame: .zero, style: .insetGrouped)
-    
-    let userManager = UserManager.shared
-    
-    let lottie = LottieWrapper.shared
-    
+
     var users: [User]? {
         
         didSet {
@@ -119,9 +115,9 @@ class UserListViewController: UIViewController {
     
     func getUsers() {
         
-        lottie.startLoading()
+        LottieWrapper.shared.startLoading()
         
-        userManager.fetchUsers(userIds: usersId) { [weak self] result in
+        UserManager.shared.fetchUsers(userIds: usersId) { [weak self] result in
             
             switch result {
                 
@@ -129,7 +125,7 @@ class UserListViewController: UIViewController {
                 
                 self?.users = users
                 
-                self?.lottie.stopLoading()
+                LottieWrapper.shared.stopLoading()
                 
                 DispatchQueue.main.async {
                     self?.tableView.reloadData()
@@ -137,8 +133,8 @@ class UserListViewController: UIViewController {
                 
             case .failure(let error):
                 
-                self?.lottie.stopLoading()
-                self?.lottie.showError(error: error)
+                LottieWrapper.shared.stopLoading()
+                LottieWrapper.shared.showError(error: error)
             }
         }
     }
@@ -149,7 +145,7 @@ extension UserListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         guard let users = users,
-              let userSelf = userManager.currentUser else { return }
+              let userSelf = UserManager.shared.currentUser else { return }
         
         guard users[indexPath.row].id != userSelf.id else { return }
         

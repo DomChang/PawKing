@@ -10,12 +10,6 @@ import FirebaseFirestore
 
 class PetConfigViewController: UIViewController {
     
-    private let petManager = PetManager.shared
-    
-    private let userManager = UserManager.shared
-    
-    private let lottie = LottieWrapper.shared
-    
     private let photoHelper = PKPhotoHelper()
     
     private var owner: User
@@ -170,22 +164,22 @@ class PetConfigViewController: UIViewController {
             
             guard let self = self else { return }
             
-            self.lottie.startLoading()
+            LottieWrapper.shared.startLoading()
             
-            self.petManager.deletePet(userId: self.owner.id, petId: pet.id) { result in
+            PetManager.shared.deletePet(userId: self.owner.id, petId: pet.id) { result in
                 
                 switch result {
                     
                 case .success:
                     
-                    self.lottie.stopLoading()
+                    LottieWrapper.shared.stopLoading()
                     NotificationCenter.default.post(name: .updateCurrentPet, object: .none)
                     self.navigationController?.popViewController(animated: true)
                     
                 case .failure(let error):
                     
-                    self.lottie.stopLoading()
-                    self.lottie.showError(error: error)
+                    LottieWrapper.shared.stopLoading()
+                    LottieWrapper.shared.showError(error: error)
                 }
             }
         }
@@ -234,7 +228,7 @@ extension PetConfigViewController: PetConfigCellDelegate {
     
     func didTapFinish(From cell: PetConfigCell) {
         
-        lottie.startLoading()
+        LottieWrapper.shared.startLoading()
         
         guard let petName = cell.petNameTextfield.text,
               let gender = cell.genderTextfield.text,
@@ -242,8 +236,8 @@ extension PetConfigViewController: PetConfigCellDelegate {
               let birthday = cell.birthday
         else {
             
-            lottie.stopLoading()
-            lottie.showError(errorMessage: "Form not completed!")
+            LottieWrapper.shared.stopLoading()
+            LottieWrapper.shared.showError(errorMessage: "Form not completed!")
             cell.finishButtonEnable()
             
             return
@@ -257,7 +251,7 @@ extension PetConfigViewController: PetConfigCellDelegate {
             editPet.gender = gender
             editPet.birthday = birthday
             
-            petManager.updatePetInfo(userId: owner.id,
+            PetManager.shared.updatePetInfo(userId: owner.id,
                                      pet: editPet,
                                      image: petImage) { [weak self] result in
                 switch result {
@@ -266,7 +260,7 @@ extension PetConfigViewController: PetConfigCellDelegate {
                     
                     cell.finishButtonEnable()
                     
-                    self?.lottie.stopLoading()
+                    LottieWrapper.shared.stopLoading()
                     
                     self?.navigationController?.popViewController(animated: true)
                     
@@ -276,8 +270,8 @@ extension PetConfigViewController: PetConfigCellDelegate {
                     
                     cell.finishButtonEnable()
                     
-                    self?.lottie.stopLoading()
-                    self?.lottie.showError(error: error)
+                    LottieWrapper.shared.stopLoading()
+                    LottieWrapper.shared.showError(error: error)
                 }
             }
             
@@ -298,7 +292,7 @@ extension PetConfigViewController: PetConfigCellDelegate {
                                                       isCatFriendly: true,
                                                       isDogFriendly: true))
             
-            petManager.setupPet(userId: owner.id,
+            PetManager.shared.setupPet(userId: owner.id,
                                 pet: &pet,
                                 petName: petName,
                                 petImage: petImage) { [weak self] result in
@@ -309,7 +303,7 @@ extension PetConfigViewController: PetConfigCellDelegate {
                     
                     cell.finishButtonEnable()
                     
-                    self?.lottie.stopLoading()
+                    LottieWrapper.shared.stopLoading()
                     
                     self?.navigationController?.popViewController(animated: true)
                     
@@ -319,8 +313,8 @@ extension PetConfigViewController: PetConfigCellDelegate {
                     
                     cell.finishButtonEnable()
                     
-                    self?.lottie.stopLoading()
-                    self?.lottie.showError(error: error)
+                    LottieWrapper.shared.stopLoading()
+                    LottieWrapper.shared.showError(error: error)
                 }
             }
         }

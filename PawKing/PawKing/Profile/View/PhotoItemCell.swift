@@ -13,19 +13,10 @@ class PhotoItemCell: UICollectionViewCell {
     
     let imageView = UIImageView()
 
-//    var photoURL: URL? {
-//
-//        didSet {
-//            configureCell()
-//        }
-//    }
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         imageView.image = UIImage.asset(.Image_Placeholder_Paw)
-
-//        configureCell()
     }
 
     required init?(coder: NSCoder) {

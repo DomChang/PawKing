@@ -18,10 +18,6 @@ class RegisterViewController: UIViewController {
 
     var delegate: RegisterViewDelegate?
     
-    private let userManager = UserManager.shared
-    
-    private let lottie = LottieWrapper.shared
-    
     private let welcomeImageView = UIImageView()
     
     private let signUpTitleLabel = UILabel()
@@ -219,11 +215,11 @@ class RegisterViewController: UIViewController {
         guard password == comfirmPassword else {
             
             signUpButtonEnable()
-            lottie.showError(errorMessage: "Wrong password")
+            LottieWrapper.shared.showError(errorMessage: "Wrong password")
             return
         }
         
-        lottie.startLoading()
+        LottieWrapper.shared.startLoading()
         
         Auth.auth().createUser(withEmail: email, password: password) { [weak self] authResult, error in
             
@@ -231,30 +227,30 @@ class RegisterViewController: UIViewController {
 
                 print(error.localizedDescription)
                 self?.signUpButtonEnable()
-                self?.lottie.showError(errorMessage: "Wrong acount or password")
-                self?.lottie.stopLoading()
+                LottieWrapper.shared.showError(errorMessage: "Wrong acount or password")
+                LottieWrapper.shared.stopLoading()
 
             } else {
                 
                 guard let uid = authResult?.user.uid else {
                     self?.signUpButtonEnable()
-                    self?.lottie.stopLoading()
+                    LottieWrapper.shared.stopLoading()
                     return
                 }
                 
-                self?.userManager.checkUserExist(uid: uid, completion: { isExit in
+                UserManager.shared.checkUserExist(uid: uid, completion: { isExit in
                     
                     if isExit {
 
-                        self?.lottie.showError(errorMessage: "This account already exist")
+                        LottieWrapper.shared.showError(errorMessage: "This account already exist")
                         self?.signUpButtonEnable()
-                        self?.lottie.stopLoading()
+                        LottieWrapper.shared.stopLoading()
                         return
                         
                     } else {
                         
                         self?.signUpButtonEnable()
-                        self?.lottie.stopLoading()
+                        LottieWrapper.shared.stopLoading()
                         self?.dismiss(animated: true, completion: {
                             
                             self?.delegate?.didFinishRegister(uid: uid)

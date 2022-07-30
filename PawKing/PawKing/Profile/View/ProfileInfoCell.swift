@@ -15,10 +15,6 @@ class ProfileInfoCell: UserInfoCell {
     
     private let user = UserManager.shared.currentUser
     
-    private let userManager = UserManager.shared
-    
-    private let lottie = LottieWrapper.shared
-    
     override func setup() {
         super.setup()
         
@@ -29,17 +25,17 @@ class ProfileInfoCell: UserInfoCell {
             
             self.userImageView.image = image
             
-            self.userManager.uploadUserPhoto(userId: user.id,
+            UserManager.shared.uploadUserPhoto(userId: user.id,
                                         image: image) { result in
                 switch result {
 
                 case .success:
                     
-                    print("更新使用者照片成功")
+                    print("update user photo success.")
                     
                 case .failure(let error):
                     
-                    self.lottie.showError(error: error)
+                    LottieWrapper.shared.showError(error: error)
                 }
             }
         }

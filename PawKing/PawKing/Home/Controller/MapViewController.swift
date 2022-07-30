@@ -186,7 +186,7 @@ class MapViewController: UIViewController {
     
     func getCurrentPet(user: User, userPets: [Pet]) {
         
-        UserManager.shared.fetchUserLocation(userId: user.id) { [weak self] result in
+        MapManager.shared.fetchUserLocation(userId: user.id) { [weak self] result in
             switch result {
                 
             case .success(let userLocation):
@@ -332,7 +332,7 @@ extension MapViewController: CLLocationManagerDelegate {
                                         location: location.transferToGeopoint(),
                                         status: Status.tracking.rawValue)
         
-        UserManager.shared.updateUserLocation(location: userLocation) { result in
+        MapManager.shared.updateUserLocation(location: userLocation) { result in
             
             switch result {
                 

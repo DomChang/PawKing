@@ -13,8 +13,6 @@ class ChatRoomViewController: UIViewController {
     
     private let tableView = UITableView()
     
-    private let chatManager = ChatManager.shared
-    
     private var chatRoooms: [Conversation] = [] {
         didSet {
             
@@ -94,20 +92,6 @@ class ChatRoomViewController: UIViewController {
         }
 
         self.user = user
-
-//        chatManager.listenChatRooms(userId: user.id, blockIds: user.blockUsersId) { [weak self] result in
-//
-//            switch result {
-//
-//            case .success(let chatRooms):
-//
-//                self?.chatRoooms = chatRooms
-//
-//            case .failure(let error):
-//
-//                print(error)
-//            }
-//        }
         
         if let chatRooms = ChatManager.shared.chatRooms {
             chatRoooms = chatRooms
@@ -163,7 +147,7 @@ extension ChatRoomViewController: UITableViewDataSource, UITableViewDelegate {
 
             tableView.deleteRows(at: [indexPath], with: .fade)
             
-            chatManager.removeChat(userId: user.id, otherUserId: otherUserId) { result in
+            ChatManager.shared.removeChat(userId: user.id, otherUserId: otherUserId) { result in
                     
                 switch result {
                     

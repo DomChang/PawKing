@@ -51,9 +51,9 @@ class ProfileViewController: UserProfileBaseViewController {
         
         guard let user = UserManager.shared.currentUser else { return }
         
-        lottie.startLoading()
+        LottieWrapper.shared.startLoading()
         
-        userManager.fetchUserInfo(userId: user.id) { [weak self] result in
+        UserManager.shared.fetchUserInfo(userId: user.id) { [weak self] result in
             
             switch result {
                 
@@ -69,11 +69,11 @@ class ProfileViewController: UserProfileBaseViewController {
                 
                 self?.fetchTrack(by: user)
                 
-                self?.lottie.stopLoading()
+                LottieWrapper.shared.stopLoading()
                 
             case .failure:
                 
-                self?.lottie.stopLoading()
+                LottieWrapper.shared.stopLoading()
             }
         }
     }
@@ -169,93 +169,118 @@ extension ProfileViewController: UICollectionViewDataSource {
             
         case ProfileSections.userInfo.rawValue:
             
-            guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileInfoCell.identifier,
-                                                                    for: indexPath) as? ProfileInfoCell
-            else {
-                fatalError("Cannot dequeue ProfileInfoCell")
-            }
-            
-            if let user = user {
-                
-                infoCell.configureCell(user: user, postCount: posts?.count ?? 0)
-                
-                infoCell.delegate = self
-            }
-            return infoCell
+            return setUserInfoCell(collectionView: collectionView, indexPath: indexPath)
             
         case ProfileSections.choosePet.rawValue:
+
+            return setChoosePetCell(collectionView: collectionView, indexPath: indexPath)
             
-            guard let petCell = collectionView.dequeueReusableCell(withReuseIdentifier: PetItemCell.identifier,
-                                                                    for: indexPath) as? PetItemCell
+        case ProfileSections.chooseContent.rawValue:
+            
+            return setChooseContentCell(collectionView: collectionView, indexPath: indexPath)
+            
+        case ProfileSections.postsPhoto.rawValue:
+            
+            return setPostPhotoCell(collectionView: collectionView, indexPath: indexPath)
+            
+        default:
+            return UICollectionViewCell()
+        }
+    }
+    
+    private func setUserInfoCell(collectionView: UICollectionView,
+                                 indexPath: IndexPath) -> UICollectionViewCell {
+        
+        guard let infoCell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileInfoCell.identifier,
+                                                                for: indexPath) as? ProfileInfoCell
+        else {
+            fatalError("Cannot dequeue ProfileInfoCell")
+        }
+        
+        if let user = user {
+            
+            infoCell.configureCell(user: user, postCount: posts?.count ?? 0)
+            
+            infoCell.delegate = self
+        }
+        return infoCell
+    }
+    
+    private func setChoosePetCell(collectionView: UICollectionView,
+                                  indexPath: IndexPath) -> UICollectionViewCell {
+        
+        guard let petCell = collectionView.dequeueReusableCell(withReuseIdentifier: PetItemCell.identifier,
+                                                               for: indexPath) as? PetItemCell
+        else {
+            fatalError("Cannot dequeue PhotoItemCell")
+        }
+        
+        guard let userPets = pets else { return petCell }
+        
+        let userPet = userPets[indexPath.item]
+        
+        if selectedPetIndex == nil {
+            petCell.selectState = false
+        }
+        petCell.configureCell(pet: userPet)
+        
+        return petCell
+    }
+    
+    private func setChooseContentCell(collectionView: UICollectionView,
+                                      indexPath: IndexPath) -> UICollectionViewCell {
+        
+        guard let chooseCell = collectionView.dequeueReusableCell(withReuseIdentifier: ContentButtonCell.identifier,
+                                                                  for: indexPath) as? ContentButtonCell
+        else {
+            fatalError("Cannot dequeue ContentButtonCell")
+        }
+        chooseCell.delegate = self
+        
+        return chooseCell
+    }
+    
+    private func setPostPhotoCell(collectionView: UICollectionView,
+                                  indexPath: IndexPath) -> UICollectionViewCell {
+        
+        if isPhoto {
+            
+            guard let photoCell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoItemCell.identifier,
+                                                                     for: indexPath) as? PhotoItemCell
             else {
                 fatalError("Cannot dequeue PhotoItemCell")
             }
             
-            guard let userPets = pets else { return petCell }
-
-            let userPet = userPets[indexPath.item]
-            
-            if selectedPetIndex == nil {
-                petCell.selectState = false
+            if let posts = displayPosts,
+               let imageUrl = URL(string: posts[indexPath.item].photo) {
+                
+                photoCell.configureCell(photoURL: imageUrl)
             }
-            petCell.configureCell(pet: userPet)
             
-            return petCell
+            return photoCell
             
-        case ProfileSections.chooseContent.rawValue:
+        } else {
             
-            guard let chooseCell = collectionView.dequeueReusableCell(withReuseIdentifier: ContentButtonCell.identifier,
-                                                                    for: indexPath) as? ContentButtonCell
+            guard let trackCell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: TrackHostoryCell.identifier,
+                for: indexPath
+            ) as? TrackHostoryCell
+                    
             else {
-                fatalError("Cannot dequeue ContentButtonCell")
+                fatalError("Cannot dequeue TrackHostoryCell")
             }
-            chooseCell.delegate = self
             
-            return chooseCell
-            
-        case ProfileSections.postsPhoto.rawValue:
-            
-            if isPhoto {
+            if let trackInfos = displayTrackInfos,
+               let userPets = pets {
                 
-                guard let photoCell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoItemCell.identifier,
-                                                                        for: indexPath) as? PhotoItemCell
-                else {
-                    fatalError("Cannot dequeue PhotoItemCell")
-                }
+                let trackInfo = trackInfos[indexPath.item]
                 
-                if let posts = displayPosts,
-                        let imageUrl = URL(string: posts[indexPath.item].photo) {
+                for userPet in userPets where userPet.id == trackInfo.petId {
                     
-                    photoCell.configureCell(photoURL: imageUrl)
+                    trackCell.configureCell(pet: userPet, trackInfo: trackInfo)
                 }
-                
-                return photoCell
-                
-            } else {
-                
-                guard let trackCell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: TrackHostoryCell.identifier,
-                    for: indexPath
-                ) as? TrackHostoryCell
-                        
-                else {
-                    fatalError("Cannot dequeue TrackHostoryCell")
-                }
-                
-                if let trackInfos = displayTrackInfos,
-                        let userPets = pets {
-                
-                    let trackInfo = trackInfos[indexPath.item]
-                    
-                    for userPet in userPets where userPet.id == trackInfo.petId {
-                        
-                        trackCell.configureCell(pet: userPet, trackInfo: trackInfo)
-                    }
-                }
-                return trackCell
             }
-        default:
-            return UICollectionViewCell()
+            return trackCell
         }
     }
 }
