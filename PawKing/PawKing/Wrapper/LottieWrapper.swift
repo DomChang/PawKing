@@ -7,6 +7,7 @@
 
 import Foundation
 import Lottie
+import UIKit
 
 enum LottieName: String {
     
@@ -37,6 +38,8 @@ class LottieWrapper {
     private let loadingView = AnimationView(name: LottieName.loading.rawValue)
     
     private let errorView = AnimationView(name: LottieName.error.rawValue)
+    
+    private let likingView = AnimationView(name: LottieName.like.rawValue)
     
     private let errorLabel = UILabel()
     
@@ -179,6 +182,31 @@ class LottieWrapper {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
 
             vStack.removeFromSuperview()
+        }
+    }
+    
+    func showLikeAnimation(addTo view: UIView, cell: PhotoPostCell) {
+        
+        likingView.contentMode = .scaleAspectFill
+        likingView.animationSpeed = 1.25
+        likingView.backgroundBehavior = .forceFinish
+        likingView.loopMode = .playOnce
+        likingView.setRadiusWithShadow()
+        
+        view.addSubview(likingView)
+        
+        likingView.anchor(centerY: cell.photoImageView.centerYAnchor,
+                          centerX: cell.photoImageView.centerXAnchor,
+                          width: 250,
+                          height: 250,
+                          padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
+        
+        DispatchQueue.main.async {
+            
+            self.likingView.play { _ in
+                self.likingView.stop()
+                self.likingView.removeFromSuperview()
+            }
         }
     }
 }

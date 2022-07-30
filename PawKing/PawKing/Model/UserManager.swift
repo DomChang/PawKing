@@ -143,36 +143,6 @@ class UserManager {
         ], forDocument: userDoc)
         
         batch.commit()
-//        locationDoc.updateData([
-//
-//            "currentPetId": pet.id,
-//            "petPhoto": pet.petImage
-//        ]) { [weak self] error in
-//
-//            if let error = error {
-//
-//                completion(.failure(error))
-//
-//            } else {
-//
-//                let userDoc = self?.dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
-//
-//                userDoc?.updateData([
-//
-//                    "currentPetId": pet.id
-//                ]) { error in
-//
-//                    if let error = error {
-//
-//                        completion(.failure(error))
-//
-//                    } else {
-//
-//                        completion(.success(()))
-//                    }
-//                }
-//            }
-//        }
     }
     
     func fetchUserInfo(userId: String, completion: @escaping (Result<User, Error>) -> Void) {

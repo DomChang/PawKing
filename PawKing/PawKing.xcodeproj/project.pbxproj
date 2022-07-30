@@ -79,6 +79,7 @@
 		B6B0B60B2891232B005A141F /* AlertHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B0B60A2891232B005A141F /* AlertHelper.swift */; };
 		B6B0B60D2892B300005A141F /* TrackDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B0B60C2892B300005A141F /* TrackDashboardView.swift */; };
 		B6B0B61228940AED005A141F /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B0B61128940AED005A141F /* SignInView.swift */; };
+		B6B0B61428953EBA005A141F /* InputCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B0B61328953EBA005A141F /* InputCommentView.swift */; };
 		B6BF96142861EABC003627C1 /* TrackHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF96132861EABC003627C1 /* TrackHistoryViewController.swift */; };
 		B6BF96182862A467003627C1 /* PhotoPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF96172862A467003627C1 /* PhotoPostViewController.swift */; };
 		B6BF961A2862A9CF003627C1 /* PhotoPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF96192862A9CF003627C1 /* PhotoPostCell.swift */; };
@@ -192,6 +193,7 @@
 		B6B0B60A2891232B005A141F /* AlertHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertHelper.swift; sourceTree = "<group>"; };
 		B6B0B60C2892B300005A141F /* TrackDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackDashboardView.swift; sourceTree = "<group>"; };
 		B6B0B61128940AED005A141F /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		B6B0B61328953EBA005A141F /* InputCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputCommentView.swift; sourceTree = "<group>"; };
 		B6BF96132861EABC003627C1 /* TrackHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackHistoryViewController.swift; sourceTree = "<group>"; };
 		B6BF96172862A467003627C1 /* PhotoPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPostViewController.swift; sourceTree = "<group>"; };
 		B6BF96192862A9CF003627C1 /* PhotoPostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPostCell.swift; sourceTree = "<group>"; };
@@ -344,7 +346,6 @@
 			isa = PBXGroup;
 			children = (
 				B66A15B32864031500DF2663 /* Model */,
-				B66A15B42864031C00DF2663 /* View */,
 				B66A15B52864032300DF2663 /* Controller */,
 			);
 			path = Explore;
@@ -355,13 +356,6 @@
 			children = (
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		B66A15B42864031C00DF2663 /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		B66A15B52864032300DF2663 /* Controller */ = {
@@ -669,6 +663,7 @@
 			children = (
 				B6BF96192862A9CF003627C1 /* PhotoPostCell.swift */,
 				B6BF961B28630C4E003627C1 /* CommentCell.swift */,
+				B6B0B61328953EBA005A141F /* InputCommentView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -936,6 +931,7 @@
 				B6ABE8EB285AE41500B1A977 /* LocationRelated+Extension.swift in Sources */,
 				B651EDCE286ED454003A5F2B /* RegisterViewController.swift in Sources */,
 				B66A15CC2865ECA300DF2663 /* OtherUserMessageCell.swift in Sources */,
+				B6B0B61428953EBA005A141F /* InputCommentView.swift in Sources */,
 				B6D4F6A9285C62F10045DDB2 /* Pet.swift in Sources */,
 				B651EDCC286EA2F8003A5F2B /* InputTextField.swift in Sources */,
 				B6E86AB228609CB7002B8C9A /* PostManager.swift in Sources */,

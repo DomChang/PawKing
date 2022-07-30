@@ -49,17 +49,9 @@ class PhotoPostViewController: UIViewController {
     
     private var comments: [Comment]?
     
-    private let userImageView = UIImageView()
-    
     private var likingView: AnimationView?
-    
-    private let userInputTextView = InputTextView()
-    
-    private let sendButton = UIButton()
-    
-    private let inputBackView = UIView()
-    
-    private let inputSeperatorLine = UIView()
+  
+    private let inputCommentView = InputCommentView()
     
     private let alertHelper = AlertHelper()
     
@@ -113,11 +105,7 @@ class PhotoPostViewController: UIViewController {
         tableView.register(CommentCell.self,
                            forCellReuseIdentifier: CommentCell.identifier)
         
-        userInputTextView.isScrollEnabled = false
-        userInputTextView.placeholder = "Enter Comment"
-        userInputTextView.delegate = self
-        
-        sendButton.addTarget(self, action: #selector(didTapSendButton), for: .touchUpInside)
+        inputCommentView.sendButton.addTarget(self, action: #selector(didTapSendButton), for: .touchUpInside)
     }
     
     private func style() {
@@ -131,69 +119,25 @@ class PhotoPostViewController: UIViewController {
         
         tableView.backgroundColor = .white
         tableView.separatorStyle = .none
-    
-        inputSeperatorLine.backgroundColor = .lightGray
         
         let imageUrl = URL(string: user.userImage)
-        userImageView.kf.setImage(with: imageUrl)
-        userImageView.contentMode = .scaleAspectFill
-        
-        userInputTextView.backgroundColor = .white
-        userInputTextView.font = UIFont.systemFont(ofSize: 18)
-        
-        sendButton.layer.cornerRadius = 3
-        sendButton.setTitle("Submit", for: .normal)
-        sendButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        sendButtonDisable()
-        
-        inputBackView.backgroundColor = .white
+        inputCommentView.userImageView.kf.setImage(with: imageUrl)
     }
     
     private func layout() {
         
         view.addSubview(tableView)
-        view.addSubview(inputBackView)
-        view.addSubview(inputSeperatorLine)
-        inputBackView.addSubview(userImageView)
-        inputBackView.addSubview(userInputTextView)
-        inputBackView.addSubview(sendButton)
+        view.addSubview(inputCommentView)
         
         tableView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                          leading: view.leadingAnchor,
-                         bottom: inputBackView.topAnchor,
+                         bottom: inputCommentView.topAnchor,
                          trailing: view.trailingAnchor,
                          padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
-        
-        userImageView.anchor(top: inputBackView.topAnchor,
-                             leading: inputBackView.leadingAnchor,
-                             width: 40,
-                             height: 40,
-                             padding: UIEdgeInsets(top: 10, left: 16, bottom: 0, right: 0))
-        
-        userInputTextView.anchor(top: inputBackView.topAnchor,
-                                 leading: userImageView.trailingAnchor,
-                                 bottom: inputBackView.bottomAnchor,
-                                  trailing: sendButton.leadingAnchor,
-                                 padding: UIEdgeInsets(top: 8, left: 10, bottom: 10, right: 10))
-        
-        inputBackView.anchor(leading: view.leadingAnchor,
+
+        inputCommentView.anchor(leading: view.leadingAnchor,
                              bottom: view.safeAreaLayoutGuide.bottomAnchor,
                              trailing: view.trailingAnchor)
-        
-        sendButton.anchor(trailing: inputBackView.trailingAnchor,
-                          centerY: inputBackView.centerYAnchor,
-                          width: 60,
-                          height: 35,
-                          padding: UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 20))
-        
-        inputSeperatorLine.anchor(leading: inputBackView.leadingAnchor,
-                                  bottom: inputBackView.topAnchor,
-                                  trailing: inputBackView.trailingAnchor,
-                                  height: 0.5)
-        
-        inputBackView.layoutIfNeeded()
-        userImageView.makeRound()
-        userImageView.clipsToBounds = true
         
         // Change bottom bounce area backgroud color
         tableView.layoutIfNeeded()
@@ -305,10 +249,10 @@ class PhotoPostViewController: UIViewController {
         
         LottieWrapper.shared.startLoading()
         
-        sendButtonDisable()
+        inputCommentView.sendButtonDisable()
         
-        guard let text = userInputTextView.text,
-              userInputTextView.text != "" else {
+        guard let text = inputCommentView.userInputTextView.text,
+              inputCommentView.userInputTextView.text != "" else {
             return
         }
         
@@ -326,9 +270,9 @@ class PhotoPostViewController: UIViewController {
                 
                 LottieWrapper.shared.stopLoading()
                 
-                self?.userInputTextView.text = ""
+                self?.inputCommentView.userInputTextView.text = ""
                 
-                self?.userInputTextView.showPlaceholderLabel()
+                self?.inputCommentView.userInputTextView.showPlaceholderLabel()
                 
             case .failure(let error):
                 
@@ -415,7 +359,6 @@ class PhotoPostViewController: UIViewController {
                                         action: { self.setDeleteAction() },
                                         by: self)
         } else {
-            
             alertHelper.showActionSheet(title: nil, message: nil,
                                         actionName: "Block and Report User",
                                         actionStyle: .destructive,
@@ -423,24 +366,11 @@ class PhotoPostViewController: UIViewController {
                                         by: self)
         }
     }
-    
-    private func sendButtonEnable() {
-        
-        sendButton.isEnabled = true
-        sendButton.backgroundColor = .CoralOrange
-    }
-    
-    private func sendButtonDisable() {
-        
-        sendButton.isEnabled = false
-        sendButton.backgroundColor = .MainGray
-    }
 }
 
 extension PhotoPostViewController: PhotoPostCellDelegate {
     
     func didTapAction() {
-        
         showActionSheet()
     }
     
@@ -453,7 +383,6 @@ extension PhotoPostViewController: PhotoPostCellDelegate {
             PostManager.shared.addPostLike(postId: post.id, userId: user.id)
             
             UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-            
         } else {
             
             likeCount -= 1
@@ -466,33 +395,7 @@ extension PhotoPostViewController: PhotoPostCellDelegate {
         
         if isLike {
             
-            likingView = AnimationView(name: LottieName.like.rawValue)
-            likingView?.contentMode = .scaleAspectFill
-            likingView?.animationSpeed = 1.25
-            likingView?.backgroundBehavior = .forceFinish
-            likingView?.loopMode = .playOnce
-            likingView?.setRadiusWithShadow()
-            
-            guard let likingView = likingView else {
-                return
-            }
-            
-            tableView.addSubview(likingView)
-            
-            likingView.anchor(centerY: cell.photoImageView.centerYAnchor,
-                              centerX: cell.photoImageView.centerXAnchor,
-                              width: 250,
-                              height: 250,
-                              padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
-            
-            DispatchQueue.main.async {
-            
-                likingView.play { _ in
-                    likingView.stop()
-                    likingView.removeFromSuperview()
-                    self.likingView = nil
-                }
-            }
+            LottieWrapper.shared.showLikeAnimation(addTo: tableView, cell: cell)
         }
     }
     
@@ -501,11 +404,9 @@ extension PhotoPostViewController: PhotoPostCellDelegate {
         guard let postUser = postUser else {
             return
         }
-        
         if self.user.id != postUser.id {
             
             let postUserVC = UserPhotoWallViewController(otherUserId: postUser.id)
-            
             navigationController?.pushViewController(postUserVC, animated: true)
         }
     }
@@ -513,7 +414,6 @@ extension PhotoPostViewController: PhotoPostCellDelegate {
     func didTapLikeUsers() {
         
         let likeUserVC = LikeUserListViewController(usersId: post.likesId, postId: post.id)
-        
         navigationController?.pushViewController(likeUserVC, animated: true)
     }
 }
@@ -527,7 +427,6 @@ extension PhotoPostViewController: CommentCellDelegate {
         else {
             return
         }
-        
         let commentUserVC = UserPhotoWallViewController(otherUserId: otherUserId)
         
         navigationController?.pushViewController(commentUserVC, animated: true)
@@ -537,18 +436,15 @@ extension PhotoPostViewController: CommentCellDelegate {
 extension PhotoPostViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        
         2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if section == 0 {
-            
             return 1
             
         } else {
-            
             return userComments.count
         }
     }
@@ -568,13 +464,11 @@ extension PhotoPostViewController: UITableViewDataSource, UITableViewDelegate {
                     let user = postUser else { return contentCell }
             
             contentCell.delegate = self
-            
             contentCell.configureCell(user: user,
                                       pet: pet,
                                       post: post,
                                       likeCount: likeCount,
                                       isLike: isLike)
-            
             contentCell.selectionStyle = .none
             
             return contentCell
@@ -594,28 +488,12 @@ extension PhotoPostViewController: UITableViewDataSource, UITableViewDelegate {
             
             commentCell.configureCell(user: userComment.user,
                                       comment: userComment.comment)
-            
             commentCell.delegate = self
             
             return commentCell
             
         default:
             return UITableViewCell()
-        }
-    }
-}
-
-extension PhotoPostViewController: UITextViewDelegate {
-    
-    func textViewDidChange(_ textView: UITextView) {
-        guard textView == userInputTextView else { return }
-        
-        if textView.text.isEmpty {
-            
-            sendButtonDisable()
-        } else {
-            
-            sendButtonEnable()
         }
     }
 }
