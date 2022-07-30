@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		B60008002876AB7B0087717F /* signIn.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B60007FF2876AB770087717F /* signIn.mp4 */; };
 		B63484D3285D80C600DB7CE7 /* UserConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484D2285D80C600DB7CE7 /* UserConfigViewController.swift */; };
-		B63484D6285D80F100DB7CE7 /* BaseConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484D5285D80F100DB7CE7 /* BaseConfigViewController.swift */; };
 		B63484DB285D85E900DB7CE7 /* UserConfigCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484DA285D85E900DB7CE7 /* UserConfigCell.swift */; };
 		B63484DF285DC62D00DB7CE7 /* PetConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484DE285DC62D00DB7CE7 /* PetConfigViewController.swift */; };
 		B63484E1285DC70D00DB7CE7 /* PetConfigCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484E0285DC70D00DB7CE7 /* PetConfigCell.swift */; };
@@ -41,6 +40,8 @@
 		B68B9DB72886AC8700156B4D /* LocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68B9DB62886AC8700156B4D /* LocationHelper.swift */; };
 		B68B9DB92886B0B300156B4D /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68B9DB82886B0B300156B4D /* TimeInterval+Extension.swift */; };
 		B68B9DBD2887A8AF00156B4D /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68B9DBC2887A8AF00156B4D /* MapViewController.swift */; };
+		B6940D6028956D34003563E0 /* TrackHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6940D5F28956D34003563E0 /* TrackHelper.swift */; };
+		B6940D622895795C003563E0 /* HoldHintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6940D612895795C003563E0 /* HoldHintView.swift */; };
 		B698DD9D285881FB0009077E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DD9C285881FB0009077E /* AppDelegate.swift */; };
 		B698DD9F285881FB0009077E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DD9E285881FB0009077E /* SceneDelegate.swift */; };
 		B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDA0285881FB0009077E /* TabBarViewController.swift */; };
@@ -79,6 +80,9 @@
 		B6B0B60B2891232B005A141F /* AlertHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B0B60A2891232B005A141F /* AlertHelper.swift */; };
 		B6B0B60D2892B300005A141F /* TrackDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B0B60C2892B300005A141F /* TrackDashboardView.swift */; };
 		B6B0B61228940AED005A141F /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B0B61128940AED005A141F /* SignInView.swift */; };
+		B6B0B61428953EBA005A141F /* InputCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B0B61328953EBA005A141F /* InputCommentView.swift */; };
+		B6B0B61628954D3B005A141F /* TrackMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B0B61528954D3B005A141F /* TrackMapViewController.swift */; };
+		B6B0B6182895553B005A141F /* FriendManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B0B6172895553B005A141F /* FriendManager.swift */; };
 		B6BF96142861EABC003627C1 /* TrackHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF96132861EABC003627C1 /* TrackHistoryViewController.swift */; };
 		B6BF96182862A467003627C1 /* PhotoPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF96172862A467003627C1 /* PhotoPostViewController.swift */; };
 		B6BF961A2862A9CF003627C1 /* PhotoPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF96192862A9CF003627C1 /* PhotoPostCell.swift */; };
@@ -119,7 +123,6 @@
 		5AF034E01BB911618BEB17BE /* Pods-PawKing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PawKing.release.xcconfig"; path = "Target Support Files/Pods-PawKing/Pods-PawKing.release.xcconfig"; sourceTree = "<group>"; };
 		B60007FF2876AB770087717F /* signIn.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = signIn.mp4; sourceTree = "<group>"; };
 		B63484D2285D80C600DB7CE7 /* UserConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConfigViewController.swift; sourceTree = "<group>"; };
-		B63484D5285D80F100DB7CE7 /* BaseConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseConfigViewController.swift; sourceTree = "<group>"; };
 		B63484DA285D85E900DB7CE7 /* UserConfigCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConfigCell.swift; sourceTree = "<group>"; };
 		B63484DE285DC62D00DB7CE7 /* PetConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetConfigViewController.swift; sourceTree = "<group>"; };
 		B63484E0285DC70D00DB7CE7 /* PetConfigCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetConfigCell.swift; sourceTree = "<group>"; };
@@ -151,6 +154,8 @@
 		B68B9DB62886AC8700156B4D /* LocationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHelper.swift; sourceTree = "<group>"; };
 		B68B9DB82886B0B300156B4D /* TimeInterval+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Extension.swift"; sourceTree = "<group>"; };
 		B68B9DBC2887A8AF00156B4D /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		B6940D5F28956D34003563E0 /* TrackHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackHelper.swift; sourceTree = "<group>"; };
+		B6940D612895795C003563E0 /* HoldHintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoldHintView.swift; sourceTree = "<group>"; };
 		B698DD99285881FB0009077E /* PawKing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PawKing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B698DD9C285881FB0009077E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B698DD9E285881FB0009077E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -192,6 +197,9 @@
 		B6B0B60A2891232B005A141F /* AlertHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertHelper.swift; sourceTree = "<group>"; };
 		B6B0B60C2892B300005A141F /* TrackDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackDashboardView.swift; sourceTree = "<group>"; };
 		B6B0B61128940AED005A141F /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		B6B0B61328953EBA005A141F /* InputCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputCommentView.swift; sourceTree = "<group>"; };
+		B6B0B61528954D3B005A141F /* TrackMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackMapViewController.swift; sourceTree = "<group>"; };
+		B6B0B6172895553B005A141F /* FriendManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendManager.swift; sourceTree = "<group>"; };
 		B6BF96132861EABC003627C1 /* TrackHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackHistoryViewController.swift; sourceTree = "<group>"; };
 		B6BF96172862A467003627C1 /* PhotoPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPostViewController.swift; sourceTree = "<group>"; };
 		B6BF96192862A9CF003627C1 /* PhotoPostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPostCell.swift; sourceTree = "<group>"; };
@@ -256,13 +264,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		B63484D7285D858C00DB7CE7 /* Modal */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Modal;
-			sourceTree = "<group>";
-		};
 		B63484D8285D859900DB7CE7 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -277,7 +278,6 @@
 			children = (
 				B63484D2285D80C600DB7CE7 /* UserConfigViewController.swift */,
 				B63484DE285DC62D00DB7CE7 /* PetConfigViewController.swift */,
-				B63484D5285D80F100DB7CE7 /* BaseConfigViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -331,6 +331,7 @@
 				B698DDBC2858B8CC0009077E /* ProfileViewController.swift */,
 				B6E86AAB2860309F002B8C9A /* EditProfileViewController.swift */,
 				B6BF96132861EABC003627C1 /* TrackHistoryViewController.swift */,
+				B6B0B61528954D3B005A141F /* TrackMapViewController.swift */,
 				B66A15CD2866AE5400DF2663 /* UserPhotoWallViewController.swift */,
 				B67726E6288D447D0056DCBE /* FriendListViewController.swift */,
 				B6DD66E4287578D700523197 /* SettingViewController.swift */,
@@ -343,25 +344,9 @@
 		B66A15B22863FA0200DF2663 /* Explore */ = {
 			isa = PBXGroup;
 			children = (
-				B66A15B32864031500DF2663 /* Model */,
-				B66A15B42864031C00DF2663 /* View */,
 				B66A15B52864032300DF2663 /* Controller */,
 			);
 			path = Explore;
-			sourceTree = "<group>";
-		};
-		B66A15B32864031500DF2663 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		B66A15B42864031C00DF2663 /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		B66A15B52864032300DF2663 /* Controller */ = {
@@ -432,6 +417,7 @@
 		B67726E9288D4A480056DCBE /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				B698DDA0285881FB0009077E /* TabBarViewController.swift */,
 				B69C56382883A61B004DD552 /* UserListViewController.swift */,
 			);
 			path = Controller;
@@ -471,26 +457,21 @@
 				B698DD9E285881FB0009077E /* SceneDelegate.swift */,
 				B6DD66D828752D8900523197 /* Wrapper */,
 				B6DD66DB2875355F00523197 /* AnimationJson */,
-				B6A91D6E286A9AB90049253A /* Resource */,
 				B698DDBE2858B98A0009077E /* Extension */,
 				B69C56372883A601004DD552 /* Base */,
 				B6ABE8E3285A0B8500B1A977 /* Model */,
 				B6A91D78286BE5760049253A /* SignIn */,
 				B6D4F6AC285D7EB70045DDB2 /* Configure */,
-				B6D4F69F285C360E0045DDB2 /* Map */,
+				B6D4F69F285C360E0045DDB2 /* Home */,
 				B66A15B22863FA0200DF2663 /* Explore */,
 				B6E86AAD28609BD9002B8C9A /* Post */,
 				B63484E8285EEE0E00DB7CE7 /* Profile */,
 				B66A15BD2865898500DF2663 /* Chat */,
-				B698DDA0285881FB0009077E /* TabBarViewController.swift */,
+				B6B0B61A28955B10005A141F /* Asset */,
 				B698DDA2285881FB0009077E /* Main.storyboard */,
-				B60007FF2876AB770087717F /* signIn.mp4 */,
-				B6E157332876C5E600D05796 /* signUp.mp4 */,
-				B69C5631287CFE18004DD552 /* pawking_icon.png */,
-				B698DDA5285881FD0009077E /* Assets.xcassets */,
+				B69C562F287C657B004DD552 /* LaunchScreen.storyboard */,
 				B698DDAA285881FD0009077E /* Info.plist */,
 				B698DDB228588D280009077E /* GoogleService-Info.plist */,
-				B69C562F287C657B004DD552 /* LaunchScreen.storyboard */,
 			);
 			path = PawKing;
 			sourceTree = "<group>";
@@ -522,20 +503,11 @@
 			path = Base;
 			sourceTree = "<group>";
 		};
-		B6A91D6E286A9AB90049253A /* Resource */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Resource;
-			sourceTree = "<group>";
-		};
 		B6A91D78286BE5760049253A /* SignIn */ = {
 			isa = PBXGroup;
 			children = (
 				B6B0B60E289406BD005A141F /* View */,
-				B6A91D79286BE5A50049253A /* SignInViewController.swift */,
-				B651EDCD286ED454003A5F2B /* RegisterViewController.swift */,
-				B6DD66EF2876875400523197 /* EULAViewController.swift */,
+				B6B0B61928955A3C005A141F /* Controller */,
 			);
 			path = SignIn;
 			sourceTree = "<group>";
@@ -548,9 +520,11 @@
 				B6D4F6AA285CDB150045DDB2 /* PKPhotoHelper.swift */,
 				B6ABE8EC285AFC2B00B1A977 /* User.swift */,
 				B6ABE8E8285AC08200B1A977 /* UserLocation.swift */,
-				B6D4F69D285C35F80045DDB2 /* UserManager.swift */,
 				B6D4F6A8285C62F10045DDB2 /* Pet.swift */,
+				B6D4F69D285C35F80045DDB2 /* UserManager.swift */,
+				B6B0B6172895553B005A141F /* FriendManager.swift */,
 				B63484E2285DC8D000DB7CE7 /* PetManager.swift */,
+				B6ABE8E1285A0B7400B1A977 /* MapManager.swift */,
 				B68B9DB62886AC8700156B4D /* LocationHelper.swift */,
 				B6B0B60A2891232B005A141F /* AlertHelper.swift */,
 			);
@@ -565,6 +539,7 @@
 				B6A91D682868372B0049253A /* NoStrangerCell.swift */,
 				B6E94319286DCA1700B3157F /* FriendRequestCell.swift */,
 				B6B0B60C2892B300005A141F /* TrackDashboardView.swift */,
+				B6940D612895795C003563E0 /* HoldHintView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -585,22 +560,43 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		B6D4F69F285C360E0045DDB2 /* Map */ = {
+		B6B0B61928955A3C005A141F /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				B6A91D79286BE5A50049253A /* SignInViewController.swift */,
+				B651EDCD286ED454003A5F2B /* RegisterViewController.swift */,
+				B6DD66EF2876875400523197 /* EULAViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		B6B0B61A28955B10005A141F /* Asset */ = {
+			isa = PBXGroup;
+			children = (
+				B60007FF2876AB770087717F /* signIn.mp4 */,
+				B6E157332876C5E600D05796 /* signUp.mp4 */,
+				B69C5631287CFE18004DD552 /* pawking_icon.png */,
+				B698DDA5285881FD0009077E /* Assets.xcassets */,
+			);
+			path = Asset;
+			sourceTree = "<group>";
+		};
+		B6D4F69F285C360E0045DDB2 /* Home */ = {
 			isa = PBXGroup;
 			children = (
 				B6D4F6A0285C367C0045DDB2 /* Model */,
 				B6ABE8F0285B86DA00B1A977 /* View */,
 				B6D4F6A1285C36950045DDB2 /* Controller */,
 			);
-			path = Map;
+			path = Home;
 			sourceTree = "<group>";
 		};
 		B6D4F6A0285C367C0045DDB2 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				B6ABE8E1285A0B7400B1A977 /* MapManager.swift */,
 				B6ABE8F3285B87AB00B1A977 /* UserAnnotation.swift */,
 				B66A15D42867500C00DF2663 /* UserAnnotationView.swift */,
+				B6940D5F28956D34003563E0 /* TrackHelper.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -620,7 +616,6 @@
 		B6D4F6AC285D7EB70045DDB2 /* Configure */ = {
 			isa = PBXGroup;
 			children = (
-				B63484D7285D858C00DB7CE7 /* Modal */,
 				B63484D8285D859900DB7CE7 /* View */,
 				B63484D9285D85A000DB7CE7 /* Controller */,
 			);
@@ -669,6 +664,7 @@
 			children = (
 				B6BF96192862A9CF003627C1 /* PhotoPostCell.swift */,
 				B6BF961B28630C4E003627C1 /* CommentCell.swift */,
+				B6B0B61328953EBA005A141F /* InputCommentView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -862,6 +858,7 @@
 				B6E157382877310700D05796 /* TrackAnnotationView.swift in Sources */,
 				B66A15B92864606700DF2663 /* ResultViewController.swift in Sources */,
 				B6E86AA4285F0B6B002B8C9A /* ContentButtonCell.swift in Sources */,
+				B6B0B6182895553B005A141F /* FriendManager.swift in Sources */,
 				B6D4F69E285C35F80045DDB2 /* UserManager.swift in Sources */,
 				B66A15CA2865EC4300DF2663 /* UserMessageCell.swift in Sources */,
 				B67726ED288D6F7F0056DCBE /* UICollectionViewCompositionalLayout+Extension.swift in Sources */,
@@ -883,9 +880,10 @@
 				B6DD66DA28752DAB00523197 /* LottieWrapper.swift in Sources */,
 				B68B9DBD2887A8AF00156B4D /* MapViewController.swift in Sources */,
 				B6ABE8E9285AC08200B1A977 /* UserLocation.swift in Sources */,
-				B63484D6285D80F100DB7CE7 /* BaseConfigViewController.swift in Sources */,
 				B651EDD628718B8B003A5F2B /* EditPetCell.swift in Sources */,
 				B6B0B61228940AED005A141F /* SignInView.swift in Sources */,
+				B6B0B61628954D3B005A141F /* TrackMapViewController.swift in Sources */,
+				B6940D6028956D34003563E0 /* TrackHelper.swift in Sources */,
 				B63484ED285EEE8800DB7CE7 /* PhotoItemCell.swift in Sources */,
 				B66A15BB28648B4900DF2663 /* UserListCell.swift in Sources */,
 				B651EDD428717AAC003A5F2B /* EditUserCell.swift in Sources */,
@@ -907,6 +905,7 @@
 				B69C56392883A61B004DD552 /* UserListViewController.swift in Sources */,
 				B698DDC02858B99F0009077E /* UIImage+Extension.swift in Sources */,
 				B6A91D6B2868909F0049253A /* PetItemBackReusableView.swift in Sources */,
+				B6940D622895795C003563E0 /* HoldHintView.swift in Sources */,
 				B698DDBB2858B8BA0009077E /* ChatRoomViewController.swift in Sources */,
 				B6DD66EB2875AD7A00523197 /* BlockListViewController.swift in Sources */,
 				B698DDB72858B8850009077E /* ExploreViewController.swift in Sources */,
@@ -936,6 +935,7 @@
 				B6ABE8EB285AE41500B1A977 /* LocationRelated+Extension.swift in Sources */,
 				B651EDCE286ED454003A5F2B /* RegisterViewController.swift in Sources */,
 				B66A15CC2865ECA300DF2663 /* OtherUserMessageCell.swift in Sources */,
+				B6B0B61428953EBA005A141F /* InputCommentView.swift in Sources */,
 				B6D4F6A9285C62F10045DDB2 /* Pet.swift in Sources */,
 				B651EDCC286EA2F8003A5F2B /* InputTextField.swift in Sources */,
 				B6E86AB228609CB7002B8C9A /* PostManager.swift in Sources */,
@@ -1096,7 +1096,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.domchang.PawKing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1130,7 +1130,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.domchang.PawKing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

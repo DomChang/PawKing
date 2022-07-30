@@ -11,8 +11,6 @@ class FriendRequestViewController: UIViewController {
 
     private let tableView = UITableView()
 
-    private let userManager = UserManager.shared
-
     private var user = UserManager.shared.currentUser
 
     private var senders: [User] = [] {
@@ -117,7 +115,7 @@ class FriendRequestViewController: UIViewController {
         
         guard let user = user else { return }
         
-        userManager.fetchUsers(userIds: user.recieveRequestsId) { [weak self] result in
+        UserManager.shared.fetchUsers(userIds: user.recieveRequestsId) { [weak self] result in
             
             switch result {
                 
@@ -140,7 +138,7 @@ extension FriendRequestViewController: FriendRequestCellDelegate {
         guard let user = user,
               let sender = cell.sender else { return }
                 
-        userManager.acceptFriendRequest(senderId: sender.id,
+        FriendManager.shared.acceptFriendRequest(senderId: sender.id,
                                         userId: user.id) { result in
             switch result {
                 
@@ -160,7 +158,7 @@ extension FriendRequestViewController: FriendRequestCellDelegate {
         guard let user = user,
               let sender = cell.sender else { return }
         
-        userManager.denyFriendRequest(senderId: sender.id, userId: user.id) { result in
+        FriendManager.shared.denyFriendRequest(senderId: sender.id, userId: user.id) { result in
             
             switch result {
                 

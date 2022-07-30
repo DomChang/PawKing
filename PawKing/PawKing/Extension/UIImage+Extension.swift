@@ -9,8 +9,6 @@ import UIKit.UIImage
 
 enum ImageAsset: String {
 
-    // Map tab - Tab
-    
     // swiftlint:disable identifier_name
     case Icons_24px_Map_Normal
     case Icons_24px_Map_Selected

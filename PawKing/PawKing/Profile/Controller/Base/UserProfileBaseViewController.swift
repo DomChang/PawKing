@@ -11,12 +11,6 @@ class UserProfileBaseViewController: UIViewController {
     
     var collectionView: UICollectionView!
     
-    let userManager = UserManager.shared
-    
-    let postManager = PostManager.shared
-    
-   let lottie = LottieWrapper.shared
-    
     var isPhoto = true {
         didSet {
             collectionView.reloadSections(IndexSet(integer: collectionView.numberOfSections - 1))
@@ -147,7 +141,7 @@ class UserProfileBaseViewController: UIViewController {
     
     func fetchPet(by user: User) {
         
-        userManager.fetchPets(userId: user.id) { [weak self] result in
+        PetManager.shared.fetchPets(userId: user.id) { [weak self] result in
             
             switch result {
                 
@@ -164,7 +158,7 @@ class UserProfileBaseViewController: UIViewController {
     
     func fetchPost(by user: User) {
         
-        postManager.fetchPosts(userId: user.id) { [weak self] result in
+        PostManager.shared.fetchPosts(userId: user.id) { [weak self] result in
             
             switch result {
                 
@@ -183,7 +177,7 @@ class UserProfileBaseViewController: UIViewController {
     
     func fetchTrack(by user: User) {
         
-        userManager.fetchTracks(userId: user.id) { [weak self] result in
+        MapManager.shared.fetchTracks(userId: user.id) { [weak self] result in
             
             switch result {
                 

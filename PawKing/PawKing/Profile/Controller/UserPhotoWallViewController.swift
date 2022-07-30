@@ -84,7 +84,7 @@ class UserPhotoWallViewController: UserProfileBaseViewController {
             otherUserListener?.remove()
         }
         
-        lottie.startLoading()
+        LottieWrapper.shared.startLoading()
         
         let semaphore = DispatchSemaphore(value: 0)
         
@@ -94,7 +94,7 @@ class UserPhotoWallViewController: UserProfileBaseViewController {
             
             guard let otherUserId = self?.otherUserId else { return }
             
-            self?.otherUserListener =  self?.userManager.listenUserInfo(userId: otherUserId,
+            self?.otherUserListener =  UserManager.shared.listenUserInfo(userId: otherUserId,
                                                                         completion: { result in
                 
                 switch result {
@@ -113,13 +113,13 @@ class UserPhotoWallViewController: UserProfileBaseViewController {
                     
                     self?.fetchPost(by: otherUser)
                     
-                    self?.lottie.stopLoading()
+                    LottieWrapper.shared.stopLoading()
                     
                 case .failure(let error):
                     
-                    self?.lottie.stopLoading()
+                    LottieWrapper.shared.stopLoading()
                     
-                    self?.lottie.showError(error: error)
+                    LottieWrapper.shared.showError(error: error)
                     
                     semaphore.signal()
                 }
@@ -163,7 +163,7 @@ class UserPhotoWallViewController: UserProfileBaseViewController {
     
     private func setBlockAction(user: User) {
         
-        userManager.removeBlockUser(userId: user.id,
+        UserManager.shared.removeBlockUser(userId: user.id,
                                     blockId: otherUserId) { result in
             
             switch result {
@@ -181,7 +181,7 @@ class UserPhotoWallViewController: UserProfileBaseViewController {
     
     private func setUnblockAction(user: User) {
 
-        userManager.addBlockUser(userId: user.id,
+        UserManager.shared.addBlockUser(userId: user.id,
                                       blockId: otherUserId) { result in
             
             switch result {
@@ -204,7 +204,7 @@ class UserPhotoWallViewController: UserProfileBaseViewController {
             return
         }
         
-        userManager.removeFriend(userId: user.id,
+        FriendManager.shared.removeFriend(userId: user.id,
                                  friendId: otherUser.id) { [weak self] result in
             switch result {
                 
@@ -264,7 +264,7 @@ extension UserPhotoWallViewController: UserInfoCellDelegate {
         guard let user = user,
               let otherUser = otherUser else {
             
-            lottie.showError(error: nil)
+            LottieWrapper.shared.showError(error: nil)
             
             return
         }
@@ -272,7 +272,7 @@ extension UserPhotoWallViewController: UserInfoCellDelegate {
             
         case .connect:
             
-            userManager.sendFriendRequest(senderId: user.id,
+            FriendManager.shared.sendFriendRequest(senderId: user.id,
                                           recieverId: otherUser.id,
                                           recieverBlockIds: otherUser.blockUsersId) { [weak self] result in
                 switch result {
@@ -283,13 +283,14 @@ extension UserPhotoWallViewController: UserInfoCellDelegate {
                     
                 case .failure(let error):
                     
-                    self?.lottie.showError(error: error)
+                    LottieWrapper.shared.showError(error: error)
                 }
             }
             
         case .requested:
             
-            userManager.removeFriendRequest(senderId: user.id, recieverId: otherUser.id) { [weak self] result in
+            FriendManager.shared.removeFriendRequest(senderId: user.id,
+                                                     recieverId: otherUser.id) { [weak self] result in
                 
                 switch result {
                     
@@ -299,7 +300,7 @@ extension UserPhotoWallViewController: UserInfoCellDelegate {
                     
                 case .failure(let error):
                     
-                    self?.lottie.showError(error: error)
+                    LottieWrapper.shared.showError(error: error)
                 }
             }
             

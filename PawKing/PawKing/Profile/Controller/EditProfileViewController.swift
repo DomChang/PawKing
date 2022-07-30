@@ -9,10 +9,6 @@ import UIKit
 
 class EditProfileViewController: UIViewController {
     
-    private let userManager = UserManager.shared
-    
-    private let lottie = LottieWrapper.shared
-    
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     
     private let user: User
@@ -91,7 +87,7 @@ class EditProfileViewController: UIViewController {
     
     func getPets(by userId: String) {
         
-        userManager.fetchPets(userId: userId) { [weak self] result in
+        PetManager.shared.fetchPets(userId: userId) { [weak self] result in
             
             switch result {
                 
@@ -111,22 +107,22 @@ extension EditProfileViewController: EditUserCellDelegate {
     
     func didEditUserName(to userName: String) {
         
-        lottie.startLoading()
+        LottieWrapper.shared.startLoading()
         
-        userManager.updateUserInfo(userId: user.id, userName: userName) { [weak self] result in
+        UserManager.shared.updateUserInfo(userId: user.id, userName: userName) { [weak self] result in
             
             switch result {
                 
             case .success:
                 
-                self?.lottie.stopLoading()
+                LottieWrapper.shared.stopLoading()
                 
                 self?.navigationController?.popViewController(animated: true)
                 
             case .failure(let error):
                 
-                self?.lottie.stopLoading()
-                self?.lottie.showError(error: error)
+                LottieWrapper.shared.stopLoading()
+                LottieWrapper.shared.showError(error: error)
             }
         }
     }
