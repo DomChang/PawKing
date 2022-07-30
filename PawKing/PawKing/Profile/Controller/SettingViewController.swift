@@ -12,10 +12,6 @@ class SettingViewController: UIViewController {
     
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     
-    private let userManager = UserManager.shared
-    
-    private let lottie = LottieWrapper.shared
-    
     private let signOutActionController = UIAlertController(title: "Are you sure you want to sign out?",
                                                      message: nil,
                                                      preferredStyle: .actionSheet)
@@ -89,7 +85,7 @@ class SettingViewController: UIViewController {
     
     private func signOut() {
         
-        userManager.signOut { [weak self] result in
+        UserManager.shared.signOut { [weak self] result in
             
             switch result {
                 
@@ -122,9 +118,9 @@ class SettingViewController: UIViewController {
         
         let deleteAction  = UIAlertAction(title: "Delete Account", style: .destructive) { [weak self] _ in
             
-            guard let user = self?.userManager.currentUser else { return }
+            guard let user = UserManager.shared.currentUser else { return }
             
-            self?.userManager.deleteUser(userId: user.id) { result  in
+            UserManager.shared.deleteUser(userId: user.id) { result  in
                 switch result {
                     
                 case .success:

@@ -268,7 +268,7 @@ class HomeViewController: UIViewController {
             return
         }
         
-        UserManager.shared.fetchPets(userId: user.id) { [weak self] result in
+        PetManager.shared.fetchPets(userId: user.id) { [weak self] result in
             
             switch result {
                 
@@ -545,7 +545,7 @@ class HomeViewController: UIViewController {
             
             group.enter()
             
-            UserManager.shared.fetchPets(userId: userId) { result in
+            PetManager.shared.fetchPets(userId: userId) { result in
                 
                 switch result {
                     
@@ -664,6 +664,6 @@ extension HomeViewController: ChoosePetViewDelegate {
         
         self.mapVC.userCurrentPet = selectedPet
         
-        UserManager.shared.updateCurrentPet(userId: user.id, pet: selectedPet)
+        PetManager.shared.updateCurrentPet(userId: user.id, pet: selectedPet)
     }
 }

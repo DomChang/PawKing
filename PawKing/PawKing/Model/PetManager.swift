@@ -14,8 +14,6 @@ class PetManager {
     
     static let shared = PetManager()
     
-    private let userManager = UserManager.shared
-    
     lazy var dataBase = Firestore.firestore()
     
     func setupPet(userId: String,
@@ -39,7 +37,7 @@ class PetManager {
                     
                 case .success(let petImageUrlString):
                     
-                    self?.userManager.updateUserPet(userId: userId, petId: petId) { result in
+                    self?.updateUserPet(userId: userId, petId: petId) { result in
                         
                         switch result {
                             
@@ -54,7 +52,7 @@ class PetManager {
                                                             location: GeoPoint(latitude: 0, longitude: 0),
                                                             status: 0)
                             
-                            self?.userManager.updateUserLocation(location: userLocation) { result in
+                            MapManager.shared.updateUserLocation(location: userLocation) { result in
                                 
                                 switch result {
                                     
@@ -109,6 +107,76 @@ class PetManager {
             } catch {
                 
                 completion(.failure(FirebaseError.decodePetError))
+            }
+        }
+    }
+    
+    func fetchPets(userId: String, completion: @escaping (Result<[Pet], Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+            .collection(FirebaseCollection.pets.rawValue).order(by: "createdTime", descending: true)
+            
+        document.getDocuments { snapshots, _ in
+            
+            var pets: [Pet] = []
+            
+            guard let snapshots = snapshots
+            
+            else {
+                    completion(.failure(FirebaseError.fetchPetError))
+                    
+                    return
+            }
+            
+            do {
+                
+                for document in snapshots.documents {
+                    
+                    let pet = try document.data(as: Pet.self)
+                    
+                    pets.append(pet)
+                }
+                
+                completion(.success(pets))
+                
+            } catch {
+                
+                completion(.failure(FirebaseError.decodePetError))
+            }
+        }
+    }
+    
+    func listenPetChange(userId: String, completion: @escaping (Result<[Pet], Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+            .collection(FirebaseCollection.pets.rawValue).order(by: "createdTime", descending: true)
+            
+        document.addSnapshotListener { snapshots, _ in
+            
+            var pets: [Pet] = []
+            
+            guard let snapshots = snapshots
+            
+            else {
+                    completion(.failure(FirebaseError.fetchUserError))
+                    
+                    return
+            }
+            
+            do {
+                
+                for document in snapshots.documents {
+                    
+                    let pet = try document.data(as: Pet.self)
+                    
+                    pets.append(pet)
+                }
+                
+                completion(.success(pets))
+                
+            } catch {
+                
+                completion(.failure(FirebaseError.decodeUserError))
             }
         }
     }
@@ -206,6 +274,47 @@ class PetManager {
                 }
             }
         }
+    }
+    
+    func updateUserPet(userId: String, petId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        let document = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+        
+        document.updateData([
+            "petsId": FieldValue.arrayUnion([petId]),
+            "currentPetId": petId
+        ]) { error in
+            
+            if let error = error {
+                
+                completion(.failure(error))
+                
+            } else {
+
+                completion(.success(()))
+            }
+        }
+    }
+    
+    func updateCurrentPet(userId: String,
+                          pet: Pet) {
+        
+        let batch = dataBase.batch()
+        
+        let locationDoc = dataBase.collection(FirebaseCollection.userLocations.rawValue).document(userId)
+        
+        batch.updateData([
+            "currentPetId": pet.id,
+            "petPhoto": pet.petImage
+        ], forDocument: locationDoc)
+        
+        let userDoc = dataBase.collection(FirebaseCollection.users.rawValue).document(userId)
+        
+        batch.updateData([
+            "currentPetId": pet.id
+        ], forDocument: userDoc)
+        
+        batch.commit()
     }
     
     func deletePet(userId: String,

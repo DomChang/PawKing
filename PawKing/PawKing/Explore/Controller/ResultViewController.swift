@@ -19,8 +19,6 @@ class ResultViewController: UISearchController {
     
     var resultVCDelegate: ResultViewControllerDelegate?
     
-    private let userManager = UserManager.shared
-    
     var allUsers: [User]?
     
     var resultUsers: [User]? {
@@ -106,13 +104,13 @@ class ResultViewController: UISearchController {
     
     private func getAllUser() {
         
-        userManager.fetchAllUser { [weak self] result in
+        UserManager.shared.fetchAllUser { [weak self] result in
             
             switch result {
                 
             case .success(let allUsers):
                 
-                self?.allUsers = allUsers.filter({ $0.id != "unKnown" })
+                self?.allUsers = allUsers.filter({ $0.id != UserStatus.unknown.rawValue })
                 
             case .failure(let error):
                 

@@ -9,8 +9,6 @@ import UIKit
 
 class LikeUserListViewController: UserListViewController {
     
-    private let postManager = PostManager.shared
-    
     private var postId: String
     
     init(usersId: [String], postId: String) {
@@ -31,9 +29,10 @@ class LikeUserListViewController: UserListViewController {
     }
     
     override func getUsers() {
-        lottie.startLoading()
         
-        userManager.fetchUsers(userIds: usersId) { [weak self] result in
+        LottieWrapper.shared.startLoading()
+        
+        UserManager.shared.fetchUsers(userIds: usersId) { [weak self] result in
             
             switch result {
                 
@@ -42,7 +41,7 @@ class LikeUserListViewController: UserListViewController {
                 
                 self?.users = users
                 
-                self?.lottie.stopLoading()
+                LottieWrapper.shared.stopLoading()
                 
                 DispatchQueue.main.async {
                     self?.tableView.reloadData()
@@ -54,14 +53,14 @@ class LikeUserListViewController: UserListViewController {
                         return
                     }
 
-                    self?.postManager.removePostLike(postId: postId,
+                    PostManager.shared.removePostLike(postId: postId,
                                                      userId: $0)
                 })
 
             case .failure(let error):
                 
-                self?.lottie.stopLoading()
-                self?.lottie.showError(error: error)
+                LottieWrapper.shared.stopLoading()
+                LottieWrapper.shared.showError(error: error)
             }
         }
 

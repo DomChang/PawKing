@@ -32,7 +32,7 @@ class BlockListViewController: UserListViewController {
 
             users?.remove(at: indexPath.row)
 
-            userManager.removeBlockUser(userId: user.id, blockId: blockId) { [weak self] result in
+            UserManager.shared.removeBlockUser(userId: user.id, blockId: blockId) { result in
 
                 switch result {
 
@@ -42,7 +42,7 @@ class BlockListViewController: UserListViewController {
 
                 case .failure:
 
-                    self?.lottie.showError(error: nil)
+                    LottieWrapper.shared.showError(error: nil)
                 }
             }
             tableView.deleteRows(at: [indexPath], with: .fade)

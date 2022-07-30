@@ -10,12 +10,6 @@ import FirebaseFirestore
 
 final class PublishViewController: UIViewController {
     
-    private let userManager = UserManager.shared
-    
-    private let postManager = PostManager.shared
-    
-    private let lottie = LottieWrapper.shared
-    
     private var userPets: [Pet]?
     
     private var user: User?
@@ -237,7 +231,7 @@ final class PublishViewController: UIViewController {
             return
         }
         
-        userManager.fetchUserInfo(userId: user.id) { [weak self] result in
+        UserManager.shared.fetchUserInfo(userId: user.id) { [weak self] result in
             
             switch result {
                 
@@ -245,7 +239,7 @@ final class PublishViewController: UIViewController {
                 
                 self?.user = user
                 
-                self?.userManager.fetchPets(userId: user.id) { result in
+                PetManager.shared.fetchPets(userId: user.id) { result in
                     
                     switch result {
                         
@@ -291,13 +285,13 @@ final class PublishViewController: UIViewController {
         
         submitButtonDisable()
         
-        lottie.startLoading()
+        LottieWrapper.shared.startLoading()
         
         guard let user = user,
                 let selectedPet = selectedPet
         else {
-            lottie.showError(error: nil)
-            lottie.stopLoading()
+            LottieWrapper.shared.showError(error: nil)
+            LottieWrapper.shared.stopLoading()
             return
         }
 
@@ -310,7 +304,7 @@ final class PublishViewController: UIViewController {
                         commentsId: [],
                         createdTime: Timestamp(date: Date()))
         
-        postManager.setupPost(userId: user.id,
+        PostManager.shared.setupPost(userId: user.id,
                               petId: selectedPet.id,
                               post: &post,
                               postImage: photoImage) { [weak self] result in
@@ -320,14 +314,14 @@ final class PublishViewController: UIViewController {
                 
                 NotificationCenter.default.post(name: .updateUser, object: .none)
                 
-                self?.lottie.stopLoading()
+                LottieWrapper.shared.stopLoading()
                 
                 self?.dismiss(animated: true)
                 
             case .failure(let error):
                 
-                self?.lottie.stopLoading()
-                self?.lottie.showError(error: error)
+                LottieWrapper.shared.stopLoading()
+                LottieWrapper.shared.showError(error: error)
                 self?.submitButtonEnable()
             }
         }

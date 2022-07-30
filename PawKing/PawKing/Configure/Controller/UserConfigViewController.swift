@@ -11,10 +11,6 @@ import SwiftUI
 
 class UserConfigViewController: UIViewController {
     
-    private let userManager = UserManager.shared
-    
-    private let lottie = LottieWrapper.shared
-    
     private let tableView = UITableView()
     
     private let photoHelper = PKPhotoHelper()
@@ -154,22 +150,22 @@ extension UserConfigViewController: UserConfigCellDelegate {
         
         cell.nextButtonDisable()
         
-        lottie.startLoading()
+        LottieWrapper.shared.startLoading()
         
         guard let userName = cell.userNameTextfield.text,
               let image = cell.userImageView.image,
               var user = user
         else {
-            lottie.stopLoading()
+            LottieWrapper.shared.stopLoading()
             cell.nextButtonEnable()
-            lottie.showError(error: nil)
+            LottieWrapper.shared.showError(error: nil)
             return
         }
         
         guard cell.userNameTextfield.text != "" else {
             
-            lottie.showError(errorMessage: "Username empty")
-            lottie.stopLoading()
+            LottieWrapper.shared.showError(errorMessage: "Username empty")
+            LottieWrapper.shared.stopLoading()
             cell.nextButtonEnable()
             return
         }
@@ -177,7 +173,7 @@ extension UserConfigViewController: UserConfigCellDelegate {
         user.name = userName
         user.description = cell.descriptionTextView.text
         
-        userManager.setupUser(user: user) { [weak self] result in
+        UserManager.shared.setupUser(user: user) { [weak self] result in
             
             switch result {
                 
@@ -186,28 +182,28 @@ extension UserConfigViewController: UserConfigCellDelegate {
                 self?.userId = userId
                 
                 // already update user data in uploadUserPhoto
-                self?.userManager.uploadUserPhoto(userId: userId, image: image) { result in
+                UserManager.shared.uploadUserPhoto(userId: userId, image: image) { result in
                     
                     switch result {
                         
                     case .success:
                         
-                        self?.lottie.stopLoading()
+                        LottieWrapper.shared.stopLoading()
                         cell.nextButtonEnable()
                         self?.showPetConfigVC(user: user)
                         
                     case .failure(let error):
                         
-                        self?.lottie.stopLoading()
+                        LottieWrapper.shared.stopLoading()
                         cell.nextButtonEnable()
-                        self?.lottie.showError(error: error)
+                        LottieWrapper.shared.showError(error: error)
                     }
                 }
             case .failure(let error):
                 
-                self?.lottie.stopLoading()
+                LottieWrapper.shared.stopLoading()
                 cell.nextButtonEnable()
-                self?.lottie.showError(error: error)
+                LottieWrapper.shared.showError(error: error)
             }
         }
     }

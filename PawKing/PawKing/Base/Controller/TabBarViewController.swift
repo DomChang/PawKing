@@ -94,10 +94,6 @@ class TabBarViewController: UITabBarController {
 
     private let tabs: [Tab] = [.map, .explore, .publish, .chat, .profile]
     
-    private let userManager = UserManager.shared
-    
-    private let chatManager = ChatManager.shared
-    
     private let photoHelper = PKPhotoHelper()
     
     private let alertController = UIAlertController(title: "No Pet",
@@ -146,7 +142,7 @@ class TabBarViewController: UITabBarController {
 
         } else {
   
-            UserManager.shared.currentUser = userManager.guestUser
+            UserManager.shared.currentUser = UserManager.shared.guestUser
         }
         
         configureUserToTab()
@@ -193,7 +189,7 @@ class TabBarViewController: UITabBarController {
             userListener?.remove()
         }
         
-        userListener = userManager.listenUserInfo(userId: userId) { [weak self] result in
+        userListener = UserManager.shared.listenUserInfo(userId: userId) { [weak self] result in
             
             switch result {
                 
@@ -235,7 +231,7 @@ class TabBarViewController: UITabBarController {
             newMessageLisener?.remove()
         }
         
-        newMessageLisener = chatManager.listenChatRooms(userId: user.id,
+        newMessageLisener = ChatManager.shared.listenChatRooms(userId: user.id,
                                                         blockIds: user.blockUsersId) { result in
             
             switch result {
