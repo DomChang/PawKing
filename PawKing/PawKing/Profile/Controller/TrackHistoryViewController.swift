@@ -8,7 +8,6 @@
 import UIKit
 import MapKit
 
-// swiftlint:disable function_body_length
 class TrackHistoryViewController: UIViewController {
     
     private let mapManager = MapManager.shared
@@ -28,17 +27,9 @@ class TrackHistoryViewController: UIViewController {
     private let petImageView = UIImageView()
     
     private let settingButton = UIButton()
-    
-    private let mapView = MKMapView()
-    
-    private let timeTitleLabel = UILabel()
-    
-    private let timeLabel = UILabel()
-    
-    private let distanceTitleLabel = UILabel()
-    
-    private let distanceLabel = UILabel()
-    
+
+    private let trackMapVC = TrackMapViewController()
+
     private let noteTitleLabel = UILabel()
     
     private let noteTextView = InputTextView()
@@ -133,13 +124,10 @@ class TrackHistoryViewController: UIViewController {
         
         updateButton.addTarget(self, action: #selector(didTapUpdateNote), for: .touchUpInside)
         abortButton.addTarget(self, action: #selector(didTapAbort), for: .touchUpInside)
-        
-        mapView.register(TrackAnnotationView.self,
-                         forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
-        mapView.delegate = self
-        
-        drawTrack()
-        setAnnotation()
+
+        let coordinates = trackInfo.track.map { $0.transferToCoordinate2D() }
+        trackMapVC.drawTrack(coordinates: coordinates)
+        trackMapVC.setAnnotation(trackInfo: trackInfo)
         
         setDeleteActionSheet()
         setAbortAlert()
@@ -171,26 +159,14 @@ class TrackHistoryViewController: UIViewController {
         abortButton.layer.cornerRadius = 4
         abortButton.layer.borderColor = UIColor.CoralOrange?.cgColor
         abortButton.layer.borderWidth = 1
-        
-        timeTitleLabel.text = "Time"
-        timeTitleLabel.textColor = .BattleGrey
-        timeTitleLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        
+
         let startTime = trackInfo.startTime.dateValue()
         let endTime = trackInfo.endTime.dateValue()
         let durationString = endTime.displayTimeInCounterStyle(since: startTime)
-        timeLabel.text = durationString
-        timeLabel.textColor = .CoralOrange
-        timeLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        
-        distanceTitleLabel.text = "Distance"
-        distanceTitleLabel.textColor = .BattleGrey
-        distanceTitleLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        
-        distanceLabel.text = "\(String(format: "%.2f", trackInfo.distanceMeter / 1000)) km"
-        distanceLabel.textColor = .CoralOrange
-        distanceLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        
+        trackMapVC.timeLabel.text = durationString
+
+        trackMapVC.distanceLabel.text = "\(String(format: "%.2f", trackInfo.distanceMeter / 1000)) km"
+
         noteTitleLabel.text = "Note:"
         noteTitleLabel.textColor = .BattleGrey
         noteTitleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -208,38 +184,11 @@ class TrackHistoryViewController: UIViewController {
         
         petImageView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         settingButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        
-        let timeVStack = UIStackView(arrangedSubviews: [timeTitleLabel, timeLabel])
-        
-        timeVStack.axis = .vertical
-        timeVStack.distribution = .fill
-        timeVStack.spacing = 3
-        
-        let distanceVStack = UIStackView(arrangedSubviews: [distanceTitleLabel, distanceLabel])
-        
-        distanceVStack.axis = .vertical
-        distanceVStack.distribution = .fill
-        distanceVStack.spacing = 3
 
-        let infoHStack = UIStackView(arrangedSubviews: [timeVStack, distanceVStack])
-        
-        infoHStack.axis = .horizontal
-        infoHStack.distribution = .equalCentering
-        infoHStack.spacing = 10
-        infoHStack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 10, leading: 30, bottom: 0, trailing: 30)
-        infoHStack.isLayoutMarginsRelativeArrangement = true
-        infoHStack.backgroundColor = .white
-        
-        infoHStack.layer.cornerRadius = 20
-        infoHStack.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        
-        distanceVStack.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        
         view.addSubview(scrollView)
+        add(trackMapVC)
         scrollView.addSubview(hStackBackView)
         scrollView.addSubview(hStack)
-        scrollView.addSubview(mapView)
-        scrollView.addSubview(infoHStack)
         scrollView.addSubview(noteTitleLabel)
         scrollView.addSubview(noteTextView)
         
@@ -253,7 +202,7 @@ class TrackHistoryViewController: UIViewController {
         
         hStackBackView.anchor(top: scrollView.topAnchor,
                               leading: scrollView.leadingAnchor,
-                              bottom: mapView.topAnchor,
+                              bottom: trackMapVC.view.topAnchor,
                               trailing: scrollView.trailingAnchor)
         
         hStack.anchor(top: scrollView.topAnchor,
@@ -262,21 +211,17 @@ class TrackHistoryViewController: UIViewController {
                             height: 40,
                             padding: UIEdgeInsets(top: 10, left: 20, bottom: 0, right: 20))
         
-        mapView.anchor(top: hStack.bottomAnchor,
+        trackMapVC.view.anchor(top: hStack.bottomAnchor,
                        leading: scrollView.leadingAnchor,
                        trailing: scrollView.trailingAnchor,
                        height: view.frame.width,
                             padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0))
         
-        mapView.widthAnchor.constraint(
+        hStackBackView.widthAnchor.constraint(
             equalTo: scrollView.widthAnchor
         ).isActive = true
-        
-        infoHStack.anchor(leading: scrollView.leadingAnchor,
-                          bottom: mapView.bottomAnchor,
-                          trailing: scrollView.trailingAnchor)
-        
-        noteTitleLabel.anchor(top: infoHStack.bottomAnchor,
+
+        noteTitleLabel.anchor(top: trackMapVC.view.bottomAnchor,
                               leading: scrollView.leadingAnchor,
                               trailing: scrollView.trailingAnchor,
                               padding: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 20))
@@ -475,89 +420,6 @@ class TrackHistoryViewController: UIViewController {
         deleteActionController.addAction(deleteAlert)
         deleteActionController.addAction(cancelAction)
     }
-    
-    private func drawTrack() {
-        
-        let coordinates = trackInfo.track.map { $0.transferToCoordinate2D() }
-
-        let polyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
-
-        mapView.addOverlay(polyline, level: .aboveRoads)
-        
-        var regionRect = polyline.boundingMapRect
-
-       let wPadding = regionRect.size.width * 0.8
-       let hPadding = regionRect.size.height * 0.8
-
-       // Add padding to the region
-       regionRect.size.width += wPadding
-       regionRect.size.height += hPadding
-
-       // Center the region on the line
-       regionRect.origin.x -= wPadding / 2
-       regionRect.origin.y -= hPadding / 2
-
-        mapView.setRegion(MKCoordinateRegion(regionRect), animated: true)
-    }
-    
-    private func setAnnotation() {
-        
-        guard let startPoint = trackInfo.track.first,
-                let endPoint = trackInfo.track.last else { return }
-        
-        let startTime = trackInfo.startTime.dateValue().displayTimeInHourMinuteStyle()
-        
-        let endTime = trackInfo.endTime.dateValue().displayTimeInHourMinuteStyle()
-        
-        let startAnnotation = TrackAnnotation(title: "Start",
-                                              subtitle: startTime,
-                                              coordinate: startPoint.transferToCoordinate2D())
-        
-        let endAnnotation = TrackAnnotation(title: "End",
-                                            subtitle: endTime,
-                                            coordinate: endPoint.transferToCoordinate2D())
-        
-        mapView.addAnnotations([startAnnotation, endAnnotation])
-    }
-}
-
-extension TrackHistoryViewController: MKMapViewDelegate, CLLocationManagerDelegate {
-    
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        
-        // do not alter user location marker
-        guard !annotation.isKind(of: MKUserLocation.self) else { return nil }
-
-        // get existing marker
-        var view = mapView.dequeueReusableAnnotationView(withIdentifier: "reuseIdentifier") as? TrackAnnotationView
-
-        // is this a new marker (i.e. nil)?
-        if view == nil {
-            view = TrackAnnotationView(annotation: nil, reuseIdentifier: "reuseIdentifier")
-        }
-
-        view?.subtitleVisibility = .visible
-
-        return view
-    }
-
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-
-        if overlay is MKPolyline {
-
-            let polylineRenderer = MKPolylineRenderer(overlay: overlay)
-
-            polylineRenderer.strokeColor = .CoralOrange
-
-            polylineRenderer.lineWidth = 4
-
-            return polylineRenderer
-
-        } else {
-
-            return MKPolylineRenderer()
-        }
-    }
 }
 
 extension TrackHistoryViewController: UITextViewDelegate {
@@ -572,4 +434,3 @@ extension TrackHistoryViewController: UITextViewDelegate {
         updateButton.isHidden = false
     }
 }
-// swiftlint:enable function_body_length

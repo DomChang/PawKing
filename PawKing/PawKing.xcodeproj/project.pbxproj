@@ -80,6 +80,7 @@
 		B6B0B60D2892B300005A141F /* TrackDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B0B60C2892B300005A141F /* TrackDashboardView.swift */; };
 		B6B0B61228940AED005A141F /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B0B61128940AED005A141F /* SignInView.swift */; };
 		B6B0B61428953EBA005A141F /* InputCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B0B61328953EBA005A141F /* InputCommentView.swift */; };
+		B6B0B61628954D3B005A141F /* TrackMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B0B61528954D3B005A141F /* TrackMapViewController.swift */; };
 		B6BF96142861EABC003627C1 /* TrackHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF96132861EABC003627C1 /* TrackHistoryViewController.swift */; };
 		B6BF96182862A467003627C1 /* PhotoPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF96172862A467003627C1 /* PhotoPostViewController.swift */; };
 		B6BF961A2862A9CF003627C1 /* PhotoPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF96192862A9CF003627C1 /* PhotoPostCell.swift */; };
@@ -194,6 +195,7 @@
 		B6B0B60C2892B300005A141F /* TrackDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackDashboardView.swift; sourceTree = "<group>"; };
 		B6B0B61128940AED005A141F /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		B6B0B61328953EBA005A141F /* InputCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputCommentView.swift; sourceTree = "<group>"; };
+		B6B0B61528954D3B005A141F /* TrackMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackMapViewController.swift; sourceTree = "<group>"; };
 		B6BF96132861EABC003627C1 /* TrackHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackHistoryViewController.swift; sourceTree = "<group>"; };
 		B6BF96172862A467003627C1 /* PhotoPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPostViewController.swift; sourceTree = "<group>"; };
 		B6BF96192862A9CF003627C1 /* PhotoPostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPostCell.swift; sourceTree = "<group>"; };
@@ -333,6 +335,7 @@
 				B698DDBC2858B8CC0009077E /* ProfileViewController.swift */,
 				B6E86AAB2860309F002B8C9A /* EditProfileViewController.swift */,
 				B6BF96132861EABC003627C1 /* TrackHistoryViewController.swift */,
+				B6B0B61528954D3B005A141F /* TrackMapViewController.swift */,
 				B66A15CD2866AE5400DF2663 /* UserPhotoWallViewController.swift */,
 				B67726E6288D447D0056DCBE /* FriendListViewController.swift */,
 				B6DD66E4287578D700523197 /* SettingViewController.swift */,
@@ -881,6 +884,7 @@
 				B63484D6285D80F100DB7CE7 /* BaseConfigViewController.swift in Sources */,
 				B651EDD628718B8B003A5F2B /* EditPetCell.swift in Sources */,
 				B6B0B61228940AED005A141F /* SignInView.swift in Sources */,
+				B6B0B61628954D3B005A141F /* TrackMapViewController.swift in Sources */,
 				B63484ED285EEE8800DB7CE7 /* PhotoItemCell.swift in Sources */,
 				B66A15BB28648B4900DF2663 /* UserListCell.swift in Sources */,
 				B651EDD428717AAC003A5F2B /* EditUserCell.swift in Sources */,
