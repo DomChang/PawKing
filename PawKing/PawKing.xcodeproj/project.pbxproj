@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		B60008002876AB7B0087717F /* signIn.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B60007FF2876AB770087717F /* signIn.mp4 */; };
 		B63484D3285D80C600DB7CE7 /* UserConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484D2285D80C600DB7CE7 /* UserConfigViewController.swift */; };
-		B63484D6285D80F100DB7CE7 /* BaseConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484D5285D80F100DB7CE7 /* BaseConfigViewController.swift */; };
 		B63484DB285D85E900DB7CE7 /* UserConfigCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484DA285D85E900DB7CE7 /* UserConfigCell.swift */; };
 		B63484DF285DC62D00DB7CE7 /* PetConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484DE285DC62D00DB7CE7 /* PetConfigViewController.swift */; };
 		B63484E1285DC70D00DB7CE7 /* PetConfigCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63484E0285DC70D00DB7CE7 /* PetConfigCell.swift */; };
@@ -41,6 +40,8 @@
 		B68B9DB72886AC8700156B4D /* LocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68B9DB62886AC8700156B4D /* LocationHelper.swift */; };
 		B68B9DB92886B0B300156B4D /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68B9DB82886B0B300156B4D /* TimeInterval+Extension.swift */; };
 		B68B9DBD2887A8AF00156B4D /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68B9DBC2887A8AF00156B4D /* MapViewController.swift */; };
+		B6940D6028956D34003563E0 /* TrackHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6940D5F28956D34003563E0 /* TrackHelper.swift */; };
+		B6940D622895795C003563E0 /* HoldHintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6940D612895795C003563E0 /* HoldHintView.swift */; };
 		B698DD9D285881FB0009077E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DD9C285881FB0009077E /* AppDelegate.swift */; };
 		B698DD9F285881FB0009077E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DD9E285881FB0009077E /* SceneDelegate.swift */; };
 		B698DDA1285881FB0009077E /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B698DDA0285881FB0009077E /* TabBarViewController.swift */; };
@@ -122,7 +123,6 @@
 		5AF034E01BB911618BEB17BE /* Pods-PawKing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PawKing.release.xcconfig"; path = "Target Support Files/Pods-PawKing/Pods-PawKing.release.xcconfig"; sourceTree = "<group>"; };
 		B60007FF2876AB770087717F /* signIn.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = signIn.mp4; sourceTree = "<group>"; };
 		B63484D2285D80C600DB7CE7 /* UserConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConfigViewController.swift; sourceTree = "<group>"; };
-		B63484D5285D80F100DB7CE7 /* BaseConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseConfigViewController.swift; sourceTree = "<group>"; };
 		B63484DA285D85E900DB7CE7 /* UserConfigCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConfigCell.swift; sourceTree = "<group>"; };
 		B63484DE285DC62D00DB7CE7 /* PetConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetConfigViewController.swift; sourceTree = "<group>"; };
 		B63484E0285DC70D00DB7CE7 /* PetConfigCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetConfigCell.swift; sourceTree = "<group>"; };
@@ -154,6 +154,8 @@
 		B68B9DB62886AC8700156B4D /* LocationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHelper.swift; sourceTree = "<group>"; };
 		B68B9DB82886B0B300156B4D /* TimeInterval+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Extension.swift"; sourceTree = "<group>"; };
 		B68B9DBC2887A8AF00156B4D /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		B6940D5F28956D34003563E0 /* TrackHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackHelper.swift; sourceTree = "<group>"; };
+		B6940D612895795C003563E0 /* HoldHintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoldHintView.swift; sourceTree = "<group>"; };
 		B698DD99285881FB0009077E /* PawKing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PawKing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B698DD9C285881FB0009077E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B698DD9E285881FB0009077E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -262,13 +264,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		B63484D7285D858C00DB7CE7 /* Modal */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Modal;
-			sourceTree = "<group>";
-		};
 		B63484D8285D859900DB7CE7 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -283,7 +278,6 @@
 			children = (
 				B63484D2285D80C600DB7CE7 /* UserConfigViewController.swift */,
 				B63484DE285DC62D00DB7CE7 /* PetConfigViewController.swift */,
-				B63484D5285D80F100DB7CE7 /* BaseConfigViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -545,6 +539,7 @@
 				B6A91D682868372B0049253A /* NoStrangerCell.swift */,
 				B6E94319286DCA1700B3157F /* FriendRequestCell.swift */,
 				B6B0B60C2892B300005A141F /* TrackDashboardView.swift */,
+				B6940D612895795C003563E0 /* HoldHintView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -601,6 +596,7 @@
 			children = (
 				B6ABE8F3285B87AB00B1A977 /* UserAnnotation.swift */,
 				B66A15D42867500C00DF2663 /* UserAnnotationView.swift */,
+				B6940D5F28956D34003563E0 /* TrackHelper.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -620,7 +616,6 @@
 		B6D4F6AC285D7EB70045DDB2 /* Configure */ = {
 			isa = PBXGroup;
 			children = (
-				B63484D7285D858C00DB7CE7 /* Modal */,
 				B63484D8285D859900DB7CE7 /* View */,
 				B63484D9285D85A000DB7CE7 /* Controller */,
 			);
@@ -885,10 +880,10 @@
 				B6DD66DA28752DAB00523197 /* LottieWrapper.swift in Sources */,
 				B68B9DBD2887A8AF00156B4D /* MapViewController.swift in Sources */,
 				B6ABE8E9285AC08200B1A977 /* UserLocation.swift in Sources */,
-				B63484D6285D80F100DB7CE7 /* BaseConfigViewController.swift in Sources */,
 				B651EDD628718B8B003A5F2B /* EditPetCell.swift in Sources */,
 				B6B0B61228940AED005A141F /* SignInView.swift in Sources */,
 				B6B0B61628954D3B005A141F /* TrackMapViewController.swift in Sources */,
+				B6940D6028956D34003563E0 /* TrackHelper.swift in Sources */,
 				B63484ED285EEE8800DB7CE7 /* PhotoItemCell.swift in Sources */,
 				B66A15BB28648B4900DF2663 /* UserListCell.swift in Sources */,
 				B651EDD428717AAC003A5F2B /* EditUserCell.swift in Sources */,
@@ -910,6 +905,7 @@
 				B69C56392883A61B004DD552 /* UserListViewController.swift in Sources */,
 				B698DDC02858B99F0009077E /* UIImage+Extension.swift in Sources */,
 				B6A91D6B2868909F0049253A /* PetItemBackReusableView.swift in Sources */,
+				B6940D622895795C003563E0 /* HoldHintView.swift in Sources */,
 				B698DDBB2858B8BA0009077E /* ChatRoomViewController.swift in Sources */,
 				B6DD66EB2875AD7A00523197 /* BlockListViewController.swift in Sources */,
 				B698DDB72858B8850009077E /* ExploreViewController.swift in Sources */,
@@ -1100,7 +1096,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.domchang.PawKing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1134,7 +1130,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.domchang.PawKing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
