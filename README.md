@@ -12,7 +12,7 @@
 <p align="center">
 	<img src="https://img.shields.io/badge/Swift-5.0-yellow.svg?style=flat">
     <img src="https://img.shields.io/badge/license-MIT-informational">
-    <img src="https://img.shields.io/badge/release-v1.0.1-orange">
+    <img src="https://img.shields.io/badge/release-v1.0.3-orange">
 </p>
 
 <p align="left">
@@ -71,11 +71,13 @@ PawKing is a social network devoted to the pets of its owners. Users can discove
 - iOS 15.0 or later</br>
 
 ## Version
-- 1.0.1
+- 1.0.3
 
 ## Release Notes
 | Version | Notes |
 | :-----: | ----- |
+| 1.0.3   | Fix bugs |
+| 1.0.2   | Optimize UI |
 | 1.0.1   | New:  Track dashboard<br>Fix: Optimize UI and user experience |
 | 1.0.0   | 	Launched in App Store |
 
