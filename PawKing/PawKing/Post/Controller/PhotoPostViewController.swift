@@ -136,9 +136,6 @@ class PhotoPostViewController: UIViewController {
                              bottom: view.safeAreaLayoutGuide.bottomAnchor,
                              trailing: view.trailingAnchor)
         
-        inputCommentView.layoutIfNeeded()
-        inputCommentView.userImageView.makeRound()
-        
         // Change bottom bounce area backgroud color
         tableView.layoutIfNeeded()
         let topView = UIView(frame: CGRect(x: 0, y: -tableView.bounds.height,
