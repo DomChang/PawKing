@@ -84,8 +84,6 @@ class InputCommentView: UIView {
                                   trailing: trailingAnchor,
                                   height: 0.5)
         
-        layoutIfNeeded()
-        userImageView.makeRound()
         userImageView.clipsToBounds = true
     }
     

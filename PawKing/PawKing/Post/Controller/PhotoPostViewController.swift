@@ -42,7 +42,6 @@ class PhotoPostViewController: UIViewController {
         didSet {
             
             userComments.sort { $0.comment.createdTime.dateValue() > $1.comment.createdTime.dateValue() }
-            
             tableView.reloadSections(IndexSet(integer: 1), with: .fade)
         }
     }
@@ -98,10 +97,8 @@ class PhotoPostViewController: UIViewController {
         
         tableView.dataSource = self
         tableView.delegate = self
-        
         tableView.register(PhotoPostCell.self,
                            forCellReuseIdentifier: PhotoPostCell.identifier)
-        
         tableView.register(CommentCell.self,
                            forCellReuseIdentifier: CommentCell.identifier)
         
@@ -138,6 +135,9 @@ class PhotoPostViewController: UIViewController {
         inputCommentView.anchor(leading: view.leadingAnchor,
                              bottom: view.safeAreaLayoutGuide.bottomAnchor,
                              trailing: view.trailingAnchor)
+        
+        inputCommentView.layoutIfNeeded()
+        inputCommentView.userImageView.makeRound()
         
         // Change bottom bounce area backgroud color
         tableView.layoutIfNeeded()
