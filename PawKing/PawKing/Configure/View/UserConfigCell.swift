@@ -18,7 +18,7 @@ class UserConfigCell: UITableViewCell {
     
     static let identifier = "\(UserConfigCell.self)"
     
-    var delegate: UserConfigCellDelegate?
+    weak var delegate: UserConfigCellDelegate?
     
     let userImageView = UIImageView()
     

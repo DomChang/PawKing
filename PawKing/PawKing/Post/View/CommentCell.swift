@@ -16,7 +16,7 @@ class CommentCell: UITableViewCell {
     
     static let identifier = "\(CommentCell.self)"
     
-    var delegate: CommentCellDelegate?
+    weak var delegate: CommentCellDelegate?
     
     private let userImageView = UIImageView()
     

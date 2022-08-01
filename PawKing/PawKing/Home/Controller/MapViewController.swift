@@ -18,7 +18,7 @@ protocol MapViewDelegate: AnyObject {
 
 class MapViewController: UIViewController {
     
-    var delegate: MapViewDelegate?
+    weak var delegate: MapViewDelegate?
     
     var locationManager: CLLocationManager?
     

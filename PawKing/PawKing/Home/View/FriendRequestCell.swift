@@ -18,7 +18,7 @@ class FriendRequestCell: UITableViewCell {
 
     static let identifier = "\(FriendRequestCell.self)"
     
-    var delegate: FriendRequestCellDelegate?
+    weak var delegate: FriendRequestCellDelegate?
     
     let userImageView = UIImageView()
     

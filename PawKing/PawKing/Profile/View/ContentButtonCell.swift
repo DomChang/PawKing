@@ -18,7 +18,7 @@ class ContentButtonCell: UICollectionViewCell {
     
     static let identifier = "\(ContentButtonCell.self)"
     
-    var delegate: ContentButtonCellDelegate?
+    weak var delegate: ContentButtonCellDelegate?
     
     let photoContentButton = UIButton()
     
