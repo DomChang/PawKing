@@ -21,7 +21,7 @@ protocol SignInViewDelegate: AnyObject {
 
 class SignInViewController: UIViewController {
     
-    var delegate: SignInViewDelegate?
+    weak var delegate: SignInViewDelegate?
     
     fileprivate var currentNonce: String?
     

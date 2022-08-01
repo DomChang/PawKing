@@ -19,7 +19,7 @@ class PetConfigCell: UITableViewCell {
     
     static let identifier = "\(PetConfigCell.self)"
     
-    var delegate: PetConfigCellDelegate?
+    weak var delegate: PetConfigCellDelegate?
     
     let petImageView = UIImageView()
     

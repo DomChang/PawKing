@@ -14,7 +14,7 @@ protocol ChoosePetViewDelegate: AnyObject {
 
 class ChoosePetViewController: UIViewController {
     
-    var delegate: ChoosePetViewDelegate?
+    weak var delegate: ChoosePetViewDelegate?
     
     private var pets: [Pet]
     

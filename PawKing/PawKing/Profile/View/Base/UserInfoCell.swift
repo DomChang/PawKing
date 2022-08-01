@@ -7,7 +7,7 @@
 
 import UIKit
  
-@objc protocol UserInfoCellDelegate: AnyObject {
+protocol UserInfoCellDelegate: AnyObject {
 
     func didTapLeftButton()
     
@@ -18,7 +18,7 @@ import UIKit
 
 class UserInfoCell: UICollectionViewCell {
     
-    var delegate: UserInfoCellDelegate?
+    weak var delegate: UserInfoCellDelegate?
     
     let userImageView = UIImageView()
     

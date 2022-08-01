@@ -22,7 +22,7 @@ class PhotoPostCell: UITableViewCell {
     
     static let identifier = "\(PhotoItemCell.self)"
     
-    var delegate: PhotoPostCellDelegate?
+    weak var delegate: PhotoPostCellDelegate?
     
     let petImageView = UIImageView()
     

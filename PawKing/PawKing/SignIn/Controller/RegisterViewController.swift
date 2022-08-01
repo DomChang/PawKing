@@ -16,7 +16,7 @@ protocol RegisterViewDelegate: AnyObject {
 
 class RegisterViewController: UIViewController {
 
-    var delegate: RegisterViewDelegate?
+    weak var delegate: RegisterViewDelegate?
     
     private let welcomeImageView = UIImageView()
     

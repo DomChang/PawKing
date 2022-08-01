@@ -17,7 +17,7 @@ class ResultViewController: UISearchController {
     
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     
-    var resultVCDelegate: ResultViewControllerDelegate?
+    weak var resultVCDelegate: ResultViewControllerDelegate?
     
     var allUsers: [User]?
     

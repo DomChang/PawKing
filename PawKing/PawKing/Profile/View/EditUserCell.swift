@@ -16,7 +16,7 @@ class EditUserCell: UITableViewCell {
     
     static let identifier = "\(EditUserCell.self)"
     
-    var delegate: EditUserCellDelegate?
+    weak var delegate: EditUserCellDelegate?
     
     private let userNameTextField = InputTextField()
     
